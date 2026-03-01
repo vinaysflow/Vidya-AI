@@ -1,11 +1,13 @@
-# Railway deployment configuration for Vid (Vidya) API
+# Railway deployment configuration for Vidya API
+# https://docs.railway.app/reference/config-as-code
 
 [build]
-buildCommand = "pnpm install && pnpm dlx prisma@5.22.0 generate --schema=apps/api/prisma/schema.prisma && pnpm --filter @vidya/api build"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "pnpm dlx prisma@5.22.0 db push --accept-data-loss --schema=apps/api/prisma/schema.prisma && node apps/api/dist/index.js"
+startCommand = "pnpm dlx prisma@5.22.0 db push --accept-data-loss --schema prisma/schema.prisma && node dist/index.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 10
+healthcheckTimeout = 30
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
