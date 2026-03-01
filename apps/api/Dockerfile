@@ -12,7 +12,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
 COPY prisma ./prisma/
 
 # Install pnpm and dependencies
@@ -37,7 +37,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Copy package files and install production deps only
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
 RUN npm install -g pnpm
 RUN pnpm install --prod --frozen-lockfile 2>/dev/null || pnpm install --prod
 
