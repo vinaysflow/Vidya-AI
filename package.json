@@ -2,15 +2,17 @@
   "name": "vidya",
   "version": "0.1.0",
   "private": true,
-  "description": "Socratic AI Tutor for Indian Students",
+  "description": "Vid (Vidya) — Socratic AI Tutor",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "start": "node apps/api/dist/index.js",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "db:push": "pnpm --filter api db:push",
     "db:seed": "pnpm --filter api db:seed",
+    "postinstall": "prisma generate --schema=apps/api/prisma/schema.prisma",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {

@@ -1,0 +1,13 @@
+# Railway deployment configuration for Vid (Vidya) API
+# https://docs.railway.app/reference/config-as-code
+
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && pnpm --filter @vidya/api build"
+
+[deploy]
+startCommand = "npx prisma db push --accept-data-loss --schema=apps/api/prisma/schema.prisma && node apps/api/dist/index.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 10
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
