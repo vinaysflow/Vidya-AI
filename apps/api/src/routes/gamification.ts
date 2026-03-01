@@ -7,7 +7,7 @@ import {
 } from '../services/gamification/engine';
 import { PrismaClient } from '@prisma/client';
 
-const router = Router();
+const router: Router = Router();
 const prisma = new PrismaClient();
 
 const UserIdSchema = z.object({

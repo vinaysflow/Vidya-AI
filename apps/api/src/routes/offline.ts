@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { Subject } from '@prisma/client';
 import { generatePack, getPacksManifest } from '../services/offline/packGenerator';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/pack/:subject', async (req: Request, res: Response, next: NextFunction) => {
   try {

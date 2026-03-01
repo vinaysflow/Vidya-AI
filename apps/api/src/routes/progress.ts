@@ -3,7 +3,7 @@ import { Subject } from '@prisma/client';
 import { getMasteryMap, getDueReviews, getRadarData } from '../services/learning/masteryTracker';
 import { generatePath, getRecommendedNext } from '../services/learning/pathGenerator';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/mastery', async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -5,7 +5,7 @@ import { transcribeAudio } from '../services/voice/stt';
 import { synthesizeSpeech } from '../services/voice/tts';
 import type { Language, Subject } from '@prisma/client';
 
-const router = Router();
+const router: Router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
 router.post('/transcribe', upload.single('audio'), async (req: Request, res: Response, next: NextFunction) => {

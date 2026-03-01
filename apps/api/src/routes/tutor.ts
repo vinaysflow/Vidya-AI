@@ -8,6 +8,7 @@ import express, { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { PrismaClient, Language, Subject } from '@prisma/client';
 import { SocraticEngine } from '../services/socratic/engine';
+import type { SessionReport } from '../services/socratic/engine';
 import { awardXP, updateStreak, checkBadges } from '../services/gamification/engine';
 import { updateMastery } from '../services/learning/masteryTracker';
 import { generatePath } from '../services/learning/pathGenerator';
@@ -640,7 +641,10 @@ router.post('/session/:sessionId/quiz', async (req: Request, res: Response, next
     }
 
     const quizLanguage = (language || session.language) as Language;
-    const report = session.report || await engine.generateSessionReport({
+    const existingReport = (session.report && typeof session.report === 'object' && !Array.isArray(session.report))
+      ? (session.report as SessionReport)
+      : null;
+    const report = existingReport || await engine.generateSessionReport({
       sessionId: session.id,
       messages: session.messages.map(m => ({
         role: m.role as 'USER' | 'ASSISTANT' | 'SYSTEM',
