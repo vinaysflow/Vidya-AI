@@ -6,7 +6,7 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "pnpm dlx prisma@5.22.0 db push --accept-data-loss --schema prisma/schema.prisma && node dist/index.js"
+startCommand = "sh scripts/railway-start.sh"
 healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "on_failure"
