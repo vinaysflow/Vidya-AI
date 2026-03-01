@@ -165,9 +165,10 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // SERVER STARTUP
 // ============================================
 
-const PORT = process.env.PORT || 4000;
+const PORT = Number.parseInt(process.env.PORT || '4000', 10);
+const HOST = process.env.HOST || '0.0.0.0';
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`
 ╔═══════════════════════════════════════════╗
 ║                                           ║
