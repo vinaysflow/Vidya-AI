@@ -19,9 +19,6 @@ COPY prisma ./prisma/
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
 
-# Generate Prisma client
-RUN npx prisma generate
-
 # Copy source
 COPY tsconfig.json ./
 COPY src ./src/
@@ -44,10 +41,11 @@ COPY package.json pnpm-lock.yaml* ./
 RUN npm install -g pnpm
 RUN pnpm install --prod --frozen-lockfile 2>/dev/null || pnpm install --prod
 
-# Copy Prisma schema and generated client
+# Copy Prisma schema
 COPY prisma ./prisma/
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Generate Prisma client in production stage
+RUN npx prisma generate
 
 # Copy built JS
 COPY --from=builder /app/dist ./dist/
