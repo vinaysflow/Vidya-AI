@@ -60,8 +60,8 @@ export function generateApiKey(): { plainKey: string; hashedKey: string; prefix:
  * - In production, a valid API key is required for all /api/* routes
  */
 export async function apiKeyAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
-  // Skip auth for health check and root
-  if (req.path === '/health' || req.path === '/') {
+  // Skip auth for health check, root, and admin routes (admin secret handled there)
+  if (req.path === '/health' || req.path === '/' || req.path.startsWith('/api/admin')) {
     return next();
   }
 
