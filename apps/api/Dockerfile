@@ -20,7 +20,7 @@ RUN npm install -g pnpm@8.15.1
 RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
 
 # Generate Prisma client using local CLI (v5)
-RUN pnpm exec prisma generate
+RUN pnpm exec prisma generate --schema prisma/schema.prisma
 
 # Copy source
 COPY tsconfig.json ./
@@ -44,10 +44,9 @@ COPY package.json pnpm-lock.yaml* ./
 RUN npm install -g pnpm@8.15.1
 RUN pnpm install --prod --frozen-lockfile 2>/dev/null || pnpm install --prod
 
-# Copy Prisma schema and generated client from builder
+# Copy Prisma schema and generate client in production stage
 COPY prisma ./prisma/
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+RUN pnpm dlx prisma@5.22.0 generate --schema prisma/schema.prisma
 
 # Copy built JS
 COPY --from=builder /app/dist ./dist/
