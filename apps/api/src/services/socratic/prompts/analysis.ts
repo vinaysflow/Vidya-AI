@@ -124,10 +124,7 @@ Respond with JSON only:
   "subtopic": "<specific subtopic>",
   "concepts": [<list of concepts needed>],
   "difficulty": <1-5>,
-  "examRelevance": {
-    "JEE": <1-10 relevance>,
-    "NEET": <1-10 relevance>
-  }
+  "examRelevance": <1-10 general relevance>
 }`;
 
 /**

@@ -1,6 +1,6 @@
 # Vidya API
 
-Socratic AI tutoring API for JEE/NEET, essay coaching, and counseling.
+Socratic AI tutoring API for multi-subject learning, essay coaching, and counseling.
 
 ## Quick start
 

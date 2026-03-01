@@ -2,7 +2,7 @@
 
 > Learn by Discovery. Never Get Direct Answers.
 
-A pedagogically-grounded AI tutor that uses Socratic questioning to help Indian students prepare for **JEE** and **NEET** exams. Supports **English**, **Hindi (हिंदी)**, and **Kannada (ಕನ್ನಡ)**.
+A pedagogically-grounded AI tutor that uses Socratic questioning to help students learn across Science, Coding, Economics, Literature, and more. Supports **7 languages** including English, Hindi, Kannada, French, German, Spanish, and Chinese.
 
 ![Vidya Banner](https://via.placeholder.com/800x200/3b82f6/ffffff?text=Vidya+-+Socratic+AI+Tutor)
 
@@ -158,7 +158,7 @@ Technical terms (velocity, acceleration, etc.) are kept in English for familiari
 - [x] Attempt-first gate
 - [x] Progressive hint ladder
 - [x] Trilingual support (EN/HI/KN)
-- [x] Physics tutoring (JEE/NEET)
+- [x] Physics tutoring
 - [x] Basic session persistence
 - [x] PWA support (installable)
 
@@ -281,6 +281,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-Built with ❤️ for Indian students preparing for JEE and NEET.
+Built with ❤️ for curious learners everywhere.
 
 **विद्या ददाति विनयम्** (Knowledge gives humility)

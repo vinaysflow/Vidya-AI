@@ -1,5 +1,5 @@
 // Vidya Database Schema
-// Socratic AI Tutor for JEE/NEET Preparation
+// Socratic AI Tutor
 
 generator client {
   provider = "prisma-client-js"
@@ -327,18 +327,12 @@ model Concept {
   prerequisites String[] // IDs of prerequisite concepts
   difficulty    Int      @default(1) // 1-5
   
-  // Exam relevance
-  jeeRelevance  Int      @default(0) // 0-10 importance for JEE
-  neetRelevance Int      @default(0) // 0-10 importance for NEET
-  
   hints         Hint[]
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
   @@index([subject, topic])
-  @@index([jeeRelevance])
-  @@index([neetRelevance])
 }
 
 model Hint {
@@ -497,9 +491,6 @@ enum Subject {
 }
 
 enum Exam {
-  JEE_MAIN
-  JEE_ADVANCED
-  NEET
   BOARDS_CBSE
   BOARDS_ICSE
   BOARDS_STATE

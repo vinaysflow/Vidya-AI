@@ -172,7 +172,7 @@ app.listen(PORT, () => {
 ╔═══════════════════════════════════════════╗
 ║                                           ║
 ║   🎓 Vidya API Server                     ║
-║   Socratic AI Tutor for JEE/NEET          ║
+║   Socratic AI Tutor                        ║
 ║                                           ║
 ║   Port: ${PORT}                              ║
 ║   Environment: ${process.env.NODE_ENV || 'development'}              ║
