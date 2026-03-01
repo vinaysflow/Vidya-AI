@@ -642,7 +642,7 @@ router.post('/session/:sessionId/quiz', async (req: Request, res: Response, next
 
     const quizLanguage = (language || session.language) as Language;
     const existingReport = (session.report && typeof session.report === 'object' && !Array.isArray(session.report))
-      ? (session.report as SessionReport)
+      ? (session.report as unknown as SessionReport)
       : null;
     const report = existingReport || await engine.generateSessionReport({
       sessionId: session.id,
