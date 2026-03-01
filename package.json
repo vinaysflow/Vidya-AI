@@ -1,6 +1,7 @@
 {
   "name": "vidya",
   "version": "0.1.0",
+  "main": "index.js",
   "private": true,
   "description": "Vid (Vidya) — Socratic AI Tutor",
   "scripts": {
