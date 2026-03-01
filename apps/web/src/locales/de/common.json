@@ -1,0 +1,67 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "Lernen durch Entdecken" },
+  "nav": { "home": "Start", "practice": "Ueben", "progress": "Fortschritt", "settings": "Einstellungen" },
+  "chat": {
+    "placeholder": "Stellen Sie Ihre Frage oder Aufgabe...",
+    "send": "Senden",
+    "thinking": "Nachdenken...",
+    "voiceInput": "Spracheingabe",
+    "sessionActive": "Aktiv",
+    "newChat": "Neuer Chat"
+  },
+  "onboarding": {
+    "welcome": "Willkommen bei Vid (Vidya)!",
+    "selectLanguage": "Waehlen Sie Ihre Sprache",
+    "selectSubject": "Welches Fach moechten Sie lernen?",
+    "continue": "Weiter",
+    "getStarted": "Los geht's",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "Physik", "chemistry": "Chemie", "mathematics": "Mathematik", "biology": "Biologie",
+    "coding": "Programmierung", "literature": "Literatur", "economics": "Wirtschaft",
+    "essay": "Aufsatz", "counseling": "Beratung"
+  },
+  "encouragement": {
+    "goodStart": "Guter Anfang! Lass uns gemeinsam nachdenken.",
+    "keepGoing": "Du bist auf dem richtigen Weg!",
+    "almostThere": "Fast geschafft! Denk an den naechsten Schritt.",
+    "excellent": "Ausgezeichnet!",
+    "tryAgain": "Versuchen wir es anders.",
+    "showWork": "Zeig mir, was du bisher versucht hast."
+  },
+  "errors": {
+    "offline": "Offline. Einige Funktionen sind eingeschraenkt.",
+    "apiError": "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
+    "sessionExpired": "Sitzung abgelaufen. Neue Sitzung wird gestartet."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "theme": "Design",
+    "themeSystem": "System",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "apiKey": "API-Schluessel",
+    "apiKeyPlaceholder": "vk_live_...",
+    "about": "Ueber Vid (Vidya)",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "Verlauf",
+    "noSessions": "Keine Sitzungen",
+    "messages": "Nachrichten"
+  }
+}

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vid Socratic Lab Wireframe</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --border: #e2e8f0;
+        --text: #0f172a;
+        --muted: #64748b;
+        --primary: #2563eb;
+        --accent: #7c3aed;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 28px;
+        background: linear-gradient(90deg, #2563eb, #7c3aed);
+        color: #fff;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+
+      header p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      .container {
+        padding: 24px;
+        display: grid;
+        gap: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      .card h2 {
+        margin: 0 0 12px;
+        font-size: 16px;
+      }
+
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+        flex: 1;
+        min-width: 160px;
+      }
+
+      label {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: #f8fafc;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .button {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .button.secondary {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+
+      .button.outline {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+      }
+
+      .chat {
+        display: grid;
+        gap: 12px;
+      }
+
+      .bubble {
+        padding: 12px 14px;
+        border-radius: 14px;
+        max-width: 85%;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .bubble.user {
+        background: #2563eb;
+        color: #fff;
+        margin-left: auto;
+        border-bottom-right-radius: 6px;
+      }
+
+      .bubble.assistant {
+        background: #f1f5f9;
+        color: #0f172a;
+        border-bottom-left-radius: 6px;
+      }
+
+      .math-block {
+        margin: 12px auto;
+        padding: 12px;
+        border-radius: 12px;
+        background: #eef2ff;
+        text-align: center;
+        font-family: "Times New Roman", serif;
+      }
+
+      .context-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .device {
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .device h3 {
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+
+      .device .screen {
+        border: 1px dashed var(--border);
+        border-radius: 14px;
+        padding: 10px;
+        min-height: 220px;
+      }
+
+      .hint-controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Vid Socratic Lab</h1>
+        <p class="muted">Wireframe for testing the full Socratic engine workflow</p>
+      </div>
+      <div class="chip">Wireframe • Non-functional</div>
+    </header>
+
+    <main class="container">
+      <section class="grid">
+        <div class="card">
+          <h2>Conversation Workspace (Web)</h2>
+          <div class="chat">
+            <div class="bubble assistant">
+              Let's explore this step by step. What principle do you think applies here?
+            </div>
+            <div class="bubble user">
+              I tried using v = u + at, but I'm not sure about the values.
+            </div>
+            <div class="bubble assistant">
+              Great start. If acceleration is constant, what does that imply about the next step?
+              <div class="math-block">v = u + at</div>
+              What happens if you set u = 0?
+            </div>
+          </div>
+          <div class="stack">
+            <label>Student message</label>
+            <textarea placeholder="Type a problem or your attempt..."></textarea>
+            <div class="row">
+              <button class="button">Analyze Attempt</button>
+              <button class="button outline">Generate Response</button>
+              <button class="button secondary">Validate Response</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Session Controls</h2>
+          <div class="context-grid">
+            <div class="row">
+              <div class="field">
+                <label>Language</label>
+                <select>
+                  <option>English (EN)</option>
+                  <option>हिंदी (HI)</option>
+                  <option>ಕನ್ನಡ (KN)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Subject</label>
+                <select>
+                  <option>Physics</option>
+                  <option>Chemistry</option>
+                  <option>Mathematics</option>
+                  <option>Biology</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Topic</label>
+              <input placeholder="Kinematics, Thermodynamics, Calculus..." />
+            </div>
+            <div class="field">
+              <label>Hint Level (0-5)</label>
+              <input type="range" min="0" max="5" value="2" />
+            </div>
+            <div class="hint-controls">
+              <button class="button secondary">Reset Hint Ladder</button>
+              <button class="button outline">Progress Hint</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Knowledge State</h2>
+          <div class="row">
+            <div class="field">
+              <label>Strengths</label>
+              <textarea placeholder="E.g., understands Newton's laws, can set up equations"></textarea>
+            </div>
+            <div class="field">
+              <label>Struggles</label>
+              <textarea placeholder="E.g., sign conventions, vector decomposition"></textarea>
+            </div>
+          </div>
+          <p class="muted">These feed the dynamic prompt and guide Socratic targeting.</p>
+        </div>
+
+        <div class="card">
+          <h2>Attempt Analysis</h2>
+          <div class="stack">
+            <div class="row">
+              <div class="chip">Attempt Shown: Yes</div>
+              <div class="chip">Quality: Partial</div>
+            </div>
+            <div class="field">
+              <label>Concepts Used</label>
+              <input value="Newton's laws, equations of motion" />
+            </div>
+            <div class="field">
+              <label>Misconceptions</label>
+              <input value="Confuses initial velocity with acceleration" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Strategy Decision</h2>
+          <div class="stack">
+            <div class="row">
+              <div class="chip">Type: address_misconception</div>
+              <div class="chip">Target: initial velocity</div>
+            </div>
+            <div class="field">
+              <label>Strategy Prompt Addition</label>
+              <textarea>Ask a targeted question that helps the student correct the misconception.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Dynamic Prompt Preview</h2>
+          <textarea>BASE SYSTEM PROMPT...\nSESSION CONTEXT...\nKNOWLEDGE STATE...\nLANGUAGE INSTRUCTION...\nSTRATEGY ADDITION...</textarea>
+          <p class="muted">Use this to inspect the exact system prompt sent to Claude.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Device Previews (Android / iOS)</h2>
+        <div class="preview-grid">
+          <div class="device">
+            <h3>Android Preview</h3>
+            <div class="screen">
+              <div class="bubble assistant">What principle applies here?</div>
+              <div class="bubble user">I think it's momentum.</div>
+              <div class="bubble assistant">What if the mass doubles?</div>
+            </div>
+          </div>
+          <div class="device">
+            <h3>iOS Preview</h3>
+            <div class="screen">
+              <div class="bubble assistant">यह integration by parts का सवाल है। पहला कदम क्या होगा?</div>
+              <div class="bubble user">मैंने u और dv चुना।</div>
+              <div class="bubble assistant">u को बदलने से क्या सरल होगा?</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

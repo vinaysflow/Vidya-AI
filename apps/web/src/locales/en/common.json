@@ -1,0 +1,75 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "Learn by Discovery" },
+  "nav": { "home": "Home", "practice": "Practice", "progress": "My Progress", "settings": "Settings" },
+  "chat": {
+    "placeholder": "Type your question or problem...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "voiceInput": "Voice input",
+    "sessionActive": "Active",
+    "newChat": "New Chat"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Vid (Vidya)!",
+    "selectLanguage": "Choose your preferred language",
+    "selectSubject": "What would you like to study?",
+    "continue": "Continue",
+    "getStarted": "Get Started",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "Physics", "chemistry": "Chemistry", "mathematics": "Mathematics", "biology": "Biology",
+    "coding": "Coding", "literature": "Literature", "economics": "Economics",
+    "essay": "Essay Writing", "counseling": "Counseling"
+  },
+  "encouragement": {
+    "goodStart": "Good start! Let's think about this together.",
+    "keepGoing": "You're on the right track!",
+    "almostThere": "Almost there! Think about what happens next.",
+    "excellent": "Excellent reasoning!",
+    "tryAgain": "Let's approach this differently.",
+    "showWork": "Show me what you've tried so far."
+  },
+  "hints": {
+    "level1": "Let's start with what you know.",
+    "level2": "Think about the concepts involved.",
+    "level3": "Consider this approach...",
+    "level4": "Here's a similar example.",
+    "level5": "Let's break this into smaller steps."
+  },
+  "errors": {
+    "offline": "You're offline. Some features may be limited.",
+    "apiError": "Something went wrong. Please try again.",
+    "sessionExpired": "Session expired. Starting a new one."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "apiKey": "API Key",
+    "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "Notifications",
+    "about": "About Vid (Vidya)",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "History",
+    "noSessions": "No sessions yet",
+    "messages": "messages"
+  }
+}

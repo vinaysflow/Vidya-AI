@@ -1,0 +1,592 @@
+// Vidya Database Schema
+// Socratic AI Tutor for JEE/NEET Preparation
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// API KEY MANAGEMENT (for external integrations)
+// ============================================
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  
+  // Key identification
+  key         String    @unique          // The hashed API key
+  prefix      String                     // First 8 chars for identification (e.g., "vk_live_")
+  name        String                     // Human-readable name (e.g., "PathWiz Production")
+  
+  // Ownership
+  ownerEmail  String                     // Contact email for key owner
+  ownerName   String                     // Organization or person name
+  
+  // Permissions & limits
+  tier        ApiKeyTier @default(STANDARD)
+  rateLimit   Int        @default(100)   // Requests per minute
+  allowedOrigins String[]               // CORS origins this key can use
+  
+  // Stripe billing (metered overage)
+  stripeCustomerId        String?
+  stripeSubscriptionItemId String?
+  
+  // Status
+  isActive    Boolean   @default(true)
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  
+  // Usage tracking
+  totalRequests Int     @default(0)
+  
+  // Relations
+  sessions            Session[]
+  usageRecords        UsageRecord[]
+  stripeUsageReports  StripeUsageReport[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([key])
+  @@index([ownerEmail])
+  @@index([isActive])
+}
+
+enum ApiKeyTier {
+  FREE        // 100 req/min, basic features
+  STANDARD    // 500 req/min, all features
+  PREMIUM     // 1000 req/min, priority processing
+}
+
+// ============================================
+// ESSAY PROMPT KNOWLEDGE BASE
+// ============================================
+
+model School {
+  id                  String            @id @default(cuid())
+  name                String            // "Stanford University"
+  slug                String            @unique  // "stanford"
+  location            String?           // "Stanford, CA"
+  selectivity         SchoolSelectivity @default(SELECTIVE)
+  applicationPlatform String?           // "Common App", "Coalition", "UC App", "MIT Portal"
+  acceptanceRate      Float?            // 0.03 = 3%
+  websiteUrl          String?
+  essayPageUrl        String?           // Direct link to essay prompt page
+
+  prompts             EssayPrompt[]
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([slug])
+  @@index([selectivity])
+}
+
+model EssayPrompt {
+  id              String         @id @default(cuid())
+  schoolId        String?
+  school          School?        @relation(fields: [schoolId], references: [id])
+
+  academicYear    String         // "2025-2026"
+  promptText      String         @db.Text
+  wordLimit       Int?           // null = no stated limit
+  charLimit       Int?           // Some schools use character limits
+  required        Boolean        @default(true)
+
+  promptType      PromptType     @default(SUPPLEMENTAL)
+  promptCategory  PromptCategory @default(OTHER)
+  sortOrder       Int            @default(0)  // Display order within a school
+
+  sourceType      PromptSource   @default(MANUAL)
+  sourceUrl       String?
+  verifiedAt      DateTime?
+
+  sessions        Session[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([schoolId, academicYear])
+  @@index([promptType])
+  @@index([promptCategory])
+  @@index([academicYear])
+}
+
+// ============================================
+// USAGE TRACKING (per-API-key analytics)
+// ============================================
+
+model UsageRecord {
+  id            String   @id @default(cuid())
+  
+  apiKeyId      String
+  apiKey        ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  
+  date          String   // "2026-02-07" — partition key for daily aggregation
+  endpoint      String   // "/api/tutor/message", "/api/tutor/session/start", etc.
+  
+  requestCount  Int      @default(0)
+  tokenEstimate Int      @default(0)  // Estimated total tokens used
+  errorCount    Int      @default(0)
+  overageCount  Int      @default(0)  // Requests that exceeded the rate limit (soft-limit overage)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@unique([apiKeyId, date, endpoint])
+  @@index([apiKeyId, date])
+  @@index([date])
+}
+
+// ============================================
+// STRIPE OVERAGE REPORTING (prevents double-reporting)
+// ============================================
+
+model StripeUsageReport {
+  id                String   @id @default(cuid())
+
+  apiKeyId          String
+  apiKey            ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  date              String   // "2026-02-07" — the day whose overage was reported
+  quantityReported  Int      // Total overage requests reported to Stripe for this day
+
+  createdAt         DateTime @default(now())
+
+  @@unique([apiKeyId, date])
+  @@index([apiKeyId])
+  @@index([date])
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  phone         String?   @unique  // Primary auth for India
+  email         String?   @unique
+  name          String?
+  preferredLang Language  @default(EN)
+  grade         Int?      // Class 11, 12, etc.
+  targetExam    Exam?
+  school        String?
+  city          String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastActiveAt  DateTime  @default(now())
+  
+  sessions      Session[]
+  progress      Progress[]
+  
+  gamification          UserGamification?
+  badges                UserBadge[]
+  xpEvents              XPEvent[]
+  guardianOf            Guardian[]          @relation("GuardianUser")
+  guardedBy             Guardian[]          @relation("GuardianStudent")
+  taughtClassRooms      ClassRoom[]
+  classRoomMemberships  ClassRoomStudent[]
+  learningPaths         LearningPath[]
+  
+  @@index([phone])
+  @@index([preferredLang])
+}
+
+// ============================================
+// TUTORING SESSIONS
+// ============================================
+
+model Session {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Multi-tenancy: which API key created this session
+  apiKeyId     String?
+  apiKey       ApiKey?       @relation(fields: [apiKeyId], references: [id])
+
+  subject      Subject
+  topic        String?
+  subtopic     String?
+  language     Language      @default(EN)
+  status       SessionStatus @default(ACTIVE)
+  
+  // Original problem/question
+  problemText  String?
+  problemImage String?       // URL to uploaded image
+
+  // Essay context (optional)
+  essayType       String?
+  essayPromptText String?     @db.Text
+  wordLimit       Int?
+  essayPromptId   String?
+  essayPrompt     EssayPrompt? @relation(fields: [essayPromptId], references: [id])
+  
+  // Session metrics
+  messageCount Int           @default(0)
+  hintLevel    Int           @default(0)  // 0-5, how many hints given
+  resolved     Boolean       @default(false)
+  noFinalAnswer Boolean      @default(false)  // Strict mode: no final answers
+  
+  // Learning outcomes
+  conceptsUsed String[]      // Concepts student engaged with
+  masteryGain  Float?        // Estimated learning gain
+  
+  // Session end report (generated on session completion)
+  report       Json?         // { summary, strengths, areasForImprovement, nextSteps, ... }
+
+  // Counselor context (multi-client support)
+  clientContext  Json?        // Full client context (PathWiz: CounselorClientContext; ODEE: careerContext)
+  clientUserId   String?      // Opaque client user ID for session grouping
+  variant        String?      // Client variant: 'COLLEGE_US', 'CAREER_INDIA', etc.
+
+  messages     Message[]
+  
+  startedAt    DateTime      @default(now())
+  endedAt      DateTime?
+  
+  @@index([userId])
+  @@index([subject])
+  @@index([status])
+  @@index([apiKeyId])
+  @@index([clientUserId])
+}
+
+model Message {
+  id          String      @id @default(cuid())
+  sessionId   String
+  session     Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  role        MessageRole
+  content     String      @db.Text
+  language    Language
+  
+  // Analysis metadata (for assistant messages)
+  metadata    Json?       // { questionType, hintLevel, analysisResult, etc. }
+  
+  // Timing
+  createdAt   DateTime    @default(now())
+  
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+// ============================================
+// LEARNING PROGRESS
+// ============================================
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  subject     Subject
+  topic       String
+  conceptId   String    // Reference to Concept
+  
+  mastery     Float     @default(0)  // 0-100 mastery score
+  attempts    Int       @default(0)  // Times practiced
+  successes   Int       @default(0)  // Times understood correctly
+  
+  lastSeen    DateTime  @default(now())
+  nextReview  DateTime? // Spaced repetition scheduling
+  
+  @@unique([userId, conceptId])
+  @@index([userId, subject])
+  @@index([nextReview])
+}
+
+// ============================================
+// EDUCATIONAL CONTENT
+// ============================================
+
+model Concept {
+  id            String   @id @default(cuid())
+  conceptKey    String?  @unique
+  
+  subject       Subject
+  topic         String   // e.g., "Mechanics"
+  subtopic      String?  // e.g., "Kinematics"
+  
+  // Multilingual names
+  name          String   // English name
+  nameHi        String?  // Hindi: हिंदी नाम
+  nameKn        String?  // Kannada: ಕನ್ನಡ ಹೆಸರು
+  
+  // Multilingual descriptions
+  description   String   @db.Text
+  descriptionHi String?  @db.Text
+  descriptionKn String?  @db.Text
+  
+  // Learning structure
+  prerequisites String[] // IDs of prerequisite concepts
+  difficulty    Int      @default(1) // 1-5
+  
+  // Exam relevance
+  jeeRelevance  Int      @default(0) // 0-10 importance for JEE
+  neetRelevance Int      @default(0) // 0-10 importance for NEET
+  
+  hints         Hint[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([subject, topic])
+  @@index([jeeRelevance])
+  @@index([neetRelevance])
+}
+
+model Hint {
+  id          String   @id @default(cuid())
+  conceptId   String
+  concept     Concept  @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  
+  level       Int      // 1-5, progressively more helpful
+  
+  // Multilingual hint content
+  content     String   @db.Text // English
+  contentHi   String?  @db.Text // Hindi
+  contentKn   String?  @db.Text // Kannada
+  
+  // Hint type
+  type        HintType @default(CONCEPTUAL)
+  
+  @@unique([conceptId, level])
+  @@index([conceptId])
+}
+
+// ============================================
+// GAMIFICATION
+// ============================================
+
+model UserGamification {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  xp              Int      @default(0)
+  level           Int      @default(1)
+  currentStreak   Int      @default(0)
+  longestStreak   Int      @default(0)
+  lastActiveDate  String?
+  streakFreezes   Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([xp])
+  @@index([currentStreak])
+}
+
+model UserBadge {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     BadgeType
+  earnedAt  DateTime  @default(now())
+  
+  @@unique([userId, badge])
+  @@index([userId])
+}
+
+model XPEvent {
+  id         String      @id @default(cuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId  String?
+  eventType  XPEventType
+  xpAmount   Int
+  createdAt  DateTime    @default(now())
+  
+  @@index([userId, createdAt])
+}
+
+// ============================================
+// LEARNING PATHS
+// ============================================
+
+model LearningPath {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject        Subject
+  
+  pathSteps      Json
+  completionPct  Float    @default(0)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([userId, subject])
+  @@index([userId])
+}
+
+// ============================================
+// GUARDIAN / CLASSROOM (Parent/Teacher Dashboard)
+// ============================================
+
+model Guardian {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation("GuardianUser", fields: [userId], references: [id])
+  studentUserId   String
+  student         User         @relation("GuardianStudent", fields: [studentUserId], references: [id])
+  relationship    GuardianRole
+  approved        Boolean      @default(false)
+  
+  createdAt       DateTime     @default(now())
+  
+  @@unique([userId, studentUserId])
+  @@index([studentUserId])
+}
+
+model ClassRoom {
+  id          String             @id @default(cuid())
+  teacherId   String
+  teacher     User               @relation(fields: [teacherId], references: [id])
+  name        String
+  joinCode    String             @unique
+  
+  students    ClassRoomStudent[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ClassRoomStudent {
+  id          String    @id @default(cuid())
+  classRoomId String
+  classRoom   ClassRoom @relation(fields: [classRoomId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  joinedAt    DateTime  @default(now())
+  
+  @@unique([classRoomId, userId])
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum Language {
+  EN  // English
+  HI  // Hindi (हिंदी)
+  KN  // Kannada (ಕನ್ನಡ)
+  FR  // French (Français)
+  DE  // German (Deutsch)
+  ES  // Spanish (Español)
+  ZH  // Mandarin Chinese (中文)
+}
+
+enum Subject {
+  PHYSICS
+  CHEMISTRY
+  MATHEMATICS
+  BIOLOGY
+  ESSAY_WRITING
+  COUNSELING
+  CODING
+  ENGLISH_LITERATURE
+  ECONOMICS
+  AI_LEARNING
+}
+
+enum Exam {
+  JEE_MAIN
+  JEE_ADVANCED
+  NEET
+  BOARDS_CBSE
+  BOARDS_ICSE
+  BOARDS_STATE
+}
+
+enum SessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+  PAUSED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum HintType {
+  CONCEPTUAL    // Points to relevant concept
+  PROCEDURAL    // Suggests approach/method
+  EXAMPLE       // Similar worked example
+  VISUAL        // Diagram or visualization hint
+  FORMULA       // Relevant formula reminder
+}
+
+enum SchoolSelectivity {
+  MOST_SELECTIVE    // < 10% acceptance
+  HIGHLY_SELECTIVE  // 10-25%
+  SELECTIVE         // 25-50%
+  MODERATE          // > 50%
+}
+
+enum PromptType {
+  PERSONAL_STATEMENT  // Common App, UC PIQ
+  SUPPLEMENTAL        // School-specific
+  SHORT_ANSWER        // < 150 words
+  ACTIVITY_DESCRIPTION
+  WHY_SCHOOL          // "Why X" essays
+}
+
+enum PromptCategory {
+  IDENTITY           // Background, culture, who you are
+  CHALLENGE          // Obstacles, setbacks, failure
+  INTELLECTUAL       // Academic curiosity, a subject you love
+  COMMUNITY          // Contribution, service, making a difference
+  GROWTH             // Personal development, realization
+  WHY_US             // Why this school
+  CREATIVE           // UChicago-style unconventional
+  EXTRACURRICULAR    // Activities, talents, skills
+  DIVERSITY          // Perspectives, experiences with difference
+  SHORT_ANSWER       // Quick-hit responses
+  OTHER
+}
+
+enum PromptSource {
+  OFFICIAL       // Scraped from school website
+  MANUAL         // Hand-entered
+  CROWDSOURCED   // User-submitted
+}
+
+enum BadgeType {
+  FIRST_STEP
+  AHA_MOMENT
+  STREAK_5
+  STREAK_30
+  DEBUGGER
+  POLYGLOT
+  SCHOLAR
+  EXPLAIN_IT
+  DEEP_DIVER
+  QUIZ_MASTER
+  SUBJECT_EXPLORER
+}
+
+enum XPEventType {
+  MESSAGE_SENT
+  SHOWED_WORK
+  SESSION_COMPLETE
+  EXPLAIN_BACK
+  DAILY_FIRST
+  QUIZ_COMPLETE
+  QUIZ_PERFECT
+}
+
+enum GuardianRole {
+  PARENT
+  TEACHER
+  GUARDIAN
+}

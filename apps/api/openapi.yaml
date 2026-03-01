@@ -1,0 +1,1560 @@
+openapi: 3.1.0
+info:
+  title: Vidya Socratic Tutor API
+  description: |
+    AI-powered Socratic tutoring API for STEM subjects and college essay coaching.
+    
+    Vidya uses the Socratic method to guide students toward understanding through
+    carefully crafted questions — never giving direct answers or writing for the student.
+    
+    ## Authentication
+    
+    All API requests require a Bearer token (API key):
+    ```
+    Authorization: Bearer vk_live_xxxxxxxxxxxxxxxx
+    ```
+    
+    API keys can be obtained by contacting the Vidya team.
+    
+    ## Rate Limits
+    
+    Rate limits are per-API-key and depend on your tier:
+    - **Free**: 100 requests/minute — **hard limit** (429 when exceeded)
+    - **Standard**: 500 requests/minute — **soft limit** (overage allowed and billed)
+    - **Premium**: 1000 requests/minute — **soft limit** (overage allowed and billed)
+    
+    Standard and Premium tiers use a soft limit: requests above the plan
+    limit are allowed but counted as overage and billed via Stripe metered
+    billing. Free tier requests that exceed the limit receive a 429.
+    
+    Rate limit headers are included in every response:
+    - `X-RateLimit-Limit`: Max requests per window
+    - `X-RateLimit-Remaining`: Remaining requests in current window
+    - `X-RateLimit-Overage`: `true` when the request was allowed over the plan limit (Standard/Premium only)
+    - `Retry-After`: Seconds to wait (only on 429 responses, Free tier only)
+    
+    ## Essay Mode Guardrails
+    
+    When using `ESSAY_WRITING` as the subject, Vidya enforces strict guardrails:
+    - Never writes essay content for the student
+    - Never suggests specific sentences or paragraphs
+    - Only asks Socratic questions to help students discover improvements
+    - Detects and blocks any form of "essay leak" in responses
+  version: 1.0.0
+  contact:
+    name: Vidya API Support
+    email: api@vidya.ai
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:4000
+    description: Local development
+  - url: https://api.vidya.ai
+    description: Production
+
+security:
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns the API health status. Does not require authentication.
+      security: []
+      tags:
+        - System
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: vidya-api
+                  timestamp:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                    example: '1.0.0'
+
+  /api/tutor/session/start:
+    post:
+      summary: Start a tutoring session
+      description: |
+        Creates a new tutoring session and generates the initial AI response.
+        
+        For essay mode (`ESSAY_WRITING`), provide `essayType`, `essayPromptText`, 
+        and optionally `wordLimit` to give the AI essay-specific context.
+      tags:
+        - Tutoring
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartSessionRequest'
+            examples:
+              essay:
+                summary: Start an essay coaching session
+                value:
+                  subject: ESSAY_WRITING
+                  language: EN
+                  problemText: "I need help with my Common App personal statement about overcoming a challenge."
+                  essayType: personal_statement
+                  essayPromptText: "Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it."
+                  wordLimit: 650
+              stem:
+                summary: Start a STEM tutoring session
+                value:
+                  subject: PHYSICS
+                  language: EN
+                  problemText: "A ball is thrown vertically upward with a velocity of 20 m/s. Find the maximum height reached."
+      responses:
+        '200':
+          description: Session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartSessionResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/tutor/message:
+    post:
+      summary: Send a message in a session
+      description: |
+        Sends a student message and receives an AI Socratic response.
+        
+        For essay mode, the student should paste their essay draft as the message.
+        The AI will analyze the draft and respond with guiding questions.
+      tags:
+        - Tutoring
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+            examples:
+              essay_draft:
+                summary: Student submits essay draft
+                value:
+                  sessionId: "clxyz123abc"
+                  message: "Here's my draft: Growing up in a small town, I learned that challenges are not obstacles but stepping stones..."
+              stem_attempt:
+                summary: Student attempts STEM problem
+                value:
+                  sessionId: "clxyz123abc"
+                  message: "I think I need to use the equation v² = u² - 2gh, so h = u²/2g = 400/20 = 20m"
+      responses:
+        '200':
+          description: AI response generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session not found
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /api/tutor/session/{sessionId}:
+    get:
+      summary: Get session details
+      description: Returns the session metadata and full message history.
+      tags:
+        - Tutoring
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSessionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session not found
+
+  /api/tutor/session/{sessionId}/end:
+    post:
+      summary: End a tutoring session
+      description: |
+        Marks the session as completed, generates a structured coaching report
+        using AI, populates learning analytics (conceptsUsed, masteryGain, resolved),
+        and returns the full report.
+        
+        If the session has already been ended, returns the existing report.
+        The report generation uses Haiku (cheap, ~$0.001 per call).
+      tags:
+        - Tutoring
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session ended with report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndSessionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session not found
+
+  /api/tutor/session/{sessionId}/summary:
+    get:
+      summary: Get session report/summary
+      description: |
+        Returns the session coaching report generated when the session was ended.
+        Returns 404 if the session hasn't been ended yet (no report available).
+      tags:
+        - Tutoring
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  session:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      subject:
+                        $ref: '#/components/schemas/Subject'
+                      status:
+                        $ref: '#/components/schemas/SessionStatus'
+                      resolved:
+                        type: boolean
+                      masteryGain:
+                        type: number
+                        nullable: true
+                      conceptsUsed:
+                        type: array
+                        items:
+                          type: string
+                      startedAt:
+                        type: string
+                        format: date-time
+                      endedAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                  report:
+                    $ref: '#/components/schemas/SessionReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session not found or report not yet generated
+
+  /api/tutor/session/{sessionId}/quiz:
+    post:
+      summary: Generate a micro-quiz from a session
+      description: |
+        Returns a short quiz (default 3 questions) based on the session report.
+      tags:
+        - Tutoring
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizRequest'
+      responses:
+        '200':
+          description: Session quiz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session not found
+
+  /api/tutor/sessions:
+    get:
+      summary: List sessions
+      description: |
+        Returns a list of sessions, optionally filtered by user, subject, or status.
+        Each session includes learning analytics (conceptsUsed, masteryGain, resolved)
+        and the session report if the session has been ended.
+        Sessions are scoped to the authenticated API key.
+      tags:
+        - Tutoring
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: string
+        - name: subject
+          in: query
+          schema:
+            $ref: '#/components/schemas/Subject'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/SessionStatus'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+      responses:
+        '200':
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSessionsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ============================================
+  # DEVELOPER PLATFORM
+  # ============================================
+
+  /api/developer/status:
+    get:
+      summary: Get API key status
+      description: |
+        Returns the authenticated API key's configuration, status, usage stats,
+        and available platform modules. Use this to check your key's tier,
+        rate limit, session count, and what tutoring domains are available.
+      tags:
+        - Developer
+      responses:
+        '200':
+          description: API key status and platform info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  key:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      prefix:
+                        type: string
+                      owner:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                          name:
+                            type: string
+                      tier:
+                        type: string
+                        enum: [FREE, STANDARD, PREMIUM]
+                      rateLimit:
+                        type: integer
+                      allowedOrigins:
+                        type: array
+                        items:
+                          type: string
+                      isActive:
+                        type: boolean
+                      lastUsedAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      expiresAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      totalRequests:
+                        type: integer
+                      totalSessions:
+                        type: integer
+                      billingEnabled:
+                        type: boolean
+                        description: Whether Stripe metered billing is linked to this key
+                      createdAt:
+                        type: string
+                        format: date-time
+                  platform:
+                    type: object
+                    properties:
+                      availableModules:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            subjects:
+                              type: array
+                              items:
+                                type: string
+                      apiVersion:
+                        type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/developer/usage:
+    get:
+      summary: Get usage analytics
+      description: |
+        Returns daily usage breakdown for the authenticated API key.
+        Data is aggregated by date and endpoint.
+      tags:
+        - Developer
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+            maximum: 90
+          description: Number of days to look back
+        - name: endpoint
+          in: query
+          schema:
+            type: string
+          description: Filter by specific endpoint
+      responses:
+        '200':
+          description: Daily usage data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  apiKeyId:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      days:
+                        type: integer
+                      from:
+                        type: string
+                  daily:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        totalRequests:
+                          type: integer
+                        totalErrors:
+                          type: integer
+                        totalOverage:
+                          type: integer
+                          description: Requests that exceeded the plan rate limit (billed as overage)
+                        endpoints:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                  rawRecords:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/developer/usage/summary:
+    get:
+      summary: Get usage summary
+      description: |
+        Returns a quick summary of usage for the authenticated API key:
+        requests today, this week, this month, top endpoints, and total sessions.
+      tags:
+        - Developer
+      responses:
+        '200':
+          description: Usage summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  apiKeyId:
+                    type: string
+                  summary:
+                    type: object
+                    properties:
+                      today:
+                        type: object
+                        properties:
+                          requests:
+                            type: integer
+                          errors:
+                            type: integer
+                          overage:
+                            type: integer
+                            description: Requests over plan limit (billed)
+                      thisWeek:
+                        type: object
+                        properties:
+                          requests:
+                            type: integer
+                          errors:
+                            type: integer
+                          overage:
+                            type: integer
+                      thisMonth:
+                        type: object
+                        properties:
+                          requests:
+                            type: integer
+                          errors:
+                            type: integer
+                          overage:
+                            type: integer
+                      totalSessions:
+                        type: integer
+                      topEndpoints:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            endpoint:
+                              type: string
+                            requests:
+                              type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: API key obtained from the Vidya admin panel
+
+  schemas:
+    Subject:
+      type: string
+      enum: [PHYSICS, CHEMISTRY, MATHEMATICS, BIOLOGY, ESSAY_WRITING, COUNSELING, CODING, ENGLISH_LITERATURE, ECONOMICS, AI_LEARNING]
+
+    Language:
+      type: string
+      enum: [EN, HI, KN, FR, DE, ES, ZH]
+
+    SessionStatus:
+      type: string
+      enum: [ACTIVE, COMPLETED, ABANDONED, PAUSED]
+
+    StartSessionRequest:
+      type: object
+      required:
+        - subject
+        - problemText
+      properties:
+        userId:
+          type: string
+          description: External user ID (your system's user identifier)
+        subject:
+          $ref: '#/components/schemas/Subject'
+        language:
+          $ref: '#/components/schemas/Language'
+          default: EN
+        problemText:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: The problem or essay prompt to work on
+        problemImage:
+          type: string
+          description: Image reference (http/https URL or data:image/* base64 string)
+        noFinalAnswer:
+          type: boolean
+          description: When true, the tutor will avoid final answers and stay Socratic
+        essayType:
+          type: string
+          description: Type of essay (e.g., personal_statement, why_us, activity)
+        essayPromptText:
+          type: string
+          maxLength: 10000
+          description: The full essay prompt text from the application
+        wordLimit:
+          type: integer
+          minimum: 1
+          description: Word limit for the essay
+
+    SendMessageRequest:
+      type: object
+      required:
+        - sessionId
+        - message
+      properties:
+        sessionId:
+          type: string
+        message:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        language:
+          $ref: '#/components/schemas/Language'
+        noFinalAnswer:
+          type: boolean
+          description: When true, the tutor will avoid final answers for this session
+
+    QuizRequest:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 1
+          maximum: 5
+        language:
+          $ref: '#/components/schemas/Language'
+
+    SessionQuiz:
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizQuestion'
+
+    QuizQuestion:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [multiple_choice, short_answer]
+        prompt:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        answer:
+          type: string
+        explanation:
+          type: string
+        concept:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+
+    QuizResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        quiz:
+          $ref: '#/components/schemas/SessionQuiz'
+
+    MessageMetadata:
+      type: object
+      description: AI analysis metadata (varies by subject)
+      properties:
+        questionType:
+          type: string
+          enum: [socratic, hint, scaffolding, encouragement, celebration, clarification]
+        grounding:
+          type: string
+          enum: [bank, reasoned, retrieved]
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 100
+        safetyEvents:
+          type: array
+          items:
+            type: string
+        hintLevel:
+          type: integer
+          minimum: 0
+          maximum: 5
+        conceptsIdentified:
+          type: array
+          items:
+            type: string
+        # STEM-specific
+        distanceFromSolution:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: How far the student is from the solution (STEM only, 0 = solved)
+        # Essay-specific
+        readiness:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Essay readiness score (essay mode only, 85+ = celebration)
+        essayStrengths:
+          type: array
+          items:
+            type: string
+          description: Identified strengths in the essay
+        essayGaps:
+          type: array
+          items:
+            type: string
+          description: Areas that need improvement
+        essaySuggestedFocus:
+          type: string
+          description: Recommended area to focus on next
+        modelUsed:
+          type: object
+          description: Which LLM provider/model generated this response
+          properties:
+            provider:
+              type: string
+            model:
+              type: string
+            fallbackUsed:
+              type: boolean
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        language:
+          $ref: '#/components/schemas/Language'
+        metadata:
+          $ref: '#/components/schemas/MessageMetadata'
+        timestamp:
+          type: string
+          format: date-time
+
+    StartSessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        session:
+          type: object
+          properties:
+            id:
+              type: string
+            subject:
+              $ref: '#/components/schemas/Subject'
+            language:
+              $ref: '#/components/schemas/Language'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+
+    SendMessageResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          $ref: '#/components/schemas/Message'
+
+    GetSessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        session:
+          type: object
+          properties:
+            id:
+              type: string
+            subject:
+              $ref: '#/components/schemas/Subject'
+            language:
+              $ref: '#/components/schemas/Language'
+            status:
+              $ref: '#/components/schemas/SessionStatus'
+            hintLevel:
+              type: integer
+            resolved:
+              type: boolean
+            startedAt:
+              type: string
+              format: date-time
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+
+    SessionReport:
+      type: object
+      description: Structured coaching report generated when a session ends
+      properties:
+        summary:
+          type: string
+          description: 2-3 sentence overview of the session
+        conceptsEngaged:
+          type: array
+          items:
+            type: string
+          description: Topics/concepts the student worked on
+        strengths:
+          type: array
+          items:
+            type: string
+          description: What the student did well
+        areasForImprovement:
+          type: array
+          items:
+            type: string
+          description: Areas needing more work
+        nextSteps:
+          type: array
+          items:
+            type: string
+          description: Actionable recommendations for next session
+        messagesExchanged:
+          type: integer
+        durationMinutes:
+          type: integer
+        readinessStart:
+          type: integer
+          nullable: true
+          description: Essay readiness at first analysis (essay mode only)
+        readinessEnd:
+          type: integer
+          nullable: true
+          description: Essay readiness at last analysis (essay mode only)
+        essayFeedbackAreas:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Key essay feedback areas addressed (essay mode only)
+
+    EndSessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        session:
+          type: object
+          properties:
+            id:
+              type: string
+            status:
+              $ref: '#/components/schemas/SessionStatus'
+            endedAt:
+              type: string
+              format: date-time
+            resolved:
+              type: boolean
+            masteryGain:
+              type: number
+              nullable: true
+            conceptsUsed:
+              type: array
+              items:
+                type: string
+        report:
+          $ref: '#/components/schemas/SessionReport'
+
+    ListSessionsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        sessions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              subject:
+                $ref: '#/components/schemas/Subject'
+              language:
+                $ref: '#/components/schemas/Language'
+              status:
+                $ref: '#/components/schemas/SessionStatus'
+              hintLevel:
+                type: integer
+              resolved:
+                type: boolean
+              conceptsUsed:
+                type: array
+                items:
+                  type: string
+              masteryGain:
+                type: number
+                nullable: true
+              messageCount:
+                type: integer
+              startedAt:
+                type: string
+                format: date-time
+              endedAt:
+                type: string
+                format: date-time
+                nullable: true
+              report:
+                $ref: '#/components/schemas/SessionReport'
+                nullable: true
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+
+    ContributePromptRequest:
+      type: object
+      required:
+        - schoolName
+        - promptText
+      properties:
+        schoolName:
+          type: string
+          minLength: 2
+          maxLength: 200
+          description: Full school name (e.g., "Duke University")
+        academicYear:
+          type: string
+          default: "2025-2026"
+        promptText:
+          type: string
+          minLength: 10
+          maxLength: 5000
+          description: The full essay prompt text
+        wordLimit:
+          type: integer
+          minimum: 1
+          description: Word limit for the essay
+        charLimit:
+          type: integer
+          minimum: 1
+          description: Character limit (if applicable)
+        required:
+          type: boolean
+          default: true
+        promptType:
+          type: string
+          enum: [PERSONAL_STATEMENT, SUPPLEMENTAL, SHORT_ANSWER, ACTIVITY_DESCRIPTION, WHY_SCHOOL]
+          default: SUPPLEMENTAL
+        sourceUrl:
+          type: string
+          format: uri
+          description: URL where the prompt was found
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error: Authentication required
+            message: "Provide an API key via Authorization: Bearer <key>"
+
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error: Validation error
+            details:
+              - path: ["subject"]
+                message: "Required"
+
+    RateLimited:
+      description: Rate limit exceeded (Free tier only; Standard/Premium use soft limits with overage billing)
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Max requests per minute
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests in current window
+        X-RateLimit-Overage:
+          schema:
+            type: string
+            enum: ['true']
+          description: Present and set to "true" when the request was allowed over the plan limit (Standard/Premium only)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error: Rate limit exceeded
+            retryAfter: 30
+            limit: 500
+            window: "1 minute"
+
+  # ============================================
+  # ESSAY PROMPT KNOWLEDGE BASE
+  # ============================================
+
+  /api/prompts/schools:
+    get:
+      tags: [Prompts]
+      summary: List schools
+      description: List all schools in the prompt catalog, optionally filtered by search or selectivity.
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by school name, slug, or location
+        - name: selectivity
+          in: query
+          schema:
+            type: string
+            enum: [MOST_SELECTIVE, HIGHLY_SELECTIVE, SELECTIVE, MODERATE]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of schools
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  schools:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        slug:
+                          type: string
+                        location:
+                          type: string
+                        selectivity:
+                          type: string
+                        applicationPlatform:
+                          type: string
+                        acceptanceRate:
+                          type: number
+                        promptCount:
+                          type: integer
+
+  /api/prompts/schools/{slug}:
+    get:
+      tags: [Prompts]
+      summary: Get school details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: stanford
+      responses:
+        '200':
+          description: School details
+        '404':
+          description: School not found
+
+  /api/prompts/schools/{slug}/prompts:
+    get:
+      tags: [Prompts]
+      summary: Get essay prompts for a school
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: stanford
+        - name: year
+          in: query
+          schema:
+            type: string
+            default: "2025-2026"
+      responses:
+        '200':
+          description: List of prompts for the school
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  school:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      slug:
+                        type: string
+                  academicYear:
+                    type: string
+                  prompts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        promptText:
+                          type: string
+                        wordLimit:
+                          type: integer
+                        required:
+                          type: boolean
+                        promptType:
+                          type: string
+                        promptCategory:
+                          type: string
+                        sortOrder:
+                          type: integer
+
+  /api/prompts/common-app:
+    get:
+      tags: [Prompts]
+      summary: Get Common App personal statement prompts
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: string
+            default: "2025-2026"
+      responses:
+        '200':
+          description: Common App prompts
+
+  /api/prompts/uc-piqs:
+    get:
+      tags: [Prompts]
+      summary: Get UC Personal Insight Questions
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: string
+            default: "2025-2026"
+      responses:
+        '200':
+          description: UC PIQ prompts
+
+  /api/prompts/search:
+    get:
+      tags: [Prompts]
+      summary: Search essay prompts
+      description: Full-text search across all prompts by keyword, category, or type.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Keyword to search in prompt text
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [IDENTITY, CHALLENGE, INTELLECTUAL, COMMUNITY, GROWTH, WHY_US, CREATIVE, EXTRACURRICULAR, DIVERSITY, SHORT_ANSWER, OTHER]
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [PERSONAL_STATEMENT, SUPPLEMENTAL, SHORT_ANSWER, ACTIVITY_DESCRIPTION, WHY_SCHOOL]
+        - name: year
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Matching prompts
+
+  /api/prompts/categories:
+    get:
+      tags: [Prompts]
+      summary: List prompt categories with counts
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: string
+            default: "2025-2026"
+      responses:
+        '200':
+          description: Category list with counts
+
+  /api/prompts/contribute:
+    post:
+      tags: [Prompts]
+      summary: Submit a user-discovered essay prompt
+      description: |
+        Allows authenticated API clients to contribute essay prompts they encounter.
+        The prompt is stored with sourceType=CROWDSOURCED and verifiedAt=null,
+        pending admin review. Duplicate prompts for the same school and year are rejected.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributePromptRequest'
+            examples:
+              supplemental:
+                summary: Contribute a supplemental prompt
+                value:
+                  schoolName: "Duke University"
+                  academicYear: "2025-2026"
+                  promptText: "Duke's commitment to diversity and inclusion includes..."
+                  wordLimit: 250
+                  required: true
+                  promptType: SUPPLEMENTAL
+                  sourceUrl: "https://apply.commonapp.org/..."
+      responses:
+        '201':
+          description: Prompt submitted for review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  prompt:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      schoolName:
+                        type: string
+                      schoolSlug:
+                        type: string
+                      status:
+                        type: string
+                        example: pending_review
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: A similar prompt already exists
+
+  /api/prompts/admin/unverified:
+    get:
+      tags: [Prompts Admin]
+      summary: List unverified prompts
+      description: |
+        Returns all prompts pending review (verifiedAt IS NULL).
+        Requires X-Admin-Secret header.
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of unverified prompts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  prompts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        schoolName:
+                          type: string
+                        schoolSlug:
+                          type: string
+                        academicYear:
+                          type: string
+                        promptText:
+                          type: string
+                        wordLimit:
+                          type: integer
+                          nullable: true
+                        required:
+                          type: boolean
+                        promptType:
+                          type: string
+                        promptCategory:
+                          type: string
+                        sourceType:
+                          type: string
+                        sourceUrl:
+                          type: string
+                          nullable: true
+                        createdAt:
+                          type: string
+                          format: date-time
+                  total:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/prompts/admin/{id}/verify:
+    patch:
+      tags: [Prompts Admin]
+      summary: Verify a prompt
+      description: |
+        Sets verifiedAt on an unverified prompt, marking it as reviewed.
+        Optionally updates promptCategory, promptType, wordLimit, and required.
+        Requires X-Admin-Secret header.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                promptCategory:
+                  type: string
+                  enum: [IDENTITY, CHALLENGE, INTELLECTUAL, COMMUNITY, GROWTH, WHY_US, CREATIVE, EXTRACURRICULAR, DIVERSITY, SHORT_ANSWER, OTHER]
+                promptType:
+                  type: string
+                  enum: [PERSONAL_STATEMENT, SUPPLEMENTAL, SHORT_ANSWER, ACTIVITY_DESCRIPTION, WHY_SCHOOL]
+                wordLimit:
+                  type: integer
+                required:
+                  type: boolean
+      responses:
+        '200':
+          description: Prompt verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  prompt:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      schoolName:
+                        type: string
+                      promptText:
+                        type: string
+                      promptCategory:
+                        type: string
+                      promptType:
+                        type: string
+                      verifiedAt:
+                        type: string
+                        format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Prompt not found
+
+  # ============================================
+  # ADMIN - STRIPE BILLING
+  # ============================================
+
+  /api/admin/keys/{keyId}/stripe-attach:
+    post:
+      tags: [Admin]
+      summary: Attach Stripe billing to an API key
+      description: |
+        Links a Stripe customer and metered subscription item to an API key so
+        overage usage can be billed. The admin creates the Stripe customer and
+        subscription externally (Dashboard/CLI) and provides the IDs here.
+        Requires X-Admin-Secret header.
+      parameters:
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - stripeCustomerId
+                - stripeSubscriptionItemId
+              properties:
+                stripeCustomerId:
+                  type: string
+                  description: Stripe Customer ID (cus_xxx)
+                stripeSubscriptionItemId:
+                  type: string
+                  description: Stripe Subscription Item ID for the metered overage price (si_xxx)
+      responses:
+        '200':
+          description: Stripe billing linked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  apiKey:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      tier:
+                        type: string
+                      stripeCustomerId:
+                        type: string
+                      stripeSubscriptionItemId:
+                        type: string
+                      updatedAt:
+                        type: string
+                        format: date-time
+        '400':
+          description: Invalid Stripe subscription item ID
+        '404':
+          description: API key not found
+
+  /api/admin/keys/{keyId}/stripe-detach:
+    post:
+      tags: [Admin]
+      summary: Remove Stripe billing from an API key
+      description: |
+        Removes the Stripe customer and subscription item linkage from an API key.
+        Overage will still be recorded but not reported to Stripe until re-attached.
+        Requires X-Admin-Secret header.
+      parameters:
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stripe billing detached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  apiKey:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      tier:
+                        type: string
+                      stripeCustomerId:
+                        type: string
+                        nullable: true
+                      stripeSubscriptionItemId:
+                        type: string
+                        nullable: true
+                      updatedAt:
+                        type: string
+                        format: date-time
+                  message:
+                    type: string
+        '404':
+          description: API key not found

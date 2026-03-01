@@ -1,0 +1,67 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "Aprender descubriendo" },
+  "nav": { "home": "Inicio", "practice": "Practica", "progress": "Mi Progreso", "settings": "Ajustes" },
+  "chat": {
+    "placeholder": "Escribe tu pregunta o problema...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "voiceInput": "Entrada de voz",
+    "sessionActive": "Activo",
+    "newChat": "Nuevo chat"
+  },
+  "onboarding": {
+    "welcome": "Bienvenido a Vid (Vidya)!",
+    "selectLanguage": "Elige tu idioma",
+    "selectSubject": "Que asignatura quieres estudiar?",
+    "continue": "Continuar",
+    "getStarted": "Empezar",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "Fisica", "chemistry": "Quimica", "mathematics": "Matematicas", "biology": "Biologia",
+    "coding": "Programacion", "literature": "Literatura", "economics": "Economia",
+    "essay": "Ensayo", "counseling": "Orientacion"
+  },
+  "encouragement": {
+    "goodStart": "Buen comienzo! Pensemos juntos.",
+    "keepGoing": "Vas por buen camino!",
+    "almostThere": "Casi! Piensa en el siguiente paso.",
+    "excellent": "Excelente razonamiento!",
+    "tryAgain": "Intentemos de otra forma.",
+    "showWork": "Muestrame lo que has intentado."
+  },
+  "errors": {
+    "offline": "Sin conexion.",
+    "apiError": "Algo salio mal. Intentalo de nuevo.",
+    "sessionExpired": "Sesion expirada. Iniciando nueva sesion."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeSystem": "Sistema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "apiKey": "Clave API",
+    "apiKeyPlaceholder": "vk_live_...",
+    "about": "Acerca de Vid (Vidya)",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "Historial",
+    "noSessions": "Sin sesiones",
+    "messages": "mensajes"
+  }
+}

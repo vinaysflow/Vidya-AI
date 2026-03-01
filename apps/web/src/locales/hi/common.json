@@ -1,0 +1,75 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "खोज से सीखो" },
+  "nav": { "home": "होम", "practice": "अभ्यास", "progress": "मेरी प्रगति", "settings": "सेटिंग्स" },
+  "chat": {
+    "placeholder": "अपना सवाल या समस्या लिखें...",
+    "send": "भेजें",
+    "thinking": "सोच रहा हूं...",
+    "voiceInput": "आवाज़ से लिखें",
+    "sessionActive": "चालू",
+    "newChat": "नई चैट"
+  },
+  "onboarding": {
+    "welcome": "Vid (Vidya) में आपका स्वागत है!",
+    "selectLanguage": "अपनी पसंदीदा भाषा चुनें",
+    "selectSubject": "आप क्या पढ़ना चाहते हैं?",
+    "continue": "आगे बढ़ें",
+    "getStarted": "शुरू करें",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "भौतिकी", "chemistry": "रसायन", "mathematics": "गणित", "biology": "जीव विज्ञान",
+    "coding": "कोडिंग", "literature": "साहित्य", "economics": "अर्थशास्त्र",
+    "essay": "निबंध लेखन", "counseling": "परामर्श"
+  },
+  "encouragement": {
+    "goodStart": "अच्छी शुरुआत! चलो साथ मिलकर सोचते हैं।",
+    "keepGoing": "आप सही रास्ते पर हैं!",
+    "almostThere": "बस थोड़ा और! सोचो आगे क्या होगा।",
+    "excellent": "बहुत बढ़िया सोच!",
+    "tryAgain": "चलो दूसरे तरीके से सोचते हैं।",
+    "showWork": "बताइए आपने क्या try किया?"
+  },
+  "hints": {
+    "level1": "जो आप जानते हैं उससे शुरू करें।",
+    "level2": "इसमें कौन से concepts हैं, सोचो।",
+    "level3": "यह approach try करें...",
+    "level4": "एक similar example देखो।",
+    "level5": "इसे छोटे steps में तोड़ते हैं।"
+  },
+  "errors": {
+    "offline": "आप offline हैं। कुछ features काम नहीं करेंगे।",
+    "apiError": "कुछ गड़बड़ हो गई। कृपया दोबारा कोशिश करें।",
+    "sessionExpired": "Session expire हो गया। नया शुरू कर रहे हैं।"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "theme": "थीम",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "apiKey": "API Key",
+    "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "सूचनाएं",
+    "about": "Vid (Vidya) के बारे में",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "इतिहास",
+    "noSessions": "कोई सत्र नहीं",
+    "messages": "संदेश"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "Apprendre par la decouverte" },
+  "nav": { "home": "Accueil", "practice": "Pratique", "progress": "Mon Progres", "settings": "Parametres" },
+  "chat": {
+    "placeholder": "Posez votre question ou probleme...",
+    "send": "Envoyer",
+    "thinking": "Reflexion en cours...",
+    "voiceInput": "Saisie vocale",
+    "sessionActive": "Actif",
+    "newChat": "Nouvelle discussion"
+  },
+  "onboarding": {
+    "welcome": "Bienvenue sur Vid (Vidya) !",
+    "selectLanguage": "Choisissez votre langue",
+    "selectSubject": "Quel sujet souhaitez-vous etudier ?",
+    "continue": "Continuer",
+    "getStarted": "Commencer",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "Physique", "chemistry": "Chimie", "mathematics": "Maths", "biology": "Biologie",
+    "coding": "Programmation", "literature": "Litterature", "economics": "Economie",
+    "essay": "Redaction", "counseling": "Conseil"
+  },
+  "encouragement": {
+    "goodStart": "Bon debut ! Reflechissons ensemble.",
+    "keepGoing": "Vous etes sur la bonne voie !",
+    "almostThere": "Presque ! Pensez a ce qui suit.",
+    "excellent": "Excellent raisonnement !",
+    "tryAgain": "Essayons autrement.",
+    "showWork": "Montrez-moi ce que vous avez essaye."
+  },
+  "errors": {
+    "offline": "Vous etes hors ligne.",
+    "apiError": "Une erreur est survenue. Reessayez.",
+    "sessionExpired": "Session expiree. Nouvelle session en cours."
+  },
+  "settings": {
+    "title": "Parametres",
+    "language": "Langue",
+    "theme": "Theme",
+    "themeSystem": "Systeme",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "apiKey": "Cle API",
+    "apiKeyPlaceholder": "vk_live_...",
+    "about": "A propos de Vid (Vidya)",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "Historique",
+    "noSessions": "Aucune session",
+    "messages": "messages"
+  }
+}

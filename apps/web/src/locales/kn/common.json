@@ -1,0 +1,75 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "ಅನ್ವೇಷಣೆಯಿಂದ ಕಲಿಯಿರಿ" },
+  "nav": { "home": "ಮುಖಪುಟ", "practice": "ಅಭ್ಯಾಸ", "progress": "ನನ್ನ ಪ್ರಗತಿ", "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" },
+  "chat": {
+    "placeholder": "ನಿಮ್ಮ ಪ್ರಶ್ನೆ ಅಥವಾ ಸಮಸ್ಯೆಯನ್ನು ಟೈಪ್ ಮಾಡಿ...",
+    "send": "ಕಳುಹಿಸಿ",
+    "thinking": "ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...",
+    "voiceInput": "ಧ್ವನಿ ಇನ್‌ಪುಟ್",
+    "sessionActive": "ಸಕ್ರಿಯ",
+    "newChat": "ಹೊಸ ಚಾಟ್"
+  },
+  "onboarding": {
+    "welcome": "Vid (Vidya) ಗೆ ಸುಸ್ವಾಗತ!",
+    "selectLanguage": "ನಿಮ್ಮ ಇಷ್ಟದ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "selectSubject": "ನೀವು ಏನು ಕಲಿಯಲು ಬಯಸುತ್ತೀರಿ?",
+    "continue": "ಮುಂದುವರಿಸಿ",
+    "getStarted": "ಪ್ರಾರಂಭಿಸಿ",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "ಭೌತಶಾಸ್ತ್ರ", "chemistry": "ರಸಾಯನಶಾಸ್ತ್ರ", "mathematics": "ಗಣಿತ", "biology": "ಜೀವಶಾಸ್ತ್ರ",
+    "coding": "ಕೋಡಿಂಗ್", "literature": "ಸಾಹಿತ್ಯ", "economics": "ಅರ್ಥಶಾಸ್ತ್ರ",
+    "essay": "ಪ್ರಬಂಧ ಬರೆಹ", "counseling": "ಸಮಾಲೋಚನೆ"
+  },
+  "encouragement": {
+    "goodStart": "ಒಳ್ಳೆಯ ಆರಂಭ! ಒಟ್ಟಿಗೆ ಯೋಚಿಸೋಣ.",
+    "keepGoing": "ನೀವು ಸರಿಯಾದ ಹಾದಿಯಲ್ಲಿದ್ದೀರಿ!",
+    "almostThere": "ಬಹುತೇಕ! ಮುಂದೆ ಏನಾಗುತ್ತದೆ ಎಂದು ಯೋಚಿಸಿ.",
+    "excellent": "ಅತ್ಯುತ್ತಮ ಯೋಚನೆ!",
+    "tryAgain": "ಬೇರೆ ರೀತಿಯಲ್ಲಿ ಯೋಚಿಸೋಣ.",
+    "showWork": "ನೀವು ಏನು try ಮಾಡಿದ್ದೀರಿ ಎಂದು ತೋರಿಸಿ."
+  },
+  "hints": {
+    "level1": "ನಿಮಗೆ ತಿಳಿದಿರುವುದರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ.",
+    "level2": "ಇದರಲ್ಲಿ ಯಾವ concepts ಇವೆ ಎಂದು ಯೋಚಿಸಿ.",
+    "level3": "ಈ approach ಪ್ರಯತ್ನಿಸಿ...",
+    "level4": "ಒಂದು similar example ನೋಡಿ.",
+    "level5": "ಇದನ್ನು ಚಿಕ್ಕ steps ಆಗಿ ವಿಭಜಿಸೋಣ."
+  },
+  "errors": {
+    "offline": "ನೀವು offline ಇದ್ದೀರಿ. ಕೆಲವು features ಕೆಲಸ ಮಾಡುವುದಿಲ್ಲ.",
+    "apiError": "ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "sessionExpired": "Session expire ಆಗಿದೆ. ಹೊಸದನ್ನು ಪ್ರಾರಂಭಿಸುತ್ತಿದ್ದೇವೆ."
+  },
+  "settings": {
+    "title": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "language": "ಭಾಷೆ",
+    "theme": "ಥೀಮ್",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "apiKey": "API Key",
+    "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "ಅಧಿಸೂಚನೆಗಳು",
+    "about": "Vid (Vidya) ಬಗ್ಗೆ",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "ಇತಿಹಾಸ",
+    "noSessions": "ಯಾವುದೇ ಸತ್ರಗಳಿಲ್ಲ",
+    "messages": "ಸಂದೇಶಗಳು"
+  }
+}

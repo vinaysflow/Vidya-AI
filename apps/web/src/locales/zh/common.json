@@ -1,0 +1,67 @@
+{
+  "app": { "name": "Vid (Vidya)", "tagline": "探索中学习" },
+  "nav": { "home": "首页", "practice": "练习", "progress": "我的进度", "settings": "设置" },
+  "chat": {
+    "placeholder": "输入你的问题...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "voiceInput": "语音输入",
+    "sessionActive": "进行中",
+    "newChat": "新对话"
+  },
+  "onboarding": {
+    "welcome": "欢迎使用 Vid (Vidya)！",
+    "selectLanguage": "选择你的语言",
+    "selectSubject": "你想学什么科目？",
+    "continue": "继续",
+    "getStarted": "开始",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "subjectTitle": "Choose a subject",
+    "languageTitle": "Choose a language",
+    "goalTitle": "Set a learning goal",
+    "goalPlaceholder": "e.g., master recursion basics, prepare for JEE mechanics",
+    "difficultyTitle": "Pick a difficulty",
+    "skip": "Skip for now",
+    "back": "Back",
+    "finish": "Get started"
+  },
+  "subjects": {
+    "physics": "物理", "chemistry": "化学", "mathematics": "数学", "biology": "生物",
+    "coding": "编程", "literature": "文学", "economics": "经济学",
+    "essay": "写作", "counseling": "咨询"
+  },
+  "encouragement": {
+    "goodStart": "好的开始！让我们一起思考。",
+    "keepGoing": "你走在正确的路上！",
+    "almostThere": "快了！想想下一步。",
+    "excellent": "推理得很好！",
+    "tryAgain": "让我们换个方式。",
+    "showWork": "给我看看你的尝试。"
+  },
+  "errors": {
+    "offline": "网络未连接。",
+    "apiError": "出了点问题，请重试。",
+    "sessionExpired": "会话已过期，正在创建新会话。"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "theme": "主题",
+    "themeSystem": "系统",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "apiKey": "API 密钥",
+    "apiKeyPlaceholder": "vk_live_...",
+    "about": "关于 Vid (Vidya)",
+    "onboarding": "Onboarding",
+    "restartOnboarding": "Restart",
+    "onboardingCompleted": "Onboarding complete",
+    "onboardingIncomplete": "Onboarding not finished",
+    "onboardingHint": "Update your preferences anytime"
+  },
+  "sidebar": {
+    "history": "历史记录",
+    "noSessions": "暂无会话",
+    "messages": "条消息"
+  }
+}
