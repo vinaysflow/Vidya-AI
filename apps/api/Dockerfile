@@ -16,8 +16,11 @@ COPY package.json pnpm-lock.yaml* ./
 COPY prisma ./prisma/
 
 # Install pnpm and dependencies
-RUN npm install -g pnpm@8.15.0
+RUN npm install -g pnpm@8.15.1
 RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+
+# Generate Prisma client using local CLI (v5)
+RUN pnpm exec prisma generate
 
 # Copy source
 COPY tsconfig.json ./
@@ -38,14 +41,13 @@ RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Copy package files and install production deps only
 COPY package.json pnpm-lock.yaml* ./
-RUN npm install -g pnpm@8.15.0
+RUN npm install -g pnpm@8.15.1
 RUN pnpm install --prod --frozen-lockfile 2>/dev/null || pnpm install --prod
 
-# Copy Prisma schema
+# Copy Prisma schema and generated client from builder
 COPY prisma ./prisma/
-
-# Generate Prisma client in production stage
-RUN npx prisma generate
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Copy built JS
 COPY --from=builder /app/dist ./dist/
