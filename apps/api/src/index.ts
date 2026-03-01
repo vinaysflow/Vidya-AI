@@ -105,6 +105,15 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Root route (useful for public link sanity checks)
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'vidya-api',
+    message: 'API is running. See /health for status.',
+  });
+});
+
 // API routes
 app.use('/api/tutor', tutorRouter);
 app.use('/api/admin', adminRouter);
