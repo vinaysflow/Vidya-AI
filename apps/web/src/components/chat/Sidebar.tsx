@@ -127,6 +127,7 @@ function SessionItem({ session, isActive, language, onClick, onDelete }: {
   onClick: () => void;
   onDelete: () => void;
 }) {
+  const { t } = useTranslation();
   const meta = SUBJECT_META.find(s => s.id === session.subject);
   const subjectLabel = meta?.label[language as keyof typeof meta.label] || meta?.label.EN || session.subject;
 
