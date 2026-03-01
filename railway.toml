@@ -1,8 +1,6 @@
 # Railway deployment configuration for Vid (Vidya) API
-# https://docs.railway.app/reference/config-as-code
 
 [build]
-builder = "nixpacks"
 buildCommand = "pnpm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && pnpm --filter @vidya/api build"
 
 [deploy]
