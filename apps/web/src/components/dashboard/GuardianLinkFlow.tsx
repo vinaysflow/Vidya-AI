@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { UserPlus, Check, Loader2 } from 'lucide-react';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 export function GuardianLinkFlow({ guardianUserId }: { guardianUserId: string }) {
   const [studentId, setStudentId] = useState('');
@@ -17,7 +18,7 @@ export function GuardianLinkFlow({ guardianUserId }: { guardianUserId: string })
     try {
       const res = await fetch(`${API_BASE}/api/dashboard/guardian/link`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getJsonHeaders(),
         body: JSON.stringify({ guardianUserId, studentUserId: studentId, relationship }),
       });
       const data = await res.json();

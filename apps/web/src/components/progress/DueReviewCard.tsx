@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Clock, ChevronRight } from 'lucide-react';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 interface DueReview {
   name: string;
@@ -18,7 +19,9 @@ export function DueReviewCard({ onStartReview }: DueReviewCardProps) {
   const [reviews, setReviews] = useState<DueReview[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/progress/due-reviews?userId=anonymous`)
+    fetch(`${API_BASE}/api/progress/due-reviews?userId=anonymous`, {
+      headers: getAuthHeader(),
+    })
       .then((r) => r.json())
       .then((res) => {
         if (res.success) setReviews(res.reviews.slice(0, 3));

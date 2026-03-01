@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Lock, CheckCircle, Circle } from 'lucide-react';
 import type { Subject } from '../../stores/chatStore';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 interface PathStep {
   conceptKey: string | null;
@@ -22,7 +23,9 @@ export function MasteryTree({ subject, onConceptClick }: MasteryTreeProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/progress/path/${subject}?userId=anonymous`)
+    fetch(`${API_BASE}/api/progress/path/${subject}?userId=anonymous`, {
+      headers: getAuthHeader(),
+    })
       .then((r) => r.json())
       .then((res) => {
         if (res.success) setSteps(res.path);

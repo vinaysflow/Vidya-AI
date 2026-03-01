@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { get as idbGet, set as idbSet, del as idbDel } from 'idb-keyval';
+import { getApiBase, getAuthHeader } from '../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 interface OfflinePack {
   subject: string;
@@ -34,7 +35,9 @@ export const useOfflineStore = create<OfflineState>((set, getState) => ({
   downloadPack: async (subject) => {
     set({ isDownloading: true });
     try {
-      const res = await fetch(`${API_BASE}/api/offline/pack/${subject}`);
+      const res = await fetch(`${API_BASE}/api/offline/pack/${subject}`, {
+        headers: getAuthHeader(),
+      });
       const data = await res.json();
       if (data.success) {
         await idbSet(`offline-pack-${subject}`, data.pack);

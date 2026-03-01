@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { School, Copy, Check, Loader2 } from 'lucide-react';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 export function ClassroomManager({ teacherId }: { teacherId: string }) {
   const [name, setName] = useState('');
@@ -15,7 +16,7 @@ export function ClassroomManager({ teacherId }: { teacherId: string }) {
     try {
       const res = await fetch(`${API_BASE}/api/dashboard/classroom`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getJsonHeaders(),
         body: JSON.stringify({ teacherId, name }),
       });
       const data = await res.json();

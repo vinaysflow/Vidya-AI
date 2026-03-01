@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 export function ActivityTimeline({ studentId }: { studentId: string }) {
   const [data, setData] = useState<Array<{ date: string; count: number }>>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/dashboard/student/${studentId}/activity`)
+    fetch(`${API_BASE}/api/dashboard/student/${studentId}/activity`, {
+      headers: getAuthHeader(),
+    })
       .then((r) => r.json())
       .then((res) => { if (res.success) setData(res.activity); })
       .catch(() => {});

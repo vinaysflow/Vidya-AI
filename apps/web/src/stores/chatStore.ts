@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { getApiBase, getJsonHeaders } from '../lib/api';
 
 // ============================================
 // TYPES
@@ -160,12 +161,10 @@ interface ChatState {
 // API
 // ============================================
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 function authHeaders(apiKey: string | null): Record<string, string> {
-  const h: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (apiKey) h['Authorization'] = `Bearer ${apiKey}`;
-  return h;
+  return getJsonHeaders(apiKey);
 }
 
 // ============================================

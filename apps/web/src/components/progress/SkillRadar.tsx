@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import type { Subject } from '../../stores/chatStore';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 interface SkillRadarProps {
   subject: Subject;
@@ -13,7 +14,9 @@ export function SkillRadar({ subject }: SkillRadarProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/progress/radar/${subject}?userId=anonymous`)
+    fetch(`${API_BASE}/api/progress/radar/${subject}?userId=anonymous`, {
+      headers: getAuthHeader(),
+    })
       .then((r) => r.json())
       .then((res) => {
         if (res.success) {

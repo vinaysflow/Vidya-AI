@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Trophy, Zap } from 'lucide-react';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
 interface LeaderboardEntry {
   rank: number;
@@ -8,14 +9,16 @@ interface LeaderboardEntry {
   level: number;
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 export function LeaderboardPanel({ currentUserId: _currentUserId }: { currentUserId?: string }) {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/gamification/leaderboard?limit=20`)
+    fetch(`${API_BASE}/api/gamification/leaderboard?limit=20`, {
+      headers: getAuthHeader(),
+    })
       .then((r) => r.json())
       .then((data) => setEntries(data.leaderboard || []))
       .catch(() => {})

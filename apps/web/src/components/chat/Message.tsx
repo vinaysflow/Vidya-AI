@@ -6,8 +6,9 @@ import { WhiteboardContainer } from '../whiteboard/WhiteboardContainer';
 import { AudioPlayer } from '../voice/AudioPlayer';
 import { useChatStore } from '../../stores/chatStore';
 import { VOICE_ENABLED } from '../../lib/featureFlags';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 const ttsCache = new Map<string, string>();
 
@@ -57,7 +58,7 @@ export function Message({ message }: MessageProps) {
     try {
       const res = await fetch(`${API_BASE}/api/voice/synthesize`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getJsonHeaders(),
         body: JSON.stringify({
           text: message.content.slice(0, 4000),
           language,

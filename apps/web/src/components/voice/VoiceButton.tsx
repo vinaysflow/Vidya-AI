@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
 import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { getApiBase, getAuthHeader } from '../../lib/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = getApiBase();
 
 interface VoiceButtonProps {
   language: string;
@@ -38,6 +39,7 @@ export function VoiceButton({ language, onTranscription, disabled }: VoiceButton
 
           const res = await fetch(`${API_BASE}/api/voice/transcribe`, {
             method: 'POST',
+            headers: getAuthHeader(),
             body: formData,
           });
           const data = await res.json();
