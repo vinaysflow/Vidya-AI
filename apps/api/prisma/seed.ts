@@ -11,6 +11,8 @@
 import { PrismaClient } from '@prisma/client';
 import { generateApiKey } from '../src/middleware/auth';
 import { seedEssayPrompts } from './seeds/essayPrompts';
+import { seedConcepts } from './seeds/concepts';
+import { seedHints } from './seeds/hints';
 
 const prisma = new PrismaClient();
 
@@ -71,6 +73,10 @@ async function main() {
 
   // Seed essay prompts (Common App, UC PIQs, top 20 schools)
   await seedEssayPrompts(prisma);
+
+  // Seed concept and hint banks (STEM, Counseling, Essay, etc.)
+  await seedConcepts(prisma);
+  await seedHints(prisma);
 }
 
 main()

@@ -616,9 +616,9 @@ export const SUBJECT_META: SubjectMeta[] = [
   { id: 'ECONOMICS', category: 'humanities', color: 'from-teal-500 to-green-500',
     label: { EN: 'Economics', HI: 'अर्थशास्त्र', KN: 'ಅರ್ಥಶಾಸ್ತ್ರ', FR: 'Economie', DE: 'Wirtschaft', ES: 'Economia', ZH: '经济学' } },
   { id: 'ESSAY_WRITING', category: 'skills', color: 'from-rose-500 to-pink-500',
-    label: { EN: 'Essay Writing', HI: 'निबंध लेखन', KN: 'ಪ್ರಬಂಧ ಬರೆಹ', FR: 'Redaction', DE: 'Aufsatz', ES: 'Ensayo', ZH: '写作' } },
+    label: { EN: 'College Essay Writing', HI: 'निबंध लेखन', KN: 'ಪ್ರಬಂಧ ಬರೆಹ', FR: 'Redaction', DE: 'Aufsatz', ES: 'Ensayo', ZH: '写作' } },
   { id: 'COUNSELING', category: 'skills', color: 'from-violet-500 to-purple-500',
-    label: { EN: 'Counseling', HI: 'परामर्श', KN: 'ಸಮಾಲೋಚನೆ', FR: 'Conseil', DE: 'Beratung', ES: 'Orientacion', ZH: '咨询' } },
+    label: { EN: 'College Counselling', HI: 'परामर्श', KN: 'ಸಮಾಲೋಚನೆ', FR: 'Conseil', DE: 'Beratung', ES: 'Orientacion', ZH: '咨询' } },
 ];
 
 export const CATEGORY_LABELS: Record<SubjectCategory, Record<Language, string>> = {

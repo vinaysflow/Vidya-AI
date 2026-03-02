@@ -213,7 +213,7 @@ describe('Counselor Integration: COLLEGE_US (PathWiz)', () => {
     const responseCall = mockCreate.mock.calls[1][0];
     const responseSystemPrompt = responseCall.system[0].text;
     expect(responseSystemPrompt).toContain('Vidya'); // Base prompt
-    expect(responseSystemPrompt).toContain('US College Application Counselor'); // Variant overlay
+    expect(responseSystemPrompt).toContain('College Counselling (US)'); // Variant overlay
     expect(responseSystemPrompt).toContain('STUDENT CONTEXT (COLLEGE_US)'); // Client context
     expect(responseSystemPrompt).toContain('First-Generation Student: Yes'); // Context detail
     expect(responseSystemPrompt).toContain('Computer Science'); // Major interests

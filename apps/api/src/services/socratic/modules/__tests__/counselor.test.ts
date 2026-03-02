@@ -300,7 +300,7 @@ describe('buildResponseSystemAddendum', () => {
       },
     });
 
-    expect(result).toContain('US College Application Counselor');
+    expect(result).toContain('College Counselling (US)');
     expect(result).toContain('STUDENT CONTEXT (COLLEGE_US)');
     expect(result).toContain('Grade: 11');
     expect(result).toContain('GPA Range: 3.5–4');
@@ -337,7 +337,7 @@ describe('buildResponseSystemAddendum', () => {
 
   it('works without clientContext', () => {
     const result = build(mockAnalysis, { variant: 'COLLEGE_US' });
-    expect(result).toContain('US College Application Counselor');
+    expect(result).toContain('College Counselling (US)');
     expect(result).toContain('Analysis Results');
     expect(result).toContain('school list balance');
   });

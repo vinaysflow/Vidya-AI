@@ -160,6 +160,7 @@ function formatCollegeUsContext(ctx: Record<string, any>): string {
 
   const s = ctx.studentContext;
   const grade = s?.grade || 12;
+  const isMiddleSchool = grade <= 8;
   const isUnderclassman = grade <= 10;
 
   if (s) {
@@ -181,10 +182,10 @@ function formatCollegeUsContext(ctx: Record<string, any>): string {
     if (s.accommodations?.length) lines.push(`- Accommodations: ${s.accommodations.join(', ')}`);
   }
 
-  // V3: Underclassman-specific context (grades 9-10)
+  // V3: Underclassman-specific context (grades 6-10)
   const uc = ctx.underclassmanContext;
   if (uc && isUnderclassman) {
-    lines.push('### Underclassman Profile');
+    lines.push(isMiddleSchool ? '### Middle School Profile' : '### Underclassman Profile');
     if (uc.courseRigor) {
       lines.push(`- Current Honors/AP Courses: ${uc.courseRigor.currentHonorsAP}`);
       if (uc.courseRigor.availableNext?.length) {
@@ -213,9 +214,21 @@ function formatCollegeUsContext(ctx: Record<string, any>): string {
       ].filter(Boolean);
       if (prefs.length) lines.push(`- College Preferences: ${prefs.join(', ')}`);
     }
+
+    if (uc.middleSchoolContext) {
+      if (uc.middleSchoolContext.studyHabits?.length) {
+        lines.push(`- Study Habits: ${uc.middleSchoolContext.studyHabits.join(', ')}`);
+      }
+      if (uc.middleSchoolContext.interests?.length) {
+        lines.push(`- Interests: ${uc.middleSchoolContext.interests.join(', ')}`);
+      }
+      if (uc.middleSchoolContext.activitySampling?.length) {
+        lines.push(`- Activity Sampling: ${uc.middleSchoolContext.activitySampling.join(', ')}`);
+      }
+    }
   }
 
-  // Application state: omit entirely for grades 9-10 (irrelevant, avoids LLM confusion)
+  // Application state: omit entirely for grades 6-10 (irrelevant, avoids LLM confusion)
   const a = ctx.applicationState;
   if (a && !isUnderclassman) {
     lines.push('### Application State');
@@ -244,6 +257,21 @@ function formatCollegeUsContext(ctx: Record<string, any>): string {
     }
   }
 
+  // Microassessment summary (optional; present when PathWiz starts sending data)
+  const micro = (ctx as Record<string, any>).microAssessment as Record<string, any> | undefined;
+  if (micro) {
+    lines.push('### Microassessment Summary');
+    if (micro.grade) lines.push(`- Grade: ${micro.grade}`);
+    if (micro.overallScore != null) lines.push(`- Overall Score: ${micro.overallScore}/100`);
+    if (micro.strengths?.length) lines.push(`- Strengths: ${micro.strengths.join(', ')}`);
+    if (micro.weaknesses?.length) lines.push(`- Gaps: ${micro.weaknesses.join(', ')}`);
+    if (micro.academicReadiness?.score != null) lines.push(`- Academic Readiness: ${micro.academicReadiness.score}/100`);
+    if (micro.testPrep?.score != null) lines.push(`- Test Prep: ${micro.testPrep.score}/100`);
+    if (micro.activities?.score != null) lines.push(`- Activities: ${micro.activities.score}/100`);
+    if (micro.careerMajor?.score != null) lines.push(`- Career/Major: ${micro.careerMajor.score}/100`);
+    if (micro.collegeReadiness?.score != null) lines.push(`- College Readiness: ${micro.collegeReadiness.score}/100`);
+  }
+
   // V2 Enriched Context (only rendered if present)
   const ex = ctx.explorationContext;
   if (ex) {
@@ -270,7 +298,7 @@ function formatCollegeUsContext(ctx: Record<string, any>): string {
     if (gp.stalledGoals?.length) lines.push(`- ⚠️ Stalled: ${gp.stalledGoals.join(', ')}`);
   }
 
-  // Scholarship context: omit for grades 9-10 (not relevant yet)
+  // Scholarship context: omit for grades 6-10 (not relevant yet)
   const sc = ctx.scholarshipContext;
   if (sc && !isUnderclassman) {
     lines.push('### Scholarship Context');
@@ -401,7 +429,7 @@ function getVariantOverlay(variant: string | undefined): string {
  * Derive the counseling stage from context and variant.
  * Returns undefined for unknown variants (safe: all downstream skips stage logic).
  *
- * COLLEGE_US stages: discoverer (9), builder (10), strategist (11),
+ * COLLEGE_US stages: discoverer (6-9), builder (10), strategist (11),
  *   executor (12 pre-submit), navigator (12 post-submit, >=50% apps submitted)
  * CAREER_INDIA stages: foundation_builder (FORMATIVE / gr 5-7),
  *   path_explorer (TRANSITIONAL / gr 8-9), exam_strategist (EXECUTIONAL / gr 10-12)
@@ -415,7 +443,7 @@ export function deriveCounselingStage(
   if (variant === 'COLLEGE_US') {
     const grade = context.studentContext?.grade;
     if (!grade) return undefined;
-    if (grade === 9) return 'discoverer';
+    if (grade <= 9) return 'discoverer';
     if (grade === 10) return 'builder';
     if (grade === 11) return 'strategist';
     // Grade 12: check if applications submitted

@@ -9,7 +9,7 @@
 
 import type { TutorModule } from '../module';
 import type { Language, QuestionType, AnalysisResult } from '../types';
-import { SOCRATIC_SYSTEM_PROMPT, getLanguageContext, SUBJECT_QUESTIONS, STEM_TOPIC_KEYS } from '../prompts/socratic';
+import { SOCRATIC_SYSTEM_PROMPT, getLanguageContext, SUBJECT_QUESTIONS, STEM_TOPIC_KEYS, STEM_TOPIC_PRIMERS } from '../prompts/socratic';
 import { ANALYSIS_PROMPT } from '../prompts/analysis';
 import { HINT_LEVEL_PROMPTS } from '../../../prompts/socratic-system-prompt';
 import { classifyPhysicsTopic, buildPhysicsDepthAddendum } from '../prompts/physics-depth';
@@ -444,6 +444,12 @@ export const stemModule: TutorModule = {
       ? `\nEXAMPLE SOCRATIC QUESTIONS (adapt, don't copy verbatim):\n${questions.map(q => `- ${q}`).join('\n')}`
       : '';
 
+    const primers = STEM_TOPIC_PRIMERS[subjectKey as keyof typeof STEM_TOPIC_PRIMERS];
+    const primerLines = topicKey && primers ? (primers[topicKey] || []) : [];
+    const primerSection = primerLines.length
+      ? `\nTOPIC PRIMER (short):\n${primerLines.map(p => `- ${p}`).join('\n')}`
+      : '';
+
     let physicsDepthSection = '';
     if (subjectKey === 'PHYSICS') {
       const physicsTopic = (metadata?.topic as string) || classifyPhysicsTopic(
@@ -459,7 +465,7 @@ CURRENT CONTEXT:
 - Concepts Student is Using: ${a.conceptsIdentified?.join(', ') || 'unclear'}
 - Concepts Student is Missing: ${a.conceptGaps?.join(', ') || 'none identified'}
 - Student's Strengths: ${a.studentStrengths?.join(', ') || 'attempting the problem'}
-${questionBankSection}${physicsDepthSection}
+${questionBankSection}${primerSection}${physicsDepthSection}
 
 RESPONSE TYPE GUIDE:
 - celebration: Acknowledge success, then ask them to explain WHY it works

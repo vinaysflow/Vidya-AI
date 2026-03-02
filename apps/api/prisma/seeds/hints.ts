@@ -1,6 +1,5 @@
 import { PrismaClient, HintType } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { pathToFileURL } from 'url';
 
 interface HintSeed {
   conceptKey: string;
@@ -67,6 +66,26 @@ const HINT_BANK: HintSeed[] = [
       { level: 5, content: 'Example: Solid sphere rolling down incline. I = 2MR²/5. a = gsinθ/(1 + 2/5) = 5gsinθ/7. Slower than a sliding block (a = gsinθ).', type: 'EXAMPLE' },
     ],
   },
+  {
+    conceptKey: 'phys_vectors',
+    hints: [
+      { level: 1, content: 'Vectors have magnitude and direction; scalars have only magnitude.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Resolve vectors into x and y components before adding them.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Draw a simple diagram to show directions and angles.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Use: A_x = A cosθ, A_y = A sinθ, and |A| = √(A_x² + A_y²).', type: 'FORMULA' },
+      { level: 5, content: 'Example: A 10 N force at 30° has components 8.66 N (x) and 5 N (y).', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'phys_motion_graphs',
+    hints: [
+      { level: 1, content: 'The slope of a position-time graph is velocity.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'The slope of a velocity-time graph is acceleration.', type: 'PROCEDURAL' },
+      { level: 3, content: 'The area under a velocity-time graph gives displacement.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Check units: slope of x-t is m/s, slope of v-t is m/s².', type: 'FORMULA' },
+      { level: 5, content: 'Example: A flat v-t line at 5 m/s for 4 s means displacement = 20 m.', type: 'EXAMPLE' },
+    ],
+  },
 
   // ═══════════════════════════════════════════════
   // CHEMISTRY HINTS
@@ -120,6 +139,26 @@ const HINT_BANK: HintSeed[] = [
       { level: 3, content: 'Standard cell potential: E°cell = E°cathode − E°anode. Positive E°cell means the reaction is spontaneous (ΔG < 0).', type: 'CONCEPTUAL' },
       { level: 4, content: 'Nernst: E = E° − (RT/nF)lnQ = E° − (0.059/n)logQ at 25°C. ΔG° = −nFE°. Faraday: m = (M×I×t)/(n×F).', type: 'FORMULA' },
       { level: 5, content: 'Example: Zn-Cu cell. Zn → Zn²⁺ + 2e⁻ (E°=-0.76V, anode). Cu²⁺ + 2e⁻ → Cu (E°=+0.34V, cathode). E°cell = 0.34−(−0.76) = 1.10V.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'chem_mole_concept',
+    hints: [
+      { level: 1, content: 'A mole is a counting unit, like a dozen, but much larger.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Use molar mass to convert between grams and moles.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use Avogadro\'s number to convert moles to particles.', type: 'PROCEDURAL' },
+      { level: 4, content: 'n = mass / molar mass; particles = n × 6.022×10^23.', type: 'FORMULA' },
+      { level: 5, content: 'Example: 18 g of water = 1 mole = 6.022×10^23 molecules.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'chem_stoichiometry',
+    hints: [
+      { level: 1, content: 'Balance the chemical equation before doing any math.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Convert given quantities to moles to compare reactants.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Identify the limiting reagent — it runs out first.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Use mole ratios from coefficients to find theoretical yield.', type: 'FORMULA' },
+      { level: 5, content: 'Example: If 1 mol A reacts with 2 mol B, you need double B for complete reaction.', type: 'EXAMPLE' },
     ],
   },
 
@@ -177,6 +216,36 @@ const HINT_BANK: HintSeed[] = [
       { level: 5, content: 'Example: A bag has 4 red and 6 blue balls. Two drawn without replacement. P(both red) = (4/10)(3/9) = 12/90 = 2/15.', type: 'EXAMPLE' },
     ],
   },
+  {
+    conceptKey: 'math_functions',
+    hints: [
+      { level: 1, content: 'A function assigns each input exactly one output.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Identify the domain (allowed inputs) and range (possible outputs).', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use graph transformations: shift, stretch, reflect.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Inverse functions swap x and y; check one-to-one before inverting.', type: 'FORMULA' },
+      { level: 5, content: 'Example: f(x)=2x+3 has inverse f^{-1}(y)=(y-3)/2.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'math_polynomials',
+    hints: [
+      { level: 1, content: 'Polynomials are sums of powers of x with constant coefficients.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Use factor theorem: if f(a)=0, then (x-a) is a factor.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Degree tells you max number of roots and end behavior.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Remainder theorem: f(a) is the remainder when dividing by (x-a).', type: 'FORMULA' },
+      { level: 5, content: 'Example: f(x)=x^2-5x+6 factors to (x-2)(x-3).', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'math_linear_inequalities',
+    hints: [
+      { level: 1, content: 'Solve inequalities like equations, but watch the sign.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'When you multiply or divide by a negative, flip the inequality.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Graph solutions on a number line to visualize intervals.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Use interval notation: (-∞, 3] or (2, 5).', type: 'FORMULA' },
+      { level: 5, content: 'Example: 2x + 1 < 5 → x < 2.', type: 'EXAMPLE' },
+    ],
+  },
 
   // ═══════════════════════════════════════════════
   // BIOLOGY HINTS
@@ -222,6 +291,26 @@ const HINT_BANK: HintSeed[] = [
       { level: 5, content: 'Example: Why are C4 plants more efficient in hot/dry climates? PEP carboxylase has higher CO₂ affinity than RuBisCO and doesn\'t do photorespiration.', type: 'EXAMPLE' },
     ],
   },
+  {
+    conceptKey: 'bio_plant_transport',
+    hints: [
+      { level: 1, content: 'Water moves up xylem; sugars move in phloem.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Transpiration pull drives water upward from roots to leaves.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Cohesion and adhesion keep the water column intact.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Phloem transport uses pressure flow from source to sink.', type: 'FORMULA' },
+      { level: 5, content: 'Example: Stomata opening increases transpiration and water uptake.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'bio_homeostasis',
+    hints: [
+      { level: 1, content: 'Homeostasis keeps internal conditions stable.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Most systems use negative feedback to return to a set point.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Identify sensor, control center, and effector in the loop.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Body temperature and blood glucose are classic examples.', type: 'FORMULA' },
+      { level: 5, content: 'Example: Sweating cools the body when temperature rises.', type: 'EXAMPLE' },
+    ],
+  },
 
   // ═══════════════════════════════════════════════
   // CODING HINTS
@@ -258,6 +347,36 @@ const HINT_BANK: HintSeed[] = [
     ],
   },
   {
+    conceptKey: 'code_two_pointers',
+    hints: [
+      { level: 1, content: 'Two pointers often work when the data is sorted or you need to scan from both ends.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Move left or right pointer based on whether your condition is too small or too large.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Each pointer moves at most n times, making it O(n).', type: 'PROCEDURAL' },
+      { level: 4, content: 'Common use cases: pair sums, removing duplicates, and partitioning arrays.', type: 'FORMULA' },
+      { level: 5, content: 'Example: Sorted array, target sum. Start left/right, move the pointer that brings sum closer to target.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'code_sliding_window',
+    hints: [
+      { level: 1, content: 'Sliding window keeps a running window instead of re-checking all elements.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Expand the window to include more elements; shrink to restore a condition.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Track window state (sum, counts) and update in O(1).', type: 'PROCEDURAL' },
+      { level: 4, content: 'Best for longest/shortest subarray problems with a constraint.', type: 'FORMULA' },
+      { level: 5, content: 'Example: Longest substring without repeats: move right pointer, shrink from left when repeat appears.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'code_prefix_sums',
+    hints: [
+      { level: 1, content: 'Prefix sums store cumulative totals to answer range queries quickly.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Build prefix[i] = prefix[i-1] + arr[i].', type: 'PROCEDURAL' },
+      { level: 3, content: 'Range sum l..r = prefix[r] - prefix[l-1].', type: 'PROCEDURAL' },
+      { level: 4, content: 'Great for multiple range queries or finding subarray sums.', type: 'FORMULA' },
+      { level: 5, content: 'Example: If prefix[4]=10 and prefix[1]=3, sum[2..4]=7.', type: 'EXAMPLE' },
+    ],
+  },
+  {
     conceptKey: 'code_dp',
     hints: [
       { level: 1, content: 'Can the problem be broken into overlapping subproblems with optimal substructure? If yes, DP applies.', type: 'CONCEPTUAL' },
@@ -280,6 +399,16 @@ const HINT_BANK: HintSeed[] = [
       { level: 3, content: 'Decision trees split data based on feature thresholds. At each node, choose the split that maximizes information gain (reduces entropy).', type: 'CONCEPTUAL' },
       { level: 4, content: 'Accuracy = (TP+TN)/(TP+TN+FP+FN). Precision = TP/(TP+FP). Recall = TP/(TP+FN). F1 = 2·P·R/(P+R).', type: 'FORMULA' },
       { level: 5, content: 'Example: Email spam filter. Features: word frequency, sender reputation. Train on labeled emails. Precision matters (don\'t flag good emails). Recall matters (don\'t miss spam).', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'ai_embeddings',
+    hints: [
+      { level: 1, content: 'Embeddings turn items (words, images) into vectors of numbers.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Similar items have vectors close to each other in space.', type: 'PROCEDURAL' },
+      { level: 3, content: 'You can measure similarity with cosine similarity or dot product.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Embeddings enable search: query vector → nearest neighbors.', type: 'FORMULA' },
+      { level: 5, content: 'Example: "king" and "queen" end up close in vector space.', type: 'EXAMPLE' },
     ],
   },
   {
@@ -558,6 +687,26 @@ const HINT_BANK: HintSeed[] = [
     ],
   },
   {
+    conceptKey: 'ai_loss_functions',
+    hints: [
+      { level: 1, content: 'A loss function tells the model how wrong it is.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'For regression, mean squared error is common; for classification, cross-entropy.', type: 'PROCEDURAL' },
+      { level: 3, content: 'The model tries to minimize loss during training.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Lower loss generally means better fit to data.', type: 'FORMULA' },
+      { level: 5, content: 'Example: Predicting prices uses MSE; spam detection uses cross-entropy.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'ai_model_selection',
+    hints: [
+      { level: 1, content: 'Model selection is choosing the best model for your task and constraints.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Use a validation set or cross-validation to compare models.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Balance accuracy with latency, size, and interpretability.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Avoid tuning on the test set to keep evaluation fair.', type: 'FORMULA' },
+      { level: 5, content: 'Example: A slightly less accurate model may win if it is much faster.', type: 'EXAMPLE' },
+    ],
+  },
+  {
     conceptKey: 'ai_cnn',
     hints: [
       { level: 1, content: 'CNNs are designed for grid-like data (images). They learn spatial features hierarchically: edges → textures → parts → objects.', type: 'CONCEPTUAL' },
@@ -787,9 +936,240 @@ const HINT_BANK: HintSeed[] = [
       { level: 5, content: 'Example: Does a discount increase sales? If you only discount to loyal customers, sales may be higher anyway. Randomly offer discount to a subset and compare outcomes to isolate causal effect.', type: 'EXAMPLE' },
     ],
   },
+
+  // ═══════════════════════════════════════════════
+  // ESSAY WRITING HINTS
+  // ═══════════════════════════════════════════════
+
+  {
+    conceptKey: 'essay_prompt_fit',
+    hints: [
+      { level: 1, content: 'What is the prompt really asking for? Try to summarize it in one sentence.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'List the key words in the prompt (e.g., challenge, community, identity). Make sure your story addresses each one.', type: 'PROCEDURAL' },
+      { level: 3, content: 'If someone read only your first paragraph, would they know which prompt you chose?', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Check alignment: story (what happened) + reflection (why it matters) + prompt link (how it answers the question).', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: If the prompt asks about a challenge, focus on one obstacle and how you responded, not a list of successes.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_specificity',
+    hints: [
+      { level: 1, content: 'Where can you add a concrete detail that makes the moment feel real?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Add one sensory detail (what you saw, heard, or felt).', type: 'PROCEDURAL' },
+      { level: 3, content: 'Replace abstract words (hard, important, meaningful) with a short example of what that looked like.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Aim for a small moment instead of a whole timeline. A focused scene is more specific.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Instead of "I was nervous," show a detail like shaking hands or a racing heart.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_voice',
+    hints: [
+      { level: 1, content: 'Does this sound like how you would explain it to a friend? If not, make it more natural.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Cut any formal phrases you would never say out loud.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Add a short line that shows your personality or humor, if it fits the moment.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Voice is consistency: keep the same tone from beginning to end so the reader hears you.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: Simple, clear sentences often sound more authentic than complex ones.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_reflection',
+    hints: [
+      { level: 1, content: 'What did this experience teach you about yourself?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Add one line that explains why this moment matters now, not just then.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Try a before/after contrast: who were you then vs who are you now?', type: 'PROCEDURAL' },
+      { level: 4, content: 'Reflection is the so-what. Connect the moment to a value, habit, or belief.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: "It taught me patience" is weaker than explaining how you now approach challenges differently.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_narrative_arc',
+    hints: [
+      { level: 1, content: 'Where does the story start, and what changes by the end?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Pick one turning point and build the essay around it.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Cut extra background so the reader can stay with the main moment.', type: 'PROCEDURAL' },
+      { level: 4, content: 'A clear arc: setup → challenge → action → reflection.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: One meaningful day can show growth better than a multi-year summary.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_structure',
+    hints: [
+      { level: 1, content: 'Does each paragraph have a clear purpose?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Make sure each paragraph leads logically to the next.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use short transitions to guide the reader ("Then," "Because of that").', type: 'PROCEDURAL' },
+      { level: 4, content: 'If a paragraph repeats the same idea, combine or cut it.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: A tight 4-5 paragraph flow is often clearer than a long, wandering draft.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_opening',
+    hints: [
+      { level: 1, content: 'What specific moment can you start with?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Avoid a broad statement; jump into action or a scene.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use one vivid detail in the first two sentences.', type: 'PROCEDURAL' },
+      { level: 4, content: 'The opening should hint at the theme without explaining everything.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: A single moment can hook more than a summary of your whole background.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_closing',
+    hints: [
+      { level: 1, content: 'What do you want the reader to remember most?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Connect the ending to the opening to create closure.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Add one line of reflection rather than a list of achievements.', type: 'PROCEDURAL' },
+      { level: 4, content: 'End with insight, not a resume line.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: A clear takeaway is stronger than a dramatic quote or slogan.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_theme',
+    hints: [
+      { level: 1, content: 'What is the one idea that connects your essay together?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'If you removed a paragraph, would the theme still be clear? If not, make the theme explicit.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use a small repeated detail or phrase to reinforce the theme.', type: 'PROCEDURAL' },
+      { level: 4, content: 'A theme is not a topic. It is what the experience means to you.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: A theme like resilience is stronger when tied to a specific moment.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'essay_revision',
+    hints: [
+      { level: 1, content: 'What is one sentence you can remove without losing meaning?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Tighten long sentences by splitting them or removing extra adjectives.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Read your draft out loud. Anything that feels awkward should be revised.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Ask: does every paragraph add new information or reflection?', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Revision is often about cutting 10-20% of words without losing meaning.', type: 'EXAMPLE' },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // COLLEGE COUNSELLING HINTS
+  // ═══════════════════════════════════════════════
+
+  {
+    conceptKey: 'counsel_academic_readiness',
+    hints: [
+      { level: 1, content: 'What does your grade trend look like over the last few terms?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Pick one class to improve this term and set a weekly plan for it.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Consistency matters more than a single perfect term. Focus on small weekly gains.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Track your grades by subject and look for patterns in where you struggle.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: A steady rise from B to A- to A can be a strong signal of growth.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_course_rigor',
+    hints: [
+      { level: 1, content: 'Which classes will stretch you while still being realistic to manage?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Balance rigor with performance. One strong AP is better than three that overwhelm you.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Choose rigor in your areas of interest when possible.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Plan year by year: increase difficulty gradually so your GPA stays stable.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: If math is your strength, take a harder math course and keep other courses balanced.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_study_habits',
+    hints: [
+      { level: 1, content: 'What study habit works best for you right now?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Use small daily blocks instead of last-minute cramming.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Make a weekly plan: 3-5 short sessions per subject.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Reflect weekly: what worked, what did not, and what to adjust.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: 30 minutes after school each day is more effective than 4 hours on Sunday.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_test_timeline',
+    hints: [
+      { level: 1, content: 'When do you want to take your first SAT/ACT?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Work backward from the test date and plan prep in 8-12 week blocks.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Leave room for one retake if your goal score is not reached.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Use a calendar to mark test dates, prep milestones, and practice tests.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: If you want a spring test, start prep in winter and schedule a practice test every 2-3 weeks.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_test_baseline',
+    hints: [
+      { level: 1, content: 'A baseline test helps you see where you are starting, not where you finish.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Take a timed diagnostic test to identify weak sections.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Use the baseline to set a realistic goal score.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Track section scores so you know where prep time should go.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: If math lags behind reading, spend extra time on math practice and review.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_activity_breadth',
+    hints: [
+      { level: 1, content: 'What activities are you curious to try this year?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Try 2-3 different areas before choosing where to focus.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Early breadth helps you discover what you actually enjoy.', type: 'CONCEPTUAL' },
+      { level: 4, content: 'Pick one academic, one creative, and one community activity to sample.', type: 'PROCEDURAL' },
+      { level: 5, content: 'Example: If you like science, try robotics, science fair, and volunteering at a museum.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_activity_depth',
+    hints: [
+      { level: 1, content: 'Which activity could you see yourself sticking with for a few years?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Depth means responsibility, impact, or leadership over time.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Pick one activity to go deep in and set a growth goal for the year.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Impact can be small but real: a club project, a program you started, or consistent mentoring.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Moving from member to organizer shows depth even if the group is small.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_interest_exploration',
+    hints: [
+      { level: 1, content: 'What topics make you lose track of time when you learn them?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Try short projects to test interest before committing long-term.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Talk to someone who works in a field you are curious about.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Exploration is about curiosity, not pressure to choose a career now.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: If you like design, try UX projects, art classes, and engineering clubs to compare.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_major_alignment',
+    hints: [
+      { level: 1, content: 'Which major best fits both your strengths and your interests?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Research 2-3 majors and list the skills and classes they require.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Look at careers that use those majors and see what excites you.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Alignment means interest + ability + long-term motivation.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: If you love biology and problem-solving, consider bioengineering and compare it to pre-med.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_application_timeline',
+    hints: [
+      { level: 1, content: 'What is the next major deadline in your timeline?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Build a checklist: testing, essays, recommendations, activities, applications.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Spread big tasks across months instead of weeks.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Deadlines include letters and financial aid, not just applications.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Finish your essay draft before asking for recommendations so you can share your story.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_financial_aid',
+    hints: [
+      { level: 1, content: 'Financial aid is a process: know what forms are required and when.', type: 'CONCEPTUAL' },
+      { level: 2, content: 'FAFSA opens each year and has deadlines. Start early.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Scholarships are separate from FAFSA and often have earlier deadlines.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Affordability depends on net cost after aid, not sticker price.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Build a simple list of scholarship deadlines alongside application deadlines.', type: 'EXAMPLE' },
+    ],
+  },
+  {
+    conceptKey: 'counsel_middle_school_foundations',
+    hints: [
+      { level: 1, content: 'What is one habit that helps you feel prepared each day?', type: 'CONCEPTUAL' },
+      { level: 2, content: 'Try a simple weekly routine: plan on Sunday, review on Friday.', type: 'PROCEDURAL' },
+      { level: 3, content: 'Explore activities that are fun and build confidence.', type: 'PROCEDURAL' },
+      { level: 4, content: 'Focus on curiosity and growth, not pressure about college yet.', type: 'CONCEPTUAL' },
+      { level: 5, content: 'Example: Choose one small goal for the month, like reading 15 minutes a day.', type: 'EXAMPLE' },
+    ],
+  },
 ];
 
-async function seedHints() {
+export async function seedHints(client?: PrismaClient) {
+  const prisma = client ?? new PrismaClient();
   console.log(`Seeding hints for ${HINT_BANK.length} concepts...`);
 
   let total = 0;
@@ -827,11 +1207,15 @@ async function seedHints() {
   }
 
   console.log(`\nHint seed complete: ${total} hints across ${HINT_BANK.length} concepts.`);
+  if (!client) {
+    await prisma.$disconnect();
+  }
 }
 
-seedHints()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  seedHints()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
+}

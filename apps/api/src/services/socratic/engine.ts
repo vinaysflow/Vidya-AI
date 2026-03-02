@@ -31,6 +31,7 @@ import {
   type SessionQuiz,
 } from './quiz';
 import { generateVisualContent } from './visualGenerator';
+import { getConceptBankAddendum } from './conceptBank';
 
 // Import and register modules
 import { stemModule } from './modules/stem';
@@ -245,6 +246,11 @@ export class SocraticEngine {
       }
     }
 
+    const bankTopic =
+      input.essayCategory ||
+      (analysis?.suggestedFocus as string | undefined) ||
+      detectedTopic;
+
     // Step 4: Generate response
     const response = await this.runResponseGeneration({
       mod,
@@ -258,6 +264,7 @@ export class SocraticEngine {
       metadata: {
         subject,
         topic: detectedTopic,
+        bankTopic,
         essayCategory: input.essayCategory,
         wordLimit: input.wordLimit,
         schoolName: input.schoolName,
@@ -528,6 +535,16 @@ Analyze this and respond with JSON only.
       if (!systemPrompt.includes('HINT LEVEL:')) {
         systemPrompt += `\n\nHINT LEVEL: ${hintLevel}/5\n${hintText}`;
       }
+    }
+
+    const bankTopic = metadata?.bankTopic || metadata?.topic || (analysis?.suggestedFocus as string | undefined);
+    const bankAddendum = await getConceptBankAddendum({
+      subject: metadata?.subject as Subject | undefined,
+      topic: typeof bankTopic === 'string' ? bankTopic : undefined,
+      hintLevel,
+    });
+    if (bankAddendum) {
+      systemPrompt += `\n\n${bankAddendum}`;
     }
 
     if (scaffoldMode) {

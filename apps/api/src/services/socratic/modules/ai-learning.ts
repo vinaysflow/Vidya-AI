@@ -16,6 +16,7 @@ import {
   AI_LEARNING_ATTEMPT_PROMPTS,
   AI_LEARNING_QUESTIONS,
   AI_LEARNING_CONCEPTS,
+  AI_LEARNING_TOPIC_PRIMERS,
 } from '../prompts/ai-learning-system';
 import { AI_LEARNING_ANALYSIS_PROMPT } from '../prompts/ai-learning-analysis';
 
@@ -271,6 +272,11 @@ export const aiLearningModule: TutorModule = {
       questionBankSection = `\nEXAMPLE SOCRATIC QUESTIONS (adapt, don't copy verbatim):\n${sample.map(q => `- ${q}`).join('\n')}`;
     }
 
+    const primerLines = topic ? (AI_LEARNING_TOPIC_PRIMERS[topic] || []) : [];
+    const primerSection = primerLines.length
+      ? `\nTOPIC PRIMER (short):\n${primerLines.map(p => `- ${p}`).join('\n')}`
+      : '';
+
     let conceptHintSection = '';
     const conceptBank = topic ? AI_LEARNING_CONCEPTS[topic] : undefined;
     if (conceptBank && hintLevel > 0) {
@@ -286,7 +292,7 @@ CURRENT CONTEXT:
 - Concepts Student Understands: ${a.conceptsIdentified?.join(', ') || 'unclear'}
 - Concepts Student Needs: ${a.conceptGaps?.join(', ') || 'none identified'}
 - Student's Strengths: ${a.studentStrengths?.join(', ') || 'showing curiosity'}
-${questionBankSection}${conceptHintSection}
+${questionBankSection}${primerSection}${conceptHintSection}
 
 RESPONSE TYPE GUIDE:
 - celebration: Acknowledge understanding, ask them to explain in own words or give new example

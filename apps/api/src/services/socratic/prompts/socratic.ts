@@ -249,34 +249,46 @@ export const SUBJECT_QUESTIONS = {
       "Is the acceleration constant here? How do you know?",
       "What does the sign of velocity tell us?",
       "Can you draw a free body diagram?",
-      "What's conserved in this situation?"
+      "What's conserved in this situation?",
+      "Which equation links the knowns to the unknown?",
+      "What coordinate system makes this simplest?"
     ],
     thermodynamics: [
       "Is this process reversible or irreversible?",
       "What happens to internal energy?",
       "Is heat entering or leaving the system?",
-      "What type of process is this - isothermal, adiabatic, or something else?"
+      "What type of process is this - isothermal, adiabatic, or something else?",
+      "What is the system vs the surroundings?",
+      "Is work done by the system or on the system?"
     ],
     electromagnetism: [
       "What's the direction of the electric field?",
       "Is current flowing into or out of this junction?",
       "What happens to the magnetic flux?",
-      "Is this circuit in series or parallel?"
+      "Is this circuit in series or parallel?",
+      "Which right-hand rule applies here?",
+      "What is the sign of charge or potential?"
     ],
     optics: [
       "Is this a real or virtual image?",
       "What happens when light goes from dense to rare medium?",
-      "Where is the focus for this mirror/lens?"
+      "Where is the focus for this mirror/lens?",
+      "What sign convention are you using?",
+      "Is magnification greater or less than 1?"
     ],
     modern_physics: [
       "Is energy quantized here?",
       "What does the uncertainty principle tell us?",
-      "Is this a particle or wave behavior?"
+      "Is this a particle or wave behavior?",
+      "What does the photon energy equation give?",
+      "What does the de Broglie relation suggest?"
     ],
     waves: [
       "What is the relationship between wavelength, frequency, and speed?",
       "Is this a standing wave or a traveling wave?",
-      "Where are the nodes and antinodes in this setup?"
+      "Where are the nodes and antinodes in this setup?",
+      "Does superposition help explain the pattern?",
+      "What boundary conditions are present?"
     ]
   },
 
@@ -284,22 +296,30 @@ export const SUBJECT_QUESTIONS = {
     physical: [
       "Is the reaction exothermic or endothermic?",
       "What does the rate depend on?",
-      "Is equilibrium shifted left or right?"
+      "Is equilibrium shifted left or right?",
+      "What happens to K when temperature changes?",
+      "Which quantities are in Kc vs Kp?"
     ],
     organic: [
       "What type of reaction is this?",
       "Where is the nucleophile attacking?",
-      "What's the most stable intermediate?"
+      "What's the most stable intermediate?",
+      "Is this SN1, SN2, E1, or E2?",
+      "How good is the leaving group?"
     ],
     inorganic: [
       "What's the oxidation state?",
       "Is this a coordination compound?",
-      "What's the hybridization?"
+      "What's the hybridization?",
+      "What is the coordination number?",
+      "Is this high-spin or low-spin?"
     ],
     electrochemistry: [
       "Which species is being oxidized and which is reduced?",
       "What does the sign of the electrode potential tell you?",
-      "Is this a galvanic or electrolytic cell?"
+      "Is this a galvanic or electrolytic cell?",
+      "Where do electrons flow in the external circuit?",
+      "What is E°cell and what does its sign mean?"
     ]
   },
 
@@ -307,22 +327,30 @@ export const SUBJECT_QUESTIONS = {
     calculus: [
       "What's the rate of change here?",
       "Is the function increasing or decreasing?",
-      "What happens at the boundary?"
+      "What happens at the boundary?",
+      "Is a derivative or an integral the right tool?",
+      "What does the second derivative tell you?"
     ],
     algebra: [
       "Can you factor this expression?",
       "What pattern do you see?",
-      "How many solutions should there be?"
+      "How many solutions should there be?",
+      "Can you substitute to simplify?",
+      "Is there symmetry you can use?"
     ],
     geometry: [
       "What's the relationship between these angles?",
       "Are these triangles similar?",
-      "What's the locus of this point?"
+      "What's the locus of this point?",
+      "Would coordinate geometry help?",
+      "Is there a useful area or similarity ratio?"
     ],
     probability: [
       "Are the events independent or dependent?",
       "Can you express this as P(A ∩ B) or P(A|B)?",
-      "Would a complementary probability be easier here?"
+      "Would a complementary probability be easier here?",
+      "Is counting or a formula approach simpler?",
+      "What is the sample space?"
     ]
   },
 
@@ -330,22 +358,131 @@ export const SUBJECT_QUESTIONS = {
     botany: [
       "What's the function of this structure?",
       "How does this adapt the plant to its environment?",
-      "What process is occurring here?"
+      "What process is occurring here?",
+      "Where does the energy come from?",
+      "What is the input and output of this process?"
     ],
     zoology: [
       "What system is involved?",
       "How does structure relate to function?",
-      "What's the evolutionary advantage?"
+      "What's the evolutionary advantage?",
+      "What does this help the organism survive?",
+      "Is there an adaptation to environment?"
     ],
     physiology: [
       "What triggers this response?",
       "Is this positive or negative feedback?",
-      "What happens if this fails?"
+      "What happens if this fails?",
+      "Which organ or hormone is the key driver?",
+      "How does the body maintain balance here?"
     ],
     genetics: [
       "Is this trait dominant, recessive, or sex-linked?",
       "What does the Punnett square predict for the offspring?",
-      "Which generation is showing the phenotype most strongly?"
+      "Which generation is showing the phenotype most strongly?",
+      "Is there evidence of linkage or incomplete dominance?",
+      "What is the genotype ratio?"
+    ]
+  }
+};
+
+export const STEM_TOPIC_PRIMERS: Record<string, Record<string, string[]>> = {
+  PHYSICS: {
+    mechanics: [
+      "Identify forces and choose axes before writing equations.",
+      "Use kinematics when acceleration is constant; otherwise use energy or momentum.",
+      "Check units early to avoid sign mistakes."
+    ],
+    thermodynamics: [
+      "Define the system and track heat (Q) and work (W) consistently.",
+      "Use the first law: ΔU = Q - W.",
+      "Process type (isothermal/adiabatic/etc.) dictates which terms vanish."
+    ],
+    electromagnetism: [
+      "Start with charge sign and field direction conventions.",
+      "Use Gauss/Ampere for symmetry; Kirchhoff for circuits.",
+      "Right-hand rules determine magnetic directions."
+    ],
+    optics: [
+      "Draw a ray diagram and stick to one sign convention.",
+      "Lens/mirror equation links object, image, and focal length.",
+      "Magnification tells size and orientation."
+    ],
+    modern_physics: [
+      "Energy comes in discrete quanta (E = hf).",
+      "Waves and particles are dual descriptions.",
+      "Uncertainty limits simultaneous precision."
+    ],
+    waves: [
+      "Relate speed, frequency, and wavelength (v = fλ).",
+      "Use boundary conditions to place nodes/antinodes.",
+      "Superposition explains interference patterns."
+    ]
+  },
+  CHEMISTRY: {
+    physical: [
+      "Track moles and units before applying formulas.",
+      "Equilibrium depends on temperature and concentrations.",
+      "Rates depend on mechanism and activation energy."
+    ],
+    organic: [
+      "Identify functional groups and likely reaction class.",
+      "Stability of intermediates drives major products.",
+      "Stereochemistry matters when mechanism allows rearrangement."
+    ],
+    inorganic: [
+      "Oxidation state and coordination number are key.",
+      "Crystal field splits d-orbitals and affects properties.",
+      "Hybridization guides geometry and magnetism."
+    ],
+    electrochemistry: [
+      "Oxidation at anode, reduction at cathode.",
+      "E°cell sign predicts spontaneity.",
+      "Nernst equation adjusts for concentration."
+    ]
+  },
+  MATHEMATICS: {
+    calculus: [
+      "Derivatives model change; integrals model accumulation.",
+      "Check critical points and endpoints for extrema.",
+      "Interpret results in context and units."
+    ],
+    algebra: [
+      "Simplify and factor before solving.",
+      "Look for symmetry or substitutions.",
+      "Check solution count with degree or constraints."
+    ],
+    geometry: [
+      "Start with a clean diagram and mark knowns.",
+      "Similarity and area ratios simplify many problems.",
+      "Coordinate forms help with circles and conics."
+    ],
+    probability: [
+      "Define the sample space explicitly.",
+      "Decide independence before multiplying.",
+      "Complementary events can reduce complexity."
+    ]
+  },
+  BIOLOGY: {
+    botany: [
+      "Structure relates directly to function in plant organs.",
+      "Photosynthesis and transport are core drivers.",
+      "Environment shapes plant adaptations."
+    ],
+    zoology: [
+      "Systems coordinate to maintain survival and reproduction.",
+      "Structure-function relationships explain adaptations.",
+      "Evolutionary advantage clarifies why traits persist."
+    ],
+    physiology: [
+      "Homeostasis depends on feedback loops.",
+      "Hormones and organs coordinate responses.",
+      "Failures often show up as system-wide symptoms."
+    ],
+    genetics: [
+      "Use allele relationships to predict ratios.",
+      "Track inheritance across generations carefully.",
+      "Linkage and recombination can alter expected outcomes."
     ]
   }
 };

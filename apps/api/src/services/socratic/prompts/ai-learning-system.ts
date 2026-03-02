@@ -214,6 +214,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Example: predict house price from size in square feet. Draw a rough line through the data.',
       ],
     },
+    {
+      concept: 'Decision Boundary',
+      hints: [
+        'A decision boundary is the line that separates classes.',
+        'Points on one side are class A; the other side is class B.',
+        'A linear model draws a straight boundary; complex data may need curves.',
+        'Try to picture where the boundary should go on a simple scatter plot.',
+        'Example: draw a line that separates red dots from blue dots.',
+      ],
+    },
   ],
   features_labels: [
     {
@@ -234,6 +244,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'The computer learns to predict labels from features by seeing many labeled examples.',
         'If features are the question, the label is the answer. What label would "spam/not-spam" use?',
         'Example: 100 photos labeled "cat" or "dog". The model studies them and learns the pattern.',
+      ],
+    },
+    {
+      concept: 'Normalization',
+      hints: [
+        'Normalization puts features on a similar scale.',
+        'If one feature is 0-1 and another is 0-1000, the bigger one can dominate.',
+        'Scaling helps many models learn faster and more accurately.',
+        'Try z-score or min-max scaling when numbers are far apart.',
+        'Example: scale height (cm) and weight (kg) before training.',
       ],
     },
   ],
@@ -258,6 +278,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Example: a model that memorizes all 80 training photos but can\'t classify a new cat photo.',
       ],
     },
+    {
+      concept: 'Validation vs Test',
+      hints: [
+        'Validation helps you tune the model while you build it.',
+        'The test set is for final evaluation only.',
+        'Using the test set too often can give a misleading result.',
+        'Keep data splits separate to avoid leakage.',
+        'Example: train on 70%, validate on 15%, test on 15%.',
+      ],
+    },
   ],
   bias_fairness: [
     {
@@ -278,6 +308,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Testing for fairness means checking accuracy across different groups, not just overall.',
         'If a loan model rejects one group more often, is that bias or a real pattern?',
         'Example: check if a school-admission model is equally accurate for all genders.',
+      ],
+    },
+    {
+      concept: 'Bias Mitigation',
+      hints: [
+        'You can rebalance data so groups are represented fairly.',
+        'You can add fairness constraints during training.',
+        'Always measure fairness, not just overall accuracy.',
+        'Ask: who might be harmed if the model is wrong?',
+        'Example: collect more data for underrepresented groups.',
       ],
     },
   ],
@@ -302,6 +342,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Example: wrong guess → compute error → adjust weights → try again → error shrinks.',
       ],
     },
+    {
+      concept: 'Activation Functions',
+      hints: [
+        'Activation functions decide how strongly a neuron "fires."',
+        'They add non-linearity so the network can learn complex patterns.',
+        'Common ones: ReLU, sigmoid, tanh.',
+        'Without them, multiple layers act like one linear layer.',
+        'Example: ReLU turns negative values into zero.',
+      ],
+    },
   ],
   supervised_unsupervised: [
     {
@@ -324,6 +374,16 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Example: given customer purchase data with no labels, the model finds 3 buying-habit groups.',
       ],
     },
+    {
+      concept: 'Clustering',
+      hints: [
+        'Clustering groups similar items together without labels.',
+        'You choose how many groups you want, then find centers.',
+        'Different algorithms cluster in different shapes.',
+        'It helps discover patterns you did not know existed.',
+        'Example: grouping students by study habits.',
+      ],
+    },
   ],
   real_world_ai: [
     {
@@ -336,6 +396,53 @@ export const AI_LEARNING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Example: Netflix recommends shows by finding users with similar watching history to yours.',
       ],
     },
+    {
+      concept: 'Data Privacy',
+      hints: [
+        'AI systems learn from data, so privacy matters.',
+        'Sensitive data should be minimized or anonymized.',
+        'Consent and transparency build trust.',
+        'Ask: does the model need this data to work?',
+        'Example: location data can improve maps but must be protected.',
+      ],
+    },
+  ],
+};
+
+export const AI_LEARNING_TOPIC_PRIMERS: Record<string, string[]> = {
+  classification_regression: [
+    'Classification predicts categories; regression predicts numbers.',
+    'Decision boundaries separate classes in feature space.',
+    'Pick the simplest model that fits the data.',
+  ],
+  features_labels: [
+    'Features are inputs; labels are the target outputs.',
+    'Good features improve accuracy; noisy features hurt.',
+    'Normalize when scales differ a lot.',
+  ],
+  training_testing: [
+    'Train on one set, validate for tuning, test once for final results.',
+    'Overfitting means doing well on training but poorly on new data.',
+    'More data and simpler models usually generalize better.',
+  ],
+  bias_fairness: [
+    'Bias can come from data, labels, or decisions.',
+    'Fairness must be measured across groups, not just overall.',
+    'Mitigation includes rebalancing data or adding constraints.',
+  ],
+  neural_networks: [
+    'Layers learn from simple patterns to complex ones.',
+    'Activation functions add non-linearity.',
+    'Training adjusts weights to reduce error.',
+  ],
+  supervised_unsupervised: [
+    'Supervised learning uses labels; unsupervised finds structure.',
+    'Clustering groups similar items without answers.',
+    'Choose based on whether labels exist.',
+  ],
+  real_world_ai: [
+    'AI appears in recommendations, vision, language, and automation.',
+    'Data quality and privacy shape real-world reliability.',
   ],
 };
 
@@ -345,41 +452,55 @@ export const AI_LEARNING_QUESTIONS: Record<string, string[]> = {
     'Can you give me an example of a classification task from everyday life?',
     'If I predict tomorrow\'s temperature, is that classification or regression? Why?',
     'What if the categories overlap — some data points could belong to either group?',
+    'Where would you draw the decision boundary?',
+    'How would you check if the model is over- or under-confident?',
   ],
   features_labels: [
     'What "clues" (features) would a computer use to solve this task?',
     'If I gave you a table of student data, which columns would be features and which is the label?',
     'Can you have too many features? What might go wrong?',
     'What happens if one of the features is noisy or incorrect?',
+    'Would scaling features change the result?',
+    'Which feature would you drop if it caused confusion?',
   ],
   training_testing: [
     'Why do we split data into training and testing sets?',
     'What happens if the model only sees one type of example during training?',
     'How would you know if your model memorized the data instead of learning the pattern?',
     'If your training accuracy is 99% but test accuracy is 60%, what might have happened?',
+    'What is the role of a validation set?',
+    'How would you avoid data leakage?',
   ],
   bias_fairness: [
     'Can you think of a case where biased training data could harm real people?',
     'How would you check if a model is fair to different groups?',
     'If a model is accurate overall but unfair to one group, is it a good model?',
     'What could you change about the data to reduce bias?',
+    'Who could be harmed if the model is wrong?',
+    'What trade-offs might exist between fairness and accuracy?',
   ],
   neural_networks: [
     'Why might a neural network need more than one layer?',
     'How is a network "learning" similar to how you learn a new skill?',
     'What does it mean for a network to "adjust its weights"?',
     'Can you think of a task that would need many layers vs. just one?',
+    'Why do activation functions matter?',
+    'What might happen if the network is too deep or too wide?',
   ],
   supervised_unsupervised: [
     'What\'s the difference between learning with answers and learning without?',
     'Can you give an example of something you learned "supervised" vs. "unsupervised"?',
     'When might you use unsupervised learning — when you don\'t have labels?',
     'Is clustering supervised or unsupervised? Why?',
+    'If labels are expensive, what could you do instead?',
+    'How do you decide how many clusters to use?',
   ],
   real_world_ai: [
     'What AI or ML application do you interact with most often?',
     'How do you think Netflix knows what shows you might like?',
     'Where might AI make mistakes in the real world, and why?',
     'Can you name an AI application that helps people in a serious way (medicine, safety)?',
+    'What data would that AI need to work well?',
+    'How could privacy concerns shape the design?',
   ],
 };

@@ -28,7 +28,7 @@
   "subjects": {
     "physics": "Physics", "chemistry": "Chemistry", "mathematics": "Mathematics", "biology": "Biology",
     "coding": "Coding", "literature": "Literature", "economics": "Economics",
-    "essay": "Essay Writing", "counseling": "Counseling"
+    "essay": "College Essay Writing", "counseling": "College Counselling"
   },
   "encouragement": {
     "goodStart": "Good start! Let's think about this together.",

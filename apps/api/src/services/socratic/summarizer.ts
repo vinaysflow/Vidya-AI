@@ -186,9 +186,13 @@ export async function generateSessionReport(params: {
   // We look for readiness in the raw message content since we only have text here
   const readinessInfo = isEssay ? extractReadinessFromMessages(messages) : null;
 
+  const subjectLabel = subject === 'COUNSELING'
+    ? 'College Counselling'
+    : subject;
+
   const subjectContext = isEssay
-    ? `Subject: Essay Writing (College Application)${schoolName ? `\nSchool: ${schoolName}` : ''}${essayType ? `\nEssay Type: ${essayType}` : ''}${wordLimit ? `\nWord Limit: ${wordLimit}` : ''}`
-    : `Subject: ${subject}`;
+    ? `Subject: College Essay Writing${schoolName ? `\nSchool: ${schoolName}` : ''}${essayType ? `\nEssay Type: ${essayType}` : ''}${wordLimit ? `\nWord Limit: ${wordLimit}` : ''}`
+    : `Subject: ${subjectLabel}`;
 
   const systemPrompt = `You are generating a session summary report for a Socratic tutoring session.
 

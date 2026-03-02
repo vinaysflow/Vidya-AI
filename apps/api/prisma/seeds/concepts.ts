@@ -1,6 +1,5 @@
 import { PrismaClient, Subject } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { pathToFileURL } from 'url';
 
 interface ConceptSeed {
   conceptKey: string;
@@ -21,7 +20,9 @@ const CONCEPTS: ConceptSeed[] = [
 
   // Mechanics
   { conceptKey: 'phys_units_dimensions', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Measurement', name: 'Units & Dimensions', description: 'SI units, dimensional analysis, significant figures, error propagation. Foundation for all quantitative physics.', difficulty: 1, prerequisites: [] },
+  { conceptKey: 'phys_vectors', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Vectors', name: 'Vectors in Physics', description: 'Vector vs scalar quantities, vector addition/subtraction, components, and resolving forces into axes.', difficulty: 1, prerequisites: ['phys_units_dimensions'] },
   { conceptKey: 'phys_kinematics', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Kinematics', name: 'Kinematics', description: 'Motion in one and two dimensions: displacement, velocity, acceleration, equations of motion, projectile motion, relative motion.', difficulty: 2, prerequisites: ['phys_units_dimensions'] },
+  { conceptKey: 'phys_motion_graphs', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Kinematics', name: 'Motion Graphs', description: 'Interpreting position-time, velocity-time, and acceleration-time graphs. Slopes and areas link to velocity and displacement.', difficulty: 2, prerequisites: ['phys_kinematics'] },
   { conceptKey: 'phys_newtons_laws', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Dynamics', name: "Newton's Laws of Motion", description: 'Three laws governing force and motion: inertia, F=ma, action-reaction. Free body diagrams, pseudo forces, constraint equations.', difficulty: 2, prerequisites: ['phys_kinematics'] },
   { conceptKey: 'phys_friction', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Friction', name: 'Friction', description: 'Static and kinetic friction, coefficient of friction, inclined planes, circular motion with friction, banking of roads.', difficulty: 2, prerequisites: ['phys_newtons_laws'] },
   { conceptKey: 'phys_circular_motion', subject: 'PHYSICS', topic: 'Mechanics', subtopic: 'Circular Motion', name: 'Circular Motion', description: 'Uniform and non-uniform circular motion, centripetal acceleration, vertical circles, conical pendulum.', difficulty: 3, prerequisites: ['phys_newtons_laws'] },
@@ -74,6 +75,8 @@ const CONCEPTS: ConceptSeed[] = [
   { conceptKey: 'chem_periodic_table', subject: 'CHEMISTRY', topic: 'Structure', name: 'Periodic Table & Properties', description: 'Periodicity in atomic radius, ionization energy, electron affinity, electronegativity, metallic character.', difficulty: 2, prerequisites: ['chem_atomic'] },
   { conceptKey: 'chem_bonding', subject: 'CHEMISTRY', topic: 'Structure', name: 'Chemical Bonding', description: 'Ionic, covalent, metallic bonds, VSEPR theory, hybridization (sp, sp2, sp3, sp3d, sp3d2), molecular orbital theory, bond order.', difficulty: 3, prerequisites: ['chem_atomic'] },
   { conceptKey: 'chem_states', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'States of Matter', description: 'Ideal gas law, real gases, van der Waals equation, liquefaction, intermolecular forces, liquid state properties.', difficulty: 2, prerequisites: ['chem_bonding'] },
+  { conceptKey: 'chem_mole_concept', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'Mole Concept', description: 'Avogadro\'s number, molar mass, moles-to-particles conversions, empirical vs molecular formula.', difficulty: 2, prerequisites: ['chem_atomic'] },
+  { conceptKey: 'chem_stoichiometry', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'Stoichiometry', description: 'Balancing equations, limiting reagent, percent yield, and reaction mass relationships.', difficulty: 2, prerequisites: ['chem_mole_concept'] },
   { conceptKey: 'chem_thermo', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'Chemical Thermodynamics', description: 'Internal energy, enthalpy, Hess law, bond enthalpy, entropy, Gibbs free energy, spontaneity criteria.', difficulty: 3, prerequisites: ['chem_states'] },
   { conceptKey: 'chem_equilibrium', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'Chemical Equilibrium', description: "Le Chatelier's principle, equilibrium constants (Kp, Kc, Ksp), ionic equilibrium, pH, buffer solutions, Henderson-Hasselbalch.", difficulty: 3, prerequisites: ['chem_thermo'] },
   { conceptKey: 'chem_kinetics', subject: 'CHEMISTRY', topic: 'Physical Chemistry', name: 'Chemical Kinetics', description: 'Rate laws, order and molecularity, integrated rate equations, half-life, Arrhenius equation, collision theory, catalysis.', difficulty: 3, prerequisites: ['chem_equilibrium'] },
@@ -108,8 +111,11 @@ const CONCEPTS: ConceptSeed[] = [
 
   // Algebra
   { conceptKey: 'math_sets', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Sets, Relations & Functions', description: 'Set operations, Venn diagrams, types of relations (reflexive, symmetric, transitive, equivalence), types of functions (injective, surjective, bijective).', difficulty: 1, prerequisites: [] },
+  { conceptKey: 'math_functions', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Functions and Graphs', description: 'Domain, range, inverse functions, transformations, and interpreting graphs of functions.', difficulty: 2, prerequisites: ['math_sets'] },
+  { conceptKey: 'math_polynomials', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Polynomials', description: 'Polynomial degree, zeros, factor theorem, remainder theorem, and graph behavior.', difficulty: 2, prerequisites: ['math_sets'] },
   { conceptKey: 'math_complex', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Complex Numbers', description: 'Argand plane, modulus, argument, polar and exponential form, De Moivre theorem, nth roots of unity, geometric applications.', difficulty: 3, prerequisites: ['math_sets'] },
   { conceptKey: 'math_quadratic', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Quadratic Equations & Inequalities', description: 'Discriminant, nature of roots, Vieta formulas, quadratic inequalities, modulus equations, location of roots.', difficulty: 2, prerequisites: ['math_sets'] },
+  { conceptKey: 'math_linear_inequalities', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Linear Inequalities', description: 'Solving linear and compound inequalities, number line representation, and interval notation.', difficulty: 1, prerequisites: ['math_sets'] },
   { conceptKey: 'math_sequences', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Sequences & Series', description: 'AP, GP, HP, AGP, summation techniques (telescoping, V_n method), AM-GM-HM inequality, convergence.', difficulty: 3, prerequisites: ['math_quadratic'] },
   { conceptKey: 'math_binomial', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Binomial Theorem', description: 'Binomial expansion, general term, middle term, properties of binomial coefficients, multinomial theorem.', difficulty: 3, prerequisites: ['math_permutations'] },
   { conceptKey: 'math_permutations', subject: 'MATHEMATICS', topic: 'Algebra', name: 'Permutations & Combinations', description: 'Fundamental counting principle, nPr, nCr, arrangements with restrictions, circular permutations, derangements, distribution problems.', difficulty: 3, prerequisites: ['math_sets'] },
@@ -168,11 +174,13 @@ const CONCEPTS: ConceptSeed[] = [
   { conceptKey: 'bio_neural', subject: 'BIOLOGY', topic: 'Human Physiology', name: 'Neural Control', description: 'Neuron structure, nerve impulse transmission, synapse, central and peripheral nervous system, reflex arc, brain anatomy.', difficulty: 3, prerequisites: ['bio_cell_transport'] },
   { conceptKey: 'bio_hormones', subject: 'BIOLOGY', topic: 'Human Physiology', name: 'Chemical Coordination', description: 'Endocrine glands, hormones and their functions, feedback mechanisms, disorders (diabetes, dwarfism, goitre).', difficulty: 3, prerequisites: ['bio_neural'] },
   { conceptKey: 'bio_immunity', subject: 'BIOLOGY', topic: 'Human Physiology', name: 'Immunity', description: 'Innate and adaptive immunity, humoral and cell-mediated, antibodies, vaccination, allergies, autoimmunity, AIDS.', difficulty: 3, prerequisites: ['bio_circulation'] },
+  { conceptKey: 'bio_homeostasis', subject: 'BIOLOGY', topic: 'Human Physiology', name: 'Homeostasis', description: 'Maintaining internal balance: temperature, glucose, water balance, and negative feedback loops.', difficulty: 2, prerequisites: ['bio_neural'] },
 
   // Plant Biology
   { conceptKey: 'bio_plant_morphology', subject: 'BIOLOGY', topic: 'Plant Biology', name: 'Plant Morphology & Anatomy', description: 'Root, stem, leaf modifications, flower parts, inflorescence types, tissue systems (meristematic, permanent).', difficulty: 2, prerequisites: [] },
   { conceptKey: 'bio_photosynthesis', subject: 'BIOLOGY', topic: 'Plant Biology', name: 'Photosynthesis', description: 'Light reactions, photosystems I & II, Calvin cycle, C3/C4/CAM pathways, photorespiration, factors affecting.', difficulty: 3, prerequisites: ['bio_cell', 'bio_biomolecules'] },
   { conceptKey: 'bio_respiration', subject: 'BIOLOGY', topic: 'Plant Biology', name: 'Plant Respiration', description: 'Glycolysis, Krebs cycle, electron transport chain, oxidative phosphorylation, fermentation, respiratory quotient.', difficulty: 3, prerequisites: ['bio_photosynthesis'] },
+  { conceptKey: 'bio_plant_transport', subject: 'BIOLOGY', topic: 'Plant Biology', name: 'Transport in Plants', description: 'Xylem and phloem transport, transpiration pull, cohesion-tension theory, and stomatal regulation.', difficulty: 3, prerequisites: ['bio_photosynthesis'] },
   { conceptKey: 'bio_plant_growth', subject: 'BIOLOGY', topic: 'Plant Biology', name: 'Plant Growth & Hormones', description: 'Growth phases, plant hormones (auxins, gibberellins, cytokinins, ethylene, ABA), photoperiodism, vernalization.', difficulty: 3, prerequisites: ['bio_plant_morphology'] },
 
   // Ecology & Reproduction
@@ -218,6 +226,9 @@ const CONCEPTS: ConceptSeed[] = [
   { conceptKey: 'code_complexity', subject: 'CODING', topic: 'Algorithms', name: 'Time & Space Complexity', description: 'Big O/Omega/Theta notation, best/average/worst case, O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n), space complexity, amortized analysis, master theorem.', difficulty: 3, prerequisites: ['code_functions', 'code_arrays'] },
   { conceptKey: 'code_sorting', subject: 'CODING', topic: 'Algorithms', name: 'Sorting Algorithms', description: 'Bubble, selection, insertion (O(n^2)), merge sort, quicksort (O(n log n)), counting/radix sort (O(n+k)), stability, comparison lower bound Ω(n log n), practical choices.', difficulty: 3, prerequisites: ['code_complexity'] },
   { conceptKey: 'code_searching', subject: 'CODING', topic: 'Algorithms', name: 'Searching & Binary Search', description: 'Linear search, binary search (iterative/recursive), binary search on answer, two pointers, sliding window, bisect left/right, rotated array search.', difficulty: 3, prerequisites: ['code_sorting'] },
+  { conceptKey: 'code_two_pointers', subject: 'CODING', topic: 'Algorithms', name: 'Two Pointers', description: 'Using two indices that move through a sequence to reduce nested loops. Common in sorted arrays and string problems.', difficulty: 3, prerequisites: ['code_searching'] },
+  { conceptKey: 'code_sliding_window', subject: 'CODING', topic: 'Algorithms', name: 'Sliding Window', description: 'Maintaining a moving window to track subarray/subsequence properties in O(n).', difficulty: 3, prerequisites: ['code_two_pointers'] },
+  { conceptKey: 'code_prefix_sums', subject: 'CODING', topic: 'Algorithms', name: 'Prefix Sums', description: 'Precompute cumulative sums to answer range sum queries quickly and detect subarray patterns.', difficulty: 3, prerequisites: ['code_arrays'] },
   { conceptKey: 'code_graph_algos', subject: 'CODING', topic: 'Algorithms', name: 'Graph Algorithms', description: 'BFS, DFS, topological sort (Kahn, DFS-based), cycle detection, shortest path (Dijkstra, Bellman-Ford, Floyd-Warshall), MST (Prim, Kruskal), bipartite check.', difficulty: 4, prerequisites: ['code_graphs_ds', 'code_stacks_queues'] },
   { conceptKey: 'code_dp', subject: 'CODING', topic: 'Algorithms', name: 'Dynamic Programming', description: 'Overlapping subproblems, optimal substructure, memoization (top-down), tabulation (bottom-up), state optimization, classic problems (knapsack, LCS, LIS, coin change, edit distance, matrix chain).', difficulty: 5, prerequisites: ['code_recursion', 'code_complexity'] },
   { conceptKey: 'code_greedy', subject: 'CODING', topic: 'Algorithms', name: 'Greedy Algorithms', description: 'Greedy choice property, activity selection, Huffman coding, fractional knapsack, interval scheduling, job sequencing, proving correctness via exchange argument.', difficulty: 4, prerequisites: ['code_sorting', 'code_complexity'] },
@@ -278,6 +289,7 @@ const CONCEPTS: ConceptSeed[] = [
 
   // ── Core ML Concepts ───────────────────────────
   { conceptKey: 'ai_features_labels', subject: 'AI_LEARNING', topic: 'Core Concepts', name: 'Features & Labels', description: 'Input features vs target labels, feature engineering (polynomial, interaction), feature selection (correlation, mutual information), one-hot encoding, normalization/standardization, embeddings preview.', difficulty: 2, prerequisites: ['ai_data_basics'] },
+  { conceptKey: 'ai_embeddings', subject: 'AI_LEARNING', topic: 'Core Concepts', name: 'Embeddings', description: 'Dense vector representations for words, images, or items. Similar items are close in vector space, enabling semantic search and recommendations.', difficulty: 3, prerequisites: ['ai_features_labels'] },
   { conceptKey: 'ai_classification', subject: 'AI_LEARNING', topic: 'Core Concepts', name: 'Classification', description: 'Binary and multiclass classification, decision boundaries, logistic regression, K-nearest neighbors, decision trees, Naive Bayes, SVM, confusion matrix, ROC curve.', difficulty: 3, prerequisites: ['ai_features_labels'] },
   { conceptKey: 'ai_regression', subject: 'AI_LEARNING', topic: 'Core Concepts', name: 'Regression', description: 'Linear regression, polynomial regression, regularized regression (Ridge, Lasso, ElasticNet), loss functions (MSE, MAE, Huber), gradient descent, learning rate, R-squared, residual analysis.', difficulty: 3, prerequisites: ['ai_features_labels'] },
   { conceptKey: 'ai_clustering', subject: 'AI_LEARNING', topic: 'Core Concepts', name: 'Clustering', description: 'K-means (initialization, convergence), hierarchical clustering (agglomerative), DBSCAN (density-based), Gaussian mixture models, silhouette score, elbow method, applications.', difficulty: 3, prerequisites: ['ai_features_labels'] },
@@ -287,8 +299,10 @@ const CONCEPTS: ConceptSeed[] = [
 
   // ── Training & Evaluation ──────────────────────
   { conceptKey: 'ai_training', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Model Training', description: 'Training loop, loss minimization, gradient descent variants (SGD, momentum, Adam, AdaGrad), learning rate scheduling (warmup, cosine decay), convergence criteria, batch size effects.', difficulty: 3, prerequisites: ['ai_classification', 'ai_regression'] },
+  { conceptKey: 'ai_loss_functions', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Loss Functions', description: 'Loss functions measure model error: MSE for regression, cross-entropy for classification, and how they shape learning.', difficulty: 3, prerequisites: ['ai_training'] },
   { conceptKey: 'ai_evaluation', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Model Evaluation', description: 'Accuracy, precision, recall, F1 score, ROC-AUC, PR curves, cross-validation (k-fold, stratified), confusion matrix interpretation, class imbalance strategies (SMOTE, class weights).', difficulty: 3, prerequisites: ['ai_training'] },
   { conceptKey: 'ai_overfitting', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Overfitting & Regularization', description: 'Bias-variance tradeoff, underfitting vs overfitting diagnosis (learning curves), L1/L2 regularization, dropout, early stopping, data augmentation, model selection.', difficulty: 3, prerequisites: ['ai_evaluation'] },
+  { conceptKey: 'ai_model_selection', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Model Selection', description: 'Choosing the best model using validation metrics, cross-validation, and balancing accuracy, latency, and interpretability.', difficulty: 3, prerequisites: ['ai_evaluation'] },
   { conceptKey: 'ai_hyperparameter', subject: 'AI_LEARNING', topic: 'Training & Evaluation', name: 'Hyperparameter Tuning', description: 'Grid search, random search, Bayesian optimization (Optuna), learning rate, batch size, architecture choices, nested cross-validation, computational budgets.', difficulty: 3, prerequisites: ['ai_overfitting'] },
 
   // ── Deep Learning ──────────────────────────────
@@ -358,9 +372,42 @@ const CONCEPTS: ConceptSeed[] = [
   { conceptKey: 'econ_agriculture', subject: 'ECONOMICS', topic: 'Indian Economy', name: 'Indian Agriculture', description: 'Green revolution, organic farming, agricultural marketing, MSP, food security, subsidies, land reforms.', difficulty: 2, prerequisites: ['econ_indian_planning'] },
   { conceptKey: 'econ_industry_infra', subject: 'ECONOMICS', topic: 'Indian Economy', name: 'Industry & Infrastructure', description: 'Industrial policy, PSEs, disinvestment, energy, transport, telecommunications, rural development.', difficulty: 2, prerequisites: ['econ_indian_planning'] },
   { conceptKey: 'econ_sustainable', subject: 'ECONOMICS', topic: 'Indian Economy', name: 'Sustainable Development', description: 'Environmental economics, resource depletion, climate change economics, SDGs, green GDP, circular economy.', difficulty: 2, prerequisites: ['econ_market_failures'] },
+
+  // ═══════════════════════════════════════════════
+  // ESSAY WRITING (~10 concepts)
+  // ═══════════════════════════════════════════════
+
+  { conceptKey: 'essay_prompt_fit', subject: 'ESSAY_WRITING', topic: 'Prompt Fit', subtopic: 'Alignment', name: 'Prompt Alignment', description: 'Matching your story to what the prompt actually asks. Focus on the core question and avoid off-topic tangents.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'essay_specificity', subject: 'ESSAY_WRITING', topic: 'Show-Don\'t-Tell', subtopic: 'Specificity', name: 'Specific Detail', description: 'Using concrete details (actions, dialogue, sensory cues) to show the reader what happened instead of summarizing.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'essay_voice', subject: 'ESSAY_WRITING', topic: 'Voice', subtopic: 'Authenticity', name: 'Authentic Voice', description: 'Writing in a personal, natural voice that sounds like the student, not a formal or generic essay template.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'essay_reflection', subject: 'ESSAY_WRITING', topic: 'Reflection', subtopic: 'Insight', name: 'Reflection and Insight', description: 'Explaining why an experience mattered and how it changed the student, not just what happened.', difficulty: 3, prerequisites: [] },
+  { conceptKey: 'essay_narrative_arc', subject: 'ESSAY_WRITING', topic: 'Narrative', subtopic: 'Arc', name: 'Narrative Arc', description: 'Beginning, middle, end with a clear turning point. A short moment can show growth more than a long timeline.', difficulty: 3, prerequisites: [] },
+  { conceptKey: 'essay_structure', subject: 'ESSAY_WRITING', topic: 'Structure', subtopic: 'Flow', name: 'Structure and Flow', description: 'Organizing ideas so the reader can follow the story: scene-setting, progression, and a clear end point.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'essay_opening', subject: 'ESSAY_WRITING', topic: 'Structure', subtopic: 'Opening', name: 'Hook and Opening', description: 'Starting with a specific moment that signals the theme. Avoid broad summaries or mission statements.', difficulty: 2, prerequisites: ['essay_specificity'] },
+  { conceptKey: 'essay_closing', subject: 'ESSAY_WRITING', topic: 'Structure', subtopic: 'Closing', name: 'Closing and Takeaway', description: 'Ending with reflection that connects back to the opening or theme, leaving the reader with one clear takeaway.', difficulty: 2, prerequisites: ['essay_reflection'] },
+  { conceptKey: 'essay_theme', subject: 'ESSAY_WRITING', topic: 'Narrative', subtopic: 'Theme', name: 'Theme and Throughline', description: 'A consistent idea that ties the essay together. The reader should know what the essay is really about.', difficulty: 3, prerequisites: ['essay_structure'] },
+  { conceptKey: 'essay_revision', subject: 'ESSAY_WRITING', topic: 'Revision', subtopic: 'Editing', name: 'Revision and Clarity', description: 'Improving clarity through focused edits: remove filler, tighten sentences, and ensure every sentence earns its place.', difficulty: 2, prerequisites: [] },
+
+  // ═══════════════════════════════════════════════
+  // COLLEGE COUNSELLING (~12 concepts)
+  // ═══════════════════════════════════════════════
+
+  { conceptKey: 'counsel_academic_readiness', subject: 'COUNSELING', topic: 'Academic Readiness', subtopic: 'Trajectory', name: 'GPA Trajectory', description: 'Understanding grade trends over time and how steady improvement matters more than a single term.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_course_rigor', subject: 'COUNSELING', topic: 'Academic Readiness', subtopic: 'Course Rigor', name: 'Course Rigor Planning', description: 'Balancing challenge and performance when choosing honors/AP/IB classes. The goal is sustainable rigor.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_study_habits', subject: 'COUNSELING', topic: 'Academic Readiness', subtopic: 'Habits', name: 'Study Habits and Time Management', description: 'Building consistent routines: weekly planning, short daily sessions, and reflection on what worked.', difficulty: 1, prerequisites: [] },
+  { conceptKey: 'counsel_test_timeline', subject: 'COUNSELING', topic: 'Test Prep', subtopic: 'Timeline', name: 'SAT/ACT Timeline', description: 'Choosing test dates, planning prep windows, and leaving room for a retake if needed.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_test_baseline', subject: 'COUNSELING', topic: 'Test Prep', subtopic: 'Baseline', name: 'Baseline Assessment', description: 'Using a diagnostic test to set a realistic target score and identify skill gaps.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_activity_breadth', subject: 'COUNSELING', topic: 'Activities', subtopic: 'Breadth', name: 'Activity Breadth', description: 'Trying a few different activities to discover interests before specializing.', difficulty: 1, prerequisites: [] },
+  { conceptKey: 'counsel_activity_depth', subject: 'COUNSELING', topic: 'Activities', subtopic: 'Depth', name: 'Activity Depth and Leadership', description: 'Going deeper in one or two activities, showing impact and responsibility over time.', difficulty: 2, prerequisites: ['counsel_activity_breadth'] },
+  { conceptKey: 'counsel_interest_exploration', subject: 'COUNSELING', topic: 'Career/Major', subtopic: 'Exploration', name: 'Interest Exploration', description: 'Connecting curiosity to subjects, projects, and possible majors without rushing a decision.', difficulty: 1, prerequisites: [] },
+  { conceptKey: 'counsel_major_alignment', subject: 'COUNSELING', topic: 'Career/Major', subtopic: 'Alignment', name: 'Major and Career Alignment', description: 'Linking strengths and interests to potential majors and careers, then validating fit with research.', difficulty: 2, prerequisites: ['counsel_interest_exploration'] },
+  { conceptKey: 'counsel_application_timeline', subject: 'COUNSELING', topic: 'College Readiness', subtopic: 'Timeline', name: 'Application Timeline', description: 'Understanding key milestones: list building, testing, essays, recommendations, and submission deadlines.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_financial_aid', subject: 'COUNSELING', topic: 'College Readiness', subtopic: 'Financial Aid', name: 'Financial Aid Basics', description: 'FAFSA, CSS Profile, scholarships, and how to plan for affordability without committing to specific amounts.', difficulty: 2, prerequisites: [] },
+  { conceptKey: 'counsel_middle_school_foundations', subject: 'COUNSELING', topic: 'Middle School', subtopic: 'Foundations', name: 'Middle School Foundations', description: 'Building curiosity, core study habits, and positive self-talk to prepare for high school success.', difficulty: 1, prerequisites: [] },
 ];
 
-async function seed() {
+export async function seedConcepts(client?: PrismaClient) {
+  const prisma = client ?? new PrismaClient();
   console.log(`Seeding ${CONCEPTS.length} concepts...`);
 
   let created = 0;
@@ -411,11 +458,15 @@ async function seed() {
   for (const [subj, count] of Object.entries(bySubject).sort((a, b) => b[1] - a[1])) {
     console.log(`    ${subj}: ${count}`);
   }
+  if (!client) {
+    await prisma.$disconnect();
+  }
 }
 
-seed()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  seedConcepts()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
+}

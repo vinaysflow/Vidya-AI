@@ -315,6 +315,26 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Priority queues model “process the most urgent item next.” Is that your flow?',
       ],
     },
+    {
+      concept: 'Array / List',
+      hints: [
+        'Arrays are great for indexed access — do you need O(1) lookups by index?',
+        'If you insert in the middle often, is a different structure better?',
+        'Think about whether order matters or if you only need membership checks.',
+        'If you need a rolling sum, can a prefix sum on an array help?',
+        'Use arrays when traversal and indexing are the main operations.',
+      ],
+    },
+    {
+      concept: 'Queue / Deque',
+      hints: [
+        'Queues are FIFO — is the earliest item the next one to process?',
+        'A deque supports both ends; useful for sliding window problems.',
+        'If you are doing BFS, a queue is the natural choice.',
+        'Ask: do you need to pop from the front and push to the back often?',
+        'Using a deque avoids costly array shifts.',
+      ],
+    },
   ],
   algorithms: [
     {
@@ -345,6 +365,36 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Are there overlapping subproblems? (Same inputs computed multiple times?)',
         'Write the recurrence first, then decide between top-down (memo) and bottom-up (table).',
         'Your DP table dimensions = number of state variables. Fill order follows dependencies.',
+      ],
+    },
+    {
+      concept: 'Sliding Window',
+      hints: [
+        'Can you maintain a window and move it one step at a time instead of re-computing?',
+        'Track what changes when the window expands or shrinks.',
+        'Use two pointers: one for the start, one for the end.',
+        'This turns many O(n^2) scans into O(n).',
+        'Great for subarray sums, longest substring, and windowed counts.',
+      ],
+    },
+    {
+      concept: 'Prefix Sums',
+      hints: [
+        'Prefix sums let you compute any range sum in O(1).',
+        'Build a running sum array first, then use it to answer queries.',
+        'sum(l..r) = prefix[r] - prefix[l-1].',
+        'This can turn repeated summations into constant time lookups.',
+        'Works for counts, sums, and even frequency differences.',
+      ],
+    },
+    {
+      concept: 'Greedy Strategy',
+      hints: [
+        'Does a locally best choice lead to a global best solution here?',
+        'Try sorting by a key (end time, value, size) and selecting in order.',
+        'If you can prove the greedy choice is safe, the solution is simple.',
+        'Greedy is common in interval scheduling and Huffman coding.',
+        'Always test with a counterexample to validate the choice.',
       ],
     },
     {
@@ -379,6 +429,16 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Sometimes O(n) space is fine if it cuts time dramatically — does that apply here?',
       ],
     },
+    {
+      concept: 'Big-O and Constraints',
+      hints: [
+        'Use input constraints to decide what complexity is feasible.',
+        'n up to 10^5 often suggests O(n log n) or O(n).',
+        'n up to 10^3 can allow O(n^2) solutions.',
+        'Always tie your complexity to the stated limits.',
+        'This helps you choose the right data structure early.',
+      ],
+    },
   ],
   recursion: [
     {
@@ -391,6 +451,16 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
         'If the tree has repeated states, add memoization to avoid redundant computation.',
       ],
     },
+    {
+      concept: 'Divide and Conquer',
+      hints: [
+        'Can you split the problem into two independent halves?',
+        'Solve smaller pieces, then merge results.',
+        'This often leads to O(n log n) solutions.',
+        'Common in merge sort and quick sort.',
+        'Make sure the combine step is efficient.',
+      ],
+    },
   ],
   debugging: [
     {
@@ -401,6 +471,16 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
         'Add a print statement inside your loop — does the variable hold what you expect?',
         'Compare your expected output at each step with the actual output.',
         'Off-by-one errors are common: double-check your loop bounds and array indices.',
+      ],
+    },
+    {
+      concept: 'Test Case Design',
+      hints: [
+        'Start with tiny cases you can solve by hand.',
+        'Add edge cases: empty input, duplicates, negatives, max values.',
+        'Include a tricky case that stresses your loop or condition.',
+        'If a bug appears, shrink the input until it still fails.',
+        'Good tests expose hidden assumptions.',
       ],
     },
   ],
@@ -442,6 +522,46 @@ export const CODING_CONCEPTS: Record<string, ConceptHint[]> = {
   ],
 };
 
+export const CODING_TOPIC_PRIMERS: Record<string, string[]> = {
+  data_structures: [
+    'Choose structures that match operations: lookup, insert, delete, order.',
+    'Hash maps for fast membership, heaps for top-k, stacks/queues for order.',
+    'Prefer simpler structures unless constraints demand otherwise.',
+  ],
+  algorithms: [
+    'Start with brute force, then remove redundancy with patterns.',
+    'Common patterns: two pointers, sliding window, prefix sums, BFS/DFS.',
+    'Sorting often unlocks simpler logic.',
+  ],
+  complexity: [
+    'Use constraints to decide acceptable complexity.',
+    'Aim for O(n) or O(n log n) for large n.',
+    'Space can trade off with time when needed.',
+  ],
+  recursion: [
+    'Define a clear base case and a smaller subproblem.',
+    'Recursion trees reveal repeated work and memoization needs.',
+    'Backtracking is recursion plus undoing choices.',
+  ],
+  debugging: [
+    'Test smallest cases first, then add edge cases.',
+    'Track variables at each step to find where assumptions break.',
+    'Simplify the failing case until it is obvious.',
+  ],
+  basics_variables: [
+    'Use clear names and track type and value changes.',
+    'Print or log variables to confirm expectations.',
+  ],
+  basics_loops: [
+    'Identify loop bounds and what changes each iteration.',
+    'Keep a simple invariant to verify correctness.',
+  ],
+  basics_functions: [
+    'Write a one-sentence contract: input, output, and purpose.',
+    'Small, testable functions make complex logic easier.',
+  ],
+};
+
 export const CODING_QUESTIONS: Record<string, string[]> = {
   data_structures: [
     "What data structure gives you O(1) lookup here?",
@@ -449,6 +569,8 @@ export const CODING_QUESTIONS: Record<string, string[]> = {
     "Would a stack or queue be more natural for this traversal order?",
     "What happens if you need to frequently insert in the middle — is this the right structure?",
     "Could a set help you avoid duplicates more efficiently?",
+    "Do you need ordered access or just fast membership checks?",
+    "Would a deque simplify pushing and popping at both ends?",
   ],
   algorithms: [
     "What's the brute-force solution, and where is it doing redundant work?",
@@ -457,6 +579,8 @@ export const CODING_QUESTIONS: Record<string, string[]> = {
     "What invariant does your loop maintain?",
     "Could sorting the input first simplify the logic?",
     "Is there a graph interpretation here that suggests BFS or DFS?",
+    "Can a sliding window reduce repeated scans?",
+    "Would prefix sums let you answer range queries quickly?",
   ],
   complexity: [
     "What's the time complexity of your current approach?",
@@ -465,6 +589,7 @@ export const CODING_QUESTIONS: Record<string, string[]> = {
     "What's the space complexity, and could you trade space for time?",
     "How does the input size affect whether your approach is practical?",
     "If you added a cache or map, how would that change the space cost?",
+    "Do the input constraints rule out a slower approach?",
   ],
   debugging: [
     "What happens when you trace through your code with a small example?",
@@ -472,6 +597,7 @@ export const CODING_QUESTIONS: Record<string, string[]> = {
     "What value does this variable hold at the start of each iteration?",
     "Are you comparing the right things in your condition?",
     "What did you expect vs. what did you actually get?",
+    "Can you design a minimal failing case?",
   ],
   recursion: [
     "What's the base case, and does it cover all terminating conditions?",
@@ -479,6 +605,7 @@ export const CODING_QUESTIONS: Record<string, string[]> = {
     "Can you draw the call tree for a small input?",
     "Is there repeated computation you could memoize?",
     "What's the maximum recursion depth for your expected input size?",
+    "Would a divide-and-conquer split make this clearer?",
   ],
   basics_variables: [
     "What type of value does this variable hold — a number, text, or something else?",

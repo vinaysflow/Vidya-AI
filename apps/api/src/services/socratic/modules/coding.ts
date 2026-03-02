@@ -16,6 +16,7 @@ import {
   CODING_ATTEMPT_PROMPTS,
   CODING_QUESTIONS,
   CODING_CONCEPTS,
+  CODING_TOPIC_PRIMERS,
 } from '../prompts/coding-system';
 import { CODING_ANALYSIS_PROMPT } from '../prompts/coding-analysis';
 import { computeCodingMetrics } from '../../nlp';
@@ -398,6 +399,11 @@ export const codingModule: TutorModule = {
       questionBankSection = `\nEXAMPLE SOCRATIC QUESTIONS (adapt, don't copy verbatim):\n${sample.map(q => `- ${q}`).join('\n')}`;
     }
 
+    const primerLines = topic ? (CODING_TOPIC_PRIMERS[topic] || []) : [];
+    const primerSection = primerLines.length
+      ? `\nTOPIC PRIMER (short):\n${primerLines.map(p => `- ${p}`).join('\n')}`
+      : '';
+
     let conceptHintSection = '';
     const conceptBank = topic ? CODING_CONCEPTS[topic] : undefined;
     if (conceptBank && hintLevel > 0) {
@@ -415,7 +421,7 @@ CURRENT CONTEXT:
 - Student's Strengths: ${a.studentStrengths?.join(', ') || 'attempting the problem'}
 ${a.timeComplexity ? `- Current Time Complexity: ${a.timeComplexity}` : ''}
 ${a.spaceComplexity ? `- Current Space Complexity: ${a.spaceComplexity}` : ''}
-${questionBankSection}${conceptHintSection}
+${questionBankSection}${primerSection}${conceptHintSection}
 
 RESPONSE TYPE GUIDE:
 - celebration: Acknowledge success, then ask them to explain WHY or analyze complexity

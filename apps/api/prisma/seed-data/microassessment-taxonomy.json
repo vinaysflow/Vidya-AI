@@ -1,0 +1,65 @@
+{
+  "version": "2026-02-28",
+  "purpose": "Shared microassessment taxonomy for counseling context (schema-only).",
+  "gradeBands": [
+    { "id": "middle_school", "grades": [6, 7, 8] },
+    { "id": "early_high_school", "grades": [9, 10] },
+    { "id": "upper_high_school", "grades": [11, 12] }
+  ],
+  "categories": [
+    {
+      "id": "academic_readiness",
+      "label": "Academic Readiness",
+      "signals": [
+        "gpa_trajectory",
+        "course_rigor_balance",
+        "study_habits_consistency"
+      ]
+    },
+    {
+      "id": "test_prep",
+      "label": "Test Prep",
+      "signals": [
+        "baseline_diagnostic",
+        "prep_timeline",
+        "section_skill_gaps"
+      ]
+    },
+    {
+      "id": "activities",
+      "label": "Activities",
+      "signals": [
+        "activity_breadth",
+        "activity_depth",
+        "leadership_impact"
+      ]
+    },
+    {
+      "id": "career_major",
+      "label": "Career and Major Exploration",
+      "signals": [
+        "interest_clarity",
+        "major_career_alignment",
+        "project_exploration"
+      ]
+    },
+    {
+      "id": "college_readiness",
+      "label": "College Readiness",
+      "signals": [
+        "application_timeline",
+        "financial_aid_awareness",
+        "school_list_strategy"
+      ]
+    },
+    {
+      "id": "middle_school_foundations",
+      "label": "Middle School Foundations",
+      "signals": [
+        "curiosity_habits",
+        "foundational_skills",
+        "activity_sampling"
+      ]
+    }
+  ]
+}

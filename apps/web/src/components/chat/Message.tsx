@@ -169,20 +169,6 @@ export function Message({ message }: MessageProps) {
           </div>
         )}
 
-        {!isUser && (message.metadata?.grounding || message.metadata?.confidence !== undefined) && (
-          <div className="mt-2 flex items-center gap-1.5 flex-wrap">
-            {message.metadata?.grounding && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-600 text-slate-600 dark:text-slate-200">
-                grounded: {message.metadata.grounding}
-              </span>
-            )}
-            {message.metadata?.confidence !== undefined && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-600 text-slate-600 dark:text-slate-200">
-                confidence: {Math.round(message.metadata.confidence)}%
-              </span>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
