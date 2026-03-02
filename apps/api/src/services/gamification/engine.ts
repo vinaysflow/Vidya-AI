@@ -3,6 +3,14 @@ import { XP_TABLE, LEVEL_XP, STREAK_FREEZE_MILESTONES } from './xpTable';
 
 const prisma = new PrismaClient();
 
+async function ensureUser(userId: string): Promise<void> {
+  await prisma.user.upsert({
+    where: { id: userId },
+    create: { id: userId },
+    update: {},
+  });
+}
+
 function todayStr(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -200,6 +208,7 @@ export interface GamificationProfile {
 }
 
 export async function getProfile(userId: string): Promise<GamificationProfile> {
+  await ensureUser(userId);
   const gam = await prisma.userGamification.upsert({
     where: { userId },
     create: { userId },
