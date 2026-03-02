@@ -216,6 +216,35 @@ export class SocraticEngine {
       newHintLevel = Math.min(currentHintLevel + 1, 5);
     }
 
+    // Adaptive engagement: attempt-quality-based escalation
+    let scaffoldMode = false;
+    let adaptiveEscalation = false;
+    let stuckDetected = false;
+
+    if (!isCounseling && questionType !== 'celebration') {
+      const turnNumber = conversationHistory.filter(m => m.role === 'USER').length;
+      const flatTurns = this.countFlatTurns(conversationHistory);
+
+      if (flatTurns >= 3) {
+        newHintLevel = Math.min(newHintLevel + 1, 5);
+        adaptiveEscalation = true;
+      }
+
+      stuckDetected = this.detectStuck(
+        conversationHistory,
+        newHintLevel,
+        userMessage,
+        analysis,
+        turnNumber
+      );
+
+      if (stuckDetected) {
+        scaffoldMode = true;
+        adaptiveEscalation = true;
+        newHintLevel = Math.max(newHintLevel, 3);
+      }
+    }
+
     // Step 4: Generate response
     const response = await this.runResponseGeneration({
       mod,
@@ -225,6 +254,7 @@ export class SocraticEngine {
       language,
       conversationHistory,
       hintLevel: newHintLevel,
+      scaffoldMode,
       metadata: {
         subject,
         topic: detectedTopic,
@@ -265,6 +295,8 @@ export class SocraticEngine {
       detectedTopic,
       modelUsed: response.modelUsed,
       visualContent,
+      adaptiveEscalation,
+      stuckDetected,
     });
   }
 
@@ -459,9 +491,10 @@ Analyze this and respond with JSON only.
     language: Language;
     conversationHistory: Message[];
     hintLevel: number;
+    scaffoldMode?: boolean;
     metadata?: Record<string, any>;
   }): Promise<{ text: string; safetyEvents: string[]; modelUsed?: { provider: string; model: string; fallbackUsed: boolean } }> {
-    const { mod, sessionId, questionType, analysis, language, conversationHistory, hintLevel, metadata } = params;
+    const { mod, sessionId, questionType, analysis, language, conversationHistory, hintLevel, scaffoldMode, metadata } = params;
     const safetyEvents: string[] = [];
 
     const { summary, recentMessages } = await getOrCreateSessionSummary(
@@ -495,6 +528,20 @@ Analyze this and respond with JSON only.
       if (!systemPrompt.includes('HINT LEVEL:')) {
         systemPrompt += `\n\nHINT LEVEL: ${hintLevel}/5\n${hintText}`;
       }
+    }
+
+    if (scaffoldMode) {
+      systemPrompt += [
+        '',
+        '',
+        'SCAFFOLD MODE - NARROW THE QUESTION:',
+        'The student appears stuck. Instead of asking a broad question:',
+        '1) Identify the single smallest sub-step the student needs next.',
+        '2) Ask only about that sub-step, not the whole problem.',
+        '3) If possible, give a concrete starting point: "What is [specific value]?"',
+        '4) Keep your response short (2-3 sentences max before the question).',
+        'Do NOT provide worked examples, solutions, or multi-step explanations.',
+      ].join('\n');
     }
 
     // Build user prompt
@@ -618,6 +665,59 @@ Generate the response:
   }
 
   /**
+   * Count consecutive recent assistant turns already in high-help mode.
+   */
+  private countFlatTurns(history: Message[]): number {
+    const assistants = history
+      .filter(m => m.role === 'ASSISTANT' && m.metadata)
+      .slice(-5);
+
+    let count = 0;
+    for (let i = assistants.length - 1; i >= 0; i--) {
+      const qt = assistants[i].metadata?.questionType;
+      if (qt === 'hint_with_question' || qt === 'foundational') {
+        count++;
+      } else {
+        break;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Detect behavioral signals that the student is stuck.
+   */
+  private detectStuck(
+    history: Message[],
+    currentHintLevel: number,
+    userMessage: string,
+    analysis: any,
+    turnNumber: number
+  ): boolean {
+    const helpPhrases = /\b(just tell me|give up|i don'?t know|no idea|help me|i'?m stuck|show me|what'?s the answer)\b/i;
+
+    if (helpPhrases.test(userMessage)) return true;
+    if (currentHintLevel >= 4) return true;
+
+    if (turnNumber > 2 && typeof analysis?.isAttemptShown === 'boolean' && analysis.isAttemptShown === false) {
+      return true;
+    }
+
+    const recentAssistant = history
+      .filter(m => m.role === 'ASSISTANT' && m.metadata)
+      .slice(-2);
+
+    if (recentAssistant.length >= 2) {
+      return recentAssistant.every(m => {
+        const qt = m.metadata?.questionType;
+        return qt === 'hint_with_question' || qt === 'foundational';
+      });
+    }
+
+    return false;
+  }
+
+  /**
    * Rewrite a leaked response into a Socratic question without giving the answer.
    * Uses Haiku for cost efficiency.
    */
@@ -707,8 +807,24 @@ Generate the response:
     detectedTopic?: string;
     modelUsed?: { provider: string; model: string; fallbackUsed: boolean };
     visualContent?: import('./types').VisualContent | null;
+    adaptiveEscalation?: boolean;
+    stuckDetected?: boolean;
   }): TutorResponse {
-    const { mod, message, safetyEvents, language, questionType, analysis, newHintLevel, input, detectedTopic, modelUsed, visualContent } = params;
+    const {
+      mod,
+      message,
+      safetyEvents,
+      language,
+      questionType,
+      analysis,
+      newHintLevel,
+      input,
+      detectedTopic,
+      modelUsed,
+      visualContent,
+      adaptiveEscalation,
+      stuckDetected,
+    } = params;
     const responseLanguage = mod.supportedLanguages.includes(language) ? language : mod.supportedLanguages[0];
     const grounding = detectedTopic ? 'bank' : 'reasoned';
     const confidence = this.deriveConfidence(mod.id, analysis);
@@ -737,6 +853,8 @@ Generate the response:
           essaySuggestedFocus: analysis.suggestedFocus,
           modelUsed,
           visualContent: visualContent || undefined,
+          adaptiveEscalation,
+          stuckDetected,
         }
       };
     }
@@ -760,6 +878,8 @@ Generate the response:
           counselorSuggestedFocus: analysis.suggestedFocus,
           modelUsed,
           visualContent: visualContent || undefined,
+          adaptiveEscalation,
+          stuckDetected,
         }
       };
     }
@@ -779,6 +899,8 @@ Generate the response:
         distanceFromSolution: analysis.distanceFromSolution || 50,
         modelUsed,
         visualContent: visualContent || undefined,
+        adaptiveEscalation,
+        stuckDetected,
       }
     };
   }

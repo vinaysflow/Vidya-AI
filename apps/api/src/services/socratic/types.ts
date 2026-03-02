@@ -74,6 +74,9 @@ export interface TutorResponse {
     };
     // Visual content for interactive whiteboard (populated by modules)
     visualContent?: VisualContent;
+    // Adaptive engagement observability (populated by engine)
+    adaptiveEscalation?: boolean;
+    stuckDetected?: boolean;
   };
 }
 
@@ -135,6 +138,7 @@ export interface Message {
   role: 'USER' | 'ASSISTANT' | 'SYSTEM';
   content: string;
   language?: Language;
+  metadata?: Record<string, any>;
 }
 
 export type AttemptQuality = 'none' | 'minimal' | 'partial' | 'substantial';
