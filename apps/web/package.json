@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "jest --passWithNoTests",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "lighthouse": "lighthouse http://localhost:4173 --output=html --output-path=./lighthouse-report.html --chrome-flags=\"--headless\""
   },
   "dependencies": {
     "@matejmazur/react-katex": "^1.0.0",
@@ -31,6 +34,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.2",
     "@types/jest": "^29.5.12",
@@ -42,6 +46,7 @@
     "autoprefixer": "^10.4.17",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "lighthouse": "^13.0.3",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.5",

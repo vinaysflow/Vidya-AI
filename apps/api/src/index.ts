@@ -19,8 +19,10 @@ import { promptsRouter } from './routes/prompts';
 import { developerRouter } from './routes/developer';
 import { gamificationRouter } from './routes/gamification';
 import { progressRouter } from './routes/progress';
+import { userRouter } from './routes/user';
 import { voiceRouter } from './routes/voice';
 import { dashboardRouter } from './routes/dashboard';
+import { gameRouter } from './routes/game';
 import { offlineRouter } from './routes/offline';
 import { apiKeyAuth } from './middleware/auth';
 import { rateLimiter } from './middleware/rateLimit';
@@ -121,8 +123,10 @@ app.use('/api/prompts', promptsRouter);
 app.use('/api/developer', developerRouter);
 app.use('/api/gamification', gamificationRouter);
 app.use('/api/progress', progressRouter);
+app.use('/api/user', userRouter);
 app.use('/api/voice', voiceRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/game', gameRouter);
 app.use('/api/offline', offlineRouter);
 
 // ============================================

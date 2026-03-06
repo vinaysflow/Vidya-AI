@@ -1,0 +1,97 @@
+[
+  {
+    "id": "minecraft_elevator",
+    "title": "Build a Minecraft Elevator",
+    "prompt": "You want to build an elevator in Minecraft that goes up 5 floors. Each floor is 4 blocks tall. How many blocks tall is the whole elevator?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "minecraft",
+      "building"
+    ]
+  },
+  {
+    "id": "lego_rows",
+    "title": "LEGO Rows",
+    "prompt": "You have 3 rows of LEGO bricks. Each row has 6 bricks. How many bricks do you have in total?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_arrays",
+    "prerequisites": [
+      "multiplication_intro"
+    ],
+    "tags": [
+      "lego"
+    ]
+  },
+  {
+    "id": "cookie_doubling",
+    "title": "Double the Cookie Recipe",
+    "prompt": "A cookie recipe needs 4 eggs. You want to make double the recipe. How many eggs do you need?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "cooking"
+    ]
+  },
+  {
+    "id": "playground_push",
+    "title": "Push the Swing",
+    "prompt": "You push a friend on the swing. What happens when you push harder? What happens when you push softer?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "forces_push_pull",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ]
+  },
+  {
+    "id": "pattern_blocks",
+    "title": "What Comes Next?",
+    "prompt": "You see a pattern: red, blue, red, blue, red, blue. What color comes next?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "patterns_repeat",
+    "prerequisites": [],
+    "tags": [
+      "patterns"
+    ]
+  },
+  {
+    "id": "nickels_count",
+    "title": "Count by 5s",
+    "prompt": "You have a jar of nickels. Each nickel is 5 cents. If you have 6 nickels, how many cents is that?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "skip_counting",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "money",
+      "counting"
+    ]
+  },
+  {
+    "id": "shape_hunt",
+    "title": "Shape Hunt",
+    "prompt": "Look around you! Can you find something shaped like a rectangle? What makes it a rectangle and not a square?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry_shapes",
+    "conceptKey": "shapes_identify",
+    "prerequisites": [],
+    "tags": [
+      "shapes",
+      "real-world"
+    ]
+  }
+]

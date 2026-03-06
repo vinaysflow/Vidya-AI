@@ -162,6 +162,11 @@
   }
 }
 
+@keyframes screenSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* KaTeX message styling */
 .katex-display {
   display: block;
@@ -201,12 +206,36 @@
   100% { opacity: 0; transform: translateY(120px) rotate(720deg); }
 }
 
+@keyframes confettiBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(0.5);
+  }
+}
+
 .animate-xp-fly {
   animation: xpFly 1.2s ease-out forwards;
 }
 
 .animate-confetti {
   animation: confetti 2s ease-out forwards;
+}
+
+.animate-confetti-burst {
+  animation: confettiBurst 1.8s ease-out forwards;
+}
+
+@keyframes voicePreviewBar {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+.animate-voice-preview-bar {
+  animation: voicePreviewBar 1.5s linear forwards;
 }
 
 @keyframes spinSlow {
@@ -236,4 +265,175 @@
 
 .animate-wave {
   animation: wave 1s ease-in-out infinite;
+}
+
+/* Game-feel animations for kid mode */
+@keyframes choicePress {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bubbleAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes correctFlash {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 16px 4px rgba(34, 197, 94, 0.5); }
+}
+
+@keyframes comboPop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-choice-press {
+  animation: choicePress 0.2s ease-out;
+}
+
+.animate-bubble-appear {
+  animation: bubbleAppear 0.3s ease-out;
+}
+
+.animate-wrong-shake {
+  animation: wrongShake 0.4s ease-in-out;
+}
+
+.animate-correct-flash {
+  animation: correctFlash 0.6s ease-out;
+}
+
+.animate-combo-pop {
+  animation: comboPop 0.3s ease-out;
+}
+
+/* Vidya character animations */
+@keyframes vidya-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes vidya-talk {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.05); }
+}
+
+@keyframes vidya-jump {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-12px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes vidya-tilt {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes vidya-think {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-2px) rotate(-3deg); }
+  66% { transform: translateY(-1px) rotate(3deg); }
+}
+
+/* Game scene animations */
+@keyframes blockSlam {
+  0% { transform: scale(0) translateY(-20px); opacity: 0; }
+  60% { transform: scale(1.25) translateY(0); opacity: 1; }
+  80% { transform: scale(0.9) translateY(0); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes blockWobble {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  20% { transform: rotate(-6deg) translateX(-4px); }
+  40% { transform: rotate(6deg) translateX(4px); }
+  60% { transform: rotate(-4deg) translateX(-2px); }
+  80% { transform: rotate(4deg) translateX(2px); }
+}
+
+@keyframes starAppear {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  60% { transform: scale(1.4) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+@keyframes scenePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+@keyframes lavaGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes choiceCorrect {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes choiceWrong {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Duolingo-style full-button color flash */
+@keyframes btnCorrectFlash {
+  0%   { background-color: inherit; transform: scale(1); }
+  15%  { background-color: #22c55e; transform: scale(1.06); box-shadow: 0 0 0 4px rgba(34,197,94,0.4); }
+  30%  { background-color: #4ade80; transform: scale(1.04); }
+  60%  { background-color: #86efac; transform: scale(1.02); }
+  100% { background-color: inherit; transform: scale(1); }
+}
+
+@keyframes btnWrongFlash {
+  0%   { background-color: inherit; transform: translateX(0); }
+  15%  { background-color: #ef4444; transform: translateX(-6px); }
+  30%  { background-color: #f87171; transform: translateX(6px); }
+  50%  { background-color: #fca5a5; transform: translateX(-4px); }
+  70%  { background-color: #fecaca; transform: translateX(4px); }
+  85%  { transform: translateX(-2px); }
+  100% { background-color: inherit; transform: translateX(0); }
+}
+
+@keyframes starBurst {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 1; }
+  60%  { transform: scale(1.4) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1.1) rotate(0deg); opacity: 0.9; }
+}
+
+/* Floating XP pop — rises and fades */
+@keyframes xpPop {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  30%  { opacity: 1; transform: translateY(-8px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-28px) scale(0.8); }
+}
+
+.animate-btn-correct {
+  animation: btnCorrectFlash 0.7s ease-out forwards;
+}
+
+.animate-btn-wrong {
+  animation: btnWrongFlash 0.5s ease-out forwards;
+}
+
+.animate-xp-pop {
+  animation: xpPop 1s ease-out forwards;
 }

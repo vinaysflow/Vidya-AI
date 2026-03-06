@@ -12,7 +12,7 @@ export type Subject =
   | 'PHYSICS' | 'CHEMISTRY' | 'MATHEMATICS' | 'BIOLOGY'
   | 'ESSAY_WRITING' | 'COUNSELING'
   | 'CODING' | 'ENGLISH_LITERATURE' | 'ECONOMICS'
-  | 'AI_LEARNING';
+  | 'AI_LEARNING' | 'LOGIC';
 
 export interface Message {
   id?: string;
@@ -103,6 +103,22 @@ export interface GamificationState {
   pendingLevelUp: number | null;
 }
 
+export interface MasteryEntry {
+  conceptKey: string;
+  mastery: number;
+}
+
+export type ScenePhase = 'loading' | 'playing' | 'celebration' | 'explain-back' | 'complete';
+
+export interface ActiveQuest {
+  id: string;
+  title: string;
+  chapter: string;
+  tags: string[];
+  prompt: string;
+  gradeLevel?: number;
+}
+
 interface ChatState {
   sessionId: string | null;
   subject: Subject;
@@ -111,6 +127,11 @@ interface ChatState {
   isLoading: boolean;
   error: string | null;
   apiKey: string | null;
+  userId: string | null;
+  grade: number | null;
+  effectiveGrade: number | null;
+  masteryMap: MasteryEntry[] | null;
+  questConceptKey: string | null;
 
   sessionHistory: SessionSummary[];
   sidebarOpen: boolean;
@@ -127,11 +148,37 @@ interface ChatState {
   planTier: PlanTier;
   theme: ThemePreference;
   voiceEnabled: boolean;
+  parentViewEnabled: boolean;
   gamification: GamificationState | null;
+
+  rsmTrack: boolean | null;
+  kidModeEnabled: boolean | null;
+
+  activeQuest: ActiveQuest | null;
+  scenePhase: ScenePhase;
+  sceneImageUrl: string | null;
+  lastChoiceCorrect: boolean | null;
+  streakCombo: number;
+
+  setRsmTrack: (rsmTrack: boolean) => void;
+  setKidModeEnabled: (enabled: boolean) => void;
+
+  setActiveQuest: (quest: ActiveQuest | null) => void;
+  setScenePhase: (phase: ScenePhase) => void;
+  setSceneImageUrl: (url: string | null) => void;
+  setLastChoiceCorrect: (correct: boolean | null) => void;
+  incrementCombo: () => void;
+  resetCombo: () => void;
 
   setLanguage: (lang: Language) => void;
   setSubject: (subject: Subject) => void;
   setApiKey: (key: string | null) => void;
+  setUserId: (id: string | null) => void;
+  setGrade: (g: number | null) => void;
+  setEffectiveGrade: (g: number | null) => void;
+  setMasteryMap: (map: MasteryEntry[] | null) => void;
+  setQuestConceptKey: (key: string | null) => void;
+  fetchProfileAndMastery: (userId: string) => Promise<void>;
   setSidebarOpen: (open: boolean) => void;
   setSettingsOpen: (open: boolean) => void;
   setLearningGoal: (goal: string) => void;
@@ -140,11 +187,12 @@ interface ChatState {
   setPlanTier: (tier: PlanTier) => void;
   setTheme: (theme: ThemePreference) => void;
   setVoiceEnabled: (enabled: boolean) => void;
+  setParentViewEnabled: (enabled: boolean) => void;
   completeOnboarding: () => void;
   startOnboarding: () => void;
   setOnboardingStep: (step: number) => void;
   startSession: (problem: string, problemImage?: string) => Promise<void>;
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (content: string, messageImage?: string) => Promise<void>;
   endSession: () => Promise<void>;
   generateQuiz: (count?: number) => Promise<void>;
   loadSession: (sessionId: string) => Promise<void>;
@@ -155,6 +203,8 @@ interface ChatState {
   fetchGamificationProfile: () => Promise<void>;
   onXPEarned: (xpDelta: number, leveledUp?: boolean, newLevel?: number) => void;
   dismissLevelUp: () => void;
+  clearGamificationAnimations: () => void;
+  resetAll: () => void;
 }
 
 // ============================================
@@ -181,6 +231,11 @@ export const useChatStore = create<ChatState>()(
       isLoading: false,
       error: null,
       apiKey: null,
+      userId: null,
+      grade: null,
+      effectiveGrade: null,
+      masteryMap: null,
+      questConceptKey: null,
 
       sessionHistory: [],
       sidebarOpen: false,
@@ -197,11 +252,55 @@ export const useChatStore = create<ChatState>()(
       planTier: 'FREE',
       theme: 'SYSTEM',
       voiceEnabled: false,
-      gamification: null,
+  parentViewEnabled: false,
+  gamification: null,
+  rsmTrack: null,
+  kidModeEnabled: null,
 
-      setLanguage: (language) => set({ language }),
+  activeQuest: null,
+  scenePhase: 'loading',
+  sceneImageUrl: null,
+  lastChoiceCorrect: null,
+  streakCombo: 0,
+
+  setRsmTrack: (rsmTrack) => set({ rsmTrack }),
+  setKidModeEnabled: (kidModeEnabled) => set({ kidModeEnabled }),
+  setActiveQuest: (activeQuest) => set({ activeQuest }),
+  setScenePhase: (scenePhase) => set({ scenePhase }),
+  setSceneImageUrl: (sceneImageUrl) => set({ sceneImageUrl }),
+  setLastChoiceCorrect: (lastChoiceCorrect) => set({ lastChoiceCorrect }),
+  incrementCombo: () => set((s) => ({ streakCombo: s.streakCombo + 1 })),
+  resetCombo: () => set({ streakCombo: 0 }),
+
+  setLanguage: (language) => set({ language }),
       setSubject: (subject) => set({ subject }),
       setApiKey: (apiKey) => set({ apiKey }),
+      setUserId: (userId) => set({ userId }),
+      setGrade: (grade) => set({ grade }),
+      setEffectiveGrade: (effectiveGrade) => set({ effectiveGrade }),
+      setMasteryMap: (masteryMap) => set({ masteryMap }),
+      setQuestConceptKey: (questConceptKey) => set({ questConceptKey }),
+      fetchProfileAndMastery: async (userId: string) => {
+        const { apiKey } = get();
+        try {
+          const [profileRes, masteryRes] = await Promise.all([
+            fetch(`${API_BASE}/api/user/${userId}`, { headers: authHeaders(apiKey) }),
+            fetch(`${API_BASE}/api/progress/mastery-by-concept?userId=${userId}`, { headers: authHeaders(apiKey) }),
+          ]);
+          if (profileRes.ok) {
+            const pd = await profileRes.json();
+            if (pd.success && pd.user) {
+              set({ grade: pd.user.grade ?? null });
+            }
+          }
+          if (masteryRes.ok) {
+            const md = await masteryRes.json();
+            if (md.success && md.mastery) {
+              set({ masteryMap: md.mastery });
+            }
+          }
+        } catch (_) {}
+      },
       setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
       setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
       setLearningGoal: (learningGoal) => set({ learningGoal }),
@@ -210,12 +309,13 @@ export const useChatStore = create<ChatState>()(
       setPlanTier: (planTier) => set({ planTier }),
       setTheme: (theme) => set({ theme }),
       setVoiceEnabled: (voiceEnabled) => set({ voiceEnabled }),
+      setParentViewEnabled: (parentViewEnabled) => set({ parentViewEnabled }),
       completeOnboarding: () => set({ hasCompletedOnboarding: true, onboardingStep: 0 }),
       startOnboarding: () => set({ hasCompletedOnboarding: false, onboardingStep: 0 }),
       setOnboardingStep: (onboardingStep) => set({ onboardingStep }),
 
       startSession: async (problem: string, problemImage?: string) => {
-        const { language, subject, apiKey, noFinalAnswerMode } = get();
+        const { language, subject, apiKey, noFinalAnswerMode, userId, grade, questConceptKey, rsmTrack } = get();
         set({ isLoading: true, error: null });
 
         try {
@@ -227,7 +327,11 @@ export const useChatStore = create<ChatState>()(
               language,
               problemText: problem,
               noFinalAnswer: noFinalAnswerMode,
-              ...(problemImage ? { problemImage } : {})
+              ...(userId ? { userId } : {}),
+              ...(grade != null ? { grade } : {}),
+              ...(questConceptKey ? { conceptKey: questConceptKey } : {}),
+              ...(problemImage ? { problemImage } : {}),
+              ...(rsmTrack ? { rsmTrack: true } : {})
             })
           });
 
@@ -237,7 +341,7 @@ export const useChatStore = create<ChatState>()(
           if (data.success) {
             const msgs = data.messages.map((m: any, idx: number) => ({
               id: m.id,
-              role: m.role,
+              role: (m.role as string).toLowerCase(),
               content: m.content,
               metadata: m.metadata,
               timestamp: new Date(m.timestamp),
@@ -261,7 +365,11 @@ export const useChatStore = create<ChatState>()(
               isLoading: false,
               currentReport: null,
               currentQuiz: null,
+              questConceptKey: null,
               sessionHistory: [summary, ...state.sessionHistory].slice(0, 50),
+              scenePhase: 'playing',
+              lastChoiceCorrect: null,
+              ...(data.session?.effectiveGrade != null ? { effectiveGrade: data.session.effectiveGrade } : {}),
             }));
           } else {
             throw new Error(data.error || 'Failed to start session');
@@ -281,21 +389,24 @@ export const useChatStore = create<ChatState>()(
         }
       },
 
-      sendMessage: async (content: string) => {
+      sendMessage: async (content: string, messageImage?: string) => {
         const { sessionId, language, messages, apiKey, noFinalAnswerMode } = get();
-        const userMessage: Message = { role: 'user', content, language, timestamp: new Date() };
+        const userMessage: Message = { role: 'user', content, language, timestamp: new Date(), ...(messageImage && { imageUrl: messageImage }) };
         set({ messages: [...messages, userMessage], isLoading: true, error: null, currentReport: null, currentQuiz: null });
 
         try {
           if (!sessionId) {
-            await get().startSession(content);
+            await get().startSession(content, messageImage);
             return;
           }
+
+          const body: Record<string, unknown> = { sessionId, message: content, language, noFinalAnswer: noFinalAnswerMode };
+          if (messageImage) body.messageImage = messageImage;
 
           const response = await fetch(`${API_BASE}/api/tutor/message`, {
             method: 'POST',
             headers: authHeaders(apiKey),
-            body: JSON.stringify({ sessionId, message: content, language, noFinalAnswer: noFinalAnswerMode })
+            body: JSON.stringify(body)
           });
 
           if (!response.ok) throw new Error('Failed to send message');
@@ -369,6 +480,13 @@ export const useChatStore = create<ChatState>()(
             if (data.gamification) {
               get().onXPEarned(data.gamification.xpEarned, data.gamification.leveledUp, data.gamification.newLevel);
               get().fetchGamificationProfile();
+            }
+            if (data.adaptive?.effectiveGrade != null) {
+              set({ effectiveGrade: data.adaptive.effectiveGrade });
+            }
+            const { userId } = get();
+            if (userId && userId !== 'anonymous') {
+              get().fetchProfileAndMastery(userId);
             }
           } else {
             throw new Error(data.error || 'Failed to end session');
@@ -484,7 +602,18 @@ export const useChatStore = create<ChatState>()(
         });
       },
 
-      clearChat: () => set({ sessionId: null, messages: [], error: null, currentReport: null, currentQuiz: null }),
+      clearChat: () => set({
+        sessionId: null,
+        messages: [],
+        error: null,
+        currentReport: null,
+        currentQuiz: null,
+        activeQuest: null,
+        scenePhase: 'loading',
+        sceneImageUrl: null,
+        lastChoiceCorrect: null,
+        streakCombo: 0,
+      }),
       setError: (error) => set({ error }),
 
       fetchGamificationProfile: async () => {
@@ -534,6 +663,49 @@ export const useChatStore = create<ChatState>()(
           return { gamification: { ...state.gamification, pendingLevelUp: null } };
         });
       },
+
+      clearGamificationAnimations: () => {
+        set((state) => {
+          if (!state.gamification) return {};
+          return {
+            gamification: {
+              ...state.gamification,
+              pendingLevelUp: null,
+              recentXp: 0,
+            },
+          };
+        });
+      },
+
+      resetAll: () => {
+        localStorage.removeItem('vidya-chat-storage');
+        set({
+          sessionId: null,
+          messages: [],
+          isLoading: false,
+          error: null,
+          grade: null,
+          effectiveGrade: null,
+          masteryMap: null,
+          questConceptKey: null,
+          sessionHistory: [],
+          hasCompletedOnboarding: false,
+          onboardingStep: 0,
+          currentReport: null,
+          learnerState: null,
+          currentQuiz: null,
+          learningGoal: '',
+          difficultyLevel: 'BEGINNER',
+          noFinalAnswerMode: false,
+          gamification: null,
+          rsmTrack: null,
+          kidModeEnabled: null,
+          activeQuest: null,
+          scenePhase: 'loading',
+          lastChoiceCorrect: null,
+          streakCombo: 0,
+        });
+      },
     }),
     {
       name: 'vidya-chat-storage',
@@ -542,6 +714,9 @@ export const useChatStore = create<ChatState>()(
         language: state.language,
         subject: state.subject,
         apiKey: state.apiKey,
+        userId: state.userId,
+        grade: state.grade,
+        effectiveGrade: state.effectiveGrade,
         sessionHistory: state.sessionHistory,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
         onboardingStep: state.onboardingStep,
@@ -553,7 +728,23 @@ export const useChatStore = create<ChatState>()(
         theme: state.theme,
         voiceEnabled: state.voiceEnabled,
         gamification: state.gamification,
-      })
+        rsmTrack: state.rsmTrack,
+        kidModeEnabled: state.kidModeEnabled,
+      }),
+      version: 1,
+      migrate: (persisted: any, version: number) => {
+        if (version === 0) {
+          const s = persisted as any;
+          if (s.grade != null && s.grade <= 7) {
+            s.kidModeEnabled = true;
+          } else if (s.hasCompletedOnboarding === true) {
+            s.kidModeEnabled = false;
+          } else {
+            s.kidModeEnabled = null;
+          }
+        }
+        return persisted;
+      },
     }
   )
 );
@@ -611,6 +802,8 @@ export const SUBJECT_META: SubjectMeta[] = [
     label: { EN: 'Coding', HI: 'कोडिंग', KN: 'ಕೋಡಿಂಗ್', FR: 'Programmation', DE: 'Programmierung', ES: 'Programacion', ZH: '编程' } },
   { id: 'AI_LEARNING', category: 'stem', color: 'from-fuchsia-500 to-violet-500',
     label: { EN: 'AI / ML', HI: 'AI / ML', KN: 'AI / ML', FR: 'IA / ML', DE: 'KI / ML', ES: 'IA / ML', ZH: 'AI / ML' } },
+  { id: 'LOGIC' as Subject, category: 'stem' as SubjectCategory, color: 'from-indigo-500 to-blue-500',
+    label: { EN: 'Logic', HI: 'तर्क', KN: 'ತರ್ಕ', FR: 'Logique', DE: 'Logik', ES: 'Logica', ZH: '逻辑' } },
   { id: 'ENGLISH_LITERATURE', category: 'humanities', color: 'from-amber-500 to-yellow-500',
     label: { EN: 'Literature', HI: 'साहित्य', KN: 'ಸಾಹಿತ್ಯ', FR: 'Litterature', DE: 'Literatur', ES: 'Literatura', ZH: '文学' } },
   { id: 'ECONOMICS', category: 'humanities', color: 'from-teal-500 to-green-500',
@@ -620,6 +813,9 @@ export const SUBJECT_META: SubjectMeta[] = [
   { id: 'COUNSELING', category: 'skills', color: 'from-violet-500 to-purple-500',
     label: { EN: 'College Counselling', HI: 'परामर्श', KN: 'ಸಮಾಲೋಚನೆ', FR: 'Conseil', DE: 'Beratung', ES: 'Orientacion', ZH: '咨询' } },
 ];
+
+/** True when parent has explicitly enabled kid mode */
+export const useIsKidMode = () => useChatStore((s) => s.kidModeEnabled === true);
 
 export const CATEGORY_LABELS: Record<SubjectCategory, Record<Language, string>> = {
   stem: { EN: 'Science & Tech', HI: 'विज्ञान', KN: 'ವಿಜ್ಞಾನ', FR: 'Sciences', DE: 'Wissenschaft', ES: 'Ciencias', ZH: '理科' },

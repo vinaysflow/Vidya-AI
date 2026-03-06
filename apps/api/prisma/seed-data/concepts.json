@@ -1,0 +1,1282 @@
+[
+  {
+    "conceptKey": "addition_grouping",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Addition as Grouping",
+    "description": "Understanding addition as combining groups of objects",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "skip_counting",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Skip Counting",
+    "description": "Counting by 2s, 5s, 10s to prepare for multiplication",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "multiplication_intro",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Introduction to Multiplication",
+    "description": "Multiplication as repeated addition",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": ["addition_grouping"]
+  },
+  {
+    "conceptKey": "multiplication_arrays",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Multiplication as Arrays",
+    "description": "Understanding rows and columns (e.g., 3×4 = 12)",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro"]
+  },
+  {
+    "conceptKey": "shapes_identify",
+    "subject": "MATHEMATICS",
+    "topic": "geometry_shapes",
+    "name": "Identifying Shapes",
+    "description": "Quadrilaterals, rectangles, squares",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "patterns_repeat",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "name": "Repeating Patterns",
+    "description": "Recognizing and extending patterns",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "forces_push_pull",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Pushes and Pulls",
+    "description": "Forces cause objects to move or change",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "states_of_matter",
+    "subject": "CHEMISTRY",
+    "topic": "states_of_matter",
+    "name": "States of Matter",
+    "description": "Solids, liquids, and gases — and how heat changes them",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "mixtures",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures",
+    "name": "Mixtures",
+    "description": "Combining two or more materials that can be separated",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "solutions",
+    "subject": "CHEMISTRY",
+    "topic": "solutions",
+    "name": "Solutions",
+    "description": "One substance dissolves into another (like sugar in water)",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["mixtures"]
+  },
+  {
+    "conceptKey": "fractions_intro",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Introduction to Fractions",
+    "description": "Parts of a whole — halves, thirds, quarters",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["addition_grouping"]
+  },
+  {
+    "conceptKey": "friction",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Friction",
+    "description": "A force that slows things down when surfaces rub together",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["forces_push_pull"]
+  },
+  {
+    "conceptKey": "balance_weight",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Balance and Weight",
+    "description": "Heavier objects need more force to balance; seesaws show this",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": ["forces_push_pull"]
+  },
+  {
+    "conceptKey": "light_shadows",
+    "subject": "PHYSICS",
+    "topic": "light_shadows",
+    "name": "Light and Shadows",
+    "description": "Shadows form when objects block light; shadow length depends on the sun's angle",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "symmetry",
+    "subject": "MATHEMATICS",
+    "topic": "geometry_shapes",
+    "name": "Symmetry",
+    "description": "A shape is symmetrical when both sides mirror each other",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": ["shapes_identify"]
+  },
+  {
+    "conceptKey": "density",
+    "subject": "PHYSICS",
+    "topic": "density",
+    "name": "Density and Floating",
+    "description": "Dense objects sink; less dense objects float — it's about how tightly packed the matter is",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "subtraction",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Subtraction",
+    "description": "Taking away from a group to find how many are left",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": ["addition_grouping"]
+  },
+
+  {
+    "conceptKey": "division_intro",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Introduction to Division",
+    "description": "Division as sharing equally into groups; relationship between multiplication and division",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro"]
+  },
+
+  {
+    "conceptKey": "place_value_hundreds",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Place Value to Hundreds",
+    "description": "Understanding the value of digits in ones, tens, and hundreds places",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "rounding_tens_hundreds",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Rounding to Tens and Hundreds",
+    "description": "Rounding whole numbers to the nearest 10 or 100 using place value understanding",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["place_value_hundreds"]
+  },
+  {
+    "conceptKey": "time_measurement",
+    "subject": "MATHEMATICS",
+    "topic": "measurement",
+    "name": "Telling Time and Elapsed Time",
+    "description": "Telling time to the nearest minute and calculating elapsed time intervals",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "area_intro",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Introduction to Area",
+    "description": "Understanding area as the number of square units covering a flat surface",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro"]
+  },
+  {
+    "conceptKey": "perimeter_intro",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Perimeter of Shapes",
+    "description": "Calculating perimeter of polygons by adding side lengths",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["addition_grouping"]
+  },
+  {
+    "conceptKey": "fractions_equal_parts",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Fractions as Equal Parts",
+    "description": "Understanding fractions as equal parts of a whole, naming unit fractions",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["division_intro"]
+  },
+  {
+    "conceptKey": "data_bar_graphs",
+    "subject": "MATHEMATICS",
+    "topic": "data_statistics",
+    "name": "Reading Bar Graphs and Pictographs",
+    "description": "Interpreting data displayed in bar graphs and pictographs to answer questions",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+
+  {
+    "conceptKey": "magnets_basics",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Magnets and Magnetic Force",
+    "description": "Understanding how magnets attract and repel, and how magnetic force acts at a distance without touching",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": ["forces_push_pull"]
+  },
+
+  {
+    "conceptKey": "simple_patterns",
+    "subject": "LOGIC",
+    "topic": "pattern_recognition",
+    "name": "Simple Repeating Patterns",
+    "description": "Identifying and extending simple AB, ABC, and ABB repeating patterns using shapes, colors, and objects",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "sorting_classifying",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Sorting and Classifying",
+    "description": "Grouping objects into categories based on one attribute and explaining the sorting rule",
+    "gradeLevel": 3,
+    "difficulty": 1,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "shape_sequences",
+    "subject": "LOGIC",
+    "topic": "sequences",
+    "name": "Shape Sequences",
+    "description": "Identifying what comes next in a sequence of shapes that follow a rule",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["simple_patterns"]
+  },
+
+  {
+    "conceptKey": "multidigit_multiplication_1digit",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Multi-Digit Multiplication by 1 Digit",
+    "description": "Multiplying 2-4 digit numbers by a 1-digit number using standard algorithm",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro", "place_value_hundreds"]
+  },
+  {
+    "conceptKey": "multidigit_multiplication_2digit",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Multi-Digit Multiplication (2-Digit)",
+    "description": "Multiplying two 2-digit numbers using area model and standard algorithm",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["multidigit_multiplication_1digit"]
+  },
+  {
+    "conceptKey": "long_division_intro",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Long Division Introduction",
+    "description": "Dividing multi-digit numbers by 1-digit divisors using long division",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["division_intro", "multidigit_multiplication_1digit"]
+  },
+  {
+    "conceptKey": "powers_of_ten",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Multiplying and Dividing by Powers of Ten",
+    "description": "Understanding how multiplying or dividing by 10, 100, 1000 shifts digits in place value",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["place_value_hundreds"]
+  },
+  {
+    "conceptKey": "factors_multiples",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Factors and Multiples",
+    "description": "Finding all factors of numbers 1-100 and identifying multiples of given numbers",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro", "division_intro"]
+  },
+  {
+    "conceptKey": "fraction_equivalence",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Equivalent Fractions",
+    "description": "Finding equivalent fractions using multiplication and fraction models",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["fractions_equal_parts"]
+  },
+  {
+    "conceptKey": "fraction_comparison",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Comparing Fractions",
+    "description": "Comparing fractions with different numerators and denominators using benchmarks and common denominators",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["fraction_equivalence"]
+  },
+  {
+    "conceptKey": "fraction_addition_same_denominator",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Adding Fractions with Same Denominator",
+    "description": "Adding and subtracting fractions and mixed numbers with the same denominator",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["fractions_equal_parts"]
+  },
+  {
+    "conceptKey": "decimal_notation",
+    "subject": "MATHEMATICS",
+    "topic": "decimals",
+    "name": "Decimal Notation (Tenths and Hundredths)",
+    "description": "Reading, writing, and representing decimals to the hundredths place",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["fraction_equivalence"]
+  },
+  {
+    "conceptKey": "unit_conversion",
+    "subject": "MATHEMATICS",
+    "topic": "measurement",
+    "name": "Unit Conversion in Measurement",
+    "description": "Converting between measurement units within the same system (inches to feet, minutes to hours, etc.)",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["multidigit_multiplication_1digit"]
+  },
+  {
+    "conceptKey": "area_complex_figures",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Area of Complex Figures",
+    "description": "Computing area of L-shapes and composite figures by decomposing them into rectangles",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["area_intro", "multidigit_multiplication_1digit"]
+  },
+  {
+    "conceptKey": "angles_intro",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Angles and Lines",
+    "description": "Identifying and measuring angles, understanding parallel and perpendicular lines",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "variables_intro",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Introduction to Variables",
+    "description": "Using letters to represent unknown quantities in simple expressions and equations",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["multidigit_multiplication_1digit"]
+  },
+  {
+    "conceptKey": "simple_equations",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Solving Simple Equations",
+    "description": "Solving one-step equations like x + 5 = 12 or 3x = 18 using inverse operations",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["variables_intro"]
+  },
+  {
+    "conceptKey": "cost_formula",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Cost Formula (Price × Quantity)",
+    "description": "Applying multiplication to calculate total cost in real-world shopping scenarios",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["multidigit_multiplication_1digit", "variables_intro"]
+  },
+  {
+    "conceptKey": "number_patterns_rules",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Number Patterns and Rules",
+    "description": "Identifying rules in number patterns and generating the next terms in a sequence",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro"]
+  },
+
+  {
+    "conceptKey": "energy_forms",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Forms of Energy",
+    "description": "Identifying different forms of energy including kinetic, potential, light, heat, and sound energy",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "sound_waves",
+    "subject": "PHYSICS",
+    "topic": "waves_sound",
+    "name": "Sound and Vibrations",
+    "description": "Understanding that sound is caused by vibrations and travels through materials as waves",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["energy_forms"]
+  },
+  {
+    "conceptKey": "light_reflection",
+    "subject": "PHYSICS",
+    "topic": "light_optics",
+    "name": "Light Reflection and Refraction",
+    "description": "Understanding how light reflects off surfaces and bends (refracts) when passing through different materials",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["light_shadows"]
+  },
+  {
+    "conceptKey": "energy_transfer",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Energy Transfer",
+    "description": "Understanding how energy moves from one object or place to another through collisions, heat, or waves",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["energy_forms"]
+  },
+
+  {
+    "conceptKey": "dissolving_solutions",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures_solutions",
+    "name": "Dissolving and Solutions",
+    "description": "Understanding how solutes dissolve in solvents to form solutions, and factors affecting dissolving rate",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["mixtures"]
+  },
+  {
+    "conceptKey": "materials_properties",
+    "subject": "CHEMISTRY",
+    "topic": "matter_properties",
+    "name": "Properties of Materials",
+    "description": "Identifying and using physical properties (hardness, flexibility, conductivity) to classify materials",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["states_of_matter"]
+  },
+  {
+    "conceptKey": "heating_cooling",
+    "subject": "CHEMISTRY",
+    "topic": "matter_properties",
+    "name": "Heating and Cooling Changes",
+    "description": "How heating and cooling cause changes in state (melting, freezing, evaporating, condensing)",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["states_of_matter"]
+  },
+
+  {
+    "conceptKey": "number_sequences_rules",
+    "subject": "LOGIC",
+    "topic": "sequences",
+    "name": "Number Sequences with Rules",
+    "description": "Finding the rule in a number sequence (add 5, multiply by 2, etc.) and predicting future terms",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["number_patterns_rules", "simple_patterns"]
+  },
+  {
+    "conceptKey": "sorting_two_attributes",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Sorting by Two Attributes",
+    "description": "Classifying objects using two criteria simultaneously, introducing Venn diagram classification",
+    "gradeLevel": 4,
+    "difficulty": 2,
+    "prerequisites": ["sorting_classifying"]
+  },
+  {
+    "conceptKey": "if_then_basic",
+    "subject": "LOGIC",
+    "topic": "deduction",
+    "name": "If-Then Reasoning",
+    "description": "Understanding conditional statements: if A then B, and applying them to simple puzzles",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["sorting_classifying"]
+  },
+  {
+    "conceptKey": "tree_diagrams",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Tree Diagrams and Counting",
+    "description": "Using tree diagrams to systematically count all possible outcomes in simple scenarios",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["if_then_basic"]
+  },
+
+  {
+    "conceptKey": "order_of_operations",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Order of Operations",
+    "description": "Evaluating expressions using PEMDAS (parentheses, exponents, multiplication/division, addition/subtraction)",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["simple_equations", "multidigit_multiplication_2digit"]
+  },
+  {
+    "conceptKey": "fraction_addition_unlike",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Adding Fractions with Unlike Denominators",
+    "description": "Finding common denominators to add and subtract fractions with different denominators",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["fraction_equivalence", "fraction_addition_same_denominator"]
+  },
+  {
+    "conceptKey": "fraction_multiplication",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Multiplying Fractions",
+    "description": "Multiplying fractions and whole numbers, including mixed numbers",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["fraction_equivalence"]
+  },
+  {
+    "conceptKey": "fraction_division",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Dividing Fractions",
+    "description": "Dividing unit fractions by whole numbers and whole numbers by unit fractions",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["fraction_multiplication"]
+  },
+  {
+    "conceptKey": "decimal_operations",
+    "subject": "MATHEMATICS",
+    "topic": "decimals",
+    "name": "Decimal Operations",
+    "description": "Adding, subtracting, multiplying, and dividing decimals to the hundredths place",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["decimal_notation"]
+  },
+  {
+    "conceptKey": "volume_intro",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Volume of Rectangular Prisms",
+    "description": "Understanding volume as filling space and calculating using l × w × h",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["area_intro", "multidigit_multiplication_2digit"]
+  },
+  {
+    "conceptKey": "coordinate_plane_intro",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Coordinate Plane Basics",
+    "description": "Plotting and identifying points using (x, y) coordinates in the first quadrant",
+    "gradeLevel": 5,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "distance_velocity_time",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Distance-Velocity-Time Formula",
+    "description": "Solving word problems using d = v × t, including finding any one of the three quantities",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["simple_equations", "decimal_operations"]
+  },
+  {
+    "conceptKey": "multistep_word_problems",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Multi-Step Word Problems",
+    "description": "Solving complex word problems requiring 3 or more operations and equations",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["order_of_operations", "fraction_multiplication"]
+  },
+
+  {
+    "conceptKey": "gravity_intro",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Gravity",
+    "description": "Understanding gravity as a force that pulls objects toward Earth and varies with mass and distance",
+    "gradeLevel": 5,
+    "difficulty": 2,
+    "prerequisites": ["forces_push_pull"]
+  },
+  {
+    "conceptKey": "simple_machines",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Simple Machines",
+    "description": "How levers, pulleys, ramps, and wheels and axles reduce the effort needed to do work",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["forces_push_pull", "gravity_intro"]
+  },
+  {
+    "conceptKey": "conservation_of_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Conservation of Energy",
+    "description": "Understanding that energy cannot be created or destroyed, only transformed from one form to another",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["energy_transfer"]
+  },
+
+  {
+    "conceptKey": "chemical_vs_physical_change",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_change",
+    "name": "Chemical vs Physical Change",
+    "description": "Distinguishing between physical changes (reversible, same substance) and chemical changes (new substance formed)",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["materials_properties", "heating_cooling"]
+  },
+  {
+    "conceptKey": "density_basics",
+    "subject": "CHEMISTRY",
+    "topic": "matter_properties",
+    "name": "Density",
+    "description": "Understanding density as mass per volume, why objects float or sink based on density comparison",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["states_of_matter"]
+  },
+  {
+    "conceptKey": "conservation_of_mass",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_change",
+    "name": "Conservation of Mass",
+    "description": "Understanding that total mass is conserved in physical and chemical changes",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["chemical_vs_physical_change"]
+  },
+
+  {
+    "conceptKey": "growing_patterns",
+    "subject": "LOGIC",
+    "topic": "pattern_recognition",
+    "name": "Growing and Shrinking Patterns",
+    "description": "Analyzing patterns that grow or shrink according to a rule, connecting to algebraic thinking",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["number_sequences_rules"]
+  },
+  {
+    "conceptKey": "visual_analogies",
+    "subject": "LOGIC",
+    "topic": "analogies",
+    "name": "Visual Analogies",
+    "description": "Completing analogical reasoning: A is to B as C is to ? using visual patterns",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["shape_sequences"]
+  },
+  {
+    "conceptKey": "syllogisms_basic",
+    "subject": "LOGIC",
+    "topic": "deduction",
+    "name": "Basic Syllogisms",
+    "description": "Reaching logical conclusions from two given statements (All A are B; All B are C; therefore...)",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["if_then_basic"]
+  },
+
+  {
+    "conceptKey": "ratios_intro",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Introduction to Ratios",
+    "description": "Understanding and writing ratios in three forms (a:b, a/b, a to b) to compare quantities",
+    "gradeLevel": 6,
+    "difficulty": 2,
+    "prerequisites": ["fraction_equivalence"]
+  },
+  {
+    "conceptKey": "unit_rates",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Unit Rates",
+    "description": "Finding and using unit rates to solve real-world problems (miles per hour, price per item)",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["ratios_intro", "decimal_operations"]
+  },
+  {
+    "conceptKey": "proportional_reasoning",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Proportional Reasoning",
+    "description": "Setting up and solving proportions to find unknown quantities in real-world situations",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["unit_rates"]
+  },
+  {
+    "conceptKey": "percentages_intro",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Percentages",
+    "description": "Converting between fractions, decimals, and percentages. Finding percent of a number.",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["ratios_intro", "decimal_operations"]
+  },
+  {
+    "conceptKey": "negative_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Negative Numbers and Integers",
+    "description": "Understanding positive and negative numbers on the number line, ordering and comparing integers",
+    "gradeLevel": 6,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "integer_operations",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Integer Operations",
+    "description": "Adding, subtracting, multiplying, and dividing positive and negative integers",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["negative_numbers"]
+  },
+  {
+    "conceptKey": "expressions_variables",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Algebraic Expressions",
+    "description": "Writing and evaluating algebraic expressions with one or two variables",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["simple_equations"]
+  },
+  {
+    "conceptKey": "one_step_equations_6",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "One-Step Equations (Grade 6)",
+    "description": "Solving one-step equations involving integers, fractions, and decimals",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["expressions_variables", "integer_operations"]
+  },
+  {
+    "conceptKey": "data_analysis_basic",
+    "subject": "MATHEMATICS",
+    "topic": "data_statistics",
+    "name": "Statistical Measures",
+    "description": "Calculating and interpreting mean, median, mode, and range of data sets",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["decimal_operations"]
+  },
+  {
+    "conceptKey": "surface_area",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Surface Area of 3D Shapes",
+    "description": "Finding surface area of rectangular prisms and triangular prisms by unfolding nets",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["area_complex_figures", "volume_intro"]
+  },
+
+  {
+    "conceptKey": "speed_velocity",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Speed and Velocity",
+    "description": "Calculating speed using distance/time, understanding direction as part of velocity",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["distance_velocity_time", "friction"]
+  },
+  {
+    "conceptKey": "newtons_laws",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Newton's Laws of Motion",
+    "description": "Understanding the three laws: inertia, F=ma, and equal-and-opposite reactions",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["speed_velocity", "gravity_intro"]
+  },
+  {
+    "conceptKey": "pressure_basics",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "name": "Pressure (Force per Area)",
+    "description": "Understanding pressure as force distributed over area, with real-world applications",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["newtons_laws"]
+  },
+  {
+    "conceptKey": "thermal_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Thermal Energy and Heat Transfer",
+    "description": "Understanding temperature, thermal energy, and three types of heat transfer: conduction, convection, radiation",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["energy_forms"]
+  },
+
+  {
+    "conceptKey": "atoms_elements_intro",
+    "subject": "CHEMISTRY",
+    "topic": "atoms_elements",
+    "name": "Atoms and Elements",
+    "description": "Understanding atoms as the building blocks of matter and elements as pure substances made of one type of atom",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["conservation_of_mass"]
+  },
+  {
+    "conceptKey": "periodic_table_intro",
+    "subject": "CHEMISTRY",
+    "topic": "atoms_elements",
+    "name": "Periodic Table Introduction",
+    "description": "Reading the periodic table: element symbols, atomic number, groups and periods, metals vs nonmetals",
+    "gradeLevel": 6,
+    "difficulty": 3,
+    "prerequisites": ["atoms_elements_intro"]
+  },
+  {
+    "conceptKey": "chemical_reactions_intro",
+    "subject": "CHEMISTRY",
+    "topic": "reactions",
+    "name": "Introduction to Chemical Reactions",
+    "description": "Understanding that chemical reactions rearrange atoms to form new substances with new properties",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["chemical_vs_physical_change", "atoms_elements_intro"]
+  },
+
+  {
+    "conceptKey": "algebraic_patterns",
+    "subject": "LOGIC",
+    "topic": "pattern_recognition",
+    "name": "Algebraic Patterns",
+    "description": "Expressing pattern rules using algebraic notation and predicting terms using formulas",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["growing_patterns", "expressions_variables"]
+  },
+  {
+    "conceptKey": "matrix_puzzles",
+    "subject": "LOGIC",
+    "topic": "spatial_reasoning",
+    "name": "Matrix Puzzles",
+    "description": "Completing 3x3 matrices by identifying the rule that relates rows and columns",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["visual_analogies", "sorting_two_attributes"]
+  },
+  {
+    "conceptKey": "multi_step_deduction",
+    "subject": "LOGIC",
+    "topic": "deduction",
+    "name": "Multi-Step Deductive Reasoning",
+    "description": "Solving logic puzzles that require chaining several if-then statements to reach a conclusion",
+    "gradeLevel": 6,
+    "difficulty": 4,
+    "prerequisites": ["syllogisms_basic"]
+  },
+
+  {
+    "conceptKey": "proportional_relationships",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Proportional Relationships and Graphs",
+    "description": "Identifying proportional relationships in tables, graphs, and equations; finding the constant of proportionality",
+    "gradeLevel": 7,
+    "difficulty": 3,
+    "prerequisites": ["proportional_reasoning", "coordinate_plane_intro"]
+  },
+  {
+    "conceptKey": "percent_applications",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "name": "Percent Applications",
+    "description": "Solving percent increase/decrease, discount, tax, tip, and interest problems",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["percentages_intro"]
+  },
+  {
+    "conceptKey": "rational_number_operations",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "name": "Rational Number Operations",
+    "description": "Adding, subtracting, multiplying, and dividing all rational numbers including negatives, fractions, and decimals",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["integer_operations", "fraction_multiplication"]
+  },
+  {
+    "conceptKey": "linear_equations_one_variable",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "name": "Linear Equations (One Variable)",
+    "description": "Solving multi-step linear equations with variables on both sides including with fractions",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["one_step_equations_6", "rational_number_operations"]
+  },
+  {
+    "conceptKey": "probability_intro",
+    "subject": "MATHEMATICS",
+    "topic": "data_statistics",
+    "name": "Introduction to Probability",
+    "description": "Understanding probability as a number 0-1, calculating theoretical probability of simple events",
+    "gradeLevel": 7,
+    "difficulty": 3,
+    "prerequisites": ["ratios_intro"]
+  },
+  {
+    "conceptKey": "geometry_scale_drawings",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Scale Drawings and Similar Figures",
+    "description": "Using scale factors to solve problems with scale drawings and similar geometric figures",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["proportional_reasoning"]
+  },
+
+  {
+    "conceptKey": "kinetic_potential_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Kinetic and Potential Energy",
+    "description": "Calculating kinetic energy (KE = ½mv²) and gravitational potential energy (PE = mgh), and their interconversion",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["conservation_of_energy", "newtons_laws"]
+  },
+  {
+    "conceptKey": "wave_properties",
+    "subject": "PHYSICS",
+    "topic": "waves_sound",
+    "name": "Wave Properties",
+    "description": "Understanding amplitude, wavelength, frequency, and speed of waves; relationship between frequency and pitch",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["sound_waves"]
+  },
+  {
+    "conceptKey": "electromagnetic_spectrum",
+    "subject": "PHYSICS",
+    "topic": "light_optics",
+    "name": "Electromagnetic Spectrum",
+    "description": "Understanding the spectrum of electromagnetic radiation from radio waves to gamma rays",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["light_reflection", "wave_properties"]
+  },
+
+  {
+    "conceptKey": "acids_bases",
+    "subject": "CHEMISTRY",
+    "topic": "reactions",
+    "name": "Acids and Bases",
+    "description": "Understanding the pH scale, properties of acids and bases, and neutralization reactions",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["chemical_reactions_intro"]
+  },
+  {
+    "conceptKey": "compounds_bonding",
+    "subject": "CHEMISTRY",
+    "topic": "atoms_elements",
+    "name": "Compounds and Chemical Bonding",
+    "description": "Understanding how atoms combine to form compounds, introduction to ionic and covalent bonding concepts",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["periodic_table_intro", "chemical_reactions_intro"]
+  },
+
+  {
+    "conceptKey": "fibonacci_sequences",
+    "subject": "LOGIC",
+    "topic": "sequences",
+    "name": "Fibonacci-Type Sequences",
+    "description": "Understanding recursive sequences where each term depends on previous terms, including Fibonacci numbers",
+    "gradeLevel": 7,
+    "difficulty": 4,
+    "prerequisites": ["algebraic_patterns"]
+  },
+  {
+    "conceptKey": "spatial_rotation",
+    "subject": "LOGIC",
+    "topic": "spatial_reasoning",
+    "name": "Spatial Rotation and Folding",
+    "description": "Mentally rotating and folding 2D shapes to determine 3D outcomes — classic IQ test reasoning",
+    "gradeLevel": 7,
+    "difficulty": 5,
+    "prerequisites": ["matrix_puzzles"]
+  },
+  {
+    "conceptKey": "logic_puzzles_advanced",
+    "subject": "LOGIC",
+    "topic": "deduction",
+    "name": "Advanced Logic Puzzles",
+    "description": "Multi-variable constraint satisfaction puzzles (Zebra puzzle style) requiring systematic elimination",
+    "gradeLevel": 7,
+    "difficulty": 5,
+    "prerequisites": ["multi_step_deduction"]
+  },
+  {
+    "conceptKey": "set_theory_intro",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "name": "Introduction to Sets",
+    "description": "Understanding defined sets, equal sets, empty sets, and set membership — RSM grade 3 Q1",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "venn_diagrams_basic",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "name": "Euler-Venn Diagrams",
+    "description": "Using Venn diagrams to show relationships between sets, subsets, and intersections",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["set_theory_intro"]
+  },
+  {
+    "conceptKey": "set_operations",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "name": "Set Operations: Union, Intersection, Complement",
+    "description": "Computing union (A ∪ B), intersection (A ∩ B), and complement of sets",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["venn_diagrams_basic"]
+  },
+  {
+    "conceptKey": "motion_problems",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "name": "Distance-Velocity-Time Word Problems",
+    "description": "Solving word problems using d = v × t formula — RSM grade 3 Q3",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["multiplication_intro", "division_intro"]
+  },
+  {
+    "conceptKey": "work_rate_time",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "name": "Work Formula (W = R × T)",
+    "description": "Worker rate problems: if A does a job in 6 hours and B in 4, how long together?",
+    "gradeLevel": 4,
+    "difficulty": 4,
+    "prerequisites": ["multiplication_intro", "division_intro", "fractions_intro"]
+  },
+  {
+    "conceptKey": "cost_formula",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "name": "Cost Formula (Cost = Price × Quantity)",
+    "description": "Multi-step cost problems involving unit price, quantity, and total cost",
+    "gradeLevel": 3,
+    "difficulty": 2,
+    "prerequisites": ["multiplication_intro"]
+  },
+  {
+    "conceptKey": "compound_word_problems",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "name": "Multi-Step Compound Word Problems",
+    "description": "Problems requiring two or more operations to solve — RSM hallmark of rigor",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["addition_grouping", "multiplication_intro"]
+  },
+  {
+    "conceptKey": "multi_step_equations",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "name": "Multi-Step Equations",
+    "description": "Solving equations like 3(x + 2) = 21 requiring distribution and inverse operations",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["simple_equations"]
+  },
+  {
+    "conceptKey": "mixed_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Mixed Numbers and Improper Fractions",
+    "description": "Converting between mixed numbers (2½) and improper fractions (5/2)",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["fractions_intro"]
+  },
+  {
+    "conceptKey": "fraction_of_number",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Finding a Fraction of a Number",
+    "description": "Computing (3/4) of 24, linking fractions to multiplication — RSM grade 4",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["fractions_intro", "multiplication_intro"]
+  },
+  {
+    "conceptKey": "percent_as_hundredths",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Percentages as Hundredths",
+    "description": "Understanding percent as parts per hundred, converting fractions to percents",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["fractions_intro", "decimal_notation"]
+  },
+  {
+    "conceptKey": "simultaneous_motion",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "name": "Simultaneous Motion Problems",
+    "description": "Two objects moving toward or away from each other — combined rate and gap problems",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["motion_problems"]
+  },
+  {
+    "conceptKey": "motion_graphs",
+    "subject": "MATHEMATICS",
+    "topic": "data_graphs",
+    "name": "Reading and Constructing Motion Graphs",
+    "description": "Plotting and interpreting distance-time graphs, understanding slope as speed",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["coordinate_plane_intro", "motion_problems"]
+  },
+  {
+    "conceptKey": "right_triangle_area",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Area of Right Triangles",
+    "description": "Computing triangle area as half the product of base and height",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["area_intro", "multiplication_intro"]
+  },
+  {
+    "conceptKey": "inequalities_intro",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "name": "Inequalities (Strict, Non-Strict, Double)",
+    "description": "Understanding <, >, ≤, ≥ and solving single-variable inequalities — RSM grade 5",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["simple_equations"]
+  },
+  {
+    "conceptKey": "counting_principles",
+    "subject": "LOGIC",
+    "topic": "combinatorics",
+    "name": "Fundamental Counting Principle",
+    "description": "If event A has m outcomes and B has n outcomes, together there are m × n outcomes",
+    "gradeLevel": 4,
+    "difficulty": 3,
+    "prerequisites": ["multiplication_intro"]
+  },
+  {
+    "conceptKey": "logical_connectives",
+    "subject": "LOGIC",
+    "topic": "formal_logic",
+    "name": "Logical Connectives (If-Then, For All, There Exists)",
+    "description": "Understanding conditional statements, universal and existential quantifiers",
+    "gradeLevel": 5,
+    "difficulty": 4,
+    "prerequisites": ["if_then_basic"]
+  },
+  {
+    "conceptKey": "coordinate_graphing",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Plotting Ordered Pairs",
+    "description": "Plotting (x, y) points on a coordinate plane and reading graph coordinates",
+    "gradeLevel": 5,
+    "difficulty": 3,
+    "prerequisites": ["coordinate_plane_intro"]
+  }
+]

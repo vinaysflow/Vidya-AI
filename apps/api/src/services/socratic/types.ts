@@ -23,6 +23,10 @@ export interface TutorInput {
   topic?: string;
   currentHintLevel: number;
   noFinalAnswer?: boolean;
+  grade?: number;
+  effectiveGrade?: number;  // Adaptive: computed grade level (may differ from enrolled grade)
+  userId?: string;
+  masteryContext?: { masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> };
   // Essay prompt metadata (populated when subject is ESSAY_WRITING)
   essayType?: string;         // "Common App", "Supplemental", etc.
   wordLimit?: number;         // From the matched prompt
@@ -33,6 +37,7 @@ export interface TutorInput {
   clientContext?: Record<string, any>;  // Full client context (PathWiz or ODEE shape)
   variant?: string;                     // 'COLLEGE_US' | 'CAREER_INDIA'
   clientUserId?: string;                // Opaque client user ID
+  rsmTrack?: boolean;                   // Student attends Russian School of Math
 }
 
 export interface TutorResponse {
@@ -132,6 +137,7 @@ export type QuestionType =
   | 'hint_with_question' // Hint + follow-up question
   | 'foundational'       // Back to basics question
   | 'celebration'        // Student got it right
+  | 'celebrate_then_explain_back'  // Celebrate + ask explain-back (elementary)
   | 'encouragement';     // Student struggling, need support
 
 export interface Message {

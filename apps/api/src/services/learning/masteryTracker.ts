@@ -46,6 +46,28 @@ function calculateNextReview(mastery: number, attempts: number): Date {
   return next;
 }
 
+/** Resolve a concept name or slug to a Concept conceptKey for mastery updates */
+export async function resolveConceptKey(
+  nameOrKey: string,
+  subject?: Subject,
+): Promise<string | null> {
+  const slug = nameOrKey.toLowerCase().replace(/[\s/]+/g, '_').replace(/[^a-z0-9_]/g, '');
+  if (!slug) return null;
+  const exact = await prisma.concept.findUnique({ where: { conceptKey: slug } });
+  if (exact?.conceptKey) return exact.conceptKey;
+  const byName = await prisma.concept.findFirst({
+    where: {
+      OR: [
+        { name: { contains: nameOrKey, mode: 'insensitive' } },
+        { conceptKey: { contains: slug.split('_')[0] || slug, mode: 'insensitive' } },
+      ],
+      ...(subject ? { subject } : {}),
+    },
+    select: { conceptKey: true },
+  });
+  return byName?.conceptKey ?? null;
+}
+
 export async function updateMastery(
   userId: string,
   conceptKey: string,
@@ -107,6 +129,25 @@ export async function getMasteryMap(
   }));
 }
 
+/** Returns mastery by conceptKey for frontend quest filtering */
+export async function getMasteryByConceptKey(
+  userId: string,
+  subject?: Subject,
+): Promise<Array<{ conceptKey: string; mastery: number }>> {
+  const records = await prisma.progress.findMany({
+    where: { userId, ...(subject ? { subject } : {}) },
+  });
+  if (records.length === 0) return [];
+  const concepts = await prisma.concept.findMany({
+    where: { id: { in: records.map((r) => r.conceptId) } },
+    select: { id: true, conceptKey: true },
+  });
+  const keyMap = new Map(concepts.map((c) => [c.id, c.conceptKey]));
+  return records
+    .filter((r) => keyMap.get(r.conceptId))
+    .map((r) => ({ conceptKey: keyMap.get(r.conceptId)!, mastery: r.mastery }));
+}
+
 export async function getDueReviews(
   userId: string,
 ): Promise<Array<{ conceptId: string; conceptKey: string | null; name: string; subject: Subject; topic: string; mastery: number }>> {
@@ -134,6 +175,50 @@ export async function getDueReviews(
       mastery: p.mastery,
     };
   });
+}
+
+/** Threshold for "mastered" in elementary mode (soft gating) */
+const MASTERY_THRESHOLD = 40;
+
+/**
+ * Returns mastery context for the elementary overlay.
+ * masteredConcepts: mastery >= threshold
+ * gapConcepts: mastery < threshold (weak prerequisites)
+ */
+export async function getMasteryContextForEngine(
+  userId: string,
+  subject: Subject,
+): Promise<{ masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> }> {
+  const records = await prisma.progress.findMany({
+    where: { userId, subject },
+    orderBy: { mastery: 'desc' },
+  });
+  if (records.length === 0) {
+    return { masteredConcepts: [], gapConcepts: [] };
+  }
+
+  const conceptIds = [...new Set(records.map((r) => r.conceptId))];
+  const concepts = await prisma.concept.findMany({
+    where: { id: { in: conceptIds } },
+    select: { id: true, name: true },
+  });
+  const conceptMap = new Map(concepts.map((c) => [c.id, c]));
+
+  const masteredConcepts: Array<{ name: string; mastery: number }> = [];
+  const gapConcepts: Array<{ name: string; mastery: number }> = [];
+
+  for (const r of records) {
+    const concept = conceptMap.get(r.conceptId);
+    const name = concept?.name ?? r.topic;
+    const entry = { name, mastery: r.mastery };
+    if (r.mastery >= MASTERY_THRESHOLD) {
+      masteredConcepts.push(entry);
+    } else {
+      gapConcepts.push(entry);
+    }
+  }
+
+  return { masteredConcepts, gapConcepts };
 }
 
 export async function getRadarData(

@@ -32,6 +32,7 @@ import {
 } from './quiz';
 import { generateVisualContent } from './visualGenerator';
 import { getConceptBankAddendum } from './conceptBank';
+import { getExampleQuestions } from '../learning/templateLookup';
 
 // Import and register modules
 import { stemModule } from './modules/stem';
@@ -168,8 +169,14 @@ export class SocraticEngine {
     // Step 1: Check if we need the student to show work first
     // Counselor mode skips the attempt gate — it's conversational
     const isCounseling = subject === 'COUNSELING';
-    if (!isCounseling && this.needsAttemptFirst(conversationHistory, userMessage, mod, language)) {
-      return this.promptForAttempt(language, mod);
+    if (!isCounseling && this.needsAttemptFirst(conversationHistory, userMessage, mod, language, { grade: input.grade })) {
+      return this.promptForAttempt(language, mod, input.grade);
+    }
+
+    // Kid quest intro: first turn skips analysis entirely — the user message is just the problem statement
+    const isFirstTurn = conversationHistory.filter(m => m.role === 'USER').length <= 1;
+    if (input.grade != null && input.grade <= 5 && isFirstTurn) {
+      return this.generateKidQuestIntro(input, mod);
     }
 
     // Step 2: Run analysis
@@ -188,6 +195,10 @@ export class SocraticEngine {
         essayType: input.essayType,
         essayCategory: input.essayCategory,
         wordLimit: input.wordLimit,
+        grade: input.grade,
+        userId: input.userId,
+        masteryContext: input.masteryContext,
+        rsmTrack: input.rsmTrack,
         // Counselor metadata
         clientContext: input.clientContext,
         variant: input.variant,
@@ -207,6 +218,24 @@ export class SocraticEngine {
       // Default fallback — shouldn't happen if modules implement it
       questionType = 'socratic';
       newHintLevel = currentHintLevel;
+    }
+
+    // Elementary celebrate_then_explain_back: after correct answer, ask kid to explain why it works
+    const grade = input.grade;
+    const STEM_SUBJECTS: Subject[] = ['PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY'];
+    const isStemSubject = STEM_SUBJECTS.includes(subject);
+
+    if (grade != null && grade <= 5 && questionType === 'celebration' && isStemSubject) {
+      const a = analysis as { distanceFromSolution?: number };
+      if ((a.distanceFromSolution ?? 100) < 15) {
+        const lastAssistant = conversationHistory.filter((m) => m.role === 'ASSISTANT').pop();
+        const content = (lastAssistant as { content?: string } | undefined)?.content ?? '';
+        const alreadyAskedExplainBack =
+          /robot|teach|explain|why.*work/i.test(content);
+        if (!alreadyAskedExplainBack) {
+          questionType = 'celebrate_then_explain_back';
+        }
+      }
     }
 
     // Adaptive anti-loop: if the assistant is repeating itself, increase help level.
@@ -270,24 +299,79 @@ export class SocraticEngine {
         schoolName: input.schoolName,
         hintLevel: newHintLevel,
         noFinalAnswer: input.noFinalAnswer,
+        grade: input.grade,
+        effectiveGrade: input.effectiveGrade,
+        masteryContext: input.masteryContext,
+        problemText: this.extractProblem(conversationHistory),
         // Counselor metadata
         clientContext: input.clientContext,
         variant: input.variant,
       }
     });
 
+    // Step 4b: Retry if kid mode response is missing [A]/[B]/[C] choices
+    if (grade != null && grade <= 7) {
+      const hasChoices = /\[A\]/i.test(response.text) && /\[B\]/i.test(response.text);
+      if (!hasChoices) {
+        try {
+          const retryHistory = [
+            ...conversationHistory,
+            { role: 'ASSISTANT' as const, content: response.text },
+            {
+              role: 'USER' as const,
+              content: 'You forgot to include [A] [B] [C] choices at the end. Please add exactly 3 answer choices now.',
+            },
+          ];
+          const retryResponse = await this.runResponseGeneration({
+            mod,
+            sessionId,
+            questionType,
+            analysis,
+            language,
+            conversationHistory: retryHistory,
+            hintLevel: newHintLevel,
+            scaffoldMode,
+            metadata: {
+              subject,
+              topic: detectedTopic,
+              bankTopic,
+              essayCategory: input.essayCategory,
+              wordLimit: input.wordLimit,
+              schoolName: input.schoolName,
+              hintLevel: newHintLevel,
+              noFinalAnswer: input.noFinalAnswer,
+              grade: input.grade,
+              effectiveGrade: input.effectiveGrade,
+              masteryContext: input.masteryContext,
+              problemText: this.extractProblem(conversationHistory),
+              clientContext: input.clientContext,
+              variant: input.variant,
+            },
+          });
+          if (/\[A\]/i.test(retryResponse.text) && /\[B\]/i.test(retryResponse.text)) {
+            Object.assign(response, retryResponse);
+          }
+        } catch (_) { /* retry is best-effort */ }
+      }
+    }
+
     // Step 5: Generate optional visual content (infographic)
+    // For kids, skip all visuals — the game scene IS the visual. Equation steps / diagrams are confusing for 3rd graders.
     let visualContent: import('./types').VisualContent | null = null;
-    try {
-      visualContent = await generateVisualContent({
-        subject,
-        tutorMessage: response.text,
-        analysis,
-        language,
-        client: this.client,
-        modelPolicy: mod.modelPolicy?.analysis,
-      });
-    } catch (_) { /* visual generation is best-effort */ }
+    const skipVisual = grade != null && grade <= 5;
+    if (!skipVisual) {
+      try {
+        visualContent = await generateVisualContent({
+          subject,
+          tutorMessage: response.text,
+          analysis,
+          language,
+          client: this.client,
+          modelPolicy: mod.modelPolicy?.analysis,
+          grade: input.grade,
+        });
+      } catch (_) { /* visual generation is best-effort */ }
+    }
 
     // Step 6: Build TutorResponse with metadata
     return this.buildTutorResponse({
@@ -511,6 +595,19 @@ Analyze this and respond with JSON only.
 
     const languageContext = mod.getLanguageContext(language);
 
+    // Pre-fetch few-shot examples for elementary overlay grade calibration
+    let fewShotExamples: string[] | undefined;
+    const kidGradeForExamples = metadata?.grade as number | undefined;
+    const effectiveGradeForExamples = (metadata?.effectiveGrade ?? kidGradeForExamples) as number | undefined;
+    if (kidGradeForExamples != null && kidGradeForExamples <= 7 && effectiveGradeForExamples != null) {
+      const exResult = await getExampleQuestions(
+        (metadata?.problemText ? 'unknown' : metadata?.bankTopic) || 'unknown',
+        effectiveGradeForExamples,
+        2
+      ).catch(() => ({ texts: [], ids: [] }));
+      fewShotExamples = exResult.texts;
+    }
+
     // Build system prompt
     let systemPrompt = `${mod.systemPrompt}\n\n${languageContext}`;
 
@@ -525,6 +622,7 @@ Analyze this and respond with JSON only.
         ...metadata,
         questionType,
         hintLevel,
+        fewShotExamples,
       });
       systemPrompt += `\n\n${addendum}`;
     }
@@ -542,6 +640,7 @@ Analyze this and respond with JSON only.
       subject: metadata?.subject as Subject | undefined,
       topic: typeof bankTopic === 'string' ? bankTopic : undefined,
       hintLevel,
+      grade: metadata?.grade as number | undefined,
     });
     if (bankAddendum) {
       systemPrompt += `\n\n${bankAddendum}`;
@@ -590,9 +689,12 @@ Generate the response:
 
     try {
       const responsePolicy = resolveModelPolicy(mod.modelPolicy?.response);
+      const baseMax = mod.maxResponseTokens || 400;
+      const maxTokens =
+        metadata?.grade != null && metadata.grade <= 5 ? Math.min(baseMax, 200) : baseMax;
       const result = await this.client.generateTextWithMeta({
         modelType: 'response',
-        maxTokens: mod.maxResponseTokens || 400,
+        maxTokens,
         systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
         usePromptCache: true,
@@ -763,6 +865,55 @@ Generate the response:
   }
 
   // ============================================
+  // KID QUEST INTRO (FIRST TURN)
+  // ============================================
+
+  /**
+   * Dedicated first-turn path for kid mode quests.
+   * Skips analysis entirely — the user message is the problem statement, not a student attempt.
+   * Generates a "present the problem" response with [A]/[B]/[C] choices.
+   */
+  private async generateKidQuestIntro(input: TutorInput, mod: TutorModule): Promise<TutorResponse> {
+    const { sessionId, language, conversationHistory, subject } = input;
+    const problemText = this.extractProblem(conversationHistory);
+
+    const response = await this.runResponseGeneration({
+      mod,
+      sessionId,
+      questionType: 'attempt_prompt',
+      analysis: {},
+      language,
+      conversationHistory,
+      hintLevel: 0,
+      metadata: {
+        subject,
+        grade: input.grade,
+        problemText,
+        masteryContext: input.masteryContext,
+        isQuestIntro: true,
+      },
+    });
+
+    const responseLanguage = mod.supportedLanguages.includes(language) ? language : mod.supportedLanguages[0];
+
+    return {
+      message: response.text,
+      language: responseLanguage,
+      metadata: {
+        questionType: 'attempt_prompt',
+        hintLevel: 0,
+        conceptsIdentified: [],
+        distanceFromSolution: 100,
+        topic: input.topic,
+        grounding: 'bank',
+        confidence: 0.9,
+        safetyEvents: response.safetyEvents,
+        modelUsed: response.modelUsed,
+      }
+    };
+  }
+
+  // ============================================
   // ATTEMPT GATE LOGIC
   // ============================================
 
@@ -770,27 +921,36 @@ Generate the response:
    * Determines if we should ask the student to show their work first.
    * Delegates attempt detection to the module.
    */
-  private needsAttemptFirst(history: Message[], currentMessage: string, mod: TutorModule, language?: Language): boolean {
-    const userMessages = history.filter(m => m.role === 'USER');
+  private needsAttemptFirst(
+    history: Message[],
+    currentMessage: string,
+    mod: TutorModule,
+    language?: Language,
+    metadata?: { grade?: number },
+  ): boolean {
+    const userMessages = history.filter((m) => m.role === 'USER');
 
-    if (userMessages.length === 0) {
+    if (userMessages.length === 0) return false;
+    if (userMessages.length !== 1) return false;
+
+    // Elementary relaxation: grade <= 5 gets more leeway (shorter messages count as attempt)
+    if (metadata?.grade != null && metadata.grade <= 5 && currentMessage.length >= 8) {
       return false;
     }
-
-    if (userMessages.length === 1) {
-      return !mod.containsAttempt(currentMessage, language);
-    }
-
-    return false;
+    return !mod.containsAttempt(currentMessage, language);
   }
 
   /**
    * Generate a prompt asking student to show their work.
    * Uses the module's attempt prompts.
    */
-  private promptForAttempt(language: Language, mod: TutorModule): TutorResponse {
+  private promptForAttempt(language: Language, mod: TutorModule, grade?: number | null): TutorResponse {
     // Use the module's attempt prompt for the given language (fallback to EN)
-    const promptText = mod.attemptPrompts[language] || mod.attemptPrompts.EN || mod.attemptPrompts[Object.keys(mod.attemptPrompts)[0]];
+    let promptText = mod.attemptPrompts[language] || mod.attemptPrompts.EN || mod.attemptPrompts[Object.keys(mod.attemptPrompts)[0]];
+    // Elementary kids need [A]/[B]/[C] choices so QuestScene can render them
+    if (grade != null && grade <= 5) {
+      promptText += '\n\n[A] I think I know!\n[B] Give me a hint\n[C] Show me how to start';
+    }
     const responseLanguage = mod.supportedLanguages.includes(language) ? language : mod.supportedLanguages[0];
 
     return {

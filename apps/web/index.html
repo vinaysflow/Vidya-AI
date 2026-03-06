@@ -13,19 +13,27 @@
     <!-- Theme Color -->
     <meta name="theme-color" content="#3b82f6" />
     
-    <!-- Apple PWA -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- PWA / Install -->
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Vid (Vidya)" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/mask-icon.svg" color="#f59e0b" />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Fredoka One: rounded, friendly font for kid-mode headings (Duolingo-inspired) -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding:2rem;text-align:center;font-family:sans-serif;">
+        <h2>Vidya needs JavaScript</h2>
+        <p>Please enable JavaScript in your browser to use the Vidya Socratic Tutor.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

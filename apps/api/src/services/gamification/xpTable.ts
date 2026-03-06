@@ -12,4 +12,4 @@ export const XP_TABLE: Record<XPEventType, number> = {
 
 export const LEVEL_XP = 100;
 
-export const STREAK_FREEZE_MILESTONES = [5, 10, 20, 50];
+export const STREAK_FREEZE_MILESTONES = [3, 5, 7, 14, 21, 30];

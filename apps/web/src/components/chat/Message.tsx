@@ -4,7 +4,8 @@ import { MathRenderer } from '../MathRenderer';
 import { cn } from '../../lib/utils';
 import { WhiteboardContainer } from '../whiteboard/WhiteboardContainer';
 import { AudioPlayer } from '../voice/AudioPlayer';
-import { useChatStore } from '../../stores/chatStore';
+import { useChatStore, useIsKidMode } from '../../stores/chatStore';
+import { ParentInsightPanel } from './ParentInsightPanel';
 import { VOICE_ENABLED } from '../../lib/featureFlags';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
 
@@ -37,12 +38,25 @@ interface MessageProps {
   message: MessageData;
 }
 
+const KID_HEADERS: Record<string, string> = {
+  celebration: '🎉 Amazing!',
+  celebrate_then_explain_back: '🤖 Teach the robot!',
+  socratic: '🤔 Think about this…',
+  hint_with_question: '🤔 Think about this…',
+  foundational: "💡 Let's figure it out!",
+  attempt_prompt: '✋ Your turn!',
+  encouragement: "🌟 You're doing great!",
+};
+
 export function Message({ message }: MessageProps) {
   const isUser = message.role === 'user';
+  const isKidMode = useIsKidMode();
+  const questionType = message.metadata?.questionType;
+  const kidHeader = isKidMode && !isUser && questionType ? KID_HEADERS[questionType] : null;
   const hintLevel = message.metadata?.hintLevel || 0;
   const topic = message.metadata?.topic;
   const distance = message.metadata?.distanceFromSolution;
-  const { voiceEnabled, subject, language } = useChatStore();
+  const { voiceEnabled, subject, language, parentViewEnabled } = useChatStore();
   const [audioUrl, setAudioUrl] = useState<string | null>(message.audioUrl || null);
   const [ttsLoading, setTtsLoading] = useState(false);
 
@@ -87,8 +101,12 @@ export function Message({ message }: MessageProps) {
         "rounded-2xl px-4 py-3",
         "shadow-sm",
         isUser
-          ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-br-md"
-          : "bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-md border border-slate-200 dark:border-slate-600"
+          ? isKidMode
+            ? "bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-br-md"
+            : "bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-br-md"
+          : isKidMode
+            ? "bg-amber-50/80 dark:bg-amber-900/10 text-slate-800 dark:text-slate-100 rounded-bl-md border border-amber-200/60 dark:border-amber-800/40"
+            : "bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-md border border-slate-200 dark:border-slate-600"
       )}>
         {message.imageUrl && (
           <div className="mb-3">
@@ -100,9 +118,16 @@ export function Message({ message }: MessageProps) {
           </div>
         )}
 
+        {kidHeader && (
+          <div className="text-sm font-bold text-amber-600 dark:text-amber-400 mb-2">
+            {kidHeader}
+          </div>
+        )}
+
         <div className={cn(
-          "prose prose-sm max-w-none",
-          isUser ? "prose-invert" : "dark:prose-invert"
+          "max-w-none",
+          isKidMode ? "text-base" : "prose prose-sm",
+          (isKidMode && isUser) ? "prose-invert" : isKidMode ? "" : isUser ? "prose-invert" : "dark:prose-invert"
         )}>
           <MathRenderer content={message.content} />
         </div>
@@ -135,8 +160,8 @@ export function Message({ message }: MessageProps) {
           </div>
         )}
 
-        {/* Hint level indicator */}
-        {!isUser && hintLevel > 0 && (
+        {/* Hint level indicator - hidden in kid mode */}
+        {!isUser && !isKidMode && hintLevel > 0 && (
           <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-600">
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-500 dark:text-slate-400">Hint:</span>
@@ -153,8 +178,18 @@ export function Message({ message }: MessageProps) {
           </div>
         )}
 
-        {/* Topic + progress badges */}
-        {!isUser && (topic || (distance !== undefined && distance < 100)) && (
+        {/* Parent insight panel - kid mode only, when parent view enabled */}
+        {!isUser && isKidMode && parentViewEnabled && (
+          <ParentInsightPanel
+            questionType={message.metadata?.questionType}
+            distanceFromSolution={message.metadata?.distanceFromSolution}
+            hintLevel={message.metadata?.hintLevel}
+            conceptsIdentified={message.metadata?.conceptsIdentified}
+          />
+        )}
+
+        {/* Topic + progress badges - hidden in kid mode */}
+        {!isUser && !isKidMode && (topic || (distance !== undefined && distance < 100)) && (
           <div className="mt-2 flex items-center gap-1.5 flex-wrap">
             {topic && (
               <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300">

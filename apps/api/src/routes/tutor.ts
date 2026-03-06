@@ -10,9 +10,10 @@ import { PrismaClient, Language, Subject } from '@prisma/client';
 import { SocraticEngine } from '../services/socratic/engine';
 import type { SessionReport } from '../services/socratic/engine';
 import { awardXP, updateStreak, checkBadges } from '../services/gamification/engine';
-import { updateMastery } from '../services/learning/masteryTracker';
+import { updateMastery, getMasteryContextForEngine, resolveConceptKey } from '../services/learning/masteryTracker';
 import { generatePath } from '../services/learning/pathGenerator';
 import { extractProblemFromImage } from '../services/vision/ocr';
+import { getAdaptiveState, computeEffectiveGrade, updateAdaptiveState, buildPerformanceEntry, persistAdaptiveState } from '../services/learning/adaptiveDifficulty';
 
 const router: express.Router = Router();
 const prisma = new PrismaClient();
@@ -41,6 +42,10 @@ const StartSessionSchema = z.object({
   clientContext: z.record(z.any()).optional(),                         // Full client context (PathWiz or ODEE shape)
   clientUserId: z.string().max(255).optional(),                       // Opaque client user ID
   variant: z.enum(['COLLEGE_US', 'CAREER_INDIA']).optional(),         // Client variant
+  // Elementary / grade-aware
+  grade: z.number().int().min(1).max(12).optional(),
+  conceptKey: z.string().max(100).optional(),
+  rsmTrack: z.boolean().optional(),
 });
 
 const SendMessageSchema = z.object({
@@ -98,13 +103,18 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
     const userId = data.userId || 'anonymous';
 
     // Ensure user exists (Supabase starts empty)
-    await prisma.user.upsert({
+    const user = await prisma.user.upsert({
       where: { id: userId },
-      update: { lastActiveAt: new Date(), preferredLang: data.language as Language },
+      update: {
+        lastActiveAt: new Date(),
+        preferredLang: data.language as Language,
+        ...(data.grade != null ? { grade: data.grade } : {}),
+      },
       create: {
         id: userId,
         name: userId === 'anonymous' ? 'Anonymous' : undefined,
         preferredLang: data.language as Language,
+        ...(data.grade != null ? { grade: data.grade } : {}),
       }
     });
 
@@ -119,6 +129,7 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
     }
 
     // Create session in database (scoped to API key for multi-tenancy)
+    // effectiveGrade is computed below after user upsert; placeholder set after adaptive computation
     const session = await prisma.session.create({
       data: {
         userId,
@@ -126,6 +137,7 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
         language: data.language as Language,
         problemText: data.problemText,
         problemImage: data.problemImage,
+        conceptKey: data.conceptKey,
         essayType: data.essayType,
         essayPromptText: data.essayPromptText,
         wordLimit: data.wordLimit,
@@ -150,6 +162,26 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       }
     });
 
+    // Mastery context for elementary (grade <= 5)
+    const grade = data.grade ?? user.grade ?? undefined;
+
+    // Compute adaptive effective grade for kid mode
+    let effectiveGrade: number | undefined = grade;
+    if (userId !== 'anonymous' && grade != null && grade <= 5) {
+      try {
+        const adaptiveState = await getAdaptiveState(userId);
+        const computed = computeEffectiveGrade(grade, adaptiveState);
+        effectiveGrade = computed.effectiveGrade;
+      } catch (_) { /* non-critical */ }
+    }
+
+    let masteryContext: { masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> } | undefined;
+    if (userId !== 'anonymous' && grade != null && grade <= 5) {
+      try {
+        masteryContext = await getMasteryContextForEngine(userId, data.subject as Subject);
+      } catch (_) { /* non-critical */ }
+    }
+
     // Generate initial response (will ask for attempt)
     const response = await engine.processMessage({
       sessionId: session.id,
@@ -159,6 +191,9 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       subject: data.subject as Subject,
       currentHintLevel: 0,
       noFinalAnswer: data.noFinalAnswer ?? false,
+      grade,
+      effectiveGrade,
+      userId: userId !== 'anonymous' ? userId : undefined,
       // Pass essay prompt metadata to the engine
       essayType: data.essayType || matchedPrompt?.promptType,
       wordLimit: data.wordLimit ?? matchedPrompt?.wordLimit ?? undefined,
@@ -169,6 +204,9 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       clientContext: data.clientContext,
       variant: data.variant,
       clientUserId: data.clientUserId,
+      // Elementary mastery context (passed via metadata in engine)
+      masteryContext,
+      rsmTrack: data.rsmTrack,
     });
 
     // Save assistant response (serialize metadata for Prisma Json)
@@ -182,13 +220,14 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       }
     });
 
-    // Update session (persist detected topic if analysis returned one)
+    // Update session (persist detected topic and effectiveGrade if computed)
     await prisma.session.update({
       where: { id: session.id },
       data: { 
         messageCount: 2,
         hintLevel: response.metadata.hintLevel,
         topic: response.metadata.topic || undefined,
+        effectiveGrade: effectiveGrade ?? undefined,
       }
     });
 
@@ -197,7 +236,8 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       session: {
         id: session.id,
         subject: session.subject,
-        language: session.language
+        language: session.language,
+        effectiveGrade: effectiveGrade ?? null,
       },
       messages: [
         {
@@ -242,7 +282,8 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
         },
         essayPrompt: {
           include: { school: { select: { name: true } } }
-        }
+        },
+        user: { select: { grade: true } }
       }
     });
 
@@ -264,7 +305,9 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
     let messageText = data.message;
     if (data.messageImage) {
       try {
-        const ocr = await extractProblemFromImage(data.messageImage, session.subject, session.language);
+        const grade = (session.user as { grade?: number } | null)?.grade ?? undefined;
+        const ocrMode = grade != null && grade <= 5 ? 'describe' : 'extract';
+        const ocr = await extractProblemFromImage(data.messageImage, session.subject, session.language, ocrMode);
         if (ocr.extractedText) {
           messageText = `[Image attached]\n${ocr.extractedText}\n\n${data.message}`;
         }
@@ -273,6 +316,16 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
 
     // Use provided language or session default
     const messageLanguage = (data.language || session.language) as Language;
+
+    // Elementary: grade, userId, masteryContext for engine
+    const grade = (session.user as { grade?: number } | null)?.grade ?? undefined;
+    const gamUserId = session.userId;
+    let masteryContext: { masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> } | undefined;
+    if (gamUserId !== 'anonymous' && grade != null && grade <= 5) {
+      try {
+        masteryContext = await getMasteryContextForEngine(gamUserId, session.subject);
+      } catch (_) { /* non-critical */ }
+    }
 
     // Save user message
     const userMessage = await prisma.message.create({
@@ -294,6 +347,10 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
       topic: session.topic ?? undefined,
       currentHintLevel: session.hintLevel,
       noFinalAnswer: data.noFinalAnswer ?? session.noFinalAnswer ?? false,
+      grade,
+      effectiveGrade: (session as any).effectiveGrade ?? grade,
+      userId: gamUserId !== 'anonymous' ? gamUserId : undefined,
+      masteryContext,
       // Essay prompt metadata from catalog
       essayType: session.essayType || session.essayPrompt?.promptType,
       wordLimit: session.wordLimit ?? session.essayPrompt?.wordLimit ?? undefined,
@@ -343,8 +400,29 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
       }
     });
 
+    // Elementary: update mastery when explain-back succeeds (celebration after celebrate_then_explain_back)
+    const prevAssistant = session.messages.filter((m) => m.role === 'ASSISTANT').pop();
+    const prevMeta = (prevAssistant as { metadata?: { questionType?: string } } | undefined)?.metadata;
+    const wasExplainBackRequest = prevMeta?.questionType === 'celebrate_then_explain_back';
+    if (
+      gamUserId !== 'anonymous' &&
+      grade != null &&
+      grade <= 5 &&
+      wasExplainBackRequest &&
+      (response.metadata.questionType === 'celebration' || response.metadata.questionType === 'celebrate_then_explain_back')
+    ) {
+      const sess = session as { conceptKey?: string | null };
+      const key = sess.conceptKey ?? (response.metadata.conceptsIdentified?.[0]
+        ? await resolveConceptKey(response.metadata.conceptsIdentified[0], session.subject)
+        : null);
+      if (key) {
+        try {
+          await updateMastery(gamUserId, key, true).catch(() => {});
+        } catch (_) { /* non-critical */ }
+      }
+    }
+
     // Award XP (fire-and-forget to avoid blocking response)
-    const gamUserId = session.userId;
     const xpResults: Array<{ xpAwarded: number; newLevel: number; leveledUp: boolean }> = [];
     try {
       xpResults.push(await awardXP(gamUserId, 'MESSAGE_SENT', session.id));
@@ -435,7 +513,7 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
   try {
     const { sessionId } = req.params;
 
-    // Fetch session with all messages and essay prompt metadata
+    // Fetch session with all messages, essay prompt metadata, and user grade
     // Scoped to the authenticated API key for multi-tenancy
     const session = await prisma.session.findFirst({
       where: {
@@ -446,7 +524,8 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
         messages: { orderBy: { createdAt: 'asc' } },
         essayPrompt: {
           include: { school: { select: { name: true } } }
-        }
+        },
+        user: { select: { grade: true } },
       }
     });
 
@@ -512,8 +591,13 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
     // Update mastery for engaged concepts (non-critical)
     try {
       const correct = (masteryGain ?? 0) > 0.3;
-      for (const conceptName of report.conceptsEngaged) {
-        const key = conceptName.toLowerCase().replace(/[\s/]+/g, '_').replace(/[^a-z0-9_]/g, '');
+      const sess = session as { conceptKey?: string | null };
+      const keysToUpdate = sess.conceptKey
+        ? [sess.conceptKey]
+        : await Promise.all(
+            report.conceptsEngaged.map((name) => resolveConceptKey(name, session.subject))
+          ).then((keys) => keys.filter((k): k is string => k != null));
+      for (const key of keysToUpdate) {
         await updateMastery(session.userId, key, correct).catch(() => {});
       }
       await generatePath(session.userId, session.subject).catch(() => {});
@@ -534,6 +618,29 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
       };
     } catch (_) { /* gamification is non-critical */ }
 
+    // Update adaptive difficulty state (non-critical, kid mode only)
+    let adaptiveResult: { effectiveGrade: number; previousEffectiveGrade: number; leveledUp: boolean } | undefined;
+    const sessionGrade = (session.user as { grade?: number | null } | null)?.grade ?? undefined;
+    if (session.userId !== 'anonymous' && sessionGrade != null && sessionGrade <= 5) {
+      try {
+        const entry = buildPerformanceEntry({
+          conceptKey: (session as any).conceptKey ?? null,
+          messageCount: session.messageCount,
+          resolved: isResolved,
+          hintLevel: session.hintLevel,
+        });
+        const currentState = await getAdaptiveState(session.userId);
+        const previousEffectiveGrade = currentState?.effectiveGrade ?? sessionGrade;
+        const { state: newState, leveledUp } = updateAdaptiveState(currentState, sessionGrade, entry);
+        await persistAdaptiveState(session.userId, newState);
+        adaptiveResult = {
+          effectiveGrade: newState.effectiveGrade,
+          previousEffectiveGrade,
+          leveledUp,
+        };
+      } catch (_) { /* adaptive tracking is non-critical */ }
+    }
+
     res.json({
       success: true,
       session: {
@@ -546,6 +653,7 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
       },
       report,
       gamification: gamificationResult,
+      adaptive: adaptiveResult,
     });
 
   } catch (error) {

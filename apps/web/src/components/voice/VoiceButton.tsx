@@ -8,9 +8,10 @@ interface VoiceButtonProps {
   language: string;
   onTranscription: (text: string) => void;
   disabled?: boolean;
+  size?: 'default' | 'large';
 }
 
-export function VoiceButton({ language, onTranscription, disabled }: VoiceButtonProps) {
+export function VoiceButton({ language, onTranscription, disabled, size = 'default' }: VoiceButtonProps) {
   const [recording, setRecording] = useState(false);
   const [processing, setProcessing] = useState(false);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -71,11 +72,14 @@ export function VoiceButton({ language, onTranscription, disabled }: VoiceButton
     else startRecording();
   };
 
+  const isLarge = size === 'large';
   return (
     <button
       onClick={handleClick}
       disabled={processing || disabled}
-      className={`p-2.5 rounded-xl transition-all ${
+      className={`transition-all ${
+        isLarge ? 'p-4 rounded-2xl' : 'p-2.5 rounded-xl'
+      } ${
         recording
           ? 'bg-red-500 text-white animate-pulse'
           : processing
@@ -85,11 +89,11 @@ export function VoiceButton({ language, onTranscription, disabled }: VoiceButton
       title={recording ? 'Stop recording' : 'Start recording'}
     >
       {processing ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className={isLarge ? 'h-6 w-6 animate-spin' : 'h-4 w-4 animate-spin'} />
       ) : recording ? (
-        <MicOff className="h-4 w-4" />
+        <MicOff className={isLarge ? 'h-6 w-6' : 'h-4 w-4'} />
       ) : (
-        <Mic className="h-4 w-4" />
+        <Mic className={isLarge ? 'h-6 w-6' : 'h-4 w-4'} />
       )}
     </button>
   );

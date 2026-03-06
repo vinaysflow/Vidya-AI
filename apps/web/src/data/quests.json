@@ -1,0 +1,1515 @@
+[
+  {
+    "id": "minecraft_elevator",
+    "title": "Build a Minecraft Elevator",
+    "prompt": "You want to build an elevator in Minecraft that goes up 5 floors. Each floor is 4 blocks tall. How many blocks tall is the whole elevator?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "minecraft",
+      "building"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "lego_rows",
+    "title": "LEGO Rows",
+    "prompt": "You have 3 rows of LEGO bricks. Each row has 6 bricks. How many bricks do you have in total?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_arrays",
+    "prerequisites": [
+      "multiplication_intro"
+    ],
+    "tags": [
+      "lego"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "minecraft_bridge",
+    "title": "Minecraft Bridge",
+    "prompt": "You need to build a bridge across a lava pit in Minecraft. The gap is 3 blocks wide. You have 4 layers of blocks to stack. How many blocks do you need in total?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_arrays",
+    "prerequisites": [],
+    "tags": [
+      "minecraft",
+      "building"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "tnt_blast",
+    "title": "TNT Blast Radius",
+    "prompt": "In Minecraft, a TNT explodes and destroys a square of blocks. If the square is 4 blocks wide and 4 blocks tall, how many blocks does the explosion destroy?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_arrays",
+    "prerequisites": [],
+    "tags": [
+      "minecraft"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 4,
+    "gradeLevel": 3
+  },
+  {
+    "id": "minecart_speed",
+    "title": "Minecart Speed",
+    "prompt": "A minecart travels 10 blocks every second. If it goes for 5 seconds, how many blocks does it pass?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [],
+    "tags": [
+      "minecraft"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 5,
+    "gradeLevel": 3
+  },
+  {
+    "id": "redstone_pattern",
+    "title": "Redstone Circuit",
+    "prompt": "You place redstone lamps in a row: ON, OFF, ON, OFF, ON, OFF. What should the 7th lamp be to keep the pattern going?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "patterns_repeat",
+    "prerequisites": [],
+    "tags": [
+      "minecraft"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 6,
+    "gradeLevel": 3
+  },
+  {
+    "id": "cookie_doubling",
+    "title": "Double the Cookie Recipe",
+    "prompt": "A cookie recipe needs 4 eggs. You want to make double the recipe. How many eggs do you need?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "ice_cream_melt",
+    "title": "Ice Cream Melt",
+    "prompt": "You leave an ice cream cone outside on a hot sunny day. What will happen to the ice cream after 10 minutes?",
+    "subject": "CHEMISTRY",
+    "topic": "states_of_matter",
+    "conceptKey": "states_of_matter",
+    "prerequisites": [],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "baking_soda_volcano",
+    "title": "Baking Soda Volcano",
+    "prompt": "You need 3 scoops of baking soda to make one volcano. If you want to make 2 volcanoes, how many scoops of baking soda do you need?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "mixing_colors",
+    "title": "Mixing Paint Colors",
+    "prompt": "You mix red paint and yellow paint together. What new color do you get?",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures",
+    "conceptKey": "mixtures",
+    "prerequisites": [],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 4,
+    "gradeLevel": 3
+  },
+  {
+    "id": "dissolving_sugar",
+    "title": "Dissolving Sugar",
+    "prompt": "You put a sugar cube in cold water and another sugar cube in hot water. Which sugar cube disappears faster?",
+    "subject": "CHEMISTRY",
+    "topic": "solutions",
+    "conceptKey": "solutions",
+    "prerequisites": [],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 5,
+    "gradeLevel": 3
+  },
+  {
+    "id": "pizza_fractions",
+    "title": "Pizza Fractions",
+    "prompt": "A pizza is cut into 4 equal slices. You eat 2 slices. How many slices of the pizza are left?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "fractions_intro",
+    "prerequisites": [],
+    "tags": [
+      "cooking"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 6,
+    "gradeLevel": 3
+  },
+  {
+    "id": "playground_push",
+    "title": "Push the Swing",
+    "prompt": "You push a friend gently on a swing, and they go a little bit forward. What happens if you push much harder?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "forces_push_pull",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ],
+    "chapter": "Playground Lab",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "slide_race",
+    "title": "Slide Race",
+    "prompt": "You race down two slides. One slide is dry and rough. The other slide is wet and slippery. Which slide makes you go faster?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "friction",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ],
+    "chapter": "Playground Lab",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "seesaw_balance",
+    "title": "Seesaw Balance",
+    "prompt": "You sit on one end of a seesaw. Your friend who weighs more than you sits on the other end. Who goes down?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "balance_weight",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ],
+    "chapter": "Playground Lab",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "shadow_play",
+    "title": "Shadow Play",
+    "prompt": "At noon your shadow is very short. In the evening your shadow gets really long. When is your shadow the shortest?",
+    "subject": "PHYSICS",
+    "topic": "light_shadows",
+    "conceptKey": "light_shadows",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ],
+    "chapter": "Playground Lab",
+    "order": 4,
+    "gradeLevel": 3
+  },
+  {
+    "id": "jump_height",
+    "title": "Jump Height",
+    "prompt": "You jump as high as you can and reach 2 feet off the ground. If you could jump 3 times that height, how many feet high would that be?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [],
+    "tags": [
+      "playground"
+    ],
+    "chapter": "Playground Lab",
+    "order": 5,
+    "gradeLevel": 3
+  },
+  {
+    "id": "pattern_blocks",
+    "title": "What Comes Next?",
+    "prompt": "You see a pattern: red, blue, red, blue, red, blue. What color comes next?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "patterns_repeat",
+    "prerequisites": [],
+    "tags": [
+      "patterns"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "nickels_count",
+    "title": "Count by 5s",
+    "prompt": "You have a jar of nickels. Each nickel is 5 cents. If you have 6 nickels, how many cents is that?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "skip_counting",
+    "prerequisites": [
+      "addition_grouping"
+    ],
+    "tags": [
+      "money",
+      "counting"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "shape_hunt",
+    "title": "Shape Hunt",
+    "prompt": "A door is shaped like a rectangle and a clock is shaped like a circle. How many sides does the door's shape (rectangle) have?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry_shapes",
+    "conceptKey": "shapes_identify",
+    "prerequisites": [],
+    "tags": [
+      "shapes",
+      "real-world"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "lego_symmetry",
+    "title": "LEGO Symmetry",
+    "prompt": "You build a LEGO butterfly. The left wing has 5 bricks. If both wings need to look exactly the same, how many bricks does the right wing need?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry_shapes",
+    "conceptKey": "symmetry",
+    "prerequisites": [],
+    "tags": [
+      "lego",
+      "patterns"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 4,
+    "gradeLevel": 3
+  },
+  {
+    "id": "plant_growth",
+    "title": "Plant Growth",
+    "prompt": "A bean plant grows 2 inches in the first week and 3 inches in the second week. How many inches did it grow in total?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "addition_grouping",
+    "prerequisites": [],
+    "tags": [
+      "real-world"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "bug_count",
+    "title": "Bug Count",
+    "prompt": "You find 3 types of bugs in the yard: 4 ladybugs, 4 ants, and 4 butterflies. How many bugs is that in total?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [],
+    "tags": [
+      "real-world"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "float_or_sink",
+    "title": "Float or Sink",
+    "prompt": "You drop a heavy rock and a light cork into a bowl of water. The rock sinks to the bottom. What does the cork do?",
+    "subject": "PHYSICS",
+    "topic": "density",
+    "conceptKey": "density",
+    "prerequisites": [],
+    "tags": [
+      "real-world"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "weather_watch",
+    "title": "Weather Watch",
+    "prompt": "Yesterday it was 70 degrees outside. Today it is 55 degrees. How many degrees colder is it today?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "subtraction",
+    "prerequisites": [],
+    "tags": [
+      "real-world"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 4,
+    "gradeLevel": 3
+  },
+  {
+    "id": "apple_seeds",
+    "title": "Apple Seeds",
+    "prompt": "You cut an apple in half and count 5 seeds. If 3 apples each have 5 seeds, how many seeds are there in all 3 apples?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multiplication_intro",
+    "prerequisites": [],
+    "tags": [
+      "real-world"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 5,
+    "gradeLevel": 3
+  },
+  {
+    "id": "minecraft_big_wall",
+    "title": "Build the Great Wall",
+    "prompt": "You want to build a wall in Minecraft that is 24 blocks long, 6 blocks tall, and 2 blocks thick. How many blocks total do you need?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multidigit_multiplication_1digit",
+    "prerequisites": [
+      "multiplication_arrays"
+    ],
+    "tags": [
+      "minecraft",
+      "building"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 7,
+    "gradeLevel": 4
+  },
+  {
+    "id": "minecraft_treasure_map",
+    "title": "Treasure Map Fractions",
+    "prompt": "You follow a treasure map. You walk 3/4 of a mile north, then 1/2 mile east. You need to walk back the same way. How far will you walk in total for the whole trip?",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "fraction_addition_same_denominator",
+    "prerequisites": [
+      "fractions_intro"
+    ],
+    "tags": [
+      "minecraft",
+      "fractions"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 8,
+    "gradeLevel": 4
+  },
+  {
+    "id": "kitchen_cookie_batch",
+    "title": "Giant Cookie Batch",
+    "prompt": "A cookie recipe makes 24 cookies and needs 2 eggs. You want to make 72 cookies for your class party. How many eggs do you need? (Hint: figure out how many batches first.)",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "multidigit_multiplication_2digit",
+    "prerequisites": [
+      "multiplication_intro"
+    ],
+    "tags": [
+      "cooking",
+      "multiplication"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 7,
+    "gradeLevel": 4
+  },
+  {
+    "id": "kitchen_dissolve_race",
+    "title": "Dissolving Race",
+    "prompt": "You test how fast sugar dissolves in warm water vs cold water. In warm water it took 30 seconds, in cold water it took 4 minutes 30 seconds. How many times longer did it take in cold water?",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures_solutions",
+    "conceptKey": "dissolving_solutions",
+    "prerequisites": [
+      "mixtures"
+    ],
+    "tags": [
+      "cooking",
+      "chemistry"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 8,
+    "gradeLevel": 4
+  },
+  {
+    "id": "playground_ramp_push",
+    "title": "The Ramp Experiment",
+    "prompt": "You push a toy car up a ramp. When the ramp is steeper, does it take more or less force to push the car up? How does this relate to simple machines?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "simple_machines",
+    "prerequisites": [
+      "forces_push_pull"
+    ],
+    "tags": [
+      "playground",
+      "physics"
+    ],
+    "chapter": "Playground Lab",
+    "order": 7,
+    "gradeLevel": 4
+  },
+  {
+    "id": "pattern_factor_detective",
+    "title": "Factor Detective",
+    "prompt": "You are a number detective. Your mystery number: it is between 20 and 30, it is divisible by both 3 and 4, and it has exactly 8 factors. What is the mystery number?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "factors_multiples",
+    "prerequisites": [
+      "multiplication_intro",
+      "division_intro"
+    ],
+    "tags": [
+      "detective",
+      "factors"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 7,
+    "gradeLevel": 4
+  },
+  {
+    "id": "nature_seed_planting",
+    "title": "The Seed Garden",
+    "prompt": "You plant seeds in rows. Row 1 has 1 seed, row 2 has 3 seeds, row 3 has 5 seeds, row 4 has 7 seeds. How many seeds will row 10 have? How many total seeds in 10 rows?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "conceptKey": "number_patterns_rules",
+    "prerequisites": [
+      "multiplication_intro"
+    ],
+    "tags": [
+      "nature",
+      "patterns"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 7,
+    "gradeLevel": 4
+  },
+  {
+    "id": "minecraft_city_grid",
+    "title": "Design a Minecraft City Grid",
+    "prompt": "You are building a city in Minecraft. The city grid is 8 blocks wide and 12 blocks long. You want to build roads every 4 blocks. How many total road sections are there, and what is the area that is NOT road?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "conceptKey": "area_complex_figures",
+    "prerequisites": [
+      "area_intro",
+      "multiplication_arrays"
+    ],
+    "tags": [
+      "minecraft",
+      "building",
+      "geometry"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "kitchen_recipe_ratio",
+    "title": "The Perfect Recipe Ratio",
+    "prompt": "A muffin recipe for 12 muffins uses 3/4 cup of sugar and 1 1/2 cups of flour. You want to make 20 muffins. How much sugar and flour do you need?",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures_solutions",
+    "conceptKey": "dissolving_solutions",
+    "prerequisites": [
+      "fractions_intro",
+      "fraction_multiplication"
+    ],
+    "tags": [
+      "cooking",
+      "fractions"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "playground_marble_run",
+    "title": "Build the Fastest Marble Run",
+    "prompt": "You design two marble run tracks. Track A is 3 meters long and the marble takes 6 seconds. Track B is 5 meters long and the marble takes 8 seconds. Which track makes the marble move faster? How much faster?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "speed_velocity",
+    "prerequisites": [
+      "friction",
+      "division_intro"
+    ],
+    "tags": [
+      "playground",
+      "speed",
+      "comparison"
+    ],
+    "chapter": "Playground Lab",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "pattern_secret_code",
+    "title": "Crack the Secret Code",
+    "prompt": "A spy left a coded message using a number pattern: 3, 7, 15, 31, 63, ___. What is the rule? What is the next number? Explain WHY the pattern works.",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "conceptKey": "growing_patterns",
+    "prerequisites": [
+      "number_sequences_rules",
+      "multiplication_intro"
+    ],
+    "tags": [
+      "detective",
+      "patterns",
+      "algebra"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "nature_ecosystem_map",
+    "title": "Map the Ecosystem",
+    "prompt": "You are cataloging animals in a forest. You found: 3 hawks, 8 rabbits, 5 foxes, 12 mice, 2 owls. Arrange these into a food chain. Which animal is eaten by the most other animals? What percentage of the animals are predators?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "data_analysis_basic",
+    "prerequisites": [
+      "fractions_intro"
+    ],
+    "tags": [
+      "nature",
+      "data",
+      "classification"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "minecraft_resource_ratio",
+    "title": "Resource Trading Ratios",
+    "prompt": "In Minecraft, you can trade 3 emeralds for 5 diamonds, or 4 emeralds for 7 gold bars. You have 24 emeralds. Which trade gives you the better deal if you want to maximize the total items you get?",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "conceptKey": "unit_rates",
+    "prerequisites": [
+      "ratios_intro",
+      "division_intro"
+    ],
+    "tags": [
+      "minecraft",
+      "ratios"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 11,
+    "gradeLevel": 6
+  },
+  {
+    "id": "kitchen_concentration",
+    "title": "The Perfect Concentration",
+    "prompt": "You are making lemonade. The recipe calls for 1 part lemon juice to 4 parts water. You make 2 liters total. If you accidentally used 500ml of lemon juice, what percentage concentration is your lemonade vs the recipe?",
+    "subject": "CHEMISTRY",
+    "topic": "mixtures_solutions",
+    "conceptKey": "percentages_intro",
+    "prerequisites": [
+      "ratios_intro",
+      "dissolving_solutions"
+    ],
+    "tags": [
+      "cooking",
+      "chemistry",
+      "percentages"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 11,
+    "gradeLevel": 6
+  },
+  {
+    "id": "playground_speed_graph",
+    "title": "Speed vs Distance Graph",
+    "prompt": "A ball rolls down a ramp and you measure: at 1 second it goes 2m, at 2 seconds 4m, at 3 seconds 6m. Plot these points. Is this proportional? Write an equation for distance in terms of time.",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "speed_velocity",
+    "prerequisites": [
+      "coordinate_plane_intro",
+      "proportional_reasoning"
+    ],
+    "tags": [
+      "playground",
+      "physics",
+      "algebra"
+    ],
+    "chapter": "Playground Lab",
+    "order": 11,
+    "gradeLevel": 6
+  },
+  {
+    "id": "pattern_matrix_level6",
+    "title": "The Detective Matrix",
+    "prompt": "A 3x3 magic square has the numbers 1-9 where every row, column, and diagonal adds to 15. Fill in the missing numbers: top row is 2, 7, 6. Middle row is 9, ?, 1. Bottom row is ?, 3, ?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "conceptKey": "matrix_puzzles",
+    "prerequisites": [
+      "one_step_equations_6"
+    ],
+    "tags": [
+      "detective",
+      "logic",
+      "algebra"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 11,
+    "gradeLevel": 6
+  },
+  {
+    "id": "minecraft_blueprint_scale",
+    "title": "Blueprint Scale Drawing",
+    "prompt": "You draw a Minecraft castle blueprint at a scale of 1 cm = 8 blocks. On your drawing, the great hall is 6.5 cm long and 4 cm wide. What are the actual Minecraft dimensions? What is the actual floor area in blocks?",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "conceptKey": "geometry_scale_drawings",
+    "prerequisites": [
+      "proportional_reasoning",
+      "area_intro"
+    ],
+    "tags": [
+      "minecraft",
+      "geometry",
+      "scale"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 12,
+    "gradeLevel": 7
+  },
+  {
+    "id": "pattern_fibonacci_nature",
+    "title": "Fibonacci in Nature",
+    "prompt": "A sunflower has spirals that follow the Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21... The 15th Fibonacci number is 610. What is the 16th? Why might flowers follow this pattern?",
+    "subject": "MATHEMATICS",
+    "topic": "sequences",
+    "conceptKey": "fibonacci_sequences",
+    "prerequisites": [
+      "growing_patterns",
+      "number_sequences_rules"
+    ],
+    "tags": [
+      "nature",
+      "detective",
+      "patterns"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 12,
+    "gradeLevel": 7
+  },
+  {
+    "id": "physics_energy_coaster",
+    "title": "Roller Coaster Energy",
+    "prompt": "A roller coaster car (500 kg) starts at the top of a 40m hill with zero speed. Using conservation of energy, what is the maximum speed at the bottom? (g = 10 m/s squared, PE = mgh, KE = 1/2 mv squared)",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "conceptKey": "kinetic_potential_energy",
+    "prerequisites": [
+      "conservation_of_energy",
+      "newtons_laws"
+    ],
+    "tags": [
+      "playground",
+      "physics",
+      "algebra"
+    ],
+    "chapter": "Playground Lab",
+    "order": 12,
+    "gradeLevel": 7
+  },
+  {
+    "id": "logic_pattern_detector",
+    "title": "Pattern Detector",
+    "prompt": "You are a secret agent. Your tracker shows this pattern: 2, 4, 6, 8, ___. What comes next? And if the pattern continues, what will the 10th number be?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "simple_patterns",
+    "prerequisites": [],
+    "tags": [
+      "detective",
+      "patterns"
+    ],
+    "chapter": "Logic Detective",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "logic_sorting_zoo",
+    "title": "Animal Sorter",
+    "prompt": "You are a zookeeper's helper. Sort these animals into groups: lion, eagle, salmon, cat, hawk, trout, tiger. What are the groups? How did you decide?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "sorting_classifying",
+    "prerequisites": [],
+    "tags": [
+      "nature",
+      "classifying"
+    ],
+    "chapter": "Logic Detective",
+    "order": 2,
+    "gradeLevel": 3
+  },
+  {
+    "id": "logic_shapes_sequence",
+    "title": "The Shape Code",
+    "prompt": "A spy left a coded message using shapes: circle, circle, triangle, circle, circle, triangle, circle, ___. What shape comes next? What is the pattern rule?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "shape_sequences",
+    "prerequisites": [
+      "simple_patterns"
+    ],
+    "tags": [
+      "detective",
+      "shapes"
+    ],
+    "chapter": "Logic Detective",
+    "order": 3,
+    "gradeLevel": 3
+  },
+  {
+    "id": "logic_ifthen_detective",
+    "title": "Detective's Deduction",
+    "prompt": "A detective has a rule: If it rained last night, then the pavement will be wet. The detective sees wet pavement this morning. Can they be SURE it rained? Why or why not?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "if_then_basic",
+    "prerequisites": [
+      "sorting_classifying"
+    ],
+    "tags": [
+      "detective",
+      "logic"
+    ],
+    "chapter": "Logic Detective",
+    "order": 4,
+    "gradeLevel": 4
+  },
+  {
+    "id": "logic_tree_adventure",
+    "title": "The Choice Map",
+    "prompt": "An explorer reaches a fork in the road: go left or right. At the next junction: up or down. Then finally: north or south. Draw a tree diagram showing all possible routes. How many paths are there?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "tree_diagrams",
+    "prerequisites": [
+      "if_then_basic"
+    ],
+    "tags": [
+      "nature",
+      "counting"
+    ],
+    "chapter": "Logic Detective",
+    "order": 5,
+    "gradeLevel": 4
+  },
+  {
+    "id": "logic_syllogism_mystery",
+    "title": "The Logic Trap",
+    "prompt": "A mystery puzzle: All gems are valuable. All rubies are gems. Is a ruby valuable? Write out the logical steps. Can you make your own syllogism about animals?",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "syllogisms_basic",
+    "prerequisites": [
+      "if_then_basic"
+    ],
+    "tags": [
+      "detective",
+      "logic"
+    ],
+    "chapter": "Logic Detective",
+    "order": 6,
+    "gradeLevel": 5
+  },
+  {
+    "id": "logic_matrix_master",
+    "title": "Matrix Master",
+    "prompt": "You find a 3x3 grid cipher. Each row and each column must have the symbols ★, ♦, ● exactly once. Row 1: ★, ?, ●. Row 2: ●, ★, ?. Row 3: ?, ●, ★. Fill in the missing symbols.",
+    "subject": "MATHEMATICS",
+    "topic": "patterns_algebra",
+    "conceptKey": "matrix_puzzles",
+    "prerequisites": [
+      "syllogisms_basic"
+    ],
+    "tags": [
+      "detective",
+      "matrix"
+    ],
+    "chapter": "Logic Detective",
+    "order": 7,
+    "gradeLevel": 6
+  },
+  {
+    "id": "logic_fibonacci_spiral",
+    "title": "Nature's Secret Number",
+    "prompt": "You notice sunflower seeds spiral in a pattern: 1, 1, 2, 3, 5, 8, 13, 21... This is the Fibonacci sequence! What are the next 3 numbers? Can you find this pattern somewhere in nature around you?",
+    "subject": "MATHEMATICS",
+    "topic": "sequences",
+    "conceptKey": "fibonacci_sequences",
+    "prerequisites": [
+      "growing_patterns"
+    ],
+    "tags": [
+      "nature",
+      "fibonacci"
+    ],
+    "chapter": "Logic Detective",
+    "order": 8,
+    "gradeLevel": 7
+  },
+  {
+    "id": "minecraft_fractions_wall",
+    "title": "Fraction Wall Builder",
+    "prompt": "You're building a Minecraft wall. The wall is 12 blocks long. You've built 3/4 of it so far. How many blocks have you built? How many are left to go?",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "fraction_equivalence",
+    "prerequisites": [
+      "fractions_intro"
+    ],
+    "tags": [
+      "minecraft",
+      "fractions"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 9,
+    "gradeLevel": 4
+  },
+  {
+    "id": "kitchen_percentage_sale",
+    "title": "The Bake Sale Discount",
+    "prompt": "Your bake sale normally charges $5 per cupcake. For the last hour, you put everything on 20% off. How much does one cupcake cost now? How much do you earn if you sell 8 cupcakes at the sale price?",
+    "subject": "MATHEMATICS",
+    "topic": "ratios_proportions",
+    "conceptKey": "percentages_intro",
+    "prerequisites": [
+      "fractions_intro"
+    ],
+    "tags": [
+      "cooking",
+      "percentages"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 9,
+    "gradeLevel": 6
+  },
+  {
+    "id": "playground_gravity_drop",
+    "title": "Gravity Race",
+    "prompt": "You drop a baseball and a crumpled piece of paper from the same height at the same time. The baseball hits the ground first. Does this mean gravity pulls harder on the baseball? What would happen in a vacuum with no air?",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "gravity_intro",
+    "prerequisites": [
+      "forces_push_pull"
+    ],
+    "tags": [
+      "playground",
+      "gravity"
+    ],
+    "chapter": "Playground Lab",
+    "order": 8,
+    "gradeLevel": 5
+  },
+  {
+    "id": "playground_newtons_skateboard",
+    "title": "Newton's Skateboard",
+    "prompt": "You stand on a skateboard and push off a wall. You move away from the wall. Which of Newton's laws explains this? Write the law in your own words using the skateboard as an example.",
+    "subject": "PHYSICS",
+    "topic": "forces_motion",
+    "conceptKey": "newtons_laws",
+    "prerequisites": [
+      "speed_velocity"
+    ],
+    "tags": [
+      "playground",
+      "newton"
+    ],
+    "chapter": "Playground Lab",
+    "order": 9,
+    "gradeLevel": 6
+  },
+  {
+    "id": "nature_chemical_reaction",
+    "title": "Chemical Change Hunt",
+    "prompt": "Look around your kitchen. Find one example of a chemical change and one example of a physical change. For each: name the change, explain how you know which type it is, and describe what new substance (if any) was formed.",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_change",
+    "conceptKey": "chemical_vs_physical_change",
+    "prerequisites": [
+      "states_of_matter"
+    ],
+    "tags": [
+      "nature",
+      "chemistry"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 8,
+    "gradeLevel": 5
+  },
+  {
+    "id": "nature_atoms_matter",
+    "title": "The Smallest Building Block",
+    "prompt": "If you could zoom into a piece of copper wire with a super-powered microscope, what would the smallest piece of copper be? This particle is the same for all copper everywhere. What is it called? Is copper an element or a compound?",
+    "subject": "CHEMISTRY",
+    "topic": "atoms_elements",
+    "conceptKey": "atoms_elements_intro",
+    "prerequisites": [
+      "chemical_vs_physical_change"
+    ],
+    "tags": [
+      "nature",
+      "atoms"
+    ],
+    "chapter": "Nature Explorer",
+    "order": 9,
+    "gradeLevel": 6
+  },
+  {
+    "id": "pattern_algebraic_tiles",
+    "title": "Tile Pattern Formula",
+    "prompt": "You're tiling a floor with a growing pattern. Pattern 1 uses 3 tiles, pattern 2 uses 5 tiles, pattern 3 uses 7 tiles. Write a formula for the number of tiles in pattern n. How many tiles in pattern 20?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_intro",
+    "conceptKey": "algebraic_patterns",
+    "prerequisites": [
+      "growing_patterns"
+    ],
+    "tags": [
+      "patterns",
+      "algebra"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 8,
+    "gradeLevel": 6
+  },
+  {
+    "id": "pattern_logic_zebra",
+    "title": "The Zebra Puzzle",
+    "prompt": "Three students — Anya, Ben, Carl — each have one pet: fish, cat, dog. Anya doesn't have the fish. Ben doesn't have the cat. Carl doesn't have the dog. Use elimination to figure out: who has which pet?",
+    "subject": "MATHEMATICS",
+    "topic": "deduction",
+    "conceptKey": "multi_step_deduction",
+    "prerequisites": [
+      "if_then_basic"
+    ],
+    "tags": [
+      "detective",
+      "deduction"
+    ],
+    "chapter": "Pattern Detective",
+    "order": 9,
+    "gradeLevel": 6
+  },
+  {
+    "id": "minecraft_energy_coaster_jr",
+    "title": "Mini Coaster Physics",
+    "prompt": "You build a mini roller coaster in Minecraft. The car starts at the top of a 10-block-high hill. At the bottom, it's moving fast. What happened to the potential energy? Where did it go? Name the two types of energy involved.",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "conceptKey": "conservation_of_energy",
+    "prerequisites": [
+      "energy_forms"
+    ],
+    "tags": [
+      "minecraft",
+      "energy"
+    ],
+    "chapter": "Minecraft Builder",
+    "order": 13,
+    "gradeLevel": 5
+  },
+  {
+    "id": "kitchen_acid_base_test",
+    "title": "Litmus Test Kitchen",
+    "prompt": "You have lemon juice (pH 2), baking soda mixed with water (pH 9), and plain water (pH 7). Which is the most acidic? Which is basic? What happens if you mix the acid and the base?",
+    "subject": "CHEMISTRY",
+    "topic": "reactions",
+    "conceptKey": "acids_bases",
+    "prerequisites": [
+      "chemical_reactions_intro"
+    ],
+    "tags": [
+      "cooking",
+      "chemistry",
+      "acids"
+    ],
+    "chapter": "Kitchen Scientist",
+    "order": 12,
+    "gradeLevel": 7
+  },
+  {
+    "id": "logic_spatial_fold",
+    "title": "The Paper Fold Challenge",
+    "prompt": "Imagine a square piece of paper. You fold it in half, then fold it in half again in the other direction. You then cut a small triangle off one corner (while folded). When you unfold, how many triangles do you see cut out? Where are they?",
+    "subject": "MATHEMATICS",
+    "topic": "spatial_reasoning",
+    "conceptKey": "spatial_rotation",
+    "prerequisites": [
+      "matrix_puzzles"
+    ],
+    "tags": [
+      "detective",
+      "spatial"
+    ],
+    "chapter": "Logic Detective",
+    "order": 9,
+    "gradeLevel": 7
+  },
+  {
+    "id": "playground_wave_sound",
+    "title": "Sound Wave Lab",
+    "prompt": "You stretch a rubber band around a box and pluck it. It makes a sound. Now pluck it tighter (higher tension). The sound changes. What changed about the wave? Draw a thick rubber band wave and a tight rubber band wave — which has higher frequency?",
+    "subject": "PHYSICS",
+    "topic": "waves_sound",
+    "conceptKey": "wave_properties",
+    "prerequisites": [
+      "sound_waves"
+    ],
+    "tags": [
+      "playground",
+      "waves"
+    ],
+    "chapter": "Playground Lab",
+    "order": 13,
+    "gradeLevel": 7
+  },
+  {
+    "id": "rsm_set_theory_treasure",
+    "title": "The Treasure Sorter",
+    "prompt": "A pirate has a chest of 20 treasures. Some are gold coins, some are gems, some are BOTH. You need to sort them into sets. What is a 'set' and how do we know if something belongs to one?",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "conceptKey": "set_theory_intro",
+    "prerequisites": [],
+    "tags": ["logic", "rsm", "sets"],
+    "chapter": "Logic Detective",
+    "order": 1,
+    "gradeLevel": 3
+  },
+  {
+    "id": "rsm_venn_diagram_zoo",
+    "title": "The Animal Venn Zoo",
+    "prompt": "At the zoo, 14 animals can fly, 10 animals can swim, and 5 animals can do BOTH. Use a Venn diagram to figure out: how many total animals are there if no animal does neither?",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "conceptKey": "venn_diagrams_basic",
+    "prerequisites": ["set_theory_intro"],
+    "tags": ["logic", "rsm", "venn"],
+    "chapter": "Pattern Detective",
+    "order": 11,
+    "gradeLevel": 3
+  },
+  {
+    "id": "rsm_set_operations_detective",
+    "title": "The Suspect Sorter",
+    "prompt": "Detective Vidya has two lists of suspects. List A = students who like math. List B = students who like science. She needs to find students in BOTH lists (the intersection) and students in EITHER list (the union). Can you help?",
+    "subject": "MATHEMATICS",
+    "topic": "sets_logic",
+    "conceptKey": "set_operations",
+    "prerequisites": ["venn_diagrams_basic"],
+    "tags": ["logic", "rsm", "sets"],
+    "chapter": "Logic Detective",
+    "order": 2,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_motion_race",
+    "title": "The Robot Race",
+    "prompt": "Two robots race on a track. Robot A moves at 8 meters per second. The track is 120 meters long. How long does Robot A take to finish? What if Robot B takes 12 seconds — how fast was Robot B?",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "motion_problems",
+    "prerequisites": ["multiplication_intro", "division_intro"],
+    "tags": ["rsm", "speed", "playground"],
+    "chapter": "Playground Lab",
+    "order": 14,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_cost_formula_shop",
+    "title": "The Minecraft Store",
+    "prompt": "You are running a Minecraft shop. Iron swords cost 7 emeralds each. A customer wants 9 swords. How much do they owe you? If they pay with 100 emeralds, what is the change?",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "cost_formula",
+    "prerequisites": ["multiplication_intro"],
+    "tags": ["minecraft", "rsm", "cost"],
+    "chapter": "Minecraft Builder",
+    "order": 11,
+    "gradeLevel": 3
+  },
+  {
+    "id": "rsm_work_formula_painters",
+    "title": "The Painting Crew",
+    "prompt": "Alex can paint a wall in 6 hours. Jordan can paint the same wall in 4 hours. If they work together on the same wall, how long will it take them? Think about how much of the wall each paints per hour.",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "work_rate_time",
+    "prerequisites": ["multiplication_intro", "division_intro", "fractions_intro"],
+    "tags": ["rsm", "rate", "work"],
+    "chapter": "Minecraft Builder",
+    "order": 12,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_compound_problems",
+    "title": "The Party Planner",
+    "prompt": "You are planning a party for 24 friends. You buy 3 bags of chips — each bag has 18 chips. Then you eat 12 chips yourself. Each friend gets an equal share of the rest. How many chips does each friend get?",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "compound_word_problems",
+    "prerequisites": ["multiplication_intro", "addition_grouping"],
+    "tags": ["rsm", "multi-step"],
+    "chapter": "Pattern Detective",
+    "order": 12,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_multi_step_equation",
+    "title": "The Secret Code Equation",
+    "prompt": "Detective Vidya finds a coded message: '3 times the mystery number, plus 6, equals 21.' What is the mystery number? Show your steps — first undo the addition, then undo the multiplication.",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "conceptKey": "multi_step_equations",
+    "prerequisites": ["simple_equations"],
+    "tags": ["rsm", "algebra", "detective"],
+    "chapter": "Logic Detective",
+    "order": 3,
+    "gradeLevel": 5
+  },
+  {
+    "id": "rsm_mixed_numbers_pizza",
+    "title": "The Pizza Fraction Puzzle",
+    "prompt": "You have 2 whole pizzas and 3/4 of another pizza. Write this as an improper fraction. Now your friend eats 5/4 of a pizza. How much pizza is left? Show your answer as a mixed number.",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "mixed_numbers",
+    "prerequisites": ["fractions_intro"],
+    "tags": ["rsm", "fractions", "cooking"],
+    "chapter": "Kitchen Scientist",
+    "order": 13,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_fraction_of_number",
+    "title": "The Recipe Fractioner",
+    "prompt": "A recipe needs 24 cups of flour. You want to make only 3/4 of the recipe. How many cups of flour do you need? What about 2/3 of the recipe?",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "fraction_of_number",
+    "prerequisites": ["fractions_intro", "multiplication_intro"],
+    "tags": ["rsm", "fractions", "cooking"],
+    "chapter": "Kitchen Scientist",
+    "order": 14,
+    "gradeLevel": 4
+  },
+  {
+    "id": "rsm_simultaneous_trains",
+    "title": "The Meeting Trains",
+    "prompt": "Two trains start from cities 300 km apart and travel toward each other. Train A goes 60 km/h and Train B goes 90 km/h. How long until they meet? How far from City A will the meeting point be?",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "simultaneous_motion",
+    "prerequisites": ["motion_problems"],
+    "tags": ["rsm", "motion", "trains"],
+    "chapter": "Playground Lab",
+    "order": 15,
+    "gradeLevel": 5
+  },
+  {
+    "id": "rsm_motion_graph_reader",
+    "title": "The Distance Detective Graph",
+    "prompt": "A hiker walks away from camp. After 2 hours they are 8 km away. After 4 hours they are 16 km away. After 6 hours they stopped and stayed at 16 km. Draw the distance-time graph in your head — when was the hiker moving? When did they stop?",
+    "subject": "MATHEMATICS",
+    "topic": "data_graphs",
+    "conceptKey": "motion_graphs",
+    "prerequisites": ["coordinate_plane_intro", "motion_problems"],
+    "tags": ["rsm", "graphs", "motion"],
+    "chapter": "Pattern Detective",
+    "order": 13,
+    "gradeLevel": 5
+  },
+  {
+    "id": "rsm_inequality_balance",
+    "title": "The Balance Scale Inequality",
+    "prompt": "On a balance scale, the left side has a mystery weight plus 5 kg. The right side has 18 kg. The left side is lighter than the right. Write an inequality for the mystery weight. What are some possible values?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "conceptKey": "inequalities_intro",
+    "prerequisites": ["simple_equations"],
+    "tags": ["rsm", "algebra", "inequality"],
+    "chapter": "Playground Lab",
+    "order": 16,
+    "gradeLevel": 5
+  },
+  {
+    "id": "rsm_triangle_area_build",
+    "title": "The Triangle Roof Builder",
+    "prompt": "You are building a triangular roof in Minecraft. The base is 12 blocks and the height is 8 blocks. What is the area of the triangular face? How many blocks of glass would you need to fill it?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "conceptKey": "right_triangle_area",
+    "prerequisites": ["area_intro", "multiplication_intro"],
+    "tags": ["minecraft", "rsm", "geometry"],
+    "chapter": "Minecraft Builder",
+    "order": 13,
+    "gradeLevel": 5
+  },
+  {
+    "id": "rsm_percent_bake_sale",
+    "title": "The Bake Sale Percent",
+    "prompt": "You baked 40 cookies. You sold 30 of them at the bake sale. What percent did you sell? What percent is left? If each cookie cost $0.50, how much money did you make?",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "percent_as_hundredths",
+    "prerequisites": ["fractions_intro", "decimal_notation"],
+    "tags": ["rsm", "percent", "cooking"],
+    "chapter": "Kitchen Scientist",
+    "order": 15,
+    "gradeLevel": 5
+  },
+  {
+    "id": "division_cookie_share",
+    "title": "The Cookie Share",
+    "prompt": "You baked 36 cookies and want to share them equally among 4 friends (including yourself). How many does each person get? What if 2 more friends show up and you also want to give each person the same amount?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "division_intro",
+    "prerequisites": ["multiplication_intro"],
+    "tags": ["cooking", "sharing"],
+    "chapter": "Kitchen Scientist",
+    "order": 16,
+    "gradeLevel": 3
+  },
+  {
+    "id": "order_ops_detective",
+    "title": "The Math Order Mystery",
+    "prompt": "Detective Vidya finds a math clue: 3 + 4 × 2. Two suspects each got different answers — one got 14, the other got 11. Who is correct? What rule tells us which operations to do first?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "order_of_operations",
+    "prerequisites": ["multiplication_intro", "addition_grouping"],
+    "tags": ["detective", "order"],
+    "chapter": "Pattern Detective",
+    "order": 14,
+    "gradeLevel": 5
+  },
+  {
+    "id": "ratio_recipe_scaler",
+    "title": "The Recipe Scale-Up",
+    "prompt": "A cake recipe that serves 6 needs 2 cups of flour and 3 eggs. You want to make it for 18 people. How much flour and how many eggs do you need? What is the ratio of flour to eggs?",
+    "subject": "MATHEMATICS",
+    "topic": "ratios",
+    "conceptKey": "ratios_intro",
+    "prerequisites": ["multiplication_intro", "division_intro"],
+    "tags": ["cooking", "ratio"],
+    "chapter": "Kitchen Scientist",
+    "order": 17,
+    "gradeLevel": 6
+  },
+  {
+    "id": "volume_box_builder",
+    "title": "The Minecraft Storage Chest",
+    "prompt": "You are building a storage room in Minecraft. The room is 6 blocks long, 4 blocks wide, and 3 blocks tall. How many blocks fill the entire room (the volume)? What if you make it twice as tall?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "conceptKey": "volume_intro",
+    "prerequisites": ["area_intro", "multiplication_intro"],
+    "tags": ["minecraft", "volume", "geometry"],
+    "chapter": "Minecraft Builder",
+    "order": 14,
+    "gradeLevel": 5
+  },
+  {
+    "id": "sound_wave_lab",
+    "title": "The Sound Wave Lab",
+    "prompt": "You pluck a guitar string and hear a sound. When you pluck it harder, it is louder. When you press down on the string to make it shorter, the pitch is higher. What property of the wave changes in each case?",
+    "subject": "PHYSICS",
+    "topic": "waves_sound",
+    "conceptKey": "sound_waves",
+    "prerequisites": ["wave_properties"],
+    "tags": ["sound", "waves", "lab"],
+    "chapter": "Playground Lab",
+    "order": 17,
+    "gradeLevel": 4
+  },
+  {
+    "id": "mirror_maze_light",
+    "title": "The Mirror Maze",
+    "prompt": "A laser beam enters a mirror maze and hits a flat mirror at an angle. The reflected beam goes in a new direction. The rule is: the angle of reflection equals the angle of incidence. If the beam hits the mirror at 30 degrees, what angle does it bounce off at?",
+    "subject": "PHYSICS",
+    "topic": "light_optics",
+    "conceptKey": "light_reflection",
+    "prerequisites": ["light_shadows"],
+    "tags": ["light", "mirror", "reflection"],
+    "chapter": "Playground Lab",
+    "order": 18,
+    "gradeLevel": 4
+  },
+  {
+    "id": "energy_hunter",
+    "title": "The Energy Hunter",
+    "prompt": "Walk around your house and find 3 examples of kinetic energy (things moving) and 3 examples of potential energy (stored energy ready to be released). What happens when you let a stretched rubber band go?",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "conceptKey": "energy_forms",
+    "prerequisites": [],
+    "tags": ["energy", "nature", "discovery"],
+    "chapter": "Nature Explorer",
+    "order": 8,
+    "gradeLevel": 4
+  },
+  {
+    "id": "mystery_number_variable",
+    "title": "The Mystery Number Box",
+    "prompt": "There is a mystery number in a box, let's call it n. When you add 7 to the mystery number, you get 15. What is n? Now try: 4 times n equals 28. Can you use the same idea to find n?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "conceptKey": "variables_intro",
+    "prerequisites": ["addition_grouping"],
+    "tags": ["algebra", "detective", "variable"],
+    "chapter": "Pattern Detective",
+    "order": 15,
+    "gradeLevel": 4
+  },
+  {
+    "id": "decimal_treasure",
+    "title": "The Decimal Treasure Map",
+    "prompt": "A treasure map has distances in decimals. From start to checkpoint A is 3.5 km. From A to B is 2.75 km. From B to treasure is 1.4 km. What is the total journey? If each km takes 20 minutes to walk, how long is the whole trip?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "decimal_notation",
+    "prerequisites": ["place_value"],
+    "tags": ["decimal", "detective", "treasure"],
+    "chapter": "Pattern Detective",
+    "order": 16,
+    "gradeLevel": 4
+  },
+  {
+    "id": "below_zero_explorer",
+    "title": "The Temperature Time Machine",
+    "prompt": "In Siberia, the temperature is -20°C. In the Sahara desert it is +45°C. What is the temperature difference? If the temperature drops 8 degrees every hour after sunset, and it starts at 5°C, what will it be after 4 hours?",
+    "subject": "MATHEMATICS",
+    "topic": "operations",
+    "conceptKey": "negative_numbers",
+    "prerequisites": ["addition_grouping"],
+    "tags": ["negative", "temperature", "nature"],
+    "chapter": "Nature Explorer",
+    "order": 9,
+    "gradeLevel": 6
+  },
+  {
+    "id": "formula_builder",
+    "title": "The Formula Factory",
+    "prompt": "A streaming service charges $8 per month plus $2 for each movie rented. Write an expression for the total monthly cost if you rent m movies. If you rented 5 movies, what is the total? How many movies did someone rent if their bill was $22?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "conceptKey": "expressions_variables",
+    "prerequisites": ["variables_intro", "multiplication_intro"],
+    "tags": ["algebra", "expressions", "real-world"],
+    "chapter": "Pattern Detective",
+    "order": 17,
+    "gradeLevel": 6
+  },
+  {
+    "id": "map_plotter",
+    "title": "The Treasure Coordinate Map",
+    "prompt": "You have a treasure map on a grid. The treasure is at (4, 3). Your starting point is (1, 1). Plot both points. How far right and how far up do you need to travel? What if the treasure is at (-2, 5) — is that left or right of center?",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "conceptKey": "coordinate_plane_intro",
+    "prerequisites": [],
+    "tags": ["coordinates", "map", "nature"],
+    "chapter": "Nature Explorer",
+    "order": 10,
+    "gradeLevel": 5
+  },
+  {
+    "id": "recipe_halver",
+    "title": "The Half-Recipe Challenge",
+    "prompt": "A cookie recipe needs 3/4 cup of butter and 2/3 cup of sugar for 24 cookies. You want to make only 12 cookies (half the recipe). How much butter and sugar do you need? Hint: multiply each fraction by 1/2.",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "conceptKey": "fraction_multiplication",
+    "prerequisites": ["fractions_intro", "multiplication_intro"],
+    "tags": ["cooking", "fractions"],
+    "chapter": "Kitchen Scientist",
+    "order": 18,
+    "gradeLevel": 5
+  },
+  {
+    "id": "equation_cracker",
+    "title": "The Safe Cracker Equation",
+    "prompt": "A safe has a combination lock. The combination is the value of x in this equation: x + 14 = 31. Use the balance method — what do you subtract from both sides? Now try: 3x = 27. What do you divide both sides by?",
+    "subject": "MATHEMATICS",
+    "topic": "algebra",
+    "conceptKey": "simple_equations",
+    "prerequisites": ["variables_intro"],
+    "tags": ["algebra", "detective", "equations"],
+    "chapter": "Logic Detective",
+    "order": 4,
+    "gradeLevel": 4
+  },
+  {
+    "id": "speed_challenge",
+    "title": "The Speed Challenge",
+    "prompt": "You are timing your friends on a running track. Sam runs 400 meters in 80 seconds. Alex runs 300 meters in 50 seconds. Who is faster? How much faster? If Sam runs for 5 minutes at the same speed, how far will he go?",
+    "subject": "MATHEMATICS",
+    "topic": "word_problems",
+    "conceptKey": "distance_velocity_time",
+    "prerequisites": ["multiplication_intro", "division_intro"],
+    "tags": ["speed", "race", "playground"],
+    "chapter": "Playground Lab",
+    "order": 19,
+    "gradeLevel": 5
+  }
+]

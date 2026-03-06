@@ -13,6 +13,8 @@ import { SOCRATIC_SYSTEM_PROMPT, getLanguageContext, SUBJECT_QUESTIONS, STEM_TOP
 import { ANALYSIS_PROMPT } from '../prompts/analysis';
 import { HINT_LEVEL_PROMPTS } from '../../../prompts/socratic-system-prompt';
 import { classifyPhysicsTopic, buildPhysicsDepthAddendum } from '../prompts/physics-depth';
+import { buildElementaryOverlay } from '../prompts/elementary-overlay';
+import { getExampleQuestions } from '../../learning/templateLookup';
 
 // ============================================
 // ATTEMPT DETECTION
@@ -296,8 +298,11 @@ function buildResponseUserPrompt(params: {
   analysis: any;
   language: Language;
   historyText: string;
+  metadata?: Record<string, any>;
 }): string {
-  const { questionType, analysis, language, historyText } = params;
+  const { questionType, analysis, language, historyText, metadata } = params;
+  const isKidMode = metadata?.grade != null && metadata.grade <= 5;
+  const effectiveGrade = metadata?.effectiveGrade ?? metadata?.grade;
   const a = analysis as AnalysisResult;
 
   const languageInstruction: Record<string, string> = {
@@ -317,8 +322,40 @@ function buildResponseUserPrompt(params: {
     hint_with_question: `Give a small hint about "${a.suggestedFocus}", then ask a guiding question. Still NO direct answers.`,
     foundational: `The student seems lost. Ask about a foundational concept they need: "${a.conceptGaps?.[0] || 'basics'}". Be encouraging.`,
     celebration: 'Celebrate their success! Then ask them to explain WHY their approach works (deepens understanding).',
-    encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier guiding question.'
+    celebrate_then_explain_back: "Celebrate immediately (e.g. 'Awesome, you got it!'). Then ask: 'Vidya's robot friend is confused — can you teach him WHY that works?' Use pretend-play framing.",
+    encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier guiding question.',
   };
+
+  if (metadata?.isQuestIntro) {
+    return `
+PROBLEM (use this EXACT question — do NOT rephrase or invent a new question):
+"${metadata?.problemText || '(not provided)'}"
+
+TASK: You are starting a new quest with a young student. This is the VERY FIRST message.
+The student has NOT attempted anything yet — they just picked this quest.
+Your ONLY job: add 1 fun sentence of context, then ask the EXACT question from the PROBLEM above (you may simplify wording for a kid but keep the same meaning and answer).
+
+Do NOT say "good start", "nice", "great job", or anything that implies they already worked on it.
+Do NOT reference any previous work or attempts.
+Do NOT invent a different question. Do NOT change what is being asked.
+
+${languageInstruction[language] || languageInstruction.EN}
+
+CRITICAL RULES:
+1. Ask the SAME question as the PROBLEM above. Do NOT substitute a different question.
+2. Maximum 1 short sentence + the question. Think NPC speech bubble.
+3. NEVER give the answer or solve the problem
+4. The [A]/[B]/[C] choices MUST directly answer the question. One choice MUST be correct. Others must be plausible wrong answers.
+5. Each choice MUST be under 8 words.
+6. ALWAYS end with exactly 3 choices: [A] ... [B] ... [C] ...
+
+Generate the response:
+    `.trim();
+  }
+
+  const difficultyNote = isKidMode && effectiveGrade != null && effectiveGrade > (metadata?.grade ?? 3)
+    ? `\nDIFFICULTY NOTE: This student is enrolled in grade ${metadata?.grade} but is performing at grade ${effectiveGrade} level. Generate the question at grade ${effectiveGrade} difficulty. Use grade ${effectiveGrade} vocabulary and number complexity.`
+    : '';
 
   return `
 CONVERSATION HISTORY:
@@ -331,13 +368,23 @@ ANALYSIS:
 TASK: ${typeInstructions[questionType] || typeInstructions.socratic}
 
 ${languageInstruction[language] || languageInstruction.EN}
+${difficultyNote}
 
 CRITICAL RULES:
 1. ONE question only (don't overwhelm)
-2. Maximum 3-4 sentences
+2. ${isKidMode ? 'MAX 1 short sentence + 1 question. NPC speech bubble style, never more.' : 'Maximum 3-4 sentences'}
 3. NEVER give the answer or solve the problem
 4. Be warm and encouraging
 5. Use the student's language style
+${isKidMode ? `6. NEVER ask an open-ended or multi-part question. Ask ONE question with ONE clear answer.
+7. The [A]/[B]/[C] choices MUST directly answer the ONE question you asked.
+8. One choice MUST be correct. Others must be plausible wrong answers.
+9. Each choice MUST be under 8 words.` : ''}
+${isKidMode && metadata?.problemText ? `
+QUEST ANCHOR (CRITICAL - do not drift):
+The student is playing: "${metadata.problemText}"
+Stay in this EXACT scenario. Use the same theme throughout (Minecraft/cooking/playground/etc).
+Do not introduce new scenarios, abstract notation, or drift to other topics.` : ''}
 
 Generate the response:
   `.trim();
@@ -431,6 +478,20 @@ export const stemModule: TutorModule = {
 
   buildResponseSystemAddendum: (analysis: any, metadata?: Record<string, any>) => {
     const a = analysis as AnalysisResult;
+    let addendum = '';
+
+    // Elementary overlay: prepend when grade <= 5
+    const grade = metadata?.grade as number | undefined;
+    if (grade != null && grade <= 7) {
+      const effectiveGrade = (metadata?.effectiveGrade ?? grade) as number;
+      const masteryContext = metadata?.masteryContext as
+        | { masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> }
+        | undefined;
+      const fewShotExamples = metadata?.fewShotExamples as string[] | undefined;
+      const rsmTrack = metadata?.rsmTrack as boolean | undefined;
+      addendum = buildElementaryOverlay(grade, effectiveGrade, masteryContext, fewShotExamples, rsmTrack) + '\n\n';
+    }
+
     const subjectKey = (metadata?.subject || 'PHYSICS') as keyof typeof SUBJECT_QUESTIONS;
     const subjectQuestions = SUBJECT_QUESTIONS[subjectKey];
     const sqAny = subjectQuestions as Record<string, string[]> | undefined;
@@ -458,7 +519,7 @@ export const stemModule: TutorModule = {
       physicsDepthSection = buildPhysicsDepthAddendum(physicsTopic, metadata?.hintLevel || 0);
     }
 
-    return `
+    addendum += `
 CURRENT CONTEXT:
 - Subject: ${metadata?.subject || 'Unknown'}
 - Student's Distance from Solution: ${a.distanceFromSolution}%
@@ -469,10 +530,12 @@ ${questionBankSection}${primerSection}${physicsDepthSection}
 
 RESPONSE TYPE GUIDE:
 - celebration: Acknowledge success, then ask them to explain WHY it works
+- celebrate_then_explain_back: Celebrate first, then "Vidya's robot is confused — can you teach him why?"
 - socratic: Ask a probing question that leads toward the gap
 - hint_with_question: Give a small hint, then ask a question
 - foundational: Ask about basic concepts they may have forgotten
 - encouragement: Validate their effort, simplify the path forward`;
+    return addendum.trim();
   },
 
   buildResponseUserPrompt,

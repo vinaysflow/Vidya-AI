@@ -16,7 +16,9 @@ export default {
           'system-ui',
           '-apple-system',
           'sans-serif'
-        ]
+        ],
+        // Kid-mode: rounded, friendly Duolingo-inspired font
+        fredoka: ['Fredoka One', 'cursive'],
       },
       colors: {
         // Custom brand colors

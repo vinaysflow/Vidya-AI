@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Subject } from '@prisma/client';
-import { getMasteryMap, getDueReviews, getRadarData } from '../services/learning/masteryTracker';
+import { getMasteryMap, getMasteryByConceptKey, getDueReviews, getRadarData } from '../services/learning/masteryTracker';
 import { generatePath, getRecommendedNext } from '../services/learning/pathGenerator';
 
 const router: Router = Router();
@@ -10,6 +10,15 @@ router.get('/mastery', async (req: Request, res: Response, next: NextFunction) =
     const userId = (req.query.userId as string) || 'anonymous';
     const subject = req.query.subject as Subject | undefined;
     const map = await getMasteryMap(userId, subject);
+    res.json({ success: true, mastery: map });
+  } catch (error) { next(error); }
+});
+
+router.get('/mastery-by-concept', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = (req.query.userId as string) || 'anonymous';
+    const subject = req.query.subject as Subject | undefined;
+    const map = await getMasteryByConceptKey(userId, subject);
     res.json({ success: true, mastery: map });
   } catch (error) { next(error); }
 });

@@ -37,6 +37,13 @@ RULES:
 - Keep data minimal and correct.
 - If no visual helps, return: { "skip": true }
 
+LABEL RULES (CRITICAL):
+- All labels must be short plain-English text, max 20 characters.
+- Good labels: "Block 1", "12 m", "Force", "Step 3".
+- NEVER use @ symbols, placeholder tokens, garbled text, or repeated fragments.
+- NEVER generate labels like "@foo", "robialof", or "Length of @xyz 1 block".
+- If you cannot write a clean label, omit the label field entirely.
+
 AVAILABLE TYPES:
 1. equation_steps — for step-by-step derivations/solutions
    { "type": "equation_steps", "data": { "steps": ["step1 in LaTeX or text", "step2", ...] } }
@@ -53,6 +60,16 @@ AVAILABLE TYPES:
 
 Respond with a single JSON object only. No markdown, no explanation.`;
 
+const GIBBERISH_RE = /@\w+@\w+/;
+const REPEATED_FRAG_RE = /(.{3,})\1{2,}/;
+
+function sanitizeDiagramLabel(raw: string): string | undefined {
+  let label = raw.replace(/@\w+/g, '').replace(/\s{2,}/g, ' ').trim();
+  if (!label || GIBBERISH_RE.test(raw) || REPEATED_FRAG_RE.test(raw)) return undefined;
+  if (label.length > 40) label = label.slice(0, 37) + '...';
+  return label;
+}
+
 export async function generateVisualContent(params: {
   subject: Subject;
   tutorMessage: string;
@@ -60,8 +77,9 @@ export async function generateVisualContent(params: {
   language: Language;
   client: LlmClient;
   modelPolicy?: ModelPolicyOverride;
+  grade?: number | null;
 }): Promise<VisualContent | null> {
-  const { subject, tutorMessage, analysis, language, client, modelPolicy } = params;
+  const { subject, tutorMessage, analysis, language, client, modelPolicy, grade } = params;
 
   if (!VISUAL_ELIGIBLE_SUBJECTS.includes(subject)) return null;
   if (tutorMessage.length < 80) return null;
@@ -70,11 +88,15 @@ export async function generateVisualContent(params: {
   const conceptContext = analysis?.conceptsIdentified?.join(', ') || '';
   const topicContext = analysis?.topic || analysis?.suggestedFocus || '';
 
+  const kidHint = grade != null && grade <= 5
+    ? `\nSTUDENT: Grade ${grade} (age ${grade + 5}). Use kid-friendly language in all labels. Write "12 blocks x 1 = 12 meters", NOT "Totallength = numberofblocks x length". Keep steps as a kid would say them.\n`
+    : '';
+
   const userPrompt = `SUBJECT: ${subject}
 TOPIC: ${topicContext}
 CONCEPTS: ${conceptContext}
 SUBJECT VISUAL HINTS: ${subjectHints}
-
+${kidHint}
 TUTOR MESSAGE:
 ${tutorMessage.slice(0, 1500)}
 
@@ -101,6 +123,14 @@ Generate a visual if it would help. Otherwise return { "skip": true }.`;
     const validTypes = ['equation_steps', 'code_trace', 'diagram', 'graph', 'scatter_plot'];
     if (!validTypes.includes(parsed.type)) return null;
     if (!parsed.data || typeof parsed.data !== 'object') return null;
+
+    if (parsed.type === 'diagram' && Array.isArray(parsed.data.elements)) {
+      for (const el of parsed.data.elements) {
+        if (typeof el.label === 'string') {
+          el.label = sanitizeDiagramLabel(el.label);
+        }
+      }
+    }
 
     return { type: parsed.type, data: parsed.data };
   } catch (err) {

@@ -8,11 +8,13 @@
  * Save it immediately — it cannot be retrieved from the database later.
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Subject } from '@prisma/client';
 import { generateApiKey } from '../src/middleware/auth';
 import { seedEssayPrompts } from './seeds/essayPrompts';
 import { seedConcepts } from './seeds/concepts';
 import { seedHints } from './seeds/hints';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const prisma = new PrismaClient();
 
@@ -77,6 +79,80 @@ async function main() {
   // Seed concept and hint banks (STEM, Counseling, Essay, etc.)
   await seedConcepts(prisma);
   await seedHints(prisma);
+
+  // Seed concept graph (grades 3-7, all subjects) from generated JSON
+  const conceptsPath = join(__dirname, 'seed-data', 'concepts.json');
+  try {
+    const conceptsData = JSON.parse(readFileSync(conceptsPath, 'utf-8')) as Array<{
+      conceptKey: string;
+      subject: string;
+      topic: string;
+      name: string;
+      description: string;
+      difficulty: number;
+      gradeLevel?: number;
+      prerequisites: string[];
+    }>;
+    let conceptCount = 0;
+    for (const c of conceptsData) {
+      await prisma.concept.upsert({
+        where: { conceptKey: c.conceptKey },
+        update: {
+          name: c.name,
+          description: c.description,
+          subject: c.subject as Subject,
+          topic: c.topic,
+          difficulty: c.difficulty,
+          gradeLevel: c.gradeLevel ?? 3,
+          prerequisites: c.prerequisites,
+        },
+        create: {
+          conceptKey: c.conceptKey,
+          name: c.name,
+          description: c.description,
+          subject: c.subject as Subject,
+          topic: c.topic,
+          difficulty: c.difficulty,
+          gradeLevel: c.gradeLevel ?? 3,
+          prerequisites: c.prerequisites,
+        },
+      });
+      conceptCount++;
+    }
+    console.log(`Seeded ${conceptCount} concepts (grades 3-7).`);
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === 'ENOENT') {
+      console.log('No concepts.json found. Skipping concept graph seeding.');
+    } else {
+      throw e;
+    }
+  }
+
+  // Seed question templates from generated JSON
+  const templatesPath = join(__dirname, 'seed-data', 'question-templates.json');
+  try {
+    const templatesData = JSON.parse(readFileSync(templatesPath, 'utf-8')) as Array<{
+      conceptKey: string;
+      gradeLevel: number;
+      difficulty: number;
+      questionText: string;
+      answerFormula: string;
+      distractors: string[];
+      solutionSteps: string[];
+      tags: string[];
+      source?: string;
+    }>;
+    // Clear existing templates and re-seed for idempotency
+    await prisma.questionTemplate.deleteMany({});
+    await prisma.questionTemplate.createMany({ data: templatesData.map(t => ({ ...t, source: t.source ?? 'generated' })) });
+    console.log(`Seeded ${templatesData.length} question templates.`);
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === 'ENOENT') {
+      console.log('No question-templates.json found. Skipping template seeding.');
+    } else {
+      throw e;
+    }
+  }
 }
 
 main()

@@ -44,6 +44,10 @@ CHEMISTRY topics:
 
 MATHEMATICS topics:
 - "calculus" | "algebra" | "geometry" | "probability"
+- For elementary (Grade 3): also use "operations" | "fractions" | "measurement" | "geometry_shapes" | "patterns_algebra"
+
+PHYSICS (elementary):
+- For Grade 3: use "forces_motion" | "weather_patterns" | "matter" in addition to mechanics/thermo/etc.
 
 BIOLOGY topics:
 - "botany" | "zoology" | "physiology" | "genetics"

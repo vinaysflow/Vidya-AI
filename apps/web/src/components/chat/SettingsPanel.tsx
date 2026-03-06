@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Check, Key, Sun, Moon, Laptop, Mic } from 'lucide-react';
+import { X, Check, Key, Sun, Moon, Laptop, Mic, User, RotateCcw } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import {
   useChatStore,
@@ -14,6 +14,8 @@ export function SettingsPanel() {
   const {
     language, setLanguage,
     apiKey, setApiKey,
+    userId, setUserId,
+    grade, setGrade,
     settingsOpen, setSettingsOpen,
     noFinalAnswerMode, setNoFinalAnswerMode,
     planTier, setPlanTier,
@@ -21,10 +23,23 @@ export function SettingsPanel() {
     voiceEnabled, setVoiceEnabled,
     hasCompletedOnboarding,
     startOnboarding,
+    resetAll,
   } = useChatStore();
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const [keyInput, setKeyInput] = useState(apiKey || '');
   const [keySaved, setKeySaved] = useState(false);
+  const [userIdInput, setUserIdInput] = useState(userId || '');
+  const [userIdSaved, setUserIdSaved] = useState(false);
+  const [gradeInput, setGradeInput] = useState(grade != null ? String(grade) : '');
+
+  useEffect(() => {
+    if (settingsOpen) {
+      setKeyInput(apiKey || '');
+      setUserIdInput(userId || '');
+      setGradeInput(grade != null ? String(grade) : '');
+    }
+  }, [settingsOpen, apiKey, userId, grade]);
 
   if (!settingsOpen) return null;
 
@@ -38,6 +53,13 @@ export function SettingsPanel() {
     setApiKey(trimmed || null);
     setKeySaved(true);
     setTimeout(() => setKeySaved(false), 2000);
+  };
+
+  const handleSaveUserId = () => {
+    const trimmed = userIdInput.trim();
+    setUserId(trimmed || null);
+    setUserIdSaved(true);
+    setTimeout(() => setUserIdSaved(false), 2000);
   };
 
   return (
@@ -155,6 +177,90 @@ export function SettingsPanel() {
             </section>
           )}
 
+          {/* User ID (dogfood / kid mode) */}
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              User ID
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+              For dogfood: set to a child&apos;s userId (e.g. dogfood-child-001) to enable kid mode and quest UI.
+            </p>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  value={userIdInput}
+                  onChange={(e) => setUserIdInput(e.target.value)}
+                  placeholder="e.g. dogfood-child-001"
+                  className={cn(
+                    "w-full pl-9 pr-3 py-2 rounded-xl text-xs",
+                    "bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600",
+                    "focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none",
+                    "text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
+                  )}
+                />
+              </div>
+              <button
+                onClick={handleSaveUserId}
+                className={cn(
+                  "px-3 py-2 rounded-xl text-xs font-medium transition-all",
+                  userIdSaved
+                    ? "bg-green-500 text-white"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                )}
+              >
+                {userIdSaved ? <Check className="w-3.5 h-3.5" /> : 'Save'}
+              </button>
+            </div>
+            {userId && (
+              <p className="text-[10px] text-green-600 dark:text-green-400 mt-1.5 flex items-center gap-1">
+                <Check className="w-3 h-3" /> Using: {userId}
+              </p>
+            )}
+            <p className="text-[10px] text-slate-400 mt-1">
+              Leave empty for anonymous. Run setup-dogfood.ts to create child user.
+            </p>
+          </section>
+
+          {/* Grade (kid mode) */}
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              Grade
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+              Set to 3 (or 1–5) to enable kid mode: quests, voice-first, kid-friendly UI. Normally fetched from user profile; override here for testing.
+            </p>
+            <div className="flex gap-2">
+              <select
+                value={gradeInput || ''}
+                onChange={(e) => {
+                  setGradeInput(e.target.value);
+                  const v = e.target.value ? parseInt(e.target.value, 10) : null;
+                  if (v != null && !Number.isNaN(v)) setGrade(v);
+                  else setGrade(null);
+                }}
+                className={cn(
+                  "flex-1 px-3 py-2 rounded-xl text-xs",
+                  "bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600",
+                  "focus:border-blue-500 outline-none text-slate-700 dark:text-slate-200"
+                )}
+              >
+                <option value="">Auto (from user profile)</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            {grade != null && (
+              <p className="text-[10px] text-green-600 dark:text-green-400 mt-1.5 flex items-center gap-1">
+                <Check className="w-3 h-3" /> Kid mode: Grade {grade}
+              </p>
+            )}
+          </section>
+
           {/* API Key */}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
@@ -221,7 +327,8 @@ export function SettingsPanel() {
             </div>
           </section>
 
-          {/* Safety mode */}
+          {/* Safety mode — hidden in kid mode (grade <= 5); choices are the only interaction there */}
+          {(!grade || grade > 5) && (
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               Safety
@@ -248,6 +355,7 @@ export function SettingsPanel() {
               </button>
             </div>
           </section>
+          )}
 
           {/* Plan */}
           <section>
@@ -295,6 +403,44 @@ export function SettingsPanel() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* Reset */}
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              Data
+            </h3>
+            {!confirmReset ? (
+              <button
+                data-testid="reset-all-btn"
+                onClick={() => setConfirmReset(true)}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl border border-red-200 text-red-500 text-xs font-semibold hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Reset All Data
+              </button>
+            ) : (
+              <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 space-y-2">
+                <p className="text-xs text-red-600 dark:text-red-400 font-medium">
+                  This clears all progress, XP, streaks, and grade. Cannot be undone.
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    data-testid="reset-confirm-btn"
+                    onClick={() => { resetAll(); setConfirmReset(false); setSettingsOpen(false); }}
+                    className="px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors"
+                  >
+                    Yes, reset everything
+                  </button>
+                  <button
+                    onClick={() => setConfirmReset(false)}
+                    className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         </div>
       </div>

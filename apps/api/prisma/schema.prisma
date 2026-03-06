@@ -176,6 +176,7 @@ model User {
   targetExam    Exam?
   school        String?
   city          String?
+  adaptiveState Json?     // { effectiveGrade: number, recentPerformance: QuestPerformance[], streakAtCurrentGrade: number }
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -219,6 +220,8 @@ model Session {
   // Original problem/question
   problemText  String?
   problemImage String?       // URL to uploaded image
+  conceptKey   String?       // Elementary: quest concept for mastery updates
+  effectiveGrade Int?     // Adaptive: computed grade level for this session
 
   // Essay context (optional)
   essayType       String?
@@ -326,6 +329,7 @@ model Concept {
   // Learning structure
   prerequisites String[] // IDs of prerequisite concepts
   difficulty    Int      @default(1) // 1-5
+  gradeLevel    Int      @default(3)  // Grade level 3-9
   
   hints         Hint[]
   
@@ -352,6 +356,22 @@ model Hint {
   
   @@unique([conceptId, level])
   @@index([conceptId])
+}
+
+model QuestionTemplate {
+  id            String   @id @default(cuid())
+  conceptKey    String
+  gradeLevel    Int
+  difficulty    Int      @default(1)
+  questionText  String   @db.Text
+  answerFormula String
+  distractors   String[]
+  solutionSteps String[]
+  tags          String[]
+  source        String?
+  createdAt     DateTime @default(now())
+
+  @@index([conceptKey, gradeLevel])
 }
 
 // ============================================
@@ -488,6 +508,7 @@ enum Subject {
   ENGLISH_LITERATURE
   ECONOMICS
   AI_LEARNING
+  LOGIC
 }
 
 enum Exam {
