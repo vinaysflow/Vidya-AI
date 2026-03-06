@@ -1,57 +1,113 @@
 # Tracking Plan
 
-## Event Principles
+## Measurement Philosophy
 
-- Track only what you can act on in the next 2 weeks.
-- Make all events subject- and language-aware.
-- Avoid PII in event payloads.
+- Dogfood v1 uses local observation + manual session review, not a full analytics pipeline.
+- All data stays on-device (localStorage). No server-side user tracking.
+- Track what you can act on in the next 2 weeks.
+- No PII in any event or log.
 
-## Core Events (Web)
+## What We Track Today (Built-In)
 
-### Onboarding
+### Client-Side State (localStorage via Zustand)
 
-- `onboarding_started`
-  - `subject`, `language`
-- `onboarding_completed`
-  - `subject`, `language`, `difficulty`, `goal_length`
+| Data Point | Location | Purpose |
+|-----------|----------|---------|
+| `kidModeEnabled` | chatStore | Kid vs adult mode selection |
+| `grade` | chatStore | Child's grade level |
+| `effectiveGrade` | chatStore | Adaptive difficulty level |
+| `rsmTrack` | chatStore | RSM curriculum alignment flag |
+| `gamification.xp` | chatStore | Total XP earned |
+| `gamification.level` | chatStore | Current level |
+| `gamification.currentStreak` | chatStore | Active daily streak |
+| `gamification.longestStreak` | chatStore | Best streak ever |
+| `gamification.badges` | chatStore | Earned badges list |
+| `sessionHistory` | chatStore | Last 50 session previews |
+| `learnerState` | chatStore | Concepts engaged, strengths, areas for improvement |
+| `masteryMap` | chatStore | Per-concept mastery scores (BKT) |
 
-### Session
+### Server-Side (Database)
 
-- `session_started`
-  - `sessionId`, `subject`, `language`, `source` (starter/manual)
-- `message_sent`
-  - `sessionId`, `turnIndex`, `subject`, `language`, `charCount`
-- `assistant_response`
-  - `sessionId`, `turnIndex`, `questionType`, `hintLevel`, `topic`, `distance`
-- `session_ended`
-  - `sessionId`, `messageCount`, `durationMinutes`, `masteryGain`
+| Data Point | Table | Purpose |
+|-----------|-------|---------|
+| Session count and duration | Session | Engagement measurement |
+| Message count per session | Message | Depth of interaction |
+| Hint level per response | Message.metadata | Scaffolding effectiveness |
+| Question type per response | Message.metadata | Learning path analysis |
+| Safety events | Message.metadata.safetyEvents | Trust & safety monitoring |
+| Mastery per concept | Progress | Learning efficacy |
+| XP events | XPEvent | Gamification health |
+| Adaptive state | User.adaptiveState | Difficulty progression |
+| Quest performance | Session metadata | Quest completion tracking |
 
-### Engagement
+### LLM Metadata (Per Response)
 
-- `quick_action_clicked`
-  - `label`, `sessionId`
-- `settings_opened`
-  - `source`
-- `sidebar_opened`
-  - `sessionCount`
+| Field | Purpose |
+|-------|---------|
+| `metadata.questionType` | What type of question the tutor asked |
+| `metadata.hintLevel` | Current position on hint ladder (0-5) |
+| `metadata.distanceFromSolution` | How close the student is to the answer |
+| `metadata.conceptsIdentified` | Concepts being practiced |
+| `metadata.grounding` | Whether response used bank, reasoning, or retrieval |
+| `metadata.confidence` | LLM confidence in its pedagogical approach |
+| `metadata.safetyEvents` | Any safety triggers (answer_leak, budget_exceeded, etc.) |
 
-## Core Events (API)
+## Dogfood Observation Protocol (Manual)
 
-- `api_request`
-  - `route`, `status`, `durationMs`, `apiKeyId`
-- `rate_limit_hit`
-  - `route`, `tier`, `overage`
-- `llm_request`
-  - `provider`, `model`, `tokensIn`, `tokensOut`, `durationMs`, `status`
+Since we don't have a full analytics pipeline yet, track these manually during dogfood:
 
-## KPI-Focused Aggregations
+### Daily (During Active Dogfood)
 
-- Activation: onboarding completion rate, first response success rate.
-- Engagement: D1/D7 return, sessions per user.
-- Learning: mastery gain per 3 sessions, hint loop rate.
-- Reliability: p95 latency, 5xx error rate.
+- [ ] How many minutes did the child use Vidya today?
+- [ ] How many quests were completed?
+- [ ] Did the child ask to use Vidya (voluntary) or was it prompted?
+- [ ] Any frustration points observed? (couldn't read text, wrong answer, confusing UI)
+- [ ] Did the streak mechanic motivate return usage?
 
-## Privacy Notes
+### Weekly
 
-- No raw user text should be logged in analytics.
-- Use session IDs and event aggregates only.
+- [ ] What is the child's current streak?
+- [ ] Current level and total XP?
+- [ ] How many unique concepts have been engaged? (check masteryMap in localStorage)
+- [ ] Has effectiveGrade increased? (adaptive difficulty working?)
+- [ ] Any patterns in which quests are chosen vs skipped?
+- [ ] Parent feedback: "Would you pay for this?"
+
+### Post-Dogfood (After 2-3 Weeks)
+
+- [ ] Total sessions across all dogfood families
+- [ ] Median session length
+- [ ] Quest completion rate
+- [ ] Mastery improvement (compare initial vs final masteryMap)
+- [ ] NPS score from parents (1-10 survey)
+- [ ] "Would pay" rate and suggested price point
+- [ ] Top 3 complaints / feature requests
+
+## Future Events (When Analytics Pipeline is Added)
+
+### Web Events
+
+- `role_selected` — `{role: 'kid' | 'learner'}`
+- `parent_setup_completed` — `{grade, rsmTrack}`
+- `quest_started` — `{questId, chapter, conceptKey, gradeLevel}`
+- `quest_completed` — `{questId, turns, durationMinutes, correct, explainBackCorrect}`
+- `choice_selected` — `{choiceLabel, correct, turnIndex}`
+- `xp_earned` — `{amount, source, level}`
+- `level_up` — `{newLevel}`
+- `streak_updated` — `{currentStreak, longestStreak}`
+- `session_started` — `{subject, language, kidMode}`
+- `session_ended` — `{messageCount, durationMinutes, masteryDelta}`
+- `reset_all_triggered` — `{}`
+
+### API Events
+
+- `llm_request` — `{provider, model, tokensIn, tokensOut, durationMs, status}`
+- `safety_event` — `{type, sessionId, details}`
+- `adaptive_grade_change` — `{userId, oldGrade, newGrade, direction}`
+
+## Privacy Constraints
+
+- No raw user text in analytics.
+- No names, emails, or identifiable information.
+- All client data is localStorage-only (no server-side user profiles for kid mode).
+- COPPA-compliant: parent setup required, no data leaves device.

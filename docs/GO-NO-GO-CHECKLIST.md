@@ -1,62 +1,79 @@
-# Go / No-Go Launch Checklist
+# Go / No-Go Checklist
 
-Use this checklist before every production deploy or public-facing release.
+Use before every production deploy or sharing with dogfood families.
 
 ## Quality Gate
 
 - [ ] `pnpm build` succeeds with zero errors for both API and Web.
-- [ ] `pnpm typecheck` passes with zero errors.
-- [ ] `pnpm test` passes — all required suites green.
-- [ ] CI workflow (`ci.yml`) passes on the deploy commit.
+- [ ] `npx tsc --noEmit` passes with zero errors in both apps.
+- [ ] All 20 Playwright E2E tests pass (`npx playwright test e2e/kid-mode.spec.ts`).
+- [ ] No new lint errors in changed files.
+
+## Product Gate (Kid Mode)
+
+- [ ] RoleSelectorScreen renders on fresh visit (no localStorage).
+- [ ] "Set up Kid Mode" leads to ParentSetupScreen with compliance disclosure.
+- [ ] "Start Learning" leads to adult onboarding wizard.
+- [ ] ParentSetupScreen: grade highlight-select + RSM toggle + "Let's go!" CTA works.
+- [ ] Quest picker: accordion chapters, RSM quests float to top when RSM mode on.
+- [ ] Clicking a quest starts a session with [A]/[B]/[C] choices on every turn.
+- [ ] Explain-back phase fires after correct answer (grade <= 5).
+- [ ] Victory screen shows on quest completion with "Next Adventure!" button.
+- [ ] XP bar updates after each message; no fly-up animation on page refresh.
+- [ ] Level-up modal does NOT reappear on page refresh.
+- [ ] Streak banner shows persistent count (not animated on refresh).
+- [ ] "Parent Settings" button on quest picker returns to ParentSetupScreen.
+- [ ] "Reset All Data" in Settings wipes everything and returns to RoleSelectorScreen.
+
+## Product Gate (General Mode)
+
+- [ ] 4-step onboarding wizard shows for adult path (subject, language, goal, difficulty).
+- [ ] Subject picker and starter prompts render correctly.
+- [ ] Socratic conversation works — hints, scaffolding, never gives answer.
+- [ ] Session end report generates with concepts, strengths, next steps.
 
 ## Security
 
-- [ ] All API keys rotated since last known exposure (see `docs/SECURITY-RUNBOOK.md`).
-- [ ] Old/exposed keys revoked in provider dashboards (OpenAI, Anthropic, Stripe).
-- [ ] `.env.local` files are NOT committed (verify with `git status`).
-- [ ] Railway production variables match the checklist in `docs/SECURITY-RUNBOOK.md`.
-- [ ] `ADMIN_SECRET` is unique per environment (not shared between dev/staging/prod).
+- [ ] `apps/api/.env` is NOT in git (`git status` clean).
+- [ ] Railway production variables set (see `docs/SECURITY-RUNBOOK.md`).
+- [ ] `OPENAI_API_KEY` rotated if previously exposed.
+- [ ] `ADMIN_SECRET` is unique per environment.
+- [ ] `ALLOWED_ORIGINS` in Railway includes the production frontend URL.
+- [ ] No hardcoded secrets in any tracked file (`git diff` reviewed).
 
 ## Deployment
 
-- [ ] Railway deploy workflow (`deploy-railway.yml`) completed successfully.
-- [ ] `/health` endpoint returns 200 on the production URL.
-- [ ] Database migrations applied (`prisma db push` or migrate deploy).
-- [ ] Redis connection verified (cache connected log in Railway).
-- [ ] Feature freeze flag set for release candidate (`VITE_FEATURE_FREEZE=true`).
+- [ ] Push to `main` triggers Railway auto-deploy.
+- [ ] API service starts and responds on production URL.
+- [ ] Database migrations applied (Prisma schema matches production).
+- [ ] Seed data loaded (95 quests, 400+ templates, 126+ concepts).
+- [ ] Web app served and loads correctly on production URL.
 
 ## Observability
 
-- [ ] `SENTRY_DSN` is set in Railway production variables.
-- [ ] Sentry receives a test event (trigger a 500 error or use Sentry test route).
-- [ ] Alert rules configured in Sentry:
-  - Error rate spike (>5 errors/minute).
-  - New issue regression alert.
-- [ ] On-call notification channel (email or Slack) connected to Sentry.
+- [ ] `SENTRY_DSN` set in Railway (if available).
+- [ ] Error logging visible in Railway logs.
+- [ ] LLM provider health check passing on startup.
 
-## Performance (SLO Targets)
+## Performance
 
-| Endpoint | p50 Target | p95 Target | Error Rate |
-|----------|-----------|-----------|------------|
-| `/health` | < 50ms | < 100ms | 0% |
-| `/api/tutor/session/start` | < 3s | < 8s | < 2% |
-| `/api/tutor/message` | < 5s | < 15s | < 5% |
+| Endpoint | p50 Target | p95 Target |
+|----------|-----------|-----------|
+| `/api/tutor/session/start` | < 3s | < 8s |
+| `/api/tutor/message` | < 5s | < 15s |
 
-- [ ] Load test run against staging/production (`npx tsx scripts/load-test.ts <url>`).
-- [ ] All endpoints meet SLO targets above under expected load.
-- [ ] Estimated token cost per session is acceptable (check OpenAI/Anthropic dashboards).
+- [ ] Manual smoke test: start session, send 3 messages, end session.
+- [ ] Kid mode smoke test: select quest, answer 2 questions, verify choices appear.
 
 ## Rollback Plan
 
-- [ ] Previous working Railway deployment is bookmarked for instant rollback.
-- [ ] Rollback procedure documented: Railway Dashboard > Deployments > Redeploy previous.
-- [ ] Database rollback strategy defined (if migration was destructive, have a snapshot).
+- [ ] Previous working Railway deployment bookmarked.
+- [ ] Database snapshot available (Supabase dashboard).
 
 ## Final Sign-off
 
-- [ ] Product owner reviewed and approved.
-- [ ] Load test results attached or linked.
+- [ ] All checkboxes above completed.
 - [ ] Decision: **GO** / **NO-GO**
 
-Date: ___________  
+Date: ___________
 Signed: ___________

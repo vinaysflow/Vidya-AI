@@ -1,111 +1,56 @@
 # Security Runbook
 
-## Secret Management
+## Architecture Overview
 
-### Where secrets live
+Vidya has two attack surfaces:
+- **API** (Express server on Railway) — handles LLM calls, database access, session management.
+- **Web** (Static React app) — no secrets, no server-side rendering. All config is public `VITE_*` env vars.
+
+Kid mode stores everything in `localStorage` — no user accounts, no server-side profiles for children. This is a deliberate COPPA-compliance choice.
+
+## Secret Inventory
+
+| Secret | Where Used | Exposure Risk |
+|--------|-----------|--------------|
+| `OPENAI_API_KEY` | API server only | High — direct cost if leaked |
+| `ANTHROPIC_API_KEY` | API server only | High — direct cost if leaked |
+| `DATABASE_URL` | API server only | Critical — full DB access |
+| `ADMIN_SECRET` | API admin routes | Medium — admin endpoint access |
+| `STRIPE_SECRET_KEY` | API billing (if enabled) | High — financial |
+| `REDIS_URL` | API caching | Low — cache data only |
+| `SENTRY_DSN` | API error reporting | Low — read-only error submission |
+
+## Where Secrets Live
 
 | Environment | Storage | Access |
 |------------|---------|--------|
-| Local dev | `apps/api/.env.local` (git-ignored) | Developer only |
+| Local dev | `apps/api/.env` (git-ignored) | Developer only |
 | CI (GitHub Actions) | Repository Secrets | Org admins |
 | Production (Railway) | Service Variables | Project admins |
 
-### Files that must NEVER be committed
+## Files That Must NEVER Be Committed
 
-- `.env.local` (any directory)
-- `.env` with real values
-- Any file containing raw API keys, tokens, or passwords
+- `apps/api/.env` (contains real keys)
+- `apps/api/.env.local`
+- Any file with raw API keys, tokens, or database passwords
 
 The root `.gitignore` blocks `.env` and `.env.*` (except `.env.example` and `.env.local.example`).
 
-### Setting up secrets locally
-
+**Verification command:**
 ```bash
-cd apps/api
-cp .env.local.example .env.local
-# Fill real values in .env.local
+git ls-files | grep -i env
+# Should only show .env.example and .env.local.example files
 ```
 
-### Setting up secrets in Railway
+## Current Security Status
 
-1. Go to your Railway project dashboard.
-2. Select the `api` service.
-3. Open the **Variables** tab.
-4. Add each required variable (see `.env.example` for the full list).
-5. Railway auto-restarts the service on variable changes.
-
-### Setting up secrets in GitHub Actions
-
-1. Go to **Settings > Secrets and variables > Actions**.
-2. Add repository secrets:
-   - `RAILWAY_TOKEN` — Railway deploy token (project-scoped)
-
-CI does not need LLM keys — tests run without live LLM calls.
-
----
-
-## Key Rotation Procedure
-
-### When to rotate
-
-- A secret was committed to version control (even if force-pushed away).
-- A team member with access leaves.
-- Periodic rotation schedule (recommended: every 90 days).
-
-### Step-by-step rotation
-
-#### 1. OpenAI API Key
-
-1. Go to [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
-2. Create a new API key with the same permissions.
-3. Update the key in Railway variables (`OPENAI_API_KEY`).
-4. Update your local `.env.local`.
-5. Verify the API responds correctly (hit `/health` and send a test message).
-6. Delete the old key in the OpenAI dashboard.
-
-#### 2. Anthropic API Key
-
-1. Go to [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys).
-2. Create a new API key.
-3. Update in Railway (`ANTHROPIC_API_KEY`) and local `.env.local`.
-4. Verify with a test message.
-5. Delete the old key.
-
-#### 3. Admin Secret
-
-1. Generate a new secret:
-   ```bash
-   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-   ```
-2. Update in Railway (`ADMIN_SECRET`) and local `.env.local`.
-3. Existing admin sessions will be invalidated (expected).
-
-#### 4. Database URL
-
-1. If using Supabase: reset the database password in the dashboard.
-2. Update `DATABASE_URL` in Railway and local `.env.local`.
-3. Verify with `npx prisma db push --accept-data-loss` (staging only) or check `/health`.
-
-#### 5. Stripe Secret Key
-
-1. Go to [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys).
-2. Roll the secret key.
-3. Update in Railway (`STRIPE_SECRET_KEY`) and local `.env.local`.
-
----
-
-## Leak Response Checklist
-
-If a secret is confirmed leaked (e.g., committed, logged, exposed in error response):
-
-- [ ] **Rotate immediately** — do not wait. Follow the rotation steps above.
-- [ ] **Revoke the old key** in the provider dashboard.
-- [ ] **Audit usage** — check provider dashboards (OpenAI, Anthropic, Stripe) for unexpected usage since the leak time.
-- [ ] **Check git history** — if committed, use `git filter-branch` or BFG Repo Cleaner to remove from history, then force-push.
-- [ ] **Notify the team** — post in the team channel with the scope and remediation status.
-- [ ] **Update this runbook** if the leak revealed a gap in process.
-
----
+- [x] `.env` files git-ignored and never committed (verified in git history).
+- [x] `.env.example` files contain only placeholder values.
+- [x] Frontend has zero secrets — only `VITE_API_URL` and feature flags.
+- [x] `README.md` examples use placeholder patterns (`sk-ant-your-key-here`).
+- [x] Kid mode: no accounts, no PII, localStorage-only.
+- [ ] OPENAI_API_KEY should be rotated (recommended before sharing with families).
+- [ ] ADMIN_SECRET should be set to a strong random value in production.
 
 ## Railway Production Variables Checklist
 
@@ -113,20 +58,82 @@ All of the following must be set in Railway before deploy:
 
 | Variable | Required | Notes |
 |----------|----------|-------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `LLM_PROVIDER` | Yes | `anthropic` or `openai` |
+| `DATABASE_URL` | Yes | PostgreSQL connection string (Supabase) |
+| `LLM_PROVIDER` | Yes | `openai` or `anthropic` |
 | `LLM_FALLBACK_PROVIDER` | No | Optional secondary provider |
-| `ANTHROPIC_API_KEY` | If using Anthropic | |
 | `OPENAI_API_KEY` | If using OpenAI | |
-| `ANTHROPIC_ANALYSIS_MODEL` | No | Defaults to `claude-3-haiku-20240307` |
-| `ANTHROPIC_RESPONSE_MODEL` | No | Defaults to `claude-3-haiku-20240307` |
+| `ANTHROPIC_API_KEY` | If using Anthropic | |
 | `OPENAI_ANALYSIS_MODEL` | No | Defaults to `gpt-4.1-nano` |
 | `OPENAI_RESPONSE_MODEL` | No | Defaults to `gpt-4.1-nano` |
-| `REDIS_URL` | Yes | Redis/Upstash connection string |
+| `REDIS_URL` | Recommended | Redis/Upstash connection string |
 | `ADMIN_SECRET` | Yes | For admin API endpoints |
-| `PORT` | No | Defaults to 4000; Railway sets `PORT` automatically |
+| `PORT` | No | Railway sets `PORT` automatically |
 | `NODE_ENV` | Yes | Set to `production` |
-| `ALLOWED_ORIGINS` | Yes | Comma-separated allowed CORS origins |
-| `STRIPE_SECRET_KEY` | If billing enabled | |
-| `STRIPE_METER_EVENT_NAME` | If billing enabled | |
+| `ALLOWED_ORIGINS` | Yes | Production frontend URL(s), comma-separated |
 | `SENTRY_DSN` | Recommended | For error monitoring |
+
+## Key Rotation Procedure
+
+### When to Rotate
+
+- A secret was committed to version control (even if force-pushed away).
+- A team member with access leaves.
+- Before sharing the product with external users (dogfood families).
+- Periodic rotation (recommended: every 90 days).
+
+### OpenAI API Key
+
+1. Go to [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
+2. Create a new key with the same permissions.
+3. Update in Railway variables (`OPENAI_API_KEY`).
+4. Update local `apps/api/.env`.
+5. Verify: start a tutoring session on production.
+6. Delete the old key in OpenAI dashboard.
+
+### Anthropic API Key
+
+1. Go to [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys).
+2. Create a new key.
+3. Update in Railway (`ANTHROPIC_API_KEY`) and local `.env`.
+4. Verify with a test session.
+5. Delete the old key.
+
+### Admin Secret
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+Update in Railway (`ADMIN_SECRET`) and local `.env`.
+
+### Database Password
+
+1. Reset password in Supabase dashboard.
+2. Update `DATABASE_URL` in Railway and local `.env`.
+3. Verify API starts and can query the database.
+
+## Leak Response Checklist
+
+If a secret is confirmed leaked:
+
+- [ ] **Rotate immediately** — do not wait.
+- [ ] **Revoke the old key** in the provider dashboard.
+- [ ] **Audit usage** — check provider dashboards for unexpected charges.
+- [ ] **Check git history** — if committed, use BFG Repo Cleaner to remove.
+- [ ] **Force-push** cleaned history.
+- [ ] **Notify stakeholders** with scope and remediation status.
+- [ ] **Update this runbook** if the leak revealed a process gap.
+
+## COPPA Compliance Posture
+
+Vidya's kid mode is designed for COPPA compliance:
+
+| Requirement | How Vidya Addresses It |
+|------------|----------------------|
+| Parental consent | Parent-first entry flow; parent must set up kid mode |
+| No data collection from children | All kid data in localStorage; no server-side child profiles |
+| No accounts for children | No sign-up, no email, no identifiers |
+| No third-party data sharing | LLM API calls contain session context only, no child identity |
+| Transparency | Compliance disclosure on ParentSetupScreen |
+| Data deletion | "Reset All Data" button wipes everything instantly |
+
+**Note:** LLM API calls do send conversation content to OpenAI/Anthropic. This content contains no PII (no names, no identifiers). Review provider data retention policies before public launch beyond dogfood.
