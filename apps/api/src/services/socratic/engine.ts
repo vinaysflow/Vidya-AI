@@ -272,6 +272,12 @@ export class SocraticEngine {
         scaffoldMode = true;
         adaptiveEscalation = true;
         newHintLevel = Math.max(newHintLevel, 3);
+        // For kids stuck in a hint/foundational loop at high hint level, switch to
+        // encouragement which asks a simpler concrete question — breaks the cycle.
+        if (grade != null && grade <= 7 && newHintLevel >= 4 &&
+          (questionType === 'hint_with_question' || questionType === 'foundational')) {
+          questionType = 'encouragement';
+        }
       }
     }
 

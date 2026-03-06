@@ -72,14 +72,14 @@ const FALLBACK_CHOICES: Record<string, Choice[]> = {
     { letter: 'C', text: "I'm not sure why it works" },
   ],
   hint_with_question: [
-    { letter: 'A', text: 'Yes, I think so!' },
-    { letter: 'B', text: "No, I'm confused" },
-    { letter: 'C', text: 'Can you explain more?' },
+    { letter: 'A', text: 'Show me the first step' },
+    { letter: 'B', text: "Can I try a simpler version?" },
+    { letter: 'C', text: "Let me try again!" },
   ],
   foundational: [
-    { letter: 'A', text: 'Yes, I think so!' },
-    { letter: 'B', text: "No, I'm confused" },
-    { letter: 'C', text: 'Can you explain more?' },
+    { letter: 'A', text: 'Show me an example' },
+    { letter: 'B', text: 'Break it into smaller steps' },
+    { letter: 'C', text: 'I want to start over' },
   ],
   encouragement: [
     { letter: 'A', text: "OK let me try again!" },

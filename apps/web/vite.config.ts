@@ -68,6 +68,11 @@ export default defineConfig({
       'vidya-socraticai-app-production.up.railway.app'
     ]
   },
+  define: {
+    // Injected at build time — changes every deploy, busting the SW precache
+    // manifest revision so users always receive fresh assets automatically.
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
   build: {
     outDir: 'dist',
     sourcemap: false,

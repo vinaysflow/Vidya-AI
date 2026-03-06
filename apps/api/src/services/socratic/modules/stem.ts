@@ -144,18 +144,21 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 const FALLBACKS: Record<string, Record<string, string>> = {
   EN: {
     socratic: "That's an interesting approach! Can you walk me through your reasoning step by step?",
+    hint_with_question: "Let's try a simpler question! How many would you have if you started with 1?\n\n[A] 1\n[B] 2\n[C] 0",
+    foundational: "Let's go back to basics! What do we do when we need to combine two groups?\n\n[A] Add them together\n[B] Multiply them\n[C] Subtract one from the other",
     celebration: "Great work! Can you explain why this approach works?",
-    foundational: "Let's take a step back. What's the core concept we're dealing with here?",
-    default: "Tell me more about how you're thinking about this problem."
+    default: "Let's try this one step at a time!\n\n[A] Show me the first step\n[B] Can I try a simpler version?\n[C] Let me start over"
   },
   HI: {
     socratic: "दिलचस्प approach है! क्या आप मुझे step by step बता सकते हैं?",
+    hint_with_question: "एक आसान सवाल! अगर हमारे पास 2 चीज़ें हैं और हम 1 और जोड़ें तो कितनी होंगी?\n\n[A] 3\n[B] 2\n[C] 4",
+    foundational: "चलो आसान शुरुआत करें! जब हम दो groups को मिलाते हैं तो क्या करते हैं?\n\n[A] जोड़ते हैं\n[B] गुणा करते हैं\n[C] घटाते हैं",
     celebration: "बहुत बढ़िया! क्या आप बता सकते हैं कि यह तरीका क्यों काम करता है?",
-    foundational: "चलो थोड़ा पीछे जाते हैं। यहाँ main concept क्या है?",
     default: "मुझे और बताइए कि आप इस problem के बारे में कैसे सोच रहे हैं।"
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ approach! ನಿಮ್ಮ reasoning step by step ಹೇಳಬಹುದೇ?",
+    hint_with_question: "ಒಂದು ಸರಳ ಪ್ರಶ್ನೆ! 2 ವಸ್ತುಗಳಿಗೆ 1 ಸೇರಿಸಿದರೆ ಎಷ್ಟಾಗುತ್ತದೆ?\n\n[A] 3\n[B] 2\n[C] 4",
     celebration: "ಅತ್ಯುತ್ತಮ! ಈ approach ಏಕೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ ಎಂದು ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಸ್ವಲ್ಪ ಹಿಂದೆ ಹೋಗೋಣ. ಇಲ್ಲಿ main concept ಏನು?",
     default: "ಈ problem ಬಗ್ಗೆ ನೀವು ಹೇಗೆ ಯೋಚಿಸುತ್ತಿದ್ದೀರಿ ಎಂದು ಇನ್ನೂ ಹೇಳಿ."
@@ -319,8 +322,8 @@ function buildResponseUserPrompt(params: {
     attempt_prompt: 'Ask the student to show their work.',
     clarifying: 'Ask a clarifying question about their approach.',
     socratic: `Ask ONE Socratic question that guides them toward understanding: "${a.conceptGaps?.[0] || 'the core concept'}". Do NOT give the answer.`,
-    hint_with_question: `Give a small hint about "${a.suggestedFocus}", then ask a guiding question. Still NO direct answers.`,
-    foundational: `The student seems lost. Ask about a foundational concept they need: "${a.conceptGaps?.[0] || 'basics'}". Be encouraging.`,
+    hint_with_question: `Give ONE small hint about "${a.suggestedFocus}", then ask a CONCRETE multiple-choice question with a specific numeric or factual answer. The question MUST have exactly one correct answer. Do NOT ask open-ended questions like "What do you think?" or "Tell me more about your thinking." ALWAYS end with [A] [B] [C] choices where one is correct and the others are plausible wrong answers.`,
+    foundational: `The student seems lost. Ask ONE simple concrete question about a foundational concept they need: "${a.conceptGaps?.[0] || 'the basics'}". Be encouraging. ALWAYS end with [A] [B] [C] choices where one is correct and the others are plausible wrong answers.`,
     celebration: 'Celebrate their success! Then ask them to explain WHY their approach works (deepens understanding).',
     celebrate_then_explain_back: "Celebrate immediately (e.g. 'Awesome, you got it!'). Then ask: 'Vidya's robot friend is confused — can you teach him WHY that works?' Use pretend-play framing.",
     encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier guiding question.',
