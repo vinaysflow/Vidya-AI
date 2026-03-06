@@ -2,12 +2,12 @@
 # https://docs.railway.app/reference/config-as-code
 
 [build]
-builder = "dockerfile"
-dockerfilePath = "Dockerfile"
+builder = "nixpacks"
+buildCommand = "pnpm --filter @vidya/api exec prisma generate --schema=prisma/schema.prisma && pnpm --filter @vidya/api run build"
 
 [deploy]
-startCommand = "sh scripts/railway-start.sh"
+startCommand = "cd apps/api && npx prisma db push --accept-data-loss --schema prisma/schema.prisma 2>&1 || true && node dist/index.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 60
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3

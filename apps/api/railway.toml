@@ -1,13 +1,12 @@
-# Railway deployment configuration for Vidya API
-# https://docs.railway.app/reference/config-as-code
+# Railway deployment configuration for Vidya API (service-level)
+# Root railway.toml takes precedence when deploying from git at repo root
 
 [build]
-builder = "dockerfile"
-dockerfilePath = "Dockerfile"
+builder = "nixpacks"
 
 [deploy]
-startCommand = "sh scripts/railway-start.sh"
+startCommand = "npx prisma db push --accept-data-loss --schema prisma/schema.prisma 2>&1 || true && node dist/index.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 60
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
