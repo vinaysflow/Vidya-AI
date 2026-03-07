@@ -140,6 +140,15 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   const { narrative, choices: parsedChoices } = parseChoices(lastAssistant?.content ?? '');
   const choices = parsedChoices.length > 0 ? parsedChoices : (lastAssistant ? getFallbackChoices(questionType) : []);
 
+  // Detect hint loop: 3+ consecutive assistant messages that are hint/foundational with no parsed choices
+  const assistantMessages = messages.filter((m) => m.role === 'assistant');
+  const recentAssistants = assistantMessages.slice(-3);
+  const isStuckInLoop = recentAssistants.length >= 3 && recentAssistants.every((m) => {
+    const qt = m.metadata?.questionType as string | undefined;
+    return (qt === 'hint_with_question' || qt === 'foundational') &&
+      parseChoices(m.content ?? '').choices.length === 0;
+  });
+
   // Show up to 2 sentences in the speech bubble
   const displayText = truncateForBubble(narrative || lastAssistant?.content || '');
 
@@ -434,6 +443,21 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           </div>
         </div>
       </div>
+
+      {/* ── Loop escape hatch ─────────────────────────────────────────── */}
+      {isStuckInLoop && (
+        <div className="mx-3 mt-2 rounded-xl bg-red-50 p-3 text-center dark:bg-red-900/30">
+          <p className="mb-2 text-sm font-semibold text-red-700 dark:text-red-300">
+            Looks like we&apos;re going in circles! Let&apos;s try something new.
+          </p>
+          <button
+            onClick={onEndSession}
+            className="rounded-xl bg-red-500 px-6 py-2 text-sm font-bold text-white shadow-md transition-all hover:bg-red-600 active:scale-95"
+          >
+            Pick a different quest
+          </button>
+        </div>
+      )}
 
       {/* ── 3. Choice Cards (always shown, including explain-back) ─────────── */}
       <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-2 pt-3">
