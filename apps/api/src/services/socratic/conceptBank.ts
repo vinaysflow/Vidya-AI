@@ -1,4 +1,4 @@
-import { PrismaClient, type Subject } from '@prisma/client';
+import { PrismaClient, type Subject, type Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const CACHE_TTL_MS = 30 * 60 * 1000;
@@ -75,11 +75,11 @@ export async function getConceptBankAddendum(params: {
   try {
     const topicQuery = topic?.trim();
     const topicFilter = topicQuery
-      ? {
+    ? {
           OR: [
-            { topic: { contains: topicQuery, mode: 'insensitive' } },
-            { subtopic: { contains: topicQuery, mode: 'insensitive' } },
-            { name: { contains: topicQuery, mode: 'insensitive' } },
+            { topic: { contains: topicQuery, mode: 'insensitive' as Prisma.QueryMode } },
+            { subtopic: { contains: topicQuery, mode: 'insensitive' as Prisma.QueryMode } },
+            { name: { contains: topicQuery, mode: 'insensitive' as Prisma.QueryMode } },
           ],
         }
       : undefined;
@@ -111,11 +111,11 @@ export async function getConceptBankAddendum(params: {
       subject,
       topic: topicQuery,
       hintLevel: Math.max(1, Math.min(5, hintLevel)),
-      concepts: fallbackConcepts.map(c => ({
+      concepts: fallbackConcepts.map((c: any) => ({
         name: c.name,
         description: c.description,
         topic: c.topic,
-        hints: c.hints.map(h => ({ level: h.level, content: h.content })),
+        hints: (c.hints ?? []).map((h: any) => ({ level: h.level, content: h.content })),
       })),
     });
 

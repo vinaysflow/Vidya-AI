@@ -5,7 +5,7 @@
  * Extracted to avoid circular dependencies between engine.ts and module files.
  */
 
-import type { Language, Subject } from '@prisma/client';
+import type { Language, Subject, Prisma } from '@prisma/client';
 
 // Re-export Prisma types for convenience
 export type { Language, Subject } from '@prisma/client';
@@ -144,7 +144,7 @@ export interface Message {
   role: 'USER' | 'ASSISTANT' | 'SYSTEM';
   content: string;
   language?: Language;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, any> | Prisma.JsonValue | null;
 }
 
 export type AttemptQuality = 'none' | 'minimal' | 'partial' | 'substantial';

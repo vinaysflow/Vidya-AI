@@ -811,7 +811,7 @@ Generate the response:
 
     let count = 0;
     for (let i = assistants.length - 1; i >= 0; i--) {
-      const qt = assistants[i].metadata?.questionType;
+      const qt = (assistants[i].metadata as Record<string, any> | undefined)?.questionType;
       if (qt === 'hint_with_question' || qt === 'foundational') {
         count++;
       } else {
@@ -846,7 +846,7 @@ Generate the response:
 
     if (recentAssistant.length >= 2) {
       return recentAssistant.every(m => {
-        const qt = m.metadata?.questionType;
+        const qt = (m.metadata as Record<string, any> | undefined)?.questionType;
         return qt === 'hint_with_question' || qt === 'foundational';
       });
     }

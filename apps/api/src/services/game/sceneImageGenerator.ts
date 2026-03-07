@@ -48,7 +48,7 @@ export async function generateSceneImage(params: {
       response_format: 'b64_json',
     });
 
-    const b64 = response.data[0]?.b64_json;
+    const b64 = response.data?.[0]?.b64_json;
     if (!b64) return null;
 
     const url = `data:image/png;base64,${b64}`;
