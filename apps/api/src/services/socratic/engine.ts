@@ -318,7 +318,10 @@ export class SocraticEngine {
     // Step 4b: Retry if kid mode response is missing [A]/[B]/[C] choices
     if (grade != null && grade <= 7) {
       const hasChoices = /\[A\]/i.test(response.text) && /\[B\]/i.test(response.text);
+      console.log(`[DEBUG-CHOICES] grade=${grade} questionType=${questionType} hasChoices=${hasChoices} responseLen=${response.text.length}`);
+      console.log(`[DEBUG-CHOICES] responseText: ${response.text.substring(0, 300)}`);
       if (!hasChoices) {
+        console.log(`[DEBUG-CHOICES] No [A]/[B]/[C] found, retrying...`);
         try {
           const retryHistory = [
             ...conversationHistory,
@@ -354,10 +357,14 @@ export class SocraticEngine {
               variant: input.variant,
             },
           });
-          if (/\[A\]/i.test(retryResponse.text) && /\[B\]/i.test(retryResponse.text)) {
+          const retryHasChoices = /\[A\]/i.test(retryResponse.text) && /\[B\]/i.test(retryResponse.text);
+          console.log(`[DEBUG-CHOICES] retryHasChoices=${retryHasChoices} retryText: ${retryResponse.text.substring(0, 300)}`);
+          if (retryHasChoices) {
             Object.assign(response, retryResponse);
           }
-        } catch (_) { /* retry is best-effort */ }
+        } catch (retryErr) {
+          console.error(`[DEBUG-CHOICES] Retry failed:`, retryErr);
+        }
       }
     }
 
@@ -709,6 +716,8 @@ Generate the response:
       });
 
       const modelUsed = { provider: result.provider, model: result.model, fallbackUsed: result.fallbackUsed };
+      console.log(`[DEBUG-LLM] provider=${result.provider} model=${result.model} fallback=${result.fallbackUsed} rawLen=${result.text.length}`);
+      console.log(`[DEBUG-LLM] rawText: ${result.text.trim().substring(0, 400)}`);
       if (result.fallbackUsed) {
         safetyEvents.push('llm_fallback');
       }
@@ -716,6 +725,9 @@ Generate the response:
       // Validate the response doesn't leak answers/content
       const validation = await this.validateResponseWithModule(result.text.trim(), mod, conversationHistory);
       safetyEvents.push(...validation.safetyEvents);
+      if (validation.text !== result.text.trim()) {
+        console.log(`[DEBUG-LLM] validation changed text! safetyEvents=${validation.safetyEvents.join(',')} validatedText: ${validation.text.substring(0, 300)}`);
+      }
 
       // Ensure response contains a question
       if (!validation.text.includes('?')) {
