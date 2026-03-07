@@ -22,7 +22,8 @@ RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
 # Generate Prisma client using local CLI (v5)
 RUN pnpm exec prisma generate --schema prisma/schema.prisma
 
-# Copy source
+# Copy source — ARG busts Docker cache so src changes are always recompiled
+ARG CACHEBUST=1
 COPY tsconfig.json ./
 COPY src ./src/
 
