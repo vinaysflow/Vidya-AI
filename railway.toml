@@ -1,13 +1,5 @@
-# Railway deployment configuration for Vidya API
-# https://docs.railway.app/reference/config-as-code
-
-[build]
-builder = "nixpacks"
-buildCommand = "pnpm --filter @vidya/api exec prisma generate --schema=prisma/schema.prisma && pnpm --filter @vidya/api run build"
-
-[deploy]
-startCommand = "cd apps/api && npx prisma db push --accept-data-loss --schema prisma/schema.prisma 2>&1 || true && node dist/index.js"
-healthcheckPath = "/health"
-healthcheckTimeout = 60
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
+# Railway deployment configuration (root)
+# Each service reads its own railway.toml from its Root Directory:
+#   - Vidya-AI API  → apps/api/railway.toml
+#   - Vidya-AI App  → apps/web/railway.toml
+# This file is intentionally minimal to avoid overriding service configs.
