@@ -1,5 +1,14 @@
-# Railway deployment configuration (root)
-# Each service reads its own railway.toml from its Root Directory:
-#   - Vidya-AI API  → Root Dir: apps/api → apps/api/railway.toml
-#   - Vidya-AI App  → Root Dir: (repo root) → this file or apps/web/railway.toml
-# This file is intentionally minimal to avoid overriding service configs.
+# Railway deployment configuration — Vidya Web App
+# This file is read when Root Directory is blank (repo root).
+# The API service uses apps/api as Root Directory and reads apps/api/railway.toml.
+
+[build]
+builder = "nixpacks"
+buildCommand = "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @vidya/web run build"
+
+[deploy]
+startCommand = "npx serve apps/web/dist -s -l tcp://0.0.0.0:${PORT:-3000}"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
