@@ -14,9 +14,11 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
 import { VidyaCharacter, type VidyaState } from './VidyaCharacter';
 import { SceneCanvas } from './SceneCanvas';
+import { AudioPlayer } from '../voice/AudioPlayer';
 import { cn } from '../../lib/utils';
 import { getTheme, parseChoices, CHAPTER_THEMES } from './questSceneTheme';
 import { useChatStore, type Message } from '../../stores/chatStore';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
 import { useGameSounds } from './useGameSounds';
 import { confettiData, sparkleData } from './lottieData';
 
@@ -119,6 +121,13 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     fetchProfileAndMastery,
     effectiveGrade,
     grade,
+    voiceEnabled,
+    language,
+    subject,
+    apiKey,
+    lastParentInsight,
+    pendingWarmUp,
+    calmMode,
   } = useChatStore();
 
   const { play: playSound } = useGameSounds();
@@ -134,6 +143,20 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   const prevEffectiveGradeRef = useRef(effectiveGrade);
   // Optional AI scene image overlay
   const [aiSceneUrl, setAiSceneUrl] = useState<string | null>(null);
+  // My Progress overlay
+  const [showProgressOverlay, setShowProgressOverlay] = useState(false);
+  const [progressSummary, setProgressSummary] = useState<{
+    conceptsMastered: number;
+    conceptsAttempted: number;
+    strongestTopic: string | null;
+    gradeLevelsUp: number;
+  } | null>(null);
+  const [progressLoading, setProgressLoading] = useState(false);
+
+  // TTS state for speech bubble
+  const [bubbleAudioUrl, setBubbleAudioUrl] = useState<string | null>(null);
+  const [ttsLoading, setTtsLoading] = useState(false);
+  const ttsCacheRef = useRef<Map<string, string>>(new Map());
 
   const lastAssistant = messages.filter((m) => m.role === 'assistant').pop();
   const questionType = lastAssistant?.metadata?.questionType as string | undefined;
@@ -149,8 +172,50 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
       parseChoices(m.content ?? '').choices.length === 0;
   });
 
-  // Show up to 2 sentences in the speech bubble
-  const displayText = truncateForBubble(narrative || lastAssistant?.content || '');
+  // Show up to 2 sentences in the speech bubble.
+  // If the LLM just parrots the quest prompt, suppress it to avoid repeating the prompt bar.
+  const rawBubble = narrative || lastAssistant?.content || '';
+  const questPrompt = activeQuest?.prompt ?? '';
+  const isSameAsPrompt = questPrompt.length > 0 &&
+    rawBubble.replace(/\s+/g, ' ').trim().toLowerCase().includes(
+      questPrompt.replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 60)
+    );
+  const displayText = isSameAsPrompt
+    ? truncateForBubble(rawBubble.replace(questPrompt, '').trim() || 'Pick the right answer!')
+    : truncateForBubble(rawBubble);
+
+  // TTS: synthesize speech bubble text
+  const synthesizeBubble = useCallback(async (text: string) => {
+    if (!text || !voiceEnabled) return;
+    const cacheKey = text.slice(0, 100);
+    const cached = ttsCacheRef.current.get(cacheKey);
+    if (cached) { setBubbleAudioUrl(cached); return; }
+
+    setTtsLoading(true);
+    try {
+      const API_BASE = getApiBase();
+      const res = await fetch(`${API_BASE}/api/voice/synthesize`, {
+        method: 'POST',
+        headers: getJsonHeaders(apiKey),
+        body: JSON.stringify({ text: text.slice(0, 4000), language, subject }),
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        ttsCacheRef.current.set(cacheKey, url);
+        setBubbleAudioUrl(url);
+      }
+    } catch (_) {}
+    finally { setTtsLoading(false); }
+  }, [voiceEnabled, language, subject, apiKey]);
+
+  useEffect(() => {
+    if (displayText && voiceEnabled) {
+      synthesizeBubble(displayText);
+    } else {
+      setBubbleAudioUrl(null);
+    }
+  }, [displayText]); // intentionally only depend on displayText
 
   const theme = getTheme(activeQuest?.chapter ?? 'Adventures');
 
@@ -293,6 +358,23 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     if (userId && userId !== 'anonymous') fetchProfileAndMastery(userId);
   }, [clearChat, userId, fetchProfileAndMastery]);
 
+  const handleShowProgress = useCallback(async () => {
+    setShowProgressOverlay(true);
+    if (userId && userId !== 'anonymous' && !progressSummary) {
+      setProgressLoading(true);
+      try {
+        const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
+        const res = await fetch(`${API_BASE}/api/progress/summary?userId=${encodeURIComponent(userId)}`);
+        if (res.ok) {
+          const data = await res.json() as { success: boolean; summary: typeof progressSummary };
+          if (data.success && data.summary) setProgressSummary(data.summary);
+        }
+      } catch (_) { /* non-critical */ } finally {
+        setProgressLoading(false);
+      }
+    }
+  }, [userId, progressSummary]);
+
   if (!activeQuest) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -308,13 +390,15 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         className="relative flex h-full flex-col items-center justify-center overflow-hidden px-6"
         style={{ maxHeight: '100dvh' }}
       >
-        {/* Full-screen confetti burst — pointer-events-none so button stays clickable */}
-        <Lottie
-          animationData={confettiData}
-          loop={false}
-          className="pointer-events-none absolute inset-0 z-20 h-full w-full"
-          aria-hidden="true"
-        />
+        {/* Full-screen confetti burst — skipped in calm mode */}
+        {!calmMode && (
+          <Lottie
+            animationData={confettiData}
+            loop={false}
+            className="pointer-events-none absolute inset-0 z-20 h-full w-full"
+            aria-hidden="true"
+          />
+        )}
 
         <div className="shrink-0 px-3 pt-3 w-full max-w-md">
           <SceneCanvas
@@ -337,6 +421,19 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
               <span>&#128293;</span> {streakCombo} streak!
             </div>
           )}
+
+          {/* Parent insight card — gives child language to share with parent */}
+          {lastParentInsight && (
+            <div className="w-full max-w-xs rounded-2xl bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700 px-4 py-3">
+              <p className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wide mb-1">
+                Tell your parent! &#128172;
+              </p>
+              <p className="text-sm text-slate-700 dark:text-slate-200 leading-snug">
+                {lastParentInsight}
+              </p>
+            </div>
+          )}
+
           <button
             data-testid="next-adventure"
             onClick={handleNextAdventure}
@@ -355,8 +452,8 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
       className="relative flex h-full flex-col overflow-hidden"
       style={{ maxHeight: '100dvh' }}
     >
-      {/* Quest Accepted overlay — shows for 1.5s on quest start */}
-      {showQuestIntro && (
+      {/* Quest Accepted overlay — shows for 1.5s on quest start, skipped in calm mode */}
+      {showQuestIntro && !calmMode && (
         <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/60 animate-[fadeIn_0.2s_ease-out]">
           <div className="animate-[comboPop_0.4s_ease-out] text-center px-6">
             <div className="text-5xl mb-3">{CHAPTER_THEMES[activeQuest.chapter]?.emoji ?? '✨'}</div>
@@ -384,7 +481,24 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         />
       </div>
 
-      {/* ── 2a. Persistent Quest Prompt ────────────────────────────────── */}
+      {/* ── 2a. Reading Context (shown when quest has supplementary material) ── */}
+      {activeQuest.context && (
+        <div className="shrink-0 px-3 pt-2">
+          <div
+            data-testid="quest-context"
+            className="rounded-xl bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 px-4 py-2 max-h-28 overflow-y-auto"
+          >
+            <p className="text-[10px] font-bold uppercase tracking-wide text-indigo-500 dark:text-indigo-400 mb-0.5">
+              &#128214; Read this first
+            </p>
+            <p className="text-sm leading-snug text-indigo-900 dark:text-indigo-200">
+              {activeQuest.context}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── 2b. Persistent Quest Prompt ────────────────────────────────── */}
       <div className="shrink-0 px-3 pt-2">
         <div
           data-testid="quest-prompt"
@@ -424,6 +538,12 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           </div>
 
           <div className="min-w-0 flex-1">
+            {/* Warm-up badge — shown on the first turn when a warm-up problem was served */}
+            {pendingWarmUp && messages.filter((m) => m.role === 'assistant').length <= 1 && (
+              <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-800/50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                <span>✦</span> Warm-up!
+              </div>
+            )}
             {questionType && (
               <div className="mb-0.5 font-fredoka text-sm tracking-wide text-amber-600 dark:text-amber-400">
                 {KID_HEADERS[questionType] ?? 'Vidya says…'}
@@ -439,6 +559,14 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
               <p className="text-base font-medium leading-snug text-slate-800 dark:text-slate-100">
                 {displayText || '…'}
               </p>
+            )}
+            {bubbleAudioUrl && !isLoading && (
+              <div className="mt-1">
+                <AudioPlayer audioUrl={bubbleAudioUrl} autoPlay={true} />
+              </div>
+            )}
+            {ttsLoading && !isLoading && (
+              <div className="mt-1 text-xs text-slate-400">Reading aloud...</div>
             )}
           </div>
         </div>
@@ -610,6 +738,15 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
             })()}
           </div>
 
+          {/* My Progress button */}
+          <button
+            data-testid="my-progress"
+            onClick={handleShowProgress}
+            className="rounded-lg bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300"
+          >
+            My Progress
+          </button>
+
           {/* End adventure */}
           <button
             data-testid="end-adventure"
@@ -620,6 +757,66 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           </button>
         </div>
       </div>
+
+      {/* My Progress overlay */}
+      {showProgressOverlay && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={() => setShowProgressOverlay(false)}
+        >
+          <div
+            className="bg-white dark:bg-slate-900 rounded-3xl p-8 text-center shadow-2xl max-w-sm mx-4 animate-[comboPop_0.4s_ease-out]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-5xl mb-3">⭐</div>
+            <h2 className="font-bold text-2xl text-amber-600 dark:text-amber-400 mb-4">
+              My Progress
+            </h2>
+            {progressLoading ? (
+              <div className="flex justify-center py-4">
+                <span className="h-3 w-3 animate-bounce rounded-full bg-amber-400 mr-1" style={{ animationDelay: '0ms' }} />
+                <span className="h-3 w-3 animate-bounce rounded-full bg-amber-400 mr-1" style={{ animationDelay: '150ms' }} />
+                <span className="h-3 w-3 animate-bounce rounded-full bg-amber-400" style={{ animationDelay: '300ms' }} />
+              </div>
+            ) : progressSummary ? (
+              <div className="space-y-3 text-left text-sm">
+                <div className="rounded-xl bg-amber-50 dark:bg-amber-900/30 px-4 py-3">
+                  <span className="font-bold text-amber-700 dark:text-amber-300">
+                    {progressSummary.conceptsMastered} of {progressSummary.conceptsAttempted}
+                  </span>
+                  <span className="text-slate-600 dark:text-slate-300"> concepts mastered!</span>
+                </div>
+                {progressSummary.strongestTopic && (
+                  <div className="rounded-xl bg-emerald-50 dark:bg-emerald-900/30 px-4 py-3">
+                    <span className="text-slate-600 dark:text-slate-300">Strongest area: </span>
+                    <span className="font-bold text-emerald-700 dark:text-emerald-300">
+                      {progressSummary.strongestTopic.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                )}
+                <div className="rounded-xl bg-sky-50 dark:bg-sky-900/30 px-4 py-3">
+                  <span className="text-slate-600 dark:text-slate-300">Challenge level: </span>
+                  <span className="font-bold text-sky-700 dark:text-sky-300">
+                    {progressSummary.gradeLevelsUp > 0
+                      ? `${progressSummary.gradeLevelsUp} above your grade!`
+                      : 'right at your grade — keep going!'}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-slate-500 text-sm">
+                Keep adventuring to see your stats here!
+              </p>
+            )}
+            <button
+              onClick={() => setShowProgressOverlay(false)}
+              className="mt-5 bg-amber-500 text-white rounded-2xl px-6 py-2 font-bold text-sm hover:bg-amber-600 transition-colors"
+            >
+              Keep Adventuring!
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Adaptive level-up celebration modal */}
       {showAdaptiveLevelUp && (

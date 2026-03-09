@@ -253,13 +253,15 @@ export function ChatInterface() {
             {gamification && gamification.currentStreak > 0 && (
               <StreakBanner streak={gamification.currentStreak} streakFreezes={gamification.streakFreezes} />
             )}
-            {/* Subject badge */}
-            <span className={cn(
-              "inline-flex items-center px-2 py-1 rounded-lg text-[10px] font-semibold text-white bg-gradient-to-r",
-              subjectMeta?.color || "from-slate-400 to-slate-500"
-            )}>
-              {isKidMode ? (subject === 'MATHEMATICS' ? 'Math' : subject === 'PHYSICS' ? 'Science' : subjectLabel) : subjectLabel}
-            </span>
+            {/* Subject badge — only show when there is an active session (messages exist) */}
+            {messages.length > 0 && (
+              <span className={cn(
+                "inline-flex items-center px-2 py-1 rounded-lg text-[10px] font-semibold text-white bg-gradient-to-r",
+                subjectMeta?.color || "from-slate-400 to-slate-500"
+              )}>
+                {isKidMode ? (subject === 'MATHEMATICS' ? 'Math' : subject === 'PHYSICS' ? 'Science' : subjectLabel) : subjectLabel}
+              </span>
+            )}
 
             {/* Language picker - hidden in kid mode */}
             {!isKidMode && (
@@ -728,6 +730,11 @@ export function ChatInterface() {
               input.length > 4500 ? "text-red-500" : "text-slate-400"
             )}>
               {input.length}/5000
+            </p>
+          )}
+          {subject === 'ESSAY_WRITING' && input.trim().length > 0 && (
+            <p className="text-xs mt-1 text-right text-violet-500 font-medium">
+              Words: {input.trim().split(/\s+/).filter(Boolean).length}
             </p>
           )}
         </div>

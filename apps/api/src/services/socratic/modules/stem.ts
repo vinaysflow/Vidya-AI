@@ -330,10 +330,13 @@ function buildResponseUserPrompt(params: {
   };
 
   if (metadata?.isQuestIntro) {
+    const contextBlock = metadata?.context
+      ? `\nCONTEXT (the student has already seen this material — base your question and choices ONLY on these details):\n"""\n${metadata.context}\n"""\n`
+      : '';
     return `
 PROBLEM (use this EXACT question — do NOT rephrase or invent a new question):
 "${metadata?.problemText || '(not provided)'}"
-
+${contextBlock}
 TASK: You are starting a new quest with a young student. This is the VERY FIRST message.
 The student has NOT attempted anything yet — they just picked this quest.
 Your ONLY job: add 1 fun sentence of context, then ask the EXACT question from the PROBLEM above (you may simplify wording for a kid but keep the same meaning and answer).
@@ -341,6 +344,7 @@ Your ONLY job: add 1 fun sentence of context, then ask the EXACT question from t
 Do NOT say "good start", "nice", "great job", or anything that implies they already worked on it.
 Do NOT reference any previous work or attempts.
 Do NOT invent a different question. Do NOT change what is being asked.
+${metadata?.context ? 'Do NOT invent details outside the CONTEXT above. All choices MUST reference details from the CONTEXT.' : ''}
 
 ${languageInstruction[language] || languageInstruction.EN}
 
@@ -348,9 +352,7 @@ CRITICAL RULES:
 1. Ask the SAME question as the PROBLEM above. Do NOT substitute a different question.
 2. Maximum 1 short sentence + the question. Think NPC speech bubble.
 3. NEVER give the answer or solve the problem
-4. The [A]/[B]/[C] choices MUST directly answer the question. One choice MUST be correct. Others must be plausible wrong answers.
-5. Each choice MUST be under 8 words.
-6. ALWAYS end with exactly 3 choices: [A] ... [B] ... [C] ...
+4. The choices you provide (per the system instructions) MUST directly answer the question. One must be correct. Others must be plausible wrong answers.
 
 Generate the response:
     `.trim();
@@ -491,7 +493,7 @@ export const stemModule: TutorModule = {
         | { masteredConcepts: Array<{ name: string; mastery: number }>; gapConcepts: Array<{ name: string; mastery: number }> }
         | undefined;
       const fewShotExamples = metadata?.fewShotExamples as string[] | undefined;
-      const rsmTrack = metadata?.rsmTrack as boolean | undefined;
+      const rsmTrack = metadata?.rsmTrack as boolean | string | undefined;
       addendum = buildElementaryOverlay(grade, effectiveGrade, masteryContext, fewShotExamples, rsmTrack) + '\n\n';
     }
 

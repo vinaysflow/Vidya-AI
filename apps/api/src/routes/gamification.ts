@@ -27,7 +27,8 @@ router.get('/profile', async (req: Request, res: Response, next: NextFunction) =
 router.get('/leaderboard', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const limit = Math.min(parseInt((req.query.limit as string) || '20', 10), 50);
-    const leaderboard = await getLeaderboard(limit);
+    const apiKeyId = req.apiKey?.id;
+    const leaderboard = await getLeaderboard(limit, apiKeyId);
     res.json({ success: true, leaderboard });
   } catch (error) {
     next(error);

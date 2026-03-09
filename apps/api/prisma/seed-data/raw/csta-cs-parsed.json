@@ -1,0 +1,289 @@
+[
+  {
+    "code": "1B-AP-08",
+    "description": "Compare and refine multiple algorithms for the same task and determine which is the most appropriate.",
+    "grade": 3,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "algorithms"
+  },
+  {
+    "code": "1B-AP-09",
+    "description": "Create programs that use variables to store and modify data.",
+    "grade": 3,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "variables_data"
+  },
+  {
+    "code": "1B-AP-10",
+    "description": "Create programs that include sequences, events, loops, and conditionals.",
+    "grade": 3,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "control_flow"
+  },
+  {
+    "code": "1B-AP-11",
+    "description": "Decompose (break down) problems into smaller, manageable subproblems to facilitate the program development process.",
+    "grade": 3,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "decomposition"
+  },
+  {
+    "code": "1B-AP-12",
+    "description": "Modify, remix, or incorporate portions of an existing program into one's own work, to develop something new or add more advanced features.",
+    "grade": 3,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "remixing"
+  },
+  {
+    "code": "1B-AP-13",
+    "description": "Use an iterative process to plan the development of a program while solving simple problems.",
+    "grade": 4,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "debugging"
+  },
+  {
+    "code": "1B-AP-14",
+    "description": "Observe intellectual property rights and give appropriate attribution when creating or remixing programs.",
+    "grade": 4,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "intellectual_property"
+  },
+  {
+    "code": "1B-AP-15",
+    "description": "Test and debug (identify and fix errors) a program or algorithm to ensure it runs as intended.",
+    "grade": 4,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "debugging"
+  },
+  {
+    "code": "1B-DA-06",
+    "description": "Organize and present collected data visually to highlight relationships and support a claim.",
+    "grade": 4,
+    "coreIdea": "Data and Analysis",
+    "topic": "data_visualization"
+  },
+  {
+    "code": "1B-DA-07",
+    "description": "Use data to highlight or explore a concept or give new meaning to data by representing it in a different way.",
+    "grade": 5,
+    "coreIdea": "Data and Analysis",
+    "topic": "data_representation"
+  },
+  {
+    "code": "1B-IC-18",
+    "description": "Discuss computing technologies that have changed the world, and express how those technologies influence, and are influenced by, cultural practices.",
+    "grade": 5,
+    "coreIdea": "Impacts of Computing",
+    "topic": "computing_society"
+  },
+  {
+    "code": "1B-IC-19",
+    "description": "Brainstorm ways to improve the accessibility and usability of technology products for the diverse needs and wants of users.",
+    "grade": 5,
+    "coreIdea": "Impacts of Computing",
+    "topic": "accessibility"
+  },
+  {
+    "code": "1B-NI-04",
+    "description": "Model how information is broken down into smaller pieces, transmitted as packets through multiple devices over networks and the Internet, and reassembled at the destination.",
+    "grade": 5,
+    "coreIdea": "Networks and the Internet",
+    "topic": "networking"
+  },
+  {
+    "code": "2-AP-10",
+    "description": "Use flowcharts and/or pseudocode to address complex problems as algorithms.",
+    "grade": 6,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "algorithms"
+  },
+  {
+    "code": "2-AP-11",
+    "description": "Create clearly named variables that represent different data types and perform operations on their values.",
+    "grade": 6,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "variables_data"
+  },
+  {
+    "code": "2-AP-12",
+    "description": "Design and iteratively develop programs that combine control structures, including nested loops and compound conditionals.",
+    "grade": 6,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "control_flow"
+  },
+  {
+    "code": "2-AP-13",
+    "description": "Decompose problems and subproblems into parts to facilitate the design, implementation, and review of increasingly complex programs.",
+    "grade": 6,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "decomposition"
+  },
+  {
+    "code": "2-AP-14",
+    "description": "Create procedures with parameters to organize code and make it easier to reuse.",
+    "grade": 7,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "functions"
+  },
+  {
+    "code": "2-AP-15",
+    "description": "Seek and incorporate feedback from team members and users to refine a solution that meets user needs.",
+    "grade": 7,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "collaboration"
+  },
+  {
+    "code": "2-AP-16",
+    "description": "Incorporate existing code, media, and libraries into original programs, and give attribution.",
+    "grade": 7,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "libraries"
+  },
+  {
+    "code": "2-AP-17",
+    "description": "Systematically test and refine programs using a range of test cases.",
+    "grade": 7,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "debugging"
+  },
+  {
+    "code": "2-AP-19",
+    "description": "Document programs in order to make them easier to follow, test, and debug.",
+    "grade": 7,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "documentation"
+  },
+  {
+    "code": "2-DA-07",
+    "description": "Represent data using multiple encoding schemes.",
+    "grade": 6,
+    "coreIdea": "Data and Analysis",
+    "topic": "data_representation"
+  },
+  {
+    "code": "2-DA-08",
+    "description": "Collect data using computational tools and transform the data to make it more useful and reliable.",
+    "grade": 6,
+    "coreIdea": "Data and Analysis",
+    "topic": "data_collection"
+  },
+  {
+    "code": "2-DA-09",
+    "description": "Refine computational models based on the data they have generated.",
+    "grade": 7,
+    "coreIdea": "Data and Analysis",
+    "topic": "modeling"
+  },
+  {
+    "code": "2-IC-20",
+    "description": "Compare tradeoffs associated with computing technologies that affect people's everyday activities and career options.",
+    "grade": 6,
+    "coreIdea": "Impacts of Computing",
+    "topic": "computing_society"
+  },
+  {
+    "code": "2-IC-21",
+    "description": "Discuss issues of bias and accessibility in the design of existing technologies.",
+    "grade": 7,
+    "coreIdea": "Impacts of Computing",
+    "topic": "bias_ethics"
+  },
+  {
+    "code": "2-IC-22",
+    "description": "Collaborate with many contributors through strategies such as crowdsourcing or surveys when creating a computational artifact.",
+    "grade": 8,
+    "coreIdea": "Impacts of Computing",
+    "topic": "collaboration"
+  },
+  {
+    "code": "2-IC-23",
+    "description": "Describe tradeoffs between allowing information to be public and keeping information private and secure.",
+    "grade": 8,
+    "coreIdea": "Impacts of Computing",
+    "topic": "privacy_security"
+  },
+  {
+    "code": "2-NI-04",
+    "description": "Model the role of protocols in transmitting data across networks and the Internet.",
+    "grade": 6,
+    "coreIdea": "Networks and the Internet",
+    "topic": "networking"
+  },
+  {
+    "code": "2-NI-05",
+    "description": "Explain how physical and digital security measures protect electronic information.",
+    "grade": 7,
+    "coreIdea": "Networks and the Internet",
+    "topic": "cybersecurity"
+  },
+  {
+    "code": "2-NI-06",
+    "description": "Apply multiple methods of encryption to model the secure transmission of information.",
+    "grade": 8,
+    "coreIdea": "Networks and the Internet",
+    "topic": "encryption"
+  },
+  {
+    "code": "3A-AP-13",
+    "description": "Create prototypes that use algorithms to solve computational problems by leveraging prior student knowledge and skills.",
+    "grade": 9,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "algorithms"
+  },
+  {
+    "code": "3A-AP-14",
+    "description": "Use lists to simplify solutions, generalizing computational problems instead of repeated use of simple variables.",
+    "grade": 9,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "data_structures"
+  },
+  {
+    "code": "3A-AP-15",
+    "description": "Justify the selection of specific control structures when tradeoffs involve implementation, readability, and program performance.",
+    "grade": 9,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "control_flow"
+  },
+  {
+    "code": "3A-AP-16",
+    "description": "Design and iteratively develop computational artifacts for practical intent, personal expression, or to address a societal issue by using events, parallel execution, exceptions, and local variables.",
+    "grade": 9,
+    "coreIdea": "Algorithms and Programming",
+    "topic": "software_design"
+  },
+  {
+    "code": "3A-DA-09",
+    "description": "Translate between different bit representations of real-world phenomena, such as characters, numbers, and images.",
+    "grade": 9,
+    "coreIdea": "Data and Analysis",
+    "topic": "data_representation"
+  },
+  {
+    "code": "3A-IC-24",
+    "description": "Evaluate the ways computing impacts personal, ethical, social, economic, and cultural practices.",
+    "grade": 9,
+    "coreIdea": "Impacts of Computing",
+    "topic": "computing_society"
+  },
+  {
+    "code": "3A-IC-28",
+    "description": "Explain the beneficial and harmful effects that intellectual property laws can have on innovation.",
+    "grade": 9,
+    "coreIdea": "Impacts of Computing",
+    "topic": "intellectual_property"
+  },
+  {
+    "code": "3A-IC-29",
+    "description": "Explain the privacy concerns related to the collection and generation of data through automated processes that may not be evident to users.",
+    "grade": 9,
+    "coreIdea": "Impacts of Computing",
+    "topic": "privacy_security"
+  },
+  {
+    "code": "3A-NI-06",
+    "description": "Describe the challenges in determining the credibility, accuracy, and validity of information found on the Internet.",
+    "grade": 9,
+    "coreIdea": "Networks and the Internet",
+    "topic": "information_literacy"
+  }
+]

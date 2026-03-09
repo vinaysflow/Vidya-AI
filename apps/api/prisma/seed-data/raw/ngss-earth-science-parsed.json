@@ -1,0 +1,212 @@
+[
+  {
+    "code": "3-ESS2-1",
+    "description": "Represent data in tables and graphical displays to describe typical weather conditions expected during a particular season.",
+    "grade": 3,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "weather_climate"
+  },
+  {
+    "code": "3-ESS2-2",
+    "description": "Obtain and combine information to describe climates in different regions of the world.",
+    "grade": 3,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "weather_climate"
+  },
+  {
+    "code": "3-ESS3-1",
+    "description": "Make a claim about the merit of a design solution that reduces the impacts of a weather-related hazard.",
+    "grade": 3,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_hazards"
+  },
+  {
+    "code": "4-ESS1-1",
+    "description": "Identify evidence from patterns in rock formations and fossils in rock layers to support an explanation for changes in a landscape over time.",
+    "grade": 4,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "earth_history"
+  },
+  {
+    "code": "4-ESS2-1",
+    "description": "Make observations and/or measurements to provide evidence of the effects of weathering or the rate of erosion by water, ice, wind, or vegetation.",
+    "grade": 4,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "weathering_erosion"
+  },
+  {
+    "code": "4-ESS2-2",
+    "description": "Analyze and interpret data from maps to describe patterns of Earth's features.",
+    "grade": 4,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "earth_features"
+  },
+  {
+    "code": "4-ESS3-1",
+    "description": "Obtain and combine information to describe that energy and fuels are derived from natural resources and their uses affect the environment.",
+    "grade": 4,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_resources"
+  },
+  {
+    "code": "4-ESS3-2",
+    "description": "Generate and compare multiple solutions to reduce the impacts of natural Earth processes on humans.",
+    "grade": 4,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_hazards"
+  },
+  {
+    "code": "5-ESS1-1",
+    "description": "Support an argument that the apparent brightness of the sun and stars is due to their relative distances from the Earth.",
+    "grade": 5,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "space_astronomy"
+  },
+  {
+    "code": "5-ESS1-2",
+    "description": "Represent data in graphical displays to reveal patterns of daily changes in length and direction of shadows, day and night, and the seasonal appearance of some stars in the night sky.",
+    "grade": 5,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "earth_sun_moon"
+  },
+  {
+    "code": "5-ESS2-1",
+    "description": "Develop a model using an example to describe ways the geosphere, biosphere, hydrosphere, and/or atmosphere interact.",
+    "grade": 5,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "earth_systems"
+  },
+  {
+    "code": "5-ESS2-2",
+    "description": "Describe and graph the amounts and percentages of water and fresh water in various reservoirs to provide evidence about the distribution of water on Earth.",
+    "grade": 5,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "water_cycle"
+  },
+  {
+    "code": "5-ESS3-1",
+    "description": "Obtain and combine information about ways individual communities use science ideas to protect the Earth's resources and environment.",
+    "grade": 5,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_resources"
+  },
+  {
+    "code": "MS-ESS1-1",
+    "description": "Develop and use a model of the Earth-sun-moon system to describe the cyclic patterns of lunar phases, eclipses of the sun and moon, and seasons.",
+    "grade": 6,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "earth_sun_moon"
+  },
+  {
+    "code": "MS-ESS1-2",
+    "description": "Develop and use a model to describe the role of gravity in the motions within galaxies and the solar system.",
+    "grade": 6,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "space_astronomy"
+  },
+  {
+    "code": "MS-ESS1-3",
+    "description": "Analyze and interpret data to determine scale properties of objects in the solar system.",
+    "grade": 6,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "space_astronomy"
+  },
+  {
+    "code": "MS-ESS2-1",
+    "description": "Develop a model to describe the cycling of Earth's materials and the flow of energy that drives this process.",
+    "grade": 6,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "rock_cycle"
+  },
+  {
+    "code": "MS-ESS2-2",
+    "description": "Construct an explanation based on evidence for how geoscience processes have changed Earth's surface at varying time and spatial scales.",
+    "grade": 6,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "plate_tectonics"
+  },
+  {
+    "code": "MS-ESS2-3",
+    "description": "Analyze and interpret data on the distribution of fossils and rocks, continental shapes, and seafloor structures to provide evidence of the past plate motions.",
+    "grade": 7,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "plate_tectonics"
+  },
+  {
+    "code": "MS-ESS2-4",
+    "description": "Develop a model to describe the cycling of water through Earth's systems driven by energy from the sun and the force of gravity.",
+    "grade": 7,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "water_cycle"
+  },
+  {
+    "code": "MS-ESS2-5",
+    "description": "Collect data to provide evidence for how the motions and complex interactions of air masses results in changes in weather conditions.",
+    "grade": 7,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "weather_climate"
+  },
+  {
+    "code": "MS-ESS2-6",
+    "description": "Develop and use a model to describe how unequal heating and rotation of the Earth cause patterns of atmospheric and oceanic circulation that determine regional climates.",
+    "grade": 7,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "weather_climate"
+  },
+  {
+    "code": "MS-ESS3-1",
+    "description": "Construct a scientific explanation based on evidence for how the uneven distributions of Earth's mineral, energy, and groundwater resources are the result of past and current geoscience processes.",
+    "grade": 7,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_resources"
+  },
+  {
+    "code": "MS-ESS3-2",
+    "description": "Analyze and interpret data on natural hazards to forecast future catastrophic events and inform the development of technologies to mitigate their effects.",
+    "grade": 7,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "natural_hazards"
+  },
+  {
+    "code": "MS-ESS3-3",
+    "description": "Apply scientific principles to design a method for monitoring and minimizing a human impact on the environment.",
+    "grade": 8,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "environmental_science"
+  },
+  {
+    "code": "MS-ESS3-4",
+    "description": "Construct an argument supported by evidence for how increases in human population and per-capita consumption of natural resources impact Earth's systems.",
+    "grade": 8,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "environmental_science"
+  },
+  {
+    "code": "MS-ESS3-5",
+    "description": "Ask questions to clarify evidence of the factors that have caused the rise in global temperatures over the past century.",
+    "grade": 8,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "climate_change"
+  },
+  {
+    "code": "HS-ESS1-1",
+    "description": "Develop a model based on evidence to illustrate the life span of the sun and the role of nuclear fusion in the sun's core to release energy in the form of radiation.",
+    "grade": 9,
+    "coreIdea": "ESS1: Earth's Place in the Universe",
+    "topic": "space_astronomy"
+  },
+  {
+    "code": "HS-ESS2-4",
+    "description": "Use a model to describe how variations in the flow of energy into and out of Earth's systems result in changes in climate.",
+    "grade": 9,
+    "coreIdea": "ESS2: Earth's Systems",
+    "topic": "climate_change"
+  },
+  {
+    "code": "HS-ESS3-1",
+    "description": "Construct an explanation based on evidence for how the availability of natural resources, occurrence of natural hazards, and changes in climate have influenced human activity.",
+    "grade": 9,
+    "coreIdea": "ESS3: Earth and Human Activity",
+    "topic": "environmental_science"
+  }
+]

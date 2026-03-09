@@ -62,11 +62,27 @@ const GRADE_PROFILES: Record<number, GradeProfile> = {
     referenceFrames: 'Brain teasers, engineering challenges, logic puzzles, scientific investigations, game design math.',
     questionStyle: '3-4 sentence problem. Present a scenario that requires generalizing to a formula.',
   },
+  8: {
+    ageLabel: '13-year-old performing at advanced 8th grade level',
+    vocabulary: 'Use words like: linear equation, system of equations, Pythagorean theorem, scientific notation, exponent rules, irrational number, function notation. Full algebra and introductory geometry OK.',
+    numberRange: 'Real numbers including irrationals, algebraic expressions with two or more variables, geometric measurements. Scientific notation OK.',
+    problemComplexity: 'Multi-step algebraic and geometric reasoning. Systems of equations, Pythagorean theorem applications, slope-intercept form, transformations.',
+    referenceFrames: 'Engineering and architecture, video game physics, data science, cryptography, sports analytics, robotics challenges.',
+    questionStyle: '3-4 sentence problem. Set up a multi-step scenario requiring algebraic manipulation or geometric reasoning.',
+  },
+  9: {
+    ageLabel: '14-year-old performing at high school freshman level',
+    vocabulary: 'Use full Algebra I and Geometry vocabulary: quadratic, polynomial, factoring, proof, congruence, similarity, trigonometric ratios, domain, range, transformation. Formal mathematical language expected.',
+    numberRange: 'Full real number system, quadratic expressions, geometric proofs, basic trigonometry. Complex fractions and radical expressions OK.',
+    problemComplexity: 'Proof-based geometric reasoning, quadratic equation solving (factoring, quadratic formula), function analysis, multi-step algebraic modeling.',
+    referenceFrames: 'Physics problems, computer science algorithms, financial modeling, architecture and design, logical deduction puzzles, real-world optimization.',
+    questionStyle: '4-5 sentence problem. Present a situation requiring formal setup, algebraic or geometric reasoning, and interpretation of the solution.',
+  },
 };
 
 function getGradeProfile(grade: number): GradeProfile {
   // Clamp to available profiles
-  const clamped = Math.max(3, Math.min(7, Math.round(grade)));
+  const clamped = Math.max(3, Math.min(9, Math.round(grade)));
   return GRADE_PROFILES[clamped] ?? GRADE_PROFILES[3];
 }
 
@@ -75,7 +91,7 @@ export function buildElementaryOverlay(
   effectiveGrade: number,
   masteryContext?: MasteryContext,
   fewShotExamples?: string[],
-  rsmTrack?: boolean
+  rsmTrack?: string | boolean
 ): string {
   const profile = getGradeProfile(effectiveGrade);
   const isAccelerated = effectiveGrade > grade;
@@ -95,6 +111,7 @@ You are talking to a ${profile.ageLabel}. You are an NPC guide in their learning
 - NEVER write more than 2 sentences total before asking a question.
 - Celebrate correct answers with one enthusiastic word ("Yes!", "Boom!", "Nailed it!")
 - NEVER give the answer. NEVER write more than 2 sentences + question.
+- For math expressions use \\(x^2\\) not $x^2$. Currency is always plain text: "costs $20" or "20 dollars" — never wrap currency in math delimiters.
 
 ### QUESTION VARIETY
 - NEVER repeat a question you already asked in this conversation.
@@ -129,7 +146,7 @@ Start your FIRST response at this difficulty level with a brief 1-word celebrati
 Do NOT announce the grade level change — just make the content harder naturally.`;
   }
 
-  if (rsmTrack) {
+  if (rsmTrack === true || rsmTrack === 'RSM') {
     overlay += `
 
 ### RSM CURRICULUM ALIGNMENT
@@ -140,6 +157,11 @@ This student attends Russian School of Mathematics. Their curriculum is 1-2 grad
 - Venn diagrams, set notation, and variables are familiar territory for this student
 - Grade 3 RSM students handle what US grade 4-5 students handle
 - NEVER give problems that are below their enrolled grade difficulty`;
+  } else if (rsmTrack && rsmTrack !== 'None') {
+    overlay += `
+
+### ENRICHMENT PROGRAM ALIGNMENT
+This student attends ${rsmTrack}. They are likely 0.5-1 grade levels ahead of peers. Use multi-step problems and expect more mathematical maturity than a typical student at this grade.`;
   }
 
   if (fewShotExamples && fewShotExamples.length > 0) {

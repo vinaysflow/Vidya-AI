@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   BookOpen, Beaker, Calculator, Leaf, Code2, BookMarked,
   TrendingUp, PenLine, Heart, Sparkles, BrainCircuit,
-  ChevronRight, ChevronDown, Map as MapIcon, Shield,
+  ChevronRight, ChevronDown, Map as MapIcon, Shield, RefreshCw,
 } from 'lucide-react';
 import { MasteryTree } from '../progress/MasteryTree';
 import { cn } from '../../lib/utils';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
 import {
   useChatStore,
   useIsKidMode,
@@ -16,6 +17,7 @@ import {
   type SubjectCategory,
 } from '../../stores/chatStore';
 import { getConceptMeta } from '../../data/conceptMeta';
+import { recommendQuests } from '../../services/questRecommender';
 
 import questsData from '../../data/quests.json';
 
@@ -31,6 +33,7 @@ interface Quest {
   chapter?: string;
   order?: number;
   gradeLevel?: number;
+  context?: string;
 }
 
 const SOFT_THRESHOLD = 40;
@@ -59,6 +62,34 @@ const CHAPTER_ORDER = [
   'Pattern Detective',
   'Nature Explorer',
   'Logic Detective',
+  'Body Detective',
+  'Code Architect',
+  'Story Detective',
+  'Money Master',
+  'Robot Trainer',
+  'Puzzle Palace',
+  'Space Explorer',
+  'Ecosystem Explorer',
+  'Algorithm Arena',
+  'Word Wizard',
+  'Market Explorer',
+  'AI Lab',
+  'Cell Lab',
+  'Debug Quest',
+  'Story Crafter',
+  'Poetry Explorer',
+  'Dragon Academy',
+  'Ocean Discovery',
+  'Enchanted Forest',
+  'Planet Patrol',
+  'Weather Watcher',
+  'Genetics Lab',
+  'Bug Hunter',
+  'Data Detective',
+  'Bias Detective',
+  'Argument Builder',
+  'Market Maker',
+  'Adventures',
 ];
 
 function groupQuestsByChapter(ready: Quest[], challenge: Quest[]): Array<{ chapter: string; ready: Quest[]; challenge: Quest[] }> {
@@ -100,6 +131,33 @@ const CHAPTER_THEMES: Record<string, { dot: string; emoji: string; label: string
   'Pattern Detective': { dot: 'bg-violet-500', emoji: '🔍', label: 'Pattern Detective' },
   'Nature Explorer':   { dot: 'bg-lime-500',   emoji: '🌿', label: 'Nature Explorer' },
   'Logic Detective':   { dot: 'bg-rose-500',   emoji: '🧠', label: 'Logic Detective' },
+  'Body Detective':    { dot: 'bg-red-500',    emoji: '🫀', label: 'Body Detective' },
+  'Code Architect':    { dot: 'bg-cyan-500',   emoji: '💻', label: 'Code Architect' },
+  'Story Detective':   { dot: 'bg-pink-500',   emoji: '📚', label: 'Story Detective' },
+  'Money Master':      { dot: 'bg-yellow-500', emoji: '💰', label: 'Money Master' },
+  'Robot Trainer':     { dot: 'bg-violet-600', emoji: '🤖', label: 'Robot Trainer' },
+  'Puzzle Palace':     { dot: 'bg-teal-500',   emoji: '🧩', label: 'Puzzle Palace' },
+  'Space Explorer':    { dot: 'bg-indigo-500', emoji: '🚀', label: 'Space Explorer' },
+  'Ecosystem Explorer':{ dot: 'bg-teal-600',   emoji: '🌱', label: 'Ecosystem Explorer' },
+  'Algorithm Arena':   { dot: 'bg-blue-500',   emoji: '⚙️', label: 'Algorithm Arena' },
+  'Word Wizard':       { dot: 'bg-purple-500', emoji: '📖', label: 'Word Wizard' },
+  'Market Explorer':   { dot: 'bg-green-500',  emoji: '📈', label: 'Market Explorer' },
+  'AI Lab':            { dot: 'bg-indigo-400', emoji: '🧠', label: 'AI Lab' },
+  'Cell Lab':          { dot: 'bg-lime-600',   emoji: '🔬', label: 'Cell Lab' },
+  'Debug Quest':       { dot: 'bg-orange-500', emoji: '🐛', label: 'Debug Quest' },
+  'Story Crafter':     { dot: 'bg-rose-400',   emoji: '✍️', label: 'Story Crafter' },
+  'Poetry Explorer':   { dot: 'bg-fuchsia-500',emoji: '🎭', label: 'Poetry Explorer' },
+  'Dragon Academy':    { dot: 'bg-red-600',    emoji: '🐉', label: 'Dragon Academy' },
+  'Ocean Discovery':   { dot: 'bg-cyan-600',   emoji: '🌊', label: 'Ocean Discovery' },
+  'Enchanted Forest':  { dot: 'bg-emerald-700',emoji: '🌲', label: 'Enchanted Forest' },
+  'Planet Patrol':     { dot: 'bg-blue-700',   emoji: '🪐', label: 'Planet Patrol' },
+  'Weather Watcher':   { dot: 'bg-sky-500',    emoji: '⛅', label: 'Weather Watcher' },
+  'Genetics Lab':      { dot: 'bg-violet-400', emoji: '🧬', label: 'Genetics Lab' },
+  'Bug Hunter':        { dot: 'bg-yellow-600', emoji: '🐛', label: 'Bug Hunter' },
+  'Data Detective':    { dot: 'bg-blue-600',   emoji: '📊', label: 'Data Detective' },
+  'Bias Detective':    { dot: 'bg-amber-500',  emoji: '🔎', label: 'Bias Detective' },
+  'Argument Builder':  { dot: 'bg-orange-600', emoji: '🗣️', label: 'Argument Builder' },
+  'Market Maker':      { dot: 'bg-teal-400',   emoji: '🏪', label: 'Market Maker' },
   Adventures:          { dot: 'bg-amber-400',  emoji: '✨', label: 'Adventures' },
 };
 
@@ -157,11 +215,35 @@ const STARTER_PROMPTS: Partial<Record<Subject, Record<string, string[]>>> = {
 
 export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
   const { t } = useTranslation();
-  const { language, subject, masteryMap, setSubject, setQuestConceptKey, setActiveQuest, setGrade, userId, effectiveGrade, grade, rsmTrack } = useChatStore();
+  const { language, subject, masteryMap, setSubject, setQuestConceptKey, setActiveQuest, setGrade, userId, effectiveGrade, grade, rsmTrack, setEssayMeta, essayMeta, interests } = useChatStore();
   const isKidMode = useIsKidMode();
   const displayGrade = effectiveGrade ?? grade ?? 3;
   const [showMap, setShowMap] = useState(false);
-  const [expandedChapters, setExpandedChapters] = useState<Set<string>>(() => new Set([CHAPTER_ORDER[0]]));
+  const [expandedChapters, setExpandedChapters] = useState<Set<string>>(() =>
+    // In kid mode: start all chapters collapsed (recommender cards are the entry point)
+    // In non-kid mode: expand the first chapter for discoverability
+    isKidMode ? new Set<string>() : new Set([CHAPTER_ORDER[0]])
+  );
+  const [showEssayPicker, setShowEssayPicker] = useState(false);
+
+  // Review Adventure state
+  const [reviewQuest, setReviewQuest] = useState<Quest | null>(null);
+  const [dueReviewCount, setDueReviewCount] = useState(0);
+  useEffect(() => {
+    if (!isKidMode || !userId) return;
+    const API_BASE = getApiBase();
+    fetch(`${API_BASE}/api/game/review-quest?userId=${encodeURIComponent(userId)}`, {
+      headers: getJsonHeaders(null),
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && d.hasDueReviews && d.quest) {
+          setReviewQuest(d.quest as Quest);
+          setDueReviewCount(d.dueCount ?? 1);
+        }
+      })
+      .catch(() => {});
+  }, [isKidMode, userId]);
   const toggleChapter = (ch: string) =>
     setExpandedChapters((prev) => {
       const next = new Set(prev);
@@ -169,7 +251,34 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
       return next;
     });
 
-  const quests = useMemo(() => questsData as Quest[], []);
+  const quests = useMemo(() => {
+    const all = questsData as Quest[];
+    // Filter to grade range: base grade up to effectiveGrade + 1
+    const baseGrade = grade ?? 3;
+    const maxGrade = (effectiveGrade ?? baseGrade) + 1;
+
+    return all.filter((q) => {
+      // In kid mode: remove subject lock — recommender handles subject diversity
+      // In non-kid mode: respect the selected subject filter
+      if (!isKidMode && q.subject && subject && q.subject !== subject) return false;
+      if (q.gradeLevel != null && q.gradeLevel > maxGrade) return false;
+      return true;
+    });
+  }, [subject, grade, effectiveGrade, isKidMode]);
+
+  // Top 3 recommended quests for kid-mode "Recommended for you" section
+  const recommendedQuests = useMemo(() => {
+    if (!isKidMode) return [];
+    return recommendQuests({
+      quests: quests as import('../../services/questRecommender').Quest[],
+      masteryMap,
+      recentSubjects: [],
+      grade: grade ?? 3,
+      effectiveGrade: effectiveGrade ?? grade ?? 3,
+      interests: interests ?? [],
+      topN: 3,
+    });
+  }, [quests, masteryMap, grade, effectiveGrade, interests, isKidMode]);
   const questByConceptKey = useMemo(() => {
     const m = new Map<string, Quest>();
     for (const q of quests) m.set(q.conceptKey, q);
@@ -223,8 +332,82 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
           Parent Settings
         </button>
 
+        {/* Review Adventure card — shown when there are due reviews */}
+        {reviewQuest && (
+          <div className="mb-4">
+            <button
+              onClick={() => {
+                setQuestConceptKey(reviewQuest.conceptKey);
+                setActiveQuest({ ...reviewQuest, chapter: reviewQuest.chapter ?? 'Review Adventure' });
+                onStarterClick(reviewQuest.prompt, reviewQuest.subject as Subject, reviewQuest.conceptKey);
+              }}
+              className="w-full flex items-center gap-3 p-4 rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transition-all shadow-sm"
+            >
+              <div className="w-10 h-10 rounded-xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center shrink-0">
+                <RefreshCw className="w-5 h-5 text-amber-600" />
+              </div>
+              <div className="flex-1 text-left">
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-600 mb-0.5">
+                  Review Adventure {dueReviewCount > 1 ? `· ${dueReviewCount} due` : ''}
+                </p>
+                <p className="text-sm font-semibold text-slate-700 line-clamp-1">
+                  {reviewQuest.title}
+                </p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-amber-400 shrink-0" />
+            </button>
+          </div>
+        )}
+
         {/* Chapter groups */}
         <div className="space-y-4">
+          {/* Recommended for you — top 3 engine-scored quests */}
+          {recommendedQuests.length > 0 && (
+            <div className="mb-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">
+                ✨ Recommended for you
+              </p>
+              <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                {recommendedQuests.map((q) => {
+                  const theme = CHAPTER_THEMES[(q as Quest).chapter ?? ''] ?? CHAPTER_THEMES.Adventures;
+                  return (
+                    <button
+                      key={q.id}
+                      onClick={() => {
+                        setQuestConceptKey(q.conceptKey);
+                        setActiveQuest({
+                          id: q.id,
+                          title: q.title,
+                          chapter: (q as Quest).chapter || 'Adventures',
+                          tags: (q as Quest).tags || [],
+                          prompt: q.prompt,
+                          gradeLevel: (q as Quest).gradeLevel,
+                          context: (q as Quest).context,
+                        });
+                        onStarterClick(q.prompt, q.subject as Subject, q.conceptKey);
+                      }}
+                      className="flex-shrink-0 w-36 flex flex-col gap-2 p-3 rounded-2xl border-2 border-indigo-100 bg-white shadow-sm hover:border-indigo-300 hover:bg-indigo-50 active:scale-95 transition-all text-left"
+                    >
+                      <div className={cn('w-8 h-8 rounded-xl flex items-center justify-center text-base', theme.dot, 'bg-opacity-20')}>
+                        {theme.emoji}
+                      </div>
+                      <p className="text-xs font-semibold text-slate-700 line-clamp-2 leading-snug">
+                        {q.title}
+                      </p>
+                      <p className="text-[10px] text-slate-400 font-medium truncate">
+                        {(q as Quest).chapter ?? q.subject}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* All adventures — collapsed chapter accordion */}
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">
+            All adventures
+          </p>
           {chapters.map(({ chapter, ready: r, challenge: c }) => {
             const theme = CHAPTER_THEMES[chapter] ?? CHAPTER_THEMES.Adventures;
             const allQuests = [...r, ...c];
@@ -291,6 +474,7 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
                               tags: q.tags || [],
                               prompt: q.prompt,
                               gradeLevel: q.gradeLevel,
+                              context: q.context,
                             });
                             onStarterClick(q.prompt, q.subject, q.conceptKey);
                           }}
@@ -381,6 +565,7 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
                     chapter: quest.chapter || 'Adventures',
                     tags: quest.tags || [],
                     prompt: quest.prompt,
+                    context: quest.context,
                   });
                   onStarterClick(quest.prompt, quest.subject, quest.conceptKey);
                 } else {
@@ -395,6 +580,15 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
         <p className="text-xs text-slate-300 mt-6 text-center">
           You can try any quest — Vidya will help you think it through
         </p>
+
+        {/* Parent access — subtle, below all content */}
+        <a
+          href="/parent-report"
+          className="mt-4 text-xs text-slate-300 hover:text-slate-500 transition-colors text-center flex items-center justify-center gap-1"
+        >
+          <Shield className="w-3 h-3" />
+          Parent? View Learning Report
+        </a>
       </div>
     );
   }
@@ -421,7 +615,7 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
 
       <div className="w-full mt-6 space-y-4 rounded-2xl bg-white/80 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-700/70 p-4 shadow-sm backdrop-blur-sm">
         {categories.map((cat) => {
-          const subjects = SUBJECT_META.filter((s) => s.category === cat);
+          const subjects = SUBJECT_META.filter((s) => s.category === cat && !s.comingSoon);
           return (
             <div key={cat}>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 px-1">
@@ -434,7 +628,10 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setSubject(s.id)}
+                      onClick={() => {
+                        setSubject(s.id);
+                        if (s.id === 'ESSAY_WRITING') setShowEssayPicker(true);
+                      }}
                       className={cn(
                         'flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all border-2',
                         isActive
@@ -484,6 +681,68 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
       <p className="text-xs text-slate-400 dark:text-slate-500 mt-6 text-center">
         Ask anything — Vid (Vidya) teaches through Socratic questioning
       </p>
+
+      {/* Essay prompt picker modal */}
+      {showEssayPicker && subject === 'ESSAY_WRITING' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <h2 className="text-lg font-bold text-slate-800 dark:text-white mb-1">Essay Setup</h2>
+            <p className="text-xs text-slate-400 mb-4">Help Vidya coach you better</p>
+
+            <label className="block text-xs font-semibold text-slate-500 mb-1">Essay Category</label>
+            <div className="grid grid-cols-3 gap-1.5 mb-4">
+              {['Why Us', 'Identity', 'Challenge', 'Intellectual', 'Activity', 'Community', 'Diversity', 'Growth', 'Creative'].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setEssayMeta({ ...(essayMeta ?? {}), category: cat })}
+                  className={cn(
+                    'py-1.5 rounded-xl border text-xs font-medium transition-all',
+                    essayMeta?.category === cat
+                      ? 'border-violet-400 bg-violet-50 text-violet-700'
+                      : 'border-slate-200 text-slate-500'
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <label className="block text-xs font-semibold text-slate-500 mb-1">Word Limit (optional)</label>
+            <div className="flex gap-2 mb-4">
+              {[250, 500, 650].map(wl => (
+                <button
+                  key={wl}
+                  onClick={() => setEssayMeta({ ...(essayMeta ?? {}), wordLimit: wl })}
+                  className={cn(
+                    'flex-1 py-1.5 rounded-xl border text-xs font-medium transition-all',
+                    essayMeta?.wordLimit === wl
+                      ? 'border-violet-400 bg-violet-50 text-violet-700'
+                      : 'border-slate-200 text-slate-500'
+                  )}
+                >
+                  {wl}
+                </button>
+              ))}
+            </div>
+
+            <label className="block text-xs font-semibold text-slate-500 mb-1">School prompt (optional)</label>
+            <textarea
+              placeholder="Paste the prompt from the school..."
+              value={essayMeta?.promptText ?? ''}
+              onChange={e => setEssayMeta({ ...(essayMeta ?? {}), promptText: e.target.value })}
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 resize-none mb-4"
+              rows={3}
+            />
+
+            <button
+              onClick={() => setShowEssayPicker(false)}
+              className="w-full py-2.5 rounded-xl bg-violet-500 text-white font-bold text-sm hover:bg-violet-600 transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

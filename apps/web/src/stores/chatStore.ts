@@ -3,6 +3,28 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { getApiBase, getJsonHeaders } from '../lib/api';
 
 // ============================================
+// ONE-TIME MIGRATION: old storage key → v2
+// Runs immediately at module load. Copies useful fields from the old
+// localStorage key into the new one (minus `subject`, which we stop persisting),
+// then deletes the old key so it never comes back.
+// ============================================
+if (typeof window !== 'undefined') {
+  try {
+    const OLD_KEY = 'vidya-chat-storage';
+    const NEW_KEY = 'vidya-chat-storage-v2';
+    const old = localStorage.getItem(OLD_KEY);
+    if (old && !localStorage.getItem(NEW_KEY)) {
+      const parsed = JSON.parse(old);
+      // Drop `subject` — it should never be persisted
+      if (parsed?.state) delete parsed.state.subject;
+      localStorage.setItem(NEW_KEY, JSON.stringify(parsed));
+    }
+    // Always remove the old key so it can't re-infect the state
+    localStorage.removeItem(OLD_KEY);
+  } catch { /* ignore parse errors */ }
+}
+
+// ============================================
 // TYPES
 // ============================================
 
@@ -117,6 +139,7 @@ export interface ActiveQuest {
   tags: string[];
   prompt: string;
   gradeLevel?: number;
+  context?: string;
 }
 
 interface ChatState {
@@ -151,17 +174,37 @@ interface ChatState {
   parentViewEnabled: boolean;
   gamification: GamificationState | null;
 
-  rsmTrack: boolean | null;
+  rsmTrack: string | null;
   kidModeEnabled: boolean | null;
+  interests: string[];
 
   activeQuest: ActiveQuest | null;
   scenePhase: ScenePhase;
   sceneImageUrl: string | null;
   lastChoiceCorrect: boolean | null;
   streakCombo: number;
+  lastParentInsight: string | null;
+  diagnosticResults: {
+    score: number;
+    suggestedGrade: number;
+    results: Array<{ conceptKey: string; gradeLevel: number; correct: boolean }>;
+  } | null;
+  pendingWarmUp: {
+    conceptKey: string;
+    questionText: string;
+    answerFormula: string;
+    distractors: string[];
+    isWarmUp: true;
+  } | null;
+  calmMode: boolean;
 
-  setRsmTrack: (rsmTrack: boolean) => void;
+  setRsmTrack: (rsmTrack: string | null) => void;
   setKidModeEnabled: (enabled: boolean) => void;
+  setInterests: (interests: string[]) => void;
+  setCalmMode: (enabled: boolean) => void;
+
+  essayMeta: { type?: string; promptText?: string; wordLimit?: number; category?: string } | null;
+  setEssayMeta: (meta: ChatState['essayMeta']) => void;
 
   setActiveQuest: (quest: ActiveQuest | null) => void;
   setScenePhase: (phase: ScenePhase) => void;
@@ -217,6 +260,16 @@ function authHeaders(apiKey: string | null): Record<string, string> {
   return getJsonHeaders(apiKey);
 }
 
+function getOrCreateUserId(): string {
+  const KEY = 'vidya-user-id';
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+}
+
 // ============================================
 // STORE
 // ============================================
@@ -225,13 +278,13 @@ export const useChatStore = create<ChatState>()(
   persist(
     (set, get) => ({
       sessionId: null,
-      subject: 'PHYSICS',
+      subject: 'MATHEMATICS',
       language: 'EN',
       messages: [],
       isLoading: false,
       error: null,
       apiKey: null,
-      userId: null,
+      userId: getOrCreateUserId(),
       grade: null,
       effectiveGrade: null,
       masteryMap: null,
@@ -256,15 +309,26 @@ export const useChatStore = create<ChatState>()(
   gamification: null,
   rsmTrack: null,
   kidModeEnabled: null,
+  interests: [],
+  essayMeta: null,
 
   activeQuest: null,
   scenePhase: 'loading',
   sceneImageUrl: null,
   lastChoiceCorrect: null,
   streakCombo: 0,
+  lastParentInsight: null,
+  diagnosticResults: null,
+  pendingWarmUp: null,
+  calmMode: typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false,
 
-  setRsmTrack: (rsmTrack) => set({ rsmTrack }),
-  setKidModeEnabled: (kidModeEnabled) => set({ kidModeEnabled }),
+      setRsmTrack: (rsmTrack) => set({ rsmTrack }),
+      setKidModeEnabled: (kidModeEnabled) => set({ kidModeEnabled }),
+      setInterests: (interests) => set({ interests }),
+      setCalmMode: (calmMode) => set({ calmMode }),
+  setEssayMeta: (essayMeta) => set({ essayMeta }),
   setActiveQuest: (activeQuest) => set({ activeQuest }),
   setScenePhase: (scenePhase) => set({ scenePhase }),
   setSceneImageUrl: (sceneImageUrl) => set({ sceneImageUrl }),
@@ -315,7 +379,7 @@ export const useChatStore = create<ChatState>()(
       setOnboardingStep: (onboardingStep) => set({ onboardingStep }),
 
       startSession: async (problem: string, problemImage?: string) => {
-        const { language, subject, apiKey, noFinalAnswerMode, userId, grade, questConceptKey, rsmTrack } = get();
+        const { language, subject, apiKey, noFinalAnswerMode, userId, grade, questConceptKey, rsmTrack, essayMeta, activeQuest } = get();
         set({ isLoading: true, error: null });
 
         try {
@@ -331,7 +395,14 @@ export const useChatStore = create<ChatState>()(
               ...(grade != null ? { grade } : {}),
               ...(questConceptKey ? { conceptKey: questConceptKey } : {}),
               ...(problemImage ? { problemImage } : {}),
-              ...(rsmTrack ? { rsmTrack: true } : {})
+              ...(rsmTrack ? { rsmTrack } : {}),
+              ...(activeQuest?.context ? { context: activeQuest.context } : {}),
+              ...(subject === 'ESSAY_WRITING' && essayMeta ? {
+                essayType: essayMeta.type,
+                essayPromptText: essayMeta.promptText,
+                wordLimit: essayMeta.wordLimit,
+                essayCategory: essayMeta.category,
+              } : {}),
             })
           });
 
@@ -369,6 +440,7 @@ export const useChatStore = create<ChatState>()(
               sessionHistory: [summary, ...state.sessionHistory].slice(0, 50),
               scenePhase: 'playing',
               lastChoiceCorrect: null,
+              pendingWarmUp: data.warmUp ?? null,
               ...(data.session?.effectiveGrade != null ? { effectiveGrade: data.session.effectiveGrade } : {}),
             }));
           } else {
@@ -475,7 +547,13 @@ export const useChatStore = create<ChatState>()(
               areasForImprovement: report.areasForImprovement,
               nextSteps: report.nextSteps,
             };
-            set({ isLoading: false, currentReport: report, learnerState, currentQuiz: null });
+            set({
+              isLoading: false,
+              currentReport: report,
+              learnerState,
+              currentQuiz: null,
+              lastParentInsight: data.parentInsight ?? null,
+            });
 
             if (data.gamification) {
               get().onXPEarned(data.gamification.xpEarned, data.gamification.leveledUp, data.gamification.newLevel);
@@ -613,13 +691,16 @@ export const useChatStore = create<ChatState>()(
         sceneImageUrl: null,
         lastChoiceCorrect: null,
         streakCombo: 0,
+        lastParentInsight: null,
+        pendingWarmUp: null,
       }),
       setError: (error) => set({ error }),
 
       fetchGamificationProfile: async () => {
         try {
-          const { apiKey } = get();
-          const res = await fetch(`${API_BASE}/api/gamification/profile?userId=anonymous`, {
+          const { apiKey, userId } = get();
+          if (!userId) return;
+          const res = await fetch(`${API_BASE}/api/gamification/profile?userId=${encodeURIComponent(userId)}`, {
             headers: authHeaders(apiKey),
           });
           if (!res.ok) return;
@@ -678,12 +759,15 @@ export const useChatStore = create<ChatState>()(
       },
 
       resetAll: () => {
-        localStorage.removeItem('vidya-chat-storage');
+        const preservedUserId = get().userId;
+        localStorage.removeItem('vidya-chat-storage-v2');
+        localStorage.removeItem('vidya-chat-storage'); // belt-and-suspenders
         set({
           sessionId: null,
           messages: [],
           isLoading: false,
           error: null,
+          userId: preservedUserId,
           grade: null,
           effectiveGrade: null,
           masteryMap: null,
@@ -708,11 +792,12 @@ export const useChatStore = create<ChatState>()(
       },
     }),
     {
-      name: 'vidya-chat-storage',
+      name: 'vidya-chat-storage-v2',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         language: state.language,
-        subject: state.subject,
+        // subject is NOT persisted: in kid mode it's session-scoped (set on quest click, cleared on clearChat)
+        // in non-kid mode it IS needed but we derive it from the session context
         apiKey: state.apiKey,
         userId: state.userId,
         grade: state.grade,
@@ -730,8 +815,10 @@ export const useChatStore = create<ChatState>()(
         gamification: state.gamification,
         rsmTrack: state.rsmTrack,
         kidModeEnabled: state.kidModeEnabled,
+        interests: state.interests,
+        calmMode: state.calmMode,
       }),
-      version: 1,
+      version: 3,
       migrate: (persisted: any, version: number) => {
         if (version === 0) {
           const s = persisted as any;
@@ -743,6 +830,9 @@ export const useChatStore = create<ChatState>()(
             s.kidModeEnabled = null;
           }
         }
+        // v2+: subject is no longer persisted — always delete stale value so it
+        // never pins the subject badge on the welcome screen.
+        delete (persisted as any).subject;
         return persisted;
       },
     }
@@ -787,6 +877,7 @@ export interface SubjectMeta {
   category: SubjectCategory;
   color: string;
   label: Record<Language, string>;
+  comingSoon?: boolean;
 }
 
 export const SUBJECT_META: SubjectMeta[] = [

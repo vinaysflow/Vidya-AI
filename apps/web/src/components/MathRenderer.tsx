@@ -33,7 +33,6 @@ const MATH_MACROS: Record<string, string> = {
 
 const MATH_DELIMITERS: Delimiter[] = [
   { left: '$$', right: '$$', display: true },
-  { left: '$', right: '$', display: false },
   { left: '\\[', right: '\\]', display: true },
   { left: '\\(', right: '\\)', display: false }
 ];
@@ -194,7 +193,6 @@ function splitByDelimiters(content: string): MathSegment[] {
   const delimiters = [
     { left: '$$', right: '$$', display: true },
     { left: '\\[', right: '\\]', display: true },
-    { left: '$', right: '$', display: false },
     { left: '\\(', right: '\\)', display: false }
   ];
 

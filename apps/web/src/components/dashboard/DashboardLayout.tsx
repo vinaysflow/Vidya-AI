@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Users, School, Settings } from 'lucide-react';
 import { GuardianLinkFlow } from './GuardianLinkFlow';
 import { ClassroomManager } from './ClassroomManager';
+import { useChatStore } from '../../stores/chatStore';
 
 const TABS = [
   { id: 'students', label: 'My Students', icon: Users },
@@ -14,7 +15,7 @@ type TabId = (typeof TABS)[number]['id'];
 
 export function DashboardLayout() {
   const [activeTab, setActiveTab] = useState<TabId>('students');
-  const userId = 'anonymous';
+  const { userId } = useChatStore();
 
   return (
     <div className="h-screen flex flex-col bg-slate-50 dark:bg-slate-900">
@@ -45,7 +46,7 @@ export function DashboardLayout() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {activeTab === 'students' && (
           <div className="space-y-4">
-            <GuardianLinkFlow guardianUserId={userId} />
+            <GuardianLinkFlow guardianUserId={userId ?? 'anonymous'} />
             <p className="text-sm text-slate-500 text-center">
               Link to students to see their learning summaries here.
             </p>
@@ -53,7 +54,7 @@ export function DashboardLayout() {
         )}
 
         {activeTab === 'classroom' && (
-          <ClassroomManager teacherId={userId} />
+          <ClassroomManager teacherId={userId ?? 'anonymous'} />
         )}
 
         {activeTab === 'settings' && (

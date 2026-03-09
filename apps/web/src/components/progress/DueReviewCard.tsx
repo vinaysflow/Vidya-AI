@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Clock, ChevronRight } from 'lucide-react';
+import { useChatStore } from '../../stores/chatStore';
 import { getApiBase, getAuthHeader } from '../../lib/api';
 
 const API_BASE = getApiBase();
@@ -17,9 +18,10 @@ interface DueReviewCardProps {
 
 export function DueReviewCard({ onStartReview }: DueReviewCardProps) {
   const [reviews, setReviews] = useState<DueReview[]>([]);
+  const { userId } = useChatStore();
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/progress/due-reviews?userId=anonymous`, {
+    fetch(`${API_BASE}/api/progress/due-reviews?userId=${encodeURIComponent(userId || 'anonymous')}`, {
       headers: getAuthHeader(),
     })
       .then((r) => r.json())

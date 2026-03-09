@@ -1,0 +1,373 @@
+[
+  {
+    "code": "CCSS.ELA-LITERACY.RL.3.1",
+    "description": "Ask and answer questions to demonstrate understanding of a text, referring explicitly to the text as the basis for the answers.",
+    "grade": 3,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.3.2",
+    "description": "Recount stories, including fables, folktales, and myths from diverse cultures; determine the central message, lesson, or moral and explain how it is conveyed through key details in the text.",
+    "grade": 3,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.3.3",
+    "description": "Describe characters in a story (e.g., their traits, motivations, or feelings) and explain how their actions contribute to the sequence of events.",
+    "grade": 3,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.3.1",
+    "description": "Ask and answer questions to demonstrate understanding of a text, referring explicitly to the text as the basis for the answers.",
+    "grade": 3,
+    "domain": "Reading: Informational Text",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.3.3",
+    "description": "Describe the relationship between a series of historical events, scientific ideas or concepts, or steps in technical procedures in a text, using language that pertains to time, sequence, and cause/effect.",
+    "grade": 3,
+    "domain": "Reading: Informational Text",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.3.1",
+    "description": "Write opinion pieces on topics or texts, supporting a point of view with reasons.",
+    "grade": 3,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.3.2",
+    "description": "Write informative/explanatory texts to examine a topic and convey ideas and information clearly.",
+    "grade": 3,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.3.1",
+    "description": "Demonstrate command of the conventions of standard English grammar and usage when writing or speaking.",
+    "grade": 3,
+    "domain": "Language",
+    "cluster": "Conventions of Standard English"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.3.4",
+    "description": "Determine or clarify the meaning of unknown and multiple-meaning words and phrases based on grade 3 reading and content.",
+    "grade": 3,
+    "domain": "Language",
+    "cluster": "Vocabulary Acquisition and Use"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.4.1",
+    "description": "Refer to details and examples in a text when explaining what the text says explicitly and when drawing inferences from the text.",
+    "grade": 4,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.4.2",
+    "description": "Determine a theme of a story, drama, or poem from details in the text; summarize the text.",
+    "grade": 4,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.4.3",
+    "description": "Describe in depth a character, setting, or event in a story or drama, drawing on specific details in the text.",
+    "grade": 4,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.4.2",
+    "description": "Determine the main idea of a text and explain how it is supported by key details; summarize the text.",
+    "grade": 4,
+    "domain": "Reading: Informational Text",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.4.1",
+    "description": "Write opinion pieces on topics or texts, supporting a point of view with reasons and information.",
+    "grade": 4,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.4.2",
+    "description": "Write informative/explanatory texts to examine a topic and convey ideas and information clearly.",
+    "grade": 4,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.4.3",
+    "description": "Use knowledge of language and its conventions when writing, speaking, reading, or listening.",
+    "grade": 4,
+    "domain": "Language",
+    "cluster": "Knowledge of Language"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.5.1",
+    "description": "Quote accurately from a text when explaining what the text says explicitly and when drawing inferences from the text.",
+    "grade": 5,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.5.2",
+    "description": "Determine a theme of a story, drama, or poem from details in the text, including how characters in a story or drama respond to challenges or how the speaker in a poem reflects upon a topic; summarize the text.",
+    "grade": 5,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.5.3",
+    "description": "Explain the relationships or interactions between two or more individuals, events, ideas, or concepts in a text based on specific information in the text.",
+    "grade": 5,
+    "domain": "Reading: Informational Text",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.5.1",
+    "description": "Write opinion pieces on topics or texts, supporting a point of view with reasons and information.",
+    "grade": 5,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.5.3",
+    "description": "Write narratives to develop real or imagined experiences or events using effective technique, descriptive details, and clear event sequences.",
+    "grade": 5,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.5.4",
+    "description": "Determine or clarify the meaning of unknown and multiple-meaning words and phrases based on grade 5 reading and content, choosing flexibly from a range of strategies.",
+    "grade": 5,
+    "domain": "Language",
+    "cluster": "Vocabulary Acquisition and Use"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.6.1",
+    "description": "Cite textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text.",
+    "grade": 6,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.6.2",
+    "description": "Determine a theme or central idea of a text and how it is conveyed through particular details; provide a summary of the text distinct from personal opinions or judgments.",
+    "grade": 6,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.6.4",
+    "description": "Determine the meaning of words and phrases as they are used in a text, including figurative and connotative meanings; analyze the impact of a specific word choice on meaning and tone.",
+    "grade": 6,
+    "domain": "Reading: Literature",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.6.2",
+    "description": "Determine a central idea of a text and how it is conveyed through particular details; provide a summary of the text distinct from personal opinions or judgments.",
+    "grade": 6,
+    "domain": "Reading: Informational Text",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.6.1",
+    "description": "Write arguments to support claims with clear reasons and relevant evidence.",
+    "grade": 6,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.6.2",
+    "description": "Write informative/explanatory texts to examine a topic and convey ideas, concepts, and information through the selection, organization, and analysis of relevant content.",
+    "grade": 6,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.6.4",
+    "description": "Determine or clarify the meaning of unknown and multiple-meaning words and phrases based on grade 6 reading and content.",
+    "grade": 6,
+    "domain": "Language",
+    "cluster": "Vocabulary Acquisition and Use"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.7.1",
+    "description": "Cite several pieces of textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text.",
+    "grade": 7,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.7.3",
+    "description": "Analyze how particular elements of a story or drama interact (e.g., how setting shapes the characters or plot).",
+    "grade": 7,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.7.5",
+    "description": "Analyze how a drama's or poem's form or structure (e.g., soliloquy, sonnet) contributes to its meaning.",
+    "grade": 7,
+    "domain": "Reading: Literature",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.7.6",
+    "description": "Determine an author's point of view or purpose in a text and analyze how the author distinguishes their position from others.",
+    "grade": 7,
+    "domain": "Reading: Informational Text",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.7.1",
+    "description": "Write arguments to support claims with clear reasons and relevant evidence.",
+    "grade": 7,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.7.3",
+    "description": "Write narratives to develop real or imagined experiences or events using effective technique, relevant descriptive details, and well-structured event sequences.",
+    "grade": 7,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.7.3",
+    "description": "Use knowledge of language and its conventions when writing, speaking, reading, or listening.",
+    "grade": 7,
+    "domain": "Language",
+    "cluster": "Knowledge of Language"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.8.1",
+    "description": "Cite the textual evidence that most strongly supports an analysis of what the text says explicitly as well as inferences drawn from the text.",
+    "grade": 8,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.8.2",
+    "description": "Determine a theme or central idea of a text and analyze its development over the course of the text, including its relationship to the characters, setting, and plot; provide an objective summary of the text.",
+    "grade": 8,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.8.6",
+    "description": "Analyze how differences in the points of view of the characters and the audience or reader (e.g., created through the use of dramatic irony) create such effects as suspense or humor.",
+    "grade": 8,
+    "domain": "Reading: Literature",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.8.5",
+    "description": "Analyze in detail the structure of a specific paragraph in a text, including the role of particular sentences in developing and refining a key concept.",
+    "grade": 8,
+    "domain": "Reading: Informational Text",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.8.8",
+    "description": "Delineate and evaluate the argument and specific claims in a text, assessing whether the reasoning is sound and the evidence is relevant and sufficient.",
+    "grade": 8,
+    "domain": "Reading: Informational Text",
+    "cluster": "Integration of Knowledge and Ideas"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.8.1",
+    "description": "Write arguments to support claims with clear reasons and relevant evidence.",
+    "grade": 8,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.8.2",
+    "description": "Write informative/explanatory texts to examine a topic and convey ideas, concepts, and information through the selection, organization, and analysis of relevant content.",
+    "grade": 8,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.8.4",
+    "description": "Determine or clarify the meaning of unknown and multiple-meaning words or phrases based on grade 8 reading and content.",
+    "grade": 8,
+    "domain": "Language",
+    "cluster": "Vocabulary Acquisition and Use"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.9-10.1",
+    "description": "Cite strong and thorough textual evidence to support analysis of what the text says explicitly as well as inferences drawn from the text.",
+    "grade": 9,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.9-10.2",
+    "description": "Determine a theme or central idea of a text and analyze in detail its development over the course of the text, including how it emerges and is shaped and refined by specific details.",
+    "grade": 9,
+    "domain": "Reading: Literature",
+    "cluster": "Key Ideas and Details"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RL.9-10.6",
+    "description": "Analyze a particular point of view or cultural experience reflected in a work of literature from outside the United States, drawing on a wide reading of world literature.",
+    "grade": 9,
+    "domain": "Reading: Literature",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.9-10.6",
+    "description": "Determine an author's point of view or purpose in a text and analyze how an author uses rhetoric to advance that point of view or purpose.",
+    "grade": 9,
+    "domain": "Reading: Informational Text",
+    "cluster": "Craft and Structure"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.RI.9-10.8",
+    "description": "Delineate and evaluate the argument and specific claims in a text, assessing whether the reasoning is valid and the evidence is relevant and sufficient.",
+    "grade": 9,
+    "domain": "Reading: Informational Text",
+    "cluster": "Integration of Knowledge and Ideas"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.9-10.1",
+    "description": "Write arguments to support claims in an analysis of substantive topics or texts, using valid reasoning and relevant and sufficient evidence.",
+    "grade": 9,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.9-10.2",
+    "description": "Write informative/explanatory texts to examine and convey complex ideas, concepts, and information clearly and accurately through the effective selection, organization, and analysis of content.",
+    "grade": 9,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.W.9-10.3",
+    "description": "Write narratives to develop real or imagined experiences or events using effective technique, well-chosen details, and well-structured event sequences.",
+    "grade": 9,
+    "domain": "Writing",
+    "cluster": "Text Types and Purposes"
+  },
+  {
+    "code": "CCSS.ELA-LITERACY.L.9-10.4",
+    "description": "Determine or clarify the meaning of unknown and multiple-meaning words and phrases based on grades 9-10 reading and content.",
+    "grade": 9,
+    "domain": "Language",
+    "cluster": "Vocabulary Acquisition and Use"
+  }
+]

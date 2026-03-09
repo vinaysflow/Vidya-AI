@@ -1,0 +1,152 @@
+[
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "3A",
+    "aopsTopic": "Shapes: area and perimeter of polygons",
+    "aopsGradeEquivalent": 3,
+    "equivalentCommonCoreGrade": 3,
+    "suggestedConceptKeys": ["area_rectangles", "perimeter", "shapes_identify"],
+    "description": "Beast Academy 3A covers area and perimeter with creative puzzles and irregular shapes",
+    "notes": "CCSS 3.MD.5-8. AoPS emphasizes mathematical reasoning over memorization."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "3B",
+    "aopsTopic": "Multiplication: strategies and word problems",
+    "aopsGradeEquivalent": 3,
+    "equivalentCommonCoreGrade": 3,
+    "suggestedConceptKeys": ["multiplication_intro", "multiplication_arrays", "multiplication_word_problems"],
+    "description": "Beast Academy 3B covers multiplication strategies including arrays, skip counting, and distributive property",
+    "notes": "CCSS 3.OA. AoPS uses puzzles and story problems to build deep multiplication understanding."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "3C",
+    "aopsTopic": "Fractions on a number line and equivalence",
+    "aopsGradeEquivalent": 3,
+    "equivalentCommonCoreGrade": 3,
+    "suggestedConceptKeys": ["fractions_intro", "fractions_number_line", "fractions_equivalent"],
+    "description": "Beast Academy 3C introduces fractions using number lines and visual models",
+    "notes": "CCSS 3.NF. AoPS emphasizes fraction concepts before procedures."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "4A",
+    "aopsTopic": "Shapes: angles, triangles, and quadrilaterals",
+    "aopsGradeEquivalent": 4,
+    "equivalentCommonCoreGrade": 4,
+    "suggestedConceptKeys": ["angles_intro", "triangle_types", "quadrilateral_types"],
+    "description": "Beast Academy 4A covers angle measurement, types of triangles, and properties of quadrilaterals",
+    "notes": "CCSS 4.G. AoPS introduces deductive reasoning about shapes."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "4B",
+    "aopsTopic": "Multiplication: multi-digit and word problems",
+    "aopsGradeEquivalent": 4,
+    "equivalentCommonCoreGrade": 4,
+    "suggestedConceptKeys": ["multi_digit_multiplication", "multiplication_strategies", "estimation"],
+    "description": "Beast Academy 4B extends multiplication to 2-digit by 2-digit with estimation and mental math",
+    "notes": "CCSS 4.NBT.5. AoPS emphasizes multiple strategies and number sense."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "4C",
+    "aopsTopic": "Fractions: addition, subtraction, and comparisons",
+    "aopsGradeEquivalent": 4,
+    "equivalentCommonCoreGrade": 4,
+    "suggestedConceptKeys": ["fractions_compare", "fractions_add_unlike", "mixed_numbers"],
+    "description": "Beast Academy 4C covers comparing fractions and adding/subtracting fractions with unlike denominators",
+    "notes": "CCSS 4.NF.1-3. AoPS uses visual models and puzzle contexts."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "5A",
+    "aopsTopic": "3D shapes: volume and surface area",
+    "aopsGradeEquivalent": 5,
+    "equivalentCommonCoreGrade": 5,
+    "suggestedConceptKeys": ["volume_rectangular_prisms", "surface_area", "3d_shapes"],
+    "description": "Beast Academy 5A covers volume and surface area of prisms and pyramids",
+    "notes": "CCSS 5.MD.3-5. AoPS extends 3D geometry with decomposition problems."
+  },
+  {
+    "aopsSeries": "Beast Academy",
+    "aopsBook": "5B",
+    "aopsTopic": "Statistics: mean, median, mode, and data analysis",
+    "aopsGradeEquivalent": 5,
+    "equivalentCommonCoreGrade": 5,
+    "suggestedConceptKeys": ["mean_median_mode", "data_analysis", "stem_leaf_plots"],
+    "description": "Beast Academy 5B covers statistical measures and data interpretation",
+    "notes": "CCSS 5.MD.2. AoPS uses real-world datasets and puzzle contexts."
+  },
+  {
+    "aopsSeries": "Introduction to Algebra",
+    "aopsBook": "Intro Algebra Ch1-5",
+    "aopsTopic": "Linear equations and word problems",
+    "aopsGradeEquivalent": 6,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": ["linear_equations_one_var", "word_problems_algebra", "equation_solving"],
+    "description": "AoPS Intro Algebra introduces variables, expressions, and solving linear equations through rich word problems",
+    "notes": "CCSS 7.EE. AoPS Intro Algebra is designed for students ready for abstract algebra."
+  },
+  {
+    "aopsSeries": "Introduction to Algebra",
+    "aopsBook": "Intro Algebra Ch6-9",
+    "aopsTopic": "Ratios, proportions, and percents",
+    "aopsGradeEquivalent": 6,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": ["ratios_intro", "proportional_reasoning", "percent_applications"],
+    "description": "AoPS covers ratios and proportional reasoning with competition-style word problems",
+    "notes": "CCSS 7.RP. AoPS extends to complex multi-step percent problems."
+  },
+  {
+    "aopsSeries": "Introduction to Algebra",
+    "aopsBook": "Intro Algebra Ch12-15",
+    "aopsTopic": "Quadratic equations and the quadratic formula",
+    "aopsGradeEquivalent": 7,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": ["quadratic_equations_intro", "quadratic_formula", "factoring_trinomials"],
+    "description": "AoPS Intro Algebra covers complete quadratic equation solving including the quadratic formula",
+    "notes": "CCSS Algebra 1 standard. AoPS reaches quadratics in the Intro Algebra book."
+  },
+  {
+    "aopsSeries": "Introduction to Counting and Probability",
+    "aopsBook": "Counting Ch1-4",
+    "aopsTopic": "Counting: permutations and combinations",
+    "aopsGradeEquivalent": 7,
+    "equivalentCommonCoreGrade": 11,
+    "suggestedConceptKeys": ["permutations", "combinations", "counting_principle"],
+    "description": "AoPS introduces systematic counting using the multiplication principle, permutations, and combinations",
+    "notes": "CCSS Statistics at grade 11. AoPS covers at grade 7 for competition preparation."
+  },
+  {
+    "aopsSeries": "Introduction to Number Theory",
+    "aopsBook": "Number Theory Ch1-4",
+    "aopsTopic": "Divisibility, prime factorization, and GCD/LCM",
+    "aopsGradeEquivalent": 7,
+    "equivalentCommonCoreGrade": 6,
+    "suggestedConceptKeys": ["prime_factorization", "greatest_common_factor", "least_common_multiple", "divisibility_rules"],
+    "description": "AoPS Number Theory covers divisibility rules, prime factorization, GCD, LCM, and Euclidean algorithm",
+    "notes": "CCSS grade 6 standard but AoPS goes much deeper with Euclidean algorithm and competition problems."
+  },
+  {
+    "aopsSeries": "Introduction to Geometry",
+    "aopsBook": "Intro Geometry Ch1-5",
+    "aopsTopic": "Triangle congruence and similarity proofs",
+    "aopsGradeEquivalent": 8,
+    "equivalentCommonCoreGrade": 10,
+    "suggestedConceptKeys": ["triangle_congruence", "similarity_ratios", "geometric_proof_intro"],
+    "description": "AoPS Intro Geometry covers formal proofs of triangle congruence (SSS, SAS, ASA, AAS) and similarity",
+    "notes": "CCSS Geometry standard. AoPS treats geometry with rigorous proof-based approach."
+  },
+  {
+    "aopsSeries": "Introduction to Geometry",
+    "aopsBook": "Intro Geometry Ch8-10",
+    "aopsTopic": "Circles: arc length, sector area, inscribed angles",
+    "aopsGradeEquivalent": 9,
+    "equivalentCommonCoreGrade": 10,
+    "suggestedConceptKeys": ["circle_theorems", "arc_length", "sector_area", "inscribed_angles"],
+    "description": "AoPS covers circle theorems, arc length, sector area, and inscribed angle theorem",
+    "notes": "CCSS Geometry standard. AoPS introduces circle theorems with proof-based approach."
+  }
+]

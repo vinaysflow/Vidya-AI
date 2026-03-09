@@ -173,6 +173,33 @@ const BADGE_CHECKS: BadgeCheck[] = [
       return subjects.length >= 5;
     },
   },
+  {
+    badge: 'AHA_MOMENT',
+    check: async (uid) => {
+      const session = await prisma.session.findFirst({
+        where: { userId: uid, resolved: true, maxHintLevel: { gte: 3 } },
+      });
+      return !!session;
+    },
+  },
+  {
+    badge: 'EXPLAIN_IT',
+    check: async (uid) => {
+      const count = await prisma.xPEvent.count({
+        where: { userId: uid, eventType: 'EXPLAIN_BACK' },
+      });
+      return count >= 1;
+    },
+  },
+  {
+    badge: 'QUIZ_MASTER',
+    check: async (uid) => {
+      const count = await prisma.xPEvent.count({
+        where: { userId: uid, eventType: 'QUIZ_PERFECT' },
+      });
+      return count >= 3;
+    },
+  },
 ];
 
 export async function checkBadges(userId: string): Promise<BadgeType[]> {
@@ -241,13 +268,27 @@ export interface LeaderboardEntry {
   level: number;
 }
 
-export async function getLeaderboard(limit = 20): Promise<LeaderboardEntry[]> {
+export async function getLeaderboard(limit = 20, apiKeyId?: string): Promise<LeaderboardEntry[]> {
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
 
+  // Scope by apiKeyId: only include users who have sessions under this API key
+  let userIdFilter: string[] | undefined;
+  if (apiKeyId) {
+    const sessions = await prisma.session.findMany({
+      where: { apiKeyId },
+      select: { userId: true },
+      distinct: ['userId'],
+    });
+    userIdFilter = sessions.map(s => s.userId);
+  }
+
   const results = await prisma.xPEvent.groupBy({
     by: ['userId'],
-    where: { createdAt: { gte: weekAgo } },
+    where: {
+      createdAt: { gte: weekAgo },
+      ...(userIdFilter ? { userId: { in: userIdFilter } } : {}),
+    },
     _sum: { xpAmount: true },
     orderBy: { _sum: { xpAmount: 'desc' } },
     take: limit,

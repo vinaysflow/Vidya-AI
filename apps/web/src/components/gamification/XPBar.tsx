@@ -9,8 +9,9 @@ interface XPBarProps {
 }
 
 export function XPBar({ xp, level, nextLevelXp, recentXp }: XPBarProps) {
+  const LEVEL_XP = 100; // Match apps/api/src/services/gamification/xpTable.ts
   const [showFlyUp, setShowFlyUp] = useState(false);
-  const progress = nextLevelXp > 0 ? ((xp % 100) / 100) * 100 : 0;
+  const progress = nextLevelXp > 0 ? ((xp % LEVEL_XP) / LEVEL_XP) * 100 : 0;
 
   useEffect(() => {
     if (recentXp && recentXp > 0) {
@@ -33,7 +34,7 @@ export function XPBar({ xp, level, nextLevelXp, recentXp }: XPBarProps) {
         />
       </div>
       <span className="text-[10px] text-slate-500 dark:text-slate-400 tabular-nums">
-        {xp % 100}/{100} XP
+        {xp % LEVEL_XP}/{LEVEL_XP} XP
       </span>
 
       {showFlyUp && recentXp && (

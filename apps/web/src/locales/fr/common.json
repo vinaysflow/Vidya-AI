@@ -43,6 +43,13 @@
     "apiError": "Une erreur est survenue. Reessayez.",
     "sessionExpired": "Session expiree. Nouvelle session en cours."
   },
+  "hints": {
+    "level1": "Commençons par ce que vous savez.",
+    "level2": "Réfléchissez aux concepts impliqués.",
+    "level3": "Considérez cette approche...",
+    "level4": "Voici un exemple similaire.",
+    "level5": "Décomposons cela en étapes plus petites."
+  },
   "settings": {
     "title": "Parametres",
     "language": "Langue",
@@ -52,6 +59,7 @@
     "themeDark": "Sombre",
     "apiKey": "Cle API",
     "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "Notifications",
     "about": "A propos de Vid (Vidya)",
     "onboarding": "Onboarding",
     "restartOnboarding": "Restart",

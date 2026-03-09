@@ -27,7 +27,9 @@
     "description": "Multiplication as repeated addition",
     "gradeLevel": 3,
     "difficulty": 1,
-    "prerequisites": ["addition_grouping"]
+    "prerequisites": [
+      "addition_grouping"
+    ]
   },
   {
     "conceptKey": "multiplication_arrays",
@@ -37,7 +39,9 @@
     "description": "Understanding rows and columns (e.g., 3×4 = 12)",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "shapes_identify",
@@ -97,7 +101,9 @@
     "description": "One substance dissolves into another (like sugar in water)",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["mixtures"]
+    "prerequisites": [
+      "mixtures"
+    ]
   },
   {
     "conceptKey": "fractions_intro",
@@ -107,7 +113,9 @@
     "description": "Parts of a whole — halves, thirds, quarters",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["addition_grouping"]
+    "prerequisites": [
+      "addition_grouping"
+    ]
   },
   {
     "conceptKey": "friction",
@@ -117,7 +125,9 @@
     "description": "A force that slows things down when surfaces rub together",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["forces_push_pull"]
+    "prerequisites": [
+      "forces_push_pull"
+    ]
   },
   {
     "conceptKey": "balance_weight",
@@ -127,7 +137,9 @@
     "description": "Heavier objects need more force to balance; seesaws show this",
     "gradeLevel": 3,
     "difficulty": 1,
-    "prerequisites": ["forces_push_pull"]
+    "prerequisites": [
+      "forces_push_pull"
+    ]
   },
   {
     "conceptKey": "light_shadows",
@@ -147,7 +159,9 @@
     "description": "A shape is symmetrical when both sides mirror each other",
     "gradeLevel": 3,
     "difficulty": 1,
-    "prerequisites": ["shapes_identify"]
+    "prerequisites": [
+      "shapes_identify"
+    ]
   },
   {
     "conceptKey": "density",
@@ -167,9 +181,10 @@
     "description": "Taking away from a group to find how many are left",
     "gradeLevel": 3,
     "difficulty": 1,
-    "prerequisites": ["addition_grouping"]
+    "prerequisites": [
+      "addition_grouping"
+    ]
   },
-
   {
     "conceptKey": "division_intro",
     "subject": "MATHEMATICS",
@@ -178,9 +193,10 @@
     "description": "Division as sharing equally into groups; relationship between multiplication and division",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
-
   {
     "conceptKey": "place_value_hundreds",
     "subject": "MATHEMATICS",
@@ -199,7 +215,9 @@
     "description": "Rounding whole numbers to the nearest 10 or 100 using place value understanding",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["place_value_hundreds"]
+    "prerequisites": [
+      "place_value_hundreds"
+    ]
   },
   {
     "conceptKey": "time_measurement",
@@ -219,7 +237,9 @@
     "description": "Understanding area as the number of square units covering a flat surface",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "perimeter_intro",
@@ -229,7 +249,9 @@
     "description": "Calculating perimeter of polygons by adding side lengths",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["addition_grouping"]
+    "prerequisites": [
+      "addition_grouping"
+    ]
   },
   {
     "conceptKey": "fractions_equal_parts",
@@ -239,7 +261,9 @@
     "description": "Understanding fractions as equal parts of a whole, naming unit fractions",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["division_intro"]
+    "prerequisites": [
+      "division_intro"
+    ]
   },
   {
     "conceptKey": "data_bar_graphs",
@@ -251,7 +275,6 @@
     "difficulty": 1,
     "prerequisites": []
   },
-
   {
     "conceptKey": "magnets_basics",
     "subject": "PHYSICS",
@@ -260,9 +283,10 @@
     "description": "Understanding how magnets attract and repel, and how magnetic force acts at a distance without touching",
     "gradeLevel": 3,
     "difficulty": 1,
-    "prerequisites": ["forces_push_pull"]
+    "prerequisites": [
+      "forces_push_pull"
+    ]
   },
-
   {
     "conceptKey": "simple_patterns",
     "subject": "LOGIC",
@@ -291,9 +315,10 @@
     "description": "Identifying what comes next in a sequence of shapes that follow a rule",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["simple_patterns"]
+    "prerequisites": [
+      "simple_patterns"
+    ]
   },
-
   {
     "conceptKey": "multidigit_multiplication_1digit",
     "subject": "MATHEMATICS",
@@ -302,7 +327,10 @@
     "description": "Multiplying 2-4 digit numbers by a 1-digit number using standard algorithm",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro", "place_value_hundreds"]
+    "prerequisites": [
+      "multiplication_intro",
+      "place_value_hundreds"
+    ]
   },
   {
     "conceptKey": "multidigit_multiplication_2digit",
@@ -312,7 +340,9 @@
     "description": "Multiplying two 2-digit numbers using area model and standard algorithm",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["multidigit_multiplication_1digit"]
+    "prerequisites": [
+      "multidigit_multiplication_1digit"
+    ]
   },
   {
     "conceptKey": "long_division_intro",
@@ -322,7 +352,10 @@
     "description": "Dividing multi-digit numbers by 1-digit divisors using long division",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["division_intro", "multidigit_multiplication_1digit"]
+    "prerequisites": [
+      "division_intro",
+      "multidigit_multiplication_1digit"
+    ]
   },
   {
     "conceptKey": "powers_of_ten",
@@ -332,7 +365,9 @@
     "description": "Understanding how multiplying or dividing by 10, 100, 1000 shifts digits in place value",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["place_value_hundreds"]
+    "prerequisites": [
+      "place_value_hundreds"
+    ]
   },
   {
     "conceptKey": "factors_multiples",
@@ -342,7 +377,10 @@
     "description": "Finding all factors of numbers 1-100 and identifying multiples of given numbers",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro", "division_intro"]
+    "prerequisites": [
+      "multiplication_intro",
+      "division_intro"
+    ]
   },
   {
     "conceptKey": "fraction_equivalence",
@@ -352,7 +390,9 @@
     "description": "Finding equivalent fractions using multiplication and fraction models",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["fractions_equal_parts"]
+    "prerequisites": [
+      "fractions_equal_parts"
+    ]
   },
   {
     "conceptKey": "fraction_comparison",
@@ -362,7 +402,9 @@
     "description": "Comparing fractions with different numerators and denominators using benchmarks and common denominators",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["fraction_equivalence"]
+    "prerequisites": [
+      "fraction_equivalence"
+    ]
   },
   {
     "conceptKey": "fraction_addition_same_denominator",
@@ -372,7 +414,9 @@
     "description": "Adding and subtracting fractions and mixed numbers with the same denominator",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["fractions_equal_parts"]
+    "prerequisites": [
+      "fractions_equal_parts"
+    ]
   },
   {
     "conceptKey": "decimal_notation",
@@ -382,7 +426,9 @@
     "description": "Reading, writing, and representing decimals to the hundredths place",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["fraction_equivalence"]
+    "prerequisites": [
+      "fraction_equivalence"
+    ]
   },
   {
     "conceptKey": "unit_conversion",
@@ -392,7 +438,9 @@
     "description": "Converting between measurement units within the same system (inches to feet, minutes to hours, etc.)",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["multidigit_multiplication_1digit"]
+    "prerequisites": [
+      "multidigit_multiplication_1digit"
+    ]
   },
   {
     "conceptKey": "area_complex_figures",
@@ -402,7 +450,10 @@
     "description": "Computing area of L-shapes and composite figures by decomposing them into rectangles",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["area_intro", "multidigit_multiplication_1digit"]
+    "prerequisites": [
+      "area_intro",
+      "multidigit_multiplication_1digit"
+    ]
   },
   {
     "conceptKey": "angles_intro",
@@ -422,7 +473,9 @@
     "description": "Using letters to represent unknown quantities in simple expressions and equations",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["multidigit_multiplication_1digit"]
+    "prerequisites": [
+      "multidigit_multiplication_1digit"
+    ]
   },
   {
     "conceptKey": "simple_equations",
@@ -432,7 +485,9 @@
     "description": "Solving one-step equations like x + 5 = 12 or 3x = 18 using inverse operations",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["variables_intro"]
+    "prerequisites": [
+      "variables_intro"
+    ]
   },
   {
     "conceptKey": "cost_formula",
@@ -442,7 +497,10 @@
     "description": "Applying multiplication to calculate total cost in real-world shopping scenarios",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["multidigit_multiplication_1digit", "variables_intro"]
+    "prerequisites": [
+      "multidigit_multiplication_1digit",
+      "variables_intro"
+    ]
   },
   {
     "conceptKey": "number_patterns_rules",
@@ -452,9 +510,10 @@
     "description": "Identifying rules in number patterns and generating the next terms in a sequence",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
-
   {
     "conceptKey": "energy_forms",
     "subject": "PHYSICS",
@@ -473,7 +532,9 @@
     "description": "Understanding that sound is caused by vibrations and travels through materials as waves",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["energy_forms"]
+    "prerequisites": [
+      "energy_forms"
+    ]
   },
   {
     "conceptKey": "light_reflection",
@@ -483,7 +544,9 @@
     "description": "Understanding how light reflects off surfaces and bends (refracts) when passing through different materials",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["light_shadows"]
+    "prerequisites": [
+      "light_shadows"
+    ]
   },
   {
     "conceptKey": "energy_transfer",
@@ -493,9 +556,10 @@
     "description": "Understanding how energy moves from one object or place to another through collisions, heat, or waves",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["energy_forms"]
+    "prerequisites": [
+      "energy_forms"
+    ]
   },
-
   {
     "conceptKey": "dissolving_solutions",
     "subject": "CHEMISTRY",
@@ -504,7 +568,9 @@
     "description": "Understanding how solutes dissolve in solvents to form solutions, and factors affecting dissolving rate",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["mixtures"]
+    "prerequisites": [
+      "mixtures"
+    ]
   },
   {
     "conceptKey": "materials_properties",
@@ -514,7 +580,9 @@
     "description": "Identifying and using physical properties (hardness, flexibility, conductivity) to classify materials",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["states_of_matter"]
+    "prerequisites": [
+      "states_of_matter"
+    ]
   },
   {
     "conceptKey": "heating_cooling",
@@ -524,9 +592,10 @@
     "description": "How heating and cooling cause changes in state (melting, freezing, evaporating, condensing)",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["states_of_matter"]
+    "prerequisites": [
+      "states_of_matter"
+    ]
   },
-
   {
     "conceptKey": "number_sequences_rules",
     "subject": "LOGIC",
@@ -535,7 +604,10 @@
     "description": "Finding the rule in a number sequence (add 5, multiply by 2, etc.) and predicting future terms",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["number_patterns_rules", "simple_patterns"]
+    "prerequisites": [
+      "number_patterns_rules",
+      "simple_patterns"
+    ]
   },
   {
     "conceptKey": "sorting_two_attributes",
@@ -545,7 +617,9 @@
     "description": "Classifying objects using two criteria simultaneously, introducing Venn diagram classification",
     "gradeLevel": 4,
     "difficulty": 2,
-    "prerequisites": ["sorting_classifying"]
+    "prerequisites": [
+      "sorting_classifying"
+    ]
   },
   {
     "conceptKey": "if_then_basic",
@@ -555,7 +629,9 @@
     "description": "Understanding conditional statements: if A then B, and applying them to simple puzzles",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["sorting_classifying"]
+    "prerequisites": [
+      "sorting_classifying"
+    ]
   },
   {
     "conceptKey": "tree_diagrams",
@@ -565,9 +641,10 @@
     "description": "Using tree diagrams to systematically count all possible outcomes in simple scenarios",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["if_then_basic"]
+    "prerequisites": [
+      "if_then_basic"
+    ]
   },
-
   {
     "conceptKey": "order_of_operations",
     "subject": "MATHEMATICS",
@@ -576,7 +653,10 @@
     "description": "Evaluating expressions using PEMDAS (parentheses, exponents, multiplication/division, addition/subtraction)",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["simple_equations", "multidigit_multiplication_2digit"]
+    "prerequisites": [
+      "simple_equations",
+      "multidigit_multiplication_2digit"
+    ]
   },
   {
     "conceptKey": "fraction_addition_unlike",
@@ -586,7 +666,10 @@
     "description": "Finding common denominators to add and subtract fractions with different denominators",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["fraction_equivalence", "fraction_addition_same_denominator"]
+    "prerequisites": [
+      "fraction_equivalence",
+      "fraction_addition_same_denominator"
+    ]
   },
   {
     "conceptKey": "fraction_multiplication",
@@ -596,7 +679,9 @@
     "description": "Multiplying fractions and whole numbers, including mixed numbers",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["fraction_equivalence"]
+    "prerequisites": [
+      "fraction_equivalence"
+    ]
   },
   {
     "conceptKey": "fraction_division",
@@ -606,7 +691,9 @@
     "description": "Dividing unit fractions by whole numbers and whole numbers by unit fractions",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["fraction_multiplication"]
+    "prerequisites": [
+      "fraction_multiplication"
+    ]
   },
   {
     "conceptKey": "decimal_operations",
@@ -616,7 +703,9 @@
     "description": "Adding, subtracting, multiplying, and dividing decimals to the hundredths place",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["decimal_notation"]
+    "prerequisites": [
+      "decimal_notation"
+    ]
   },
   {
     "conceptKey": "volume_intro",
@@ -626,7 +715,10 @@
     "description": "Understanding volume as filling space and calculating using l × w × h",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["area_intro", "multidigit_multiplication_2digit"]
+    "prerequisites": [
+      "area_intro",
+      "multidigit_multiplication_2digit"
+    ]
   },
   {
     "conceptKey": "coordinate_plane_intro",
@@ -646,7 +738,10 @@
     "description": "Solving word problems using d = v × t, including finding any one of the three quantities",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["simple_equations", "decimal_operations"]
+    "prerequisites": [
+      "simple_equations",
+      "decimal_operations"
+    ]
   },
   {
     "conceptKey": "multistep_word_problems",
@@ -656,9 +751,11 @@
     "description": "Solving complex word problems requiring 3 or more operations and equations",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["order_of_operations", "fraction_multiplication"]
+    "prerequisites": [
+      "order_of_operations",
+      "fraction_multiplication"
+    ]
   },
-
   {
     "conceptKey": "gravity_intro",
     "subject": "PHYSICS",
@@ -667,7 +764,9 @@
     "description": "Understanding gravity as a force that pulls objects toward Earth and varies with mass and distance",
     "gradeLevel": 5,
     "difficulty": 2,
-    "prerequisites": ["forces_push_pull"]
+    "prerequisites": [
+      "forces_push_pull"
+    ]
   },
   {
     "conceptKey": "simple_machines",
@@ -677,7 +776,10 @@
     "description": "How levers, pulleys, ramps, and wheels and axles reduce the effort needed to do work",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["forces_push_pull", "gravity_intro"]
+    "prerequisites": [
+      "forces_push_pull",
+      "gravity_intro"
+    ]
   },
   {
     "conceptKey": "conservation_of_energy",
@@ -687,9 +789,10 @@
     "description": "Understanding that energy cannot be created or destroyed, only transformed from one form to another",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["energy_transfer"]
+    "prerequisites": [
+      "energy_transfer"
+    ]
   },
-
   {
     "conceptKey": "chemical_vs_physical_change",
     "subject": "CHEMISTRY",
@@ -698,7 +801,10 @@
     "description": "Distinguishing between physical changes (reversible, same substance) and chemical changes (new substance formed)",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["materials_properties", "heating_cooling"]
+    "prerequisites": [
+      "materials_properties",
+      "heating_cooling"
+    ]
   },
   {
     "conceptKey": "density_basics",
@@ -708,7 +814,9 @@
     "description": "Understanding density as mass per volume, why objects float or sink based on density comparison",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["states_of_matter"]
+    "prerequisites": [
+      "states_of_matter"
+    ]
   },
   {
     "conceptKey": "conservation_of_mass",
@@ -718,9 +826,10 @@
     "description": "Understanding that total mass is conserved in physical and chemical changes",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["chemical_vs_physical_change"]
+    "prerequisites": [
+      "chemical_vs_physical_change"
+    ]
   },
-
   {
     "conceptKey": "growing_patterns",
     "subject": "LOGIC",
@@ -729,7 +838,9 @@
     "description": "Analyzing patterns that grow or shrink according to a rule, connecting to algebraic thinking",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["number_sequences_rules"]
+    "prerequisites": [
+      "number_sequences_rules"
+    ]
   },
   {
     "conceptKey": "visual_analogies",
@@ -739,7 +850,9 @@
     "description": "Completing analogical reasoning: A is to B as C is to ? using visual patterns",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["shape_sequences"]
+    "prerequisites": [
+      "shape_sequences"
+    ]
   },
   {
     "conceptKey": "syllogisms_basic",
@@ -749,9 +862,10 @@
     "description": "Reaching logical conclusions from two given statements (All A are B; All B are C; therefore...)",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["if_then_basic"]
+    "prerequisites": [
+      "if_then_basic"
+    ]
   },
-
   {
     "conceptKey": "ratios_intro",
     "subject": "MATHEMATICS",
@@ -760,7 +874,9 @@
     "description": "Understanding and writing ratios in three forms (a:b, a/b, a to b) to compare quantities",
     "gradeLevel": 6,
     "difficulty": 2,
-    "prerequisites": ["fraction_equivalence"]
+    "prerequisites": [
+      "fraction_equivalence"
+    ]
   },
   {
     "conceptKey": "unit_rates",
@@ -770,7 +886,10 @@
     "description": "Finding and using unit rates to solve real-world problems (miles per hour, price per item)",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["ratios_intro", "decimal_operations"]
+    "prerequisites": [
+      "ratios_intro",
+      "decimal_operations"
+    ]
   },
   {
     "conceptKey": "proportional_reasoning",
@@ -780,7 +899,9 @@
     "description": "Setting up and solving proportions to find unknown quantities in real-world situations",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["unit_rates"]
+    "prerequisites": [
+      "unit_rates"
+    ]
   },
   {
     "conceptKey": "percentages_intro",
@@ -790,7 +911,10 @@
     "description": "Converting between fractions, decimals, and percentages. Finding percent of a number.",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["ratios_intro", "decimal_operations"]
+    "prerequisites": [
+      "ratios_intro",
+      "decimal_operations"
+    ]
   },
   {
     "conceptKey": "negative_numbers",
@@ -810,7 +934,9 @@
     "description": "Adding, subtracting, multiplying, and dividing positive and negative integers",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["negative_numbers"]
+    "prerequisites": [
+      "negative_numbers"
+    ]
   },
   {
     "conceptKey": "expressions_variables",
@@ -820,7 +946,9 @@
     "description": "Writing and evaluating algebraic expressions with one or two variables",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["simple_equations"]
+    "prerequisites": [
+      "simple_equations"
+    ]
   },
   {
     "conceptKey": "one_step_equations_6",
@@ -830,7 +958,10 @@
     "description": "Solving one-step equations involving integers, fractions, and decimals",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["expressions_variables", "integer_operations"]
+    "prerequisites": [
+      "expressions_variables",
+      "integer_operations"
+    ]
   },
   {
     "conceptKey": "data_analysis_basic",
@@ -840,7 +971,9 @@
     "description": "Calculating and interpreting mean, median, mode, and range of data sets",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["decimal_operations"]
+    "prerequisites": [
+      "decimal_operations"
+    ]
   },
   {
     "conceptKey": "surface_area",
@@ -850,9 +983,11 @@
     "description": "Finding surface area of rectangular prisms and triangular prisms by unfolding nets",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["area_complex_figures", "volume_intro"]
+    "prerequisites": [
+      "area_complex_figures",
+      "volume_intro"
+    ]
   },
-
   {
     "conceptKey": "speed_velocity",
     "subject": "PHYSICS",
@@ -861,7 +996,10 @@
     "description": "Calculating speed using distance/time, understanding direction as part of velocity",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["distance_velocity_time", "friction"]
+    "prerequisites": [
+      "distance_velocity_time",
+      "friction"
+    ]
   },
   {
     "conceptKey": "newtons_laws",
@@ -871,7 +1009,10 @@
     "description": "Understanding the three laws: inertia, F=ma, and equal-and-opposite reactions",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["speed_velocity", "gravity_intro"]
+    "prerequisites": [
+      "speed_velocity",
+      "gravity_intro"
+    ]
   },
   {
     "conceptKey": "pressure_basics",
@@ -881,7 +1022,9 @@
     "description": "Understanding pressure as force distributed over area, with real-world applications",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["newtons_laws"]
+    "prerequisites": [
+      "newtons_laws"
+    ]
   },
   {
     "conceptKey": "thermal_energy",
@@ -891,9 +1034,10 @@
     "description": "Understanding temperature, thermal energy, and three types of heat transfer: conduction, convection, radiation",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["energy_forms"]
+    "prerequisites": [
+      "energy_forms"
+    ]
   },
-
   {
     "conceptKey": "atoms_elements_intro",
     "subject": "CHEMISTRY",
@@ -902,7 +1046,9 @@
     "description": "Understanding atoms as the building blocks of matter and elements as pure substances made of one type of atom",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["conservation_of_mass"]
+    "prerequisites": [
+      "conservation_of_mass"
+    ]
   },
   {
     "conceptKey": "periodic_table_intro",
@@ -912,7 +1058,9 @@
     "description": "Reading the periodic table: element symbols, atomic number, groups and periods, metals vs nonmetals",
     "gradeLevel": 6,
     "difficulty": 3,
-    "prerequisites": ["atoms_elements_intro"]
+    "prerequisites": [
+      "atoms_elements_intro"
+    ]
   },
   {
     "conceptKey": "chemical_reactions_intro",
@@ -922,9 +1070,11 @@
     "description": "Understanding that chemical reactions rearrange atoms to form new substances with new properties",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["chemical_vs_physical_change", "atoms_elements_intro"]
+    "prerequisites": [
+      "chemical_vs_physical_change",
+      "atoms_elements_intro"
+    ]
   },
-
   {
     "conceptKey": "algebraic_patterns",
     "subject": "LOGIC",
@@ -933,7 +1083,10 @@
     "description": "Expressing pattern rules using algebraic notation and predicting terms using formulas",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["growing_patterns", "expressions_variables"]
+    "prerequisites": [
+      "growing_patterns",
+      "expressions_variables"
+    ]
   },
   {
     "conceptKey": "matrix_puzzles",
@@ -943,7 +1096,10 @@
     "description": "Completing 3x3 matrices by identifying the rule that relates rows and columns",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["visual_analogies", "sorting_two_attributes"]
+    "prerequisites": [
+      "visual_analogies",
+      "sorting_two_attributes"
+    ]
   },
   {
     "conceptKey": "multi_step_deduction",
@@ -953,9 +1109,10 @@
     "description": "Solving logic puzzles that require chaining several if-then statements to reach a conclusion",
     "gradeLevel": 6,
     "difficulty": 4,
-    "prerequisites": ["syllogisms_basic"]
+    "prerequisites": [
+      "syllogisms_basic"
+    ]
   },
-
   {
     "conceptKey": "proportional_relationships",
     "subject": "MATHEMATICS",
@@ -964,7 +1121,10 @@
     "description": "Identifying proportional relationships in tables, graphs, and equations; finding the constant of proportionality",
     "gradeLevel": 7,
     "difficulty": 3,
-    "prerequisites": ["proportional_reasoning", "coordinate_plane_intro"]
+    "prerequisites": [
+      "proportional_reasoning",
+      "coordinate_plane_intro"
+    ]
   },
   {
     "conceptKey": "percent_applications",
@@ -974,7 +1134,9 @@
     "description": "Solving percent increase/decrease, discount, tax, tip, and interest problems",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["percentages_intro"]
+    "prerequisites": [
+      "percentages_intro"
+    ]
   },
   {
     "conceptKey": "rational_number_operations",
@@ -984,7 +1146,10 @@
     "description": "Adding, subtracting, multiplying, and dividing all rational numbers including negatives, fractions, and decimals",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["integer_operations", "fraction_multiplication"]
+    "prerequisites": [
+      "integer_operations",
+      "fraction_multiplication"
+    ]
   },
   {
     "conceptKey": "linear_equations_one_variable",
@@ -994,7 +1159,10 @@
     "description": "Solving multi-step linear equations with variables on both sides including with fractions",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["one_step_equations_6", "rational_number_operations"]
+    "prerequisites": [
+      "one_step_equations_6",
+      "rational_number_operations"
+    ]
   },
   {
     "conceptKey": "probability_intro",
@@ -1004,7 +1172,9 @@
     "description": "Understanding probability as a number 0-1, calculating theoretical probability of simple events",
     "gradeLevel": 7,
     "difficulty": 3,
-    "prerequisites": ["ratios_intro"]
+    "prerequisites": [
+      "ratios_intro"
+    ]
   },
   {
     "conceptKey": "geometry_scale_drawings",
@@ -1014,9 +1184,10 @@
     "description": "Using scale factors to solve problems with scale drawings and similar geometric figures",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["proportional_reasoning"]
+    "prerequisites": [
+      "proportional_reasoning"
+    ]
   },
-
   {
     "conceptKey": "kinetic_potential_energy",
     "subject": "PHYSICS",
@@ -1025,7 +1196,10 @@
     "description": "Calculating kinetic energy (KE = ½mv²) and gravitational potential energy (PE = mgh), and their interconversion",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["conservation_of_energy", "newtons_laws"]
+    "prerequisites": [
+      "conservation_of_energy",
+      "newtons_laws"
+    ]
   },
   {
     "conceptKey": "wave_properties",
@@ -1035,7 +1209,9 @@
     "description": "Understanding amplitude, wavelength, frequency, and speed of waves; relationship between frequency and pitch",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["sound_waves"]
+    "prerequisites": [
+      "sound_waves"
+    ]
   },
   {
     "conceptKey": "electromagnetic_spectrum",
@@ -1045,9 +1221,11 @@
     "description": "Understanding the spectrum of electromagnetic radiation from radio waves to gamma rays",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["light_reflection", "wave_properties"]
+    "prerequisites": [
+      "light_reflection",
+      "wave_properties"
+    ]
   },
-
   {
     "conceptKey": "acids_bases",
     "subject": "CHEMISTRY",
@@ -1056,7 +1234,9 @@
     "description": "Understanding the pH scale, properties of acids and bases, and neutralization reactions",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["chemical_reactions_intro"]
+    "prerequisites": [
+      "chemical_reactions_intro"
+    ]
   },
   {
     "conceptKey": "compounds_bonding",
@@ -1066,9 +1246,11 @@
     "description": "Understanding how atoms combine to form compounds, introduction to ionic and covalent bonding concepts",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["periodic_table_intro", "chemical_reactions_intro"]
+    "prerequisites": [
+      "periodic_table_intro",
+      "chemical_reactions_intro"
+    ]
   },
-
   {
     "conceptKey": "fibonacci_sequences",
     "subject": "LOGIC",
@@ -1077,7 +1259,9 @@
     "description": "Understanding recursive sequences where each term depends on previous terms, including Fibonacci numbers",
     "gradeLevel": 7,
     "difficulty": 4,
-    "prerequisites": ["algebraic_patterns"]
+    "prerequisites": [
+      "algebraic_patterns"
+    ]
   },
   {
     "conceptKey": "spatial_rotation",
@@ -1087,7 +1271,9 @@
     "description": "Mentally rotating and folding 2D shapes to determine 3D outcomes — classic IQ test reasoning",
     "gradeLevel": 7,
     "difficulty": 5,
-    "prerequisites": ["matrix_puzzles"]
+    "prerequisites": [
+      "matrix_puzzles"
+    ]
   },
   {
     "conceptKey": "logic_puzzles_advanced",
@@ -1097,7 +1283,9 @@
     "description": "Multi-variable constraint satisfaction puzzles (Zebra puzzle style) requiring systematic elimination",
     "gradeLevel": 7,
     "difficulty": 5,
-    "prerequisites": ["multi_step_deduction"]
+    "prerequisites": [
+      "multi_step_deduction"
+    ]
   },
   {
     "conceptKey": "set_theory_intro",
@@ -1117,7 +1305,9 @@
     "description": "Using Venn diagrams to show relationships between sets, subsets, and intersections",
     "gradeLevel": 3,
     "difficulty": 2,
-    "prerequisites": ["set_theory_intro"]
+    "prerequisites": [
+      "set_theory_intro"
+    ]
   },
   {
     "conceptKey": "set_operations",
@@ -1127,7 +1317,9 @@
     "description": "Computing union (A ∪ B), intersection (A ∩ B), and complement of sets",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["venn_diagrams_basic"]
+    "prerequisites": [
+      "venn_diagrams_basic"
+    ]
   },
   {
     "conceptKey": "motion_problems",
@@ -1137,7 +1329,10 @@
     "description": "Solving word problems using d = v × t formula — RSM grade 3 Q3",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["multiplication_intro", "division_intro"]
+    "prerequisites": [
+      "multiplication_intro",
+      "division_intro"
+    ]
   },
   {
     "conceptKey": "work_rate_time",
@@ -1147,17 +1342,11 @@
     "description": "Worker rate problems: if A does a job in 6 hours and B in 4, how long together?",
     "gradeLevel": 4,
     "difficulty": 4,
-    "prerequisites": ["multiplication_intro", "division_intro", "fractions_intro"]
-  },
-  {
-    "conceptKey": "cost_formula",
-    "subject": "MATHEMATICS",
-    "topic": "word_problems",
-    "name": "Cost Formula (Cost = Price × Quantity)",
-    "description": "Multi-step cost problems involving unit price, quantity, and total cost",
-    "gradeLevel": 3,
-    "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro",
+      "division_intro",
+      "fractions_intro"
+    ]
   },
   {
     "conceptKey": "compound_word_problems",
@@ -1167,7 +1356,10 @@
     "description": "Problems requiring two or more operations to solve — RSM hallmark of rigor",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["addition_grouping", "multiplication_intro"]
+    "prerequisites": [
+      "addition_grouping",
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "multi_step_equations",
@@ -1177,7 +1369,9 @@
     "description": "Solving equations like 3(x + 2) = 21 requiring distribution and inverse operations",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["simple_equations"]
+    "prerequisites": [
+      "simple_equations"
+    ]
   },
   {
     "conceptKey": "mixed_numbers",
@@ -1187,7 +1381,9 @@
     "description": "Converting between mixed numbers (2½) and improper fractions (5/2)",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["fractions_intro"]
+    "prerequisites": [
+      "fractions_intro"
+    ]
   },
   {
     "conceptKey": "fraction_of_number",
@@ -1197,7 +1393,10 @@
     "description": "Computing (3/4) of 24, linking fractions to multiplication — RSM grade 4",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["fractions_intro", "multiplication_intro"]
+    "prerequisites": [
+      "fractions_intro",
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "percent_as_hundredths",
@@ -1207,7 +1406,10 @@
     "description": "Understanding percent as parts per hundred, converting fractions to percents",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["fractions_intro", "decimal_notation"]
+    "prerequisites": [
+      "fractions_intro",
+      "decimal_notation"
+    ]
   },
   {
     "conceptKey": "simultaneous_motion",
@@ -1217,7 +1419,9 @@
     "description": "Two objects moving toward or away from each other — combined rate and gap problems",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["motion_problems"]
+    "prerequisites": [
+      "motion_problems"
+    ]
   },
   {
     "conceptKey": "motion_graphs",
@@ -1227,7 +1431,10 @@
     "description": "Plotting and interpreting distance-time graphs, understanding slope as speed",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["coordinate_plane_intro", "motion_problems"]
+    "prerequisites": [
+      "coordinate_plane_intro",
+      "motion_problems"
+    ]
   },
   {
     "conceptKey": "right_triangle_area",
@@ -1237,7 +1444,10 @@
     "description": "Computing triangle area as half the product of base and height",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["area_intro", "multiplication_intro"]
+    "prerequisites": [
+      "area_intro",
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "inequalities_intro",
@@ -1247,7 +1457,9 @@
     "description": "Understanding <, >, ≤, ≥ and solving single-variable inequalities — RSM grade 5",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["simple_equations"]
+    "prerequisites": [
+      "simple_equations"
+    ]
   },
   {
     "conceptKey": "counting_principles",
@@ -1257,7 +1469,9 @@
     "description": "If event A has m outcomes and B has n outcomes, together there are m × n outcomes",
     "gradeLevel": 4,
     "difficulty": 3,
-    "prerequisites": ["multiplication_intro"]
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "logical_connectives",
@@ -1267,7 +1481,9 @@
     "description": "Understanding conditional statements, universal and existential quantifiers",
     "gradeLevel": 5,
     "difficulty": 4,
-    "prerequisites": ["if_then_basic"]
+    "prerequisites": [
+      "if_then_basic"
+    ]
   },
   {
     "conceptKey": "coordinate_graphing",
@@ -1277,6 +1493,3543 @@
     "description": "Plotting (x, y) points on a coordinate plane and reading graph coordinates",
     "gradeLevel": 5,
     "difficulty": 3,
-    "prerequisites": ["coordinate_plane_intro"]
+    "prerequisites": [
+      "coordinate_plane_intro"
+    ]
+  },
+  {
+    "conceptKey": "whole_number_multiplication",
+    "subject": "MATHEMATICS",
+    "topic": "multiplication",
+    "name": "Understanding Multiplication",
+    "description": "Learn to interpret multiplication as groups of objects and understand how it helps find the total number of items.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "place_value_rounding",
+    "subject": "MATHEMATICS",
+    "topic": "number_place_value",
+    "name": "Rounding Numbers",
+    "description": "Learn to use place value understanding to round whole numbers to the nearest 10 or 100.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "fraction_of_whole",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Understanding Fractions",
+    "description": "Understand a fraction as the part of a whole when it is divided into equal parts.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "balanced_forces",
+    "subject": "PHYSICS",
+    "topic": "forces_and_motion",
+    "name": "Balanced and Unbalanced Forces",
+    "description": "Learn how forces can make objects stay still or move by exploring balanced and unbalanced forces.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "motion_pattern",
+    "subject": "PHYSICS",
+    "topic": "forces_and_motion",
+    "name": "Motion and Patterns",
+    "description": "Observe how objects move and look for patterns to predict how they will move next.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "balanced_forces"
+    ]
+  },
+  {
+    "conceptKey": "electromagnetic_interaction",
+    "subject": "PHYSICS",
+    "topic": "electric_magnetism",
+    "name": "Electric and Magnetic Forces",
+    "description": "Ask questions and explore how electric and magnetic forces can act at a distance between objects.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "chemistry_matter_basics",
+    "subject": "CHEMISTRY",
+    "topic": "matter",
+    "name": "What is Matter?",
+    "description": "Matter is anything that takes up space and has weight. Everything around us is made of matter.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "chemistry_states_of_matter",
+    "subject": "CHEMISTRY",
+    "topic": "states_of_matter",
+    "name": "States of Matter",
+    "description": "Matter can be in different states: solid, liquid, or gas. These states describe how particles move and are arranged.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "chemistry_matter_basics"
+    ]
+  },
+  {
+    "conceptKey": "chemistry_matter_changes",
+    "subject": "CHEMISTRY",
+    "topic": "matter_changes",
+    "name": "Changing Matter",
+    "description": "Matter can change from one form to another, like ice melting into water or water boiling into steam, without losing its properties.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "chemistry_states_of_matter"
+    ]
+  },
+  {
+    "conceptKey": "biology_life_cycles",
+    "subject": "BIOLOGY",
+    "topic": "life_cycles",
+    "name": "Organisms' Life Cycles",
+    "description": "All living things go through stages like birth, growth, reproduction, and death, but their exact life cycles are different.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "biology_animal_groups",
+    "subject": "BIOLOGY",
+    "topic": "animal_groups",
+    "name": "Animal Group Behaviors",
+    "description": "Some animals form groups that help them find food, stay safe, or survive better together.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "biology_traits_inheritance",
+    "subject": "BIOLOGY",
+    "topic": "traits_inheritance",
+    "name": "Traits from Parents",
+    "description": "Plants and animals get traits from their parents, and these traits can be different among similar animals or plants.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "coding_variables_introduction",
+    "subject": "CODING",
+    "topic": "variables",
+    "name": "Using Variables",
+    "description": "Learn how to use variables to store and change numbers in your programs.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "coding_sequence_events",
+    "subject": "CODING",
+    "topic": "sequences",
+    "name": "Sequences and Events",
+    "description": "Explore how to make your programs follow steps in order and respond to clicks or key presses.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "coding_loops_conditionals",
+    "subject": "CODING",
+    "topic": "loops_conditional",
+    "name": "Loops and Conditionals",
+    "description": "Learn to repeat actions with loops and make decisions with if-then statements to create smarter programs.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "coding_sequence_events"
+    ]
+  },
+  {
+    "conceptKey": "character_traits_description",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "characteristics",
+    "name": "Describe Characters",
+    "description": "Students learn how to describe characters in stories, including their traits, feelings, and motivations, and understand how characters' actions move the story forward.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "story_sequence_understanding",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "story_structure",
+    "name": "Sequence of Events",
+    "description": "Students will practice recounting story events in the correct order and understanding how the sequence affects the story's meaning.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "character_traits_description"
+    ]
+  },
+  {
+    "conceptKey": "moral_and_message_identification",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "lesson_moral",
+    "name": "Story's Moral or Lesson",
+    "description": "Students learn to identify the main lesson or moral in stories, especially fables, folktales, and myths, and explain how it is conveyed through story details.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "story_sequence_understanding"
+    ]
+  },
+  {
+    "conceptKey": "money_definition",
+    "subject": "ECONOMICS",
+    "topic": "money",
+    "name": "What Is Money?",
+    "description": "Money is what people use to buy things and pay for services. It can be coins, bills, or digital money.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "needs_vs_wants",
+    "subject": "ECONOMICS",
+    "topic": "needs_and_wants",
+    "name": "Needs and Wants",
+    "description": "People need things like food and shelter, while wants are things like toys and candy. Both are part of our choices.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "saving_money",
+    "subject": "ECONOMICS",
+    "topic": "saving",
+    "name": "Saving Money",
+    "description": "Saving money means setting some aside instead of spending it all now. It helps people buy bigger things later.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "money_definition"
+    ]
+  },
+  {
+    "conceptKey": "ai_introduction",
+    "subject": "AI_LEARNING",
+    "topic": "introduction",
+    "name": "What is AI?",
+    "description": "Learn what Artificial Intelligence (AI) is and think about how computers can act smart.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "ai_patterns",
+    "subject": "AI_LEARNING",
+    "topic": "patterns",
+    "name": "Recognizing Patterns",
+    "description": "Discover how computers find patterns like shapes, colors, or numbers to help them understand data.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "ai_training",
+    "subject": "AI_LEARNING",
+    "topic": "training",
+    "name": "Training AI",
+    "description": "Learn how computers are trained using examples so they can solve problems better.",
+    "difficulty": 3,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "ai_patterns"
+    ]
+  },
+  {
+    "conceptKey": "logic_identify_patterns",
+    "subject": "LOGIC",
+    "topic": "patterns",
+    "name": "Identify Patterns",
+    "description": "Learn to find and complete patterns using colors, shapes, or numbers.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_sort_by_category",
+    "subject": "LOGIC",
+    "topic": "sorting",
+    "name": "Sort by Category",
+    "description": "Practice grouping objects or ideas into different categories based on similarities.",
+    "difficulty": 1,
+    "gradeLevel": 3,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_sequence_next",
+    "subject": "LOGIC",
+    "topic": "sequences",
+    "name": "Find the Next in Sequence",
+    "description": "Learn to predict the next item in a sequence of shapes, numbers, or patterns.",
+    "difficulty": 2,
+    "gradeLevel": 3,
+    "prerequisites": [
+      "logic_identify_patterns"
+    ]
+  },
+  {
+    "conceptKey": "place_value_understanding",
+    "subject": "MATHEMATICS",
+    "topic": "place_value",
+    "name": "Understanding Place Value",
+    "description": "Explore how digits in a number represent different amounts depending on their position, including units, tens, hundreds, and beyond.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "dividing_whole_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "number_operations",
+    "name": "Dividing Whole Numbers",
+    "description": "Learn how to interpret and perform division of whole numbers, including sharing objects equally and understanding quotients.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "whole_number_multiplication"
+    ]
+  },
+  {
+    "conceptKey": "understanding_fractions",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Understanding Fractions",
+    "description": "Recognize a fraction as a part of a whole, understanding numerator and denominator and how they represent equal parts.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "place_value_understanding"
+    ]
+  },
+  {
+    "conceptKey": "balanced_forces_in_motion",
+    "subject": "PHYSICS",
+    "topic": "forces_and_motion",
+    "name": "Balanced and Unbalanced Forces",
+    "description": "Learn how forces can push or pull objects and how balanced forces keep objects still or moving at constant speed, while unbalanced forces change their motion.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "motion_pattern_prediction",
+    "subject": "PHYSICS",
+    "topic": "motion_patterns",
+    "name": "Predicting Motion",
+    "description": "Observe how objects move and use patterns to guess what will happen next in their motion.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "balanced_forces_in_motion"
+    ]
+  },
+  {
+    "conceptKey": "force_and_energy_relationship",
+    "subject": "PHYSICS",
+    "topic": "force_energy",
+    "name": "Force and Energy Relationship",
+    "description": "Explore how the strength of an object’s movement relates to the energy it has and transfers.",
+    "difficulty": 3,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "balanced_forces_in_motion"
+    ]
+  },
+  {
+    "conceptKey": "waves_and_movement",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Wave Patterns and Movement",
+    "description": "Understand how waves have patterns like amplitude and wavelength, and how they can make objects move.",
+    "difficulty": 3,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "atoms_basic",
+    "subject": "CHEMISTRY",
+    "topic": "atoms",
+    "name": "What is an Atom?",
+    "description": "An atom is the smallest unit of matter that makes up everything around us.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "molecules_formation",
+    "subject": "CHEMISTRY",
+    "topic": "molecules",
+    "name": "Forming Molecules",
+    "description": "Molecules are formed when two or more atoms join together, making new substances.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "atoms_basic"
+    ]
+  },
+  {
+    "conceptKey": "chemical_reactions",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_reactions",
+    "name": "What Are Chemical Reactions?",
+    "description": "Chemical reactions happen when substances break apart or combine to make new substances.",
+    "difficulty": 3,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "atoms_basic"
+    ]
+  },
+  {
+    "conceptKey": "biology_inherited_traits",
+    "subject": "BIOLOGY",
+    "topic": "traits_inheritance",
+    "name": "Traits from Parents",
+    "description": "Animals and plants inherit traits from their parents, which can make them look or behave a certain way.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "biology_environment_influence",
+    "subject": "BIOLOGY",
+    "topic": "environmental_traits",
+    "name": "Traits and Environment",
+    "description": "Traits of plants and animals can be affected by their environment, changing how they grow or look.",
+    "difficulty": 3,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "biology_inherited_traits"
+    ]
+  },
+  {
+    "conceptKey": "variables_introduction",
+    "subject": "CODING",
+    "topic": "variables",
+    "name": "Understanding Variables",
+    "description": "Learn what variables are and how they can store different kinds of information in a program.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "creating_simple_sequences",
+    "subject": "CODING",
+    "topic": "sequences",
+    "name": "Creating Sequences",
+    "description": "Explore how to write simple instructions in order to make a program perform a sequence of actions.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "variables_introduction"
+    ]
+  },
+  {
+    "conceptKey": "introduction_to_loops",
+    "subject": "CODING",
+    "topic": "loops",
+    "name": "Using Loops",
+    "description": "Discover how loops can help repeat actions in a program to save time and effort.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "creating_simple_sequences"
+    ]
+  },
+  {
+    "conceptKey": "if_else_conditionals",
+    "subject": "CODING",
+    "topic": "conditionals",
+    "name": "Conditional Statements",
+    "description": "Learn how to use if-else statements to make decisions in a program based on different conditions.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "creating_simple_sequences"
+    ]
+  },
+  {
+    "conceptKey": "identifying_characters",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "character_analysis",
+    "name": "Identifying Characters",
+    "description": "Learn to recognize and describe characters in a story, including their traits and feelings.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "understanding_story_summary",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "story_summaries",
+    "name": "Story Summaries",
+    "description": "Practice recounting stories, including key events and lessons from fables and folktales.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "identifying_characters"
+    ]
+  },
+  {
+    "conceptKey": "finding_story_theme",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "story_theme",
+    "name": "Finding the Theme",
+    "description": "Learn to determine the central message or moral of a story using details from the text.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "understanding_story_summary"
+    ]
+  },
+  {
+    "conceptKey": "analyzing_character_actions",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "character_actions",
+    "name": "Analyzing Characters",
+    "description": "Describe how characters' traits and actions help move the story forward and lead to outcomes.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "identifying_characters"
+    ]
+  },
+  {
+    "conceptKey": "econ_supply_and_demand",
+    "subject": "ECONOMICS",
+    "topic": "market_factors",
+    "name": "Supply and Demand",
+    "description": "Supply and demand are how businesses decide how much of a product to make and how much people want to buy it.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "econ_money_and_currency",
+    "subject": "ECONOMICS",
+    "topic": "money",
+    "name": "Money and Currency",
+    "description": "Money is what we use to buy things, and currency is the actual coins or bills used as money.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "econ_producers_and_consumers",
+    "subject": "ECONOMICS",
+    "topic": "economic_roles",
+    "name": "Producers and Consumers",
+    "description": "Producers make goods and services, while consumers buy and use them.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "econ_saving_and_spending",
+    "subject": "ECONOMICS",
+    "topic": "money_management",
+    "name": "Saving and Spending",
+    "description": "Saving is keeping money for later, while spending is using money now to buy things.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "econ_money_and_currency"
+    ]
+  },
+  {
+    "conceptKey": "ai_intelligent_systems",
+    "subject": "AI_LEARNING",
+    "topic": "introduction_to_ai",
+    "name": "What is AI?",
+    "description": "Learn what artificial intelligence (AI) means and how computers can think and learn like humans.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "ai_machine_learning",
+    "subject": "AI_LEARNING",
+    "topic": "machine_learning",
+    "name": "Machine Learning Basics",
+    "description": "Discover how computers can learn from data to improve their tasks without being reprogrammed each time.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "ai_intelligent_systems"
+    ]
+  },
+  {
+    "conceptKey": "ai_training_data",
+    "subject": "AI_LEARNING",
+    "topic": "training_data",
+    "name": "Training Data",
+    "description": "Understand how examples and data help AI systems learn and make decisions.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "ai_machine_learning"
+    ]
+  },
+  {
+    "conceptKey": "ai_real_world_applications",
+    "subject": "AI_LEARNING",
+    "topic": "applications",
+    "name": "AI in Our Lives",
+    "description": "Learn how AI is used in everyday life, like in video games, smart devices, and recommendations.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "ai_intelligent_systems"
+    ]
+  },
+  {
+    "conceptKey": "logic_patterns_simple",
+    "subject": "LOGIC",
+    "topic": "patterns",
+    "name": "Simple Patterns",
+    "description": "Learn to recognize and finish basic patterns like colors, shapes, or numbers.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_sequence_following",
+    "subject": "LOGIC",
+    "topic": "sequences",
+    "name": "Following Sequences",
+    "description": "Understand how to follow and predict the next item in a sequence of pictures or numbers.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": [
+      "logic_patterns_simple"
+    ]
+  },
+  {
+    "conceptKey": "logic_voting_decisions",
+    "subject": "LOGIC",
+    "topic": "decision_making",
+    "name": "Making Choices",
+    "description": "Practice making decisions based on clues or rules, like choosing the best option among several.",
+    "difficulty": 2,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_sorting_classification",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Sorting Items",
+    "description": "Learn to group objects based on shared features, like color, shape, or size.",
+    "difficulty": 1,
+    "gradeLevel": 4,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "place_value_multi_digit_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "number_and_operations",
+    "name": "Place Value in Multi-Digit Numbers",
+    "description": "Understanding how each digit in a multi-digit number represents a value based on its position, including the concept that each place is ten times the value to its right.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "multiplication_comparison",
+    "subject": "MATHEMATICS",
+    "topic": "multiplication_and_comparison",
+    "name": "Interpreting Multiplication as Comparison",
+    "description": "Learn to interpret a multiplication equation as a comparison, such as understanding that 35 = 5 × 7 means 35 is 5 times as many as 7.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "place_value_multi_digit_numbers"
+    ]
+  },
+  {
+    "conceptKey": "finding_factor_pairs",
+    "subject": "MATHEMATICS",
+    "topic": "factorization",
+    "name": "Finding Factor Pairs",
+    "description": "Discover all factor pairs of whole numbers from 1 to 100 and understand their relationship to multiples.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "multiplication_comparison"
+    ]
+  },
+  {
+    "conceptKey": "adding_decimals",
+    "subject": "MATHEMATICS",
+    "topic": "decimal_operations",
+    "name": "Adding Decimals to Hundredths",
+    "description": "Learn to add decimals up to hundredths using models, drawings, and strategies based on place value.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "place_value_multi_digit_numbers"
+    ]
+  },
+  {
+    "conceptKey": "area_and_perimeter",
+    "subject": "MATHEMATICS",
+    "topic": "measurement_and_geometry",
+    "name": "Area and Perimeter of Rectangles",
+    "description": "Apply formulas for area and perimeter to solve real-world and mathematical problems involving rectangles.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "place_value_multi_digit_numbers"
+    ]
+  },
+  {
+    "conceptKey": "energy_and_speed",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Energy and Speed",
+    "description": "This concept explains how the speed of an object is related to its energy, showing that faster objects have more energy.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "energy_transfer_light_heat_sound",
+    "subject": "PHYSICS",
+    "topic": "energy_transfer",
+    "name": "Energy Transfer Methods",
+    "description": "This concept describes how energy can be transferred between objects through light, heat, sound, and electric currents.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "waves_pattern_amplitude_wavelength",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Wave Patterns and Properties",
+    "description": "This concept introduces waves, including how amplitude and wavelength create wave patterns and how waves can move objects.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "light_reflection_visibility",
+    "subject": "PHYSICS",
+    "topic": "light",
+    "name": "Light and Reflection",
+    "description": "This concept explains how light reflects from objects and enters our eyes, helping us see objects around us.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "matter_particles",
+    "subject": "PHYSICS",
+    "topic": "matter",
+    "name": "Particles of Matter",
+    "description": "This concept describes how matter is made up of tiny particles that are too small to see.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "matter_particles_too_small",
+    "subject": "CHEMISTRY",
+    "topic": "matter",
+    "name": "Particles of Matter",
+    "description": "Matter is made up of tiny particles that are too small to see without a microscope.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "energy_transfer_light_sound_heat",
+    "subject": "CHEMISTRY",
+    "topic": "energy_transfer",
+    "name": "Energy Transfer",
+    "description": "Energy can move from one place to another through light, sound, heat, or electric currents.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "change_in_matter_weight",
+    "subject": "CHEMISTRY",
+    "topic": "matter_changes",
+    "name": "Conservation of Weight",
+    "description": "When substances are heated, cooled, or mixed, their total weight stays the same, showing matter is conserved.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "matter_particles_too_small"
+    ]
+  },
+  {
+    "conceptKey": "plant_internal_structures",
+    "subject": "BIOLOGY",
+    "topic": "plant_structures",
+    "name": "Plant Internal Structures",
+    "description": "Plants have different parts inside that help them grow and stay healthy, like roots, stems, and leaves.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "animal_external_structures",
+    "subject": "BIOLOGY",
+    "topic": "animal_structures",
+    "name": "Animal External Structures",
+    "description": "Animals have outside body parts like fur, feathers, or shells that help them survive and protect themselves.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "senses_and_responses",
+    "subject": "BIOLOGY",
+    "topic": "animal_senses",
+    "name": "How Animals Use Senses",
+    "description": "Animals use their senses, like sight and smell, to receive information, process it in their brains, and respond in different ways.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "photosynthesis_materials",
+    "subject": "BIOLOGY",
+    "topic": "plant_photosynthesis",
+    "name": "Materials for Plant Growth",
+    "description": "Plants mainly get materials needed for growth from air (carbon dioxide) and water, which help them make food through photosynthesis.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "matter_movement_in_ecosystem",
+    "subject": "BIOLOGY",
+    "topic": "matter_cycle",
+    "name": "Movement of Matter",
+    "description": "Matter such as water, air, and nutrients move between plants, animals, decomposers, and the environment in a cycle.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "coding_introduction",
+    "subject": "CODING",
+    "topic": "getting_started",
+    "name": "Introduction to Coding",
+    "description": "Learn what coding is and how it is used to create computer programs and games.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "basic_sequence",
+    "subject": "CODING",
+    "topic": "program_structure",
+    "name": "Understanding Sequences",
+    "description": "Discover how sequences of commands are used to tell a computer what to do step by step.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "coding_introduction"
+    ]
+  },
+  {
+    "conceptKey": "loop_iteration",
+    "subject": "CODING",
+    "topic": "control_structures",
+    "name": "Using Loops",
+    "description": "Learn how to use loops to repeat actions, making programs more efficient and easier to write.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "basic_sequence"
+    ]
+  },
+  {
+    "conceptKey": "debugging_skills",
+    "subject": "CODING",
+    "topic": "problem_solving",
+    "name": "Debugging Programs",
+    "description": "Practice finding and fixing errors in programs to ensure they work correctly.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "basic_sequence"
+    ]
+  },
+  {
+    "conceptKey": "attribution_rights",
+    "subject": "CODING",
+    "topic": "digital_citizenship",
+    "name": "Respect for Creativity",
+    "description": "Learn why it is important to give credit when using or remixing others' code.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "finding_plot_details",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "plot",
+    "name": "Finding Plot Details",
+    "description": "Identify important events in a story by paying attention to details that move the story forward.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "identifying_characters"
+    ]
+  },
+  {
+    "conceptKey": "determining_story_theme",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "theme",
+    "name": "Determining Story Themes",
+    "description": "Discover the main message or lesson in a story by analyzing details and characters’ responses.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "finding_plot_details"
+    ]
+  },
+  {
+    "conceptKey": "using_text_evidence",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "text_evidence",
+    "name": "Using Text Evidence",
+    "description": "Practice quoting and citing parts of a story to support your understanding of what it means.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "identifying_characters"
+    ]
+  },
+  {
+    "conceptKey": "writing_character_descriptions",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "character_writing",
+    "name": "Writing Character Descriptions",
+    "description": "Learn to write detailed descriptions of characters using specific details from stories.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "identifying_characters"
+    ]
+  },
+  {
+    "conceptKey": "goods_and_services",
+    "subject": "ECONOMICS",
+    "topic": "products",
+    "name": "Goods and Services",
+    "description": "Goods are physical items like toys or food, while services are work done for you like haircuts or car repairs.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "needs_vs_wants"
+    ]
+  },
+  {
+    "conceptKey": "price_and_value",
+    "subject": "ECONOMICS",
+    "topic": "pricing",
+    "name": "Price and Value",
+    "description": "Price is how much money something costs, and value is how much you think it’s worth to you.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "goods_and_services"
+    ]
+  },
+  {
+    "conceptKey": "machine_learning_basics",
+    "subject": "AI_LEARNING",
+    "topic": "machine_learning",
+    "name": "Machine Learning Basics",
+    "description": "Discover how computers can learn from data to make decisions without being directly programmed.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "training_data",
+    "subject": "AI_LEARNING",
+    "topic": "training_data",
+    "name": "Training Data",
+    "description": "Understand what training data is and how it helps AI systems learn and improve.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "neural_networks",
+    "subject": "AI_LEARNING",
+    "topic": "neural_networks",
+    "name": "Neural Networks",
+    "description": "Explore how neural networks mimic the brain to help AI recognize patterns and make decisions.",
+    "difficulty": 3,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "machine_learning_basics"
+    ]
+  },
+  {
+    "conceptKey": "ai_applications",
+    "subject": "AI_LEARNING",
+    "topic": "applications",
+    "name": "AI in Real Life",
+    "description": "See how AI is used in voice assistants, games, and other technology that we use daily.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "logic_continuous_patterns",
+    "subject": "LOGIC",
+    "topic": "patterns_and_sequences",
+    "name": "Continuing Patterns",
+    "description": "Practice predicting what comes next in a pattern based on the sequence of shapes, colors, or numbers.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "logic_identify_patterns"
+    ]
+  },
+  {
+    "conceptKey": "logic_simple_classification",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Classify Objects",
+    "description": "Learn how to group objects based on common features like size, color, or shape to understand similarities and differences.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_decide_true_false",
+    "subject": "LOGIC",
+    "topic": "true_false_statements",
+    "name": "Decide True or False",
+    "description": "Evaluate simple statements to decide whether they are true or false based on given information.",
+    "difficulty": 1,
+    "gradeLevel": 5,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_basic_conclusions",
+    "subject": "LOGIC",
+    "topic": "making_conclusions",
+    "name": "Draw Basic Conclusions",
+    "description": "Use clues and evidence to make simple logical conclusions about a situation or story.",
+    "difficulty": 2,
+    "gradeLevel": 5,
+    "prerequisites": [
+      "logic_decide_true_false"
+    ]
+  },
+  {
+    "conceptKey": "adding_fractions_with_unlike_denominators",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Adding Fractions with Different Denominators",
+    "description": "Learn to find equivalent fractions and add fractions with unlike denominators by creating common denominators.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "place_value_understanding"
+    ]
+  },
+  {
+    "conceptKey": "coordinate_system_basics",
+    "subject": "MATHEMATICS",
+    "topic": "coordinate_plane",
+    "name": "Using a Coordinate System",
+    "description": "Use a pair of perpendicular number lines, called axes, to locate points and understand positions on a grid.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "place_value_understanding"
+    ]
+  },
+  {
+    "conceptKey": "ratio_concepts",
+    "subject": "MATHEMATICS",
+    "topic": "ratio_and_rate",
+    "name": "Understanding Ratios",
+    "description": "Understand and describe relationships between two quantities using ratio language and notation.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "division_of_fractions",
+    "subject": "MATHEMATICS",
+    "topic": "fractions_division",
+    "name": "Dividing Fractions",
+    "description": "Learn how to interpret and compute the division of fractions, solving real-world problems involving fractional division.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "adding_fractions_with_unlike_denominators"
+    ]
+  },
+  {
+    "conceptKey": "volume_of_rectangular_prisms",
+    "subject": "MATHEMATICS",
+    "topic": "volume",
+    "name": "Volume of Rectangular Prisms",
+    "description": "Understand the concept of volume as the space inside a solid figure and learn how to measure it.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "conservation_weight",
+    "subject": "PHYSICS",
+    "topic": "mass_and_weight",
+    "name": "Conservation of Weight",
+    "description": "When substances are heated or mixed, their total weight stays the same, showing that mass is conserved.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_particles"
+    ]
+  },
+  {
+    "conceptKey": "properties_of_materials",
+    "subject": "PHYSICS",
+    "topic": "material_properties",
+    "name": "Material Properties",
+    "description": "Different materials have unique properties that help us identify them, like color, texture, and hardness.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_particles"
+    ]
+  },
+  {
+    "conceptKey": "gravitational_force",
+    "subject": "PHYSICS",
+    "topic": "gravity",
+    "name": "Gravity and Downward Force",
+    "description": "Earth pulls objects down due to gravity, which is a force that acts toward the center of the planet.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "energy_from_sun",
+    "subject": "PHYSICS",
+    "topic": "energy_sources",
+    "name": "Energy from the Sun",
+    "description": "Animals get energy from food that originally comes from the sun, linking sunlight to energy used by living things.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "particle_motion_change",
+    "subject": "PHYSICS",
+    "topic": "states_of_matter",
+    "name": "Particle Motion and State Changes",
+    "description": "Adding or removing thermal energy causes particles to move faster or slower, changing the state of the material (solid, liquid, gas).",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_particles"
+    ]
+  },
+  {
+    "conceptKey": "matter_particle_size",
+    "subject": "CHEMISTRY",
+    "topic": "matter_and_particles",
+    "name": "Particles Too Small to See",
+    "description": "Matter is made of tiny particles that are so small we cannot see them without special tools, but they make up everything around us.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "matter_conservation",
+    "subject": "CHEMISTRY",
+    "topic": "matter_change",
+    "name": "Matter is Not Created or Destroyed",
+    "description": "When substances are heated, cooled, or mixed, the total weight stays the same, showing matter is conserved during changes.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_particle_size"
+    ]
+  },
+  {
+    "conceptKey": "chemical_reaction_detection",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_changes",
+    "name": "Detecting Chemical Reactions",
+    "description": "Observing changes in properties or energy can help us tell if a chemical reaction has taken place between materials.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_conservation",
+      "materials_properties"
+    ]
+  },
+  {
+    "conceptKey": "sun_energy_in_food",
+    "subject": "CHEMISTRY",
+    "topic": "energy_sources",
+    "name": "Energy from the Sun in Food",
+    "description": "Animals get energy from their food, which originally comes from the sun, to help them grow, move, and stay warm.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "atoms_in_molecules",
+    "subject": "CHEMISTRY",
+    "topic": "atomic_structure",
+    "name": "Atoms in Molecules",
+    "description": "Atoms are the small building blocks that connect to form molecules and extended structures like crystals and plastics.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "matter_particle_size"
+    ]
+  },
+  {
+    "conceptKey": "bio_plants_need_air_water",
+    "subject": "BIOLOGY",
+    "topic": "plant_physiology",
+    "name": "Plant Materials from Air and Water",
+    "description": "Plants mainly get the materials they need for growth from air and water, which help them produce food through photosynthesis.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_food_chain_model",
+    "subject": "BIOLOGY",
+    "topic": "ecosystem",
+    "name": "Model of Matter Movement",
+    "description": "A model showing how matter moves among plants, animals, decomposers, and the environment in an ecosystem.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_cells_have_parts",
+    "subject": "BIOLOGY",
+    "topic": "cell_structure",
+    "name": "Cells are Made of Parts",
+    "description": "Living things are made of cells, and investigating reveals that cells are the basic units of life, whether one or many.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_cell_function",
+    "subject": "BIOLOGY",
+    "topic": "cell_function",
+    "name": "Cell Parts and Functions",
+    "description": "Different parts of a cell work together to help the cell carry out its specific functions in the organism.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "bio_cells_have_parts"
+    ]
+  },
+  {
+    "conceptKey": "bio_body_systems",
+    "subject": "BIOLOGY",
+    "topic": "body_systems",
+    "name": "Body as a System",
+    "description": "The human body is made up of interacting subsystems, such as the circulatory, respiratory, and digestive systems, that work together.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "bio_cell_function"
+    ]
+  },
+  {
+    "conceptKey": "bio_cell_division_growth",
+    "subject": "BIOLOGY",
+    "topic": "cell_division",
+    "name": "Cell Division and Growth",
+    "description": "Cell division helps organisms grow, heal, and replace worn-out cells, which is important for development and repair.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "bio_cells_have_parts"
+    ]
+  },
+  {
+    "conceptKey": "control_structures_intro",
+    "subject": "CODING",
+    "topic": "control_flow",
+    "name": "Control Structures",
+    "description": "Understand how to use if-else statements and loops to control the flow of a program.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "variables_introduction"
+    ]
+  },
+  {
+    "conceptKey": "flowchart_algorithms",
+    "subject": "CODING",
+    "topic": "algorithm_design",
+    "name": "Flowcharts and Pseudocode",
+    "description": "Use flowcharts and pseudocode to plan and visualize solving a coding problem step-by-step.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "control_structures_intro"
+    ]
+  },
+  {
+    "conceptKey": "data_encoding_schemes",
+    "subject": "CODING",
+    "topic": "data_encoding",
+    "name": "Data Encoding Methods",
+    "description": "Explore different ways to represent data using encoding schemes like binary and ASCII.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "data_transmission_packets",
+    "subject": "CODING",
+    "topic": "networking",
+    "name": "Data Packets and Networks",
+    "description": "Learn how information is broken into packets, transmitted over networks, and reassembled at the destination.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "data_encoding_schemes"
+    ]
+  },
+  {
+    "conceptKey": "bug_debugging_methods",
+    "subject": "CODING",
+    "topic": "program_debugging",
+    "name": "Debugging and Troubleshooting",
+    "description": "Discover techniques for finding and fixing errors in your code to improve program reliability.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "control_structures_intro"
+    ]
+  },
+  {
+    "conceptKey": "character_trait_identification",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "characterization",
+    "name": "Identifying Character Traits",
+    "description": "Students learn to recognize and describe the personality traits of characters in stories through actions and dialogue.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "plot_summary_skills",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "plot_structure",
+    "name": "Summarizing Plot",
+    "description": "Students develop skills to create concise summaries of story events, recognizing beginning, middle, and end elements.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "theme_determination",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "themes",
+    "name": "Determining Theme",
+    "description": "Students analyze details in a story to identify the main message or lesson the author conveys.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "plot_summary_skills"
+    ]
+  },
+  {
+    "conceptKey": "text_evidence_support",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "textual_evidence",
+    "name": "Supporting with Evidence",
+    "description": "Students practice quoting and citing specific parts of the text to support their explanations and inferences.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "character_trait_identification"
+    ]
+  },
+  {
+    "conceptKey": "figurative_language_analysis",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "figurative_language",
+    "name": "Analyzing Figurative Language",
+    "description": "Students interpret figurative language such as metaphors and similes to understand tone and meaning.",
+    "difficulty": 4,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "text_evidence_support"
+    ]
+  },
+  {
+    "conceptKey": "narrative_writing_skill",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "narrative_writing",
+    "name": "Writing Narratives",
+    "description": "Students learn to write stories with clear sequence, descriptive details, and engaging events based on real or imagined experiences.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "plot_summary_skills"
+    ]
+  },
+  {
+    "conceptKey": "goods_vs_services",
+    "subject": "ECONOMICS",
+    "topic": "goods_services",
+    "name": "Goods and Services",
+    "description": "Goods are physical items like toys, and services are actions like haircuts that people pay for.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "wants_vs_needs",
+    "subject": "ECONOMICS",
+    "topic": "consumer_choices",
+    "name": "Wants and Needs",
+    "description": "Wants are things we desire, while needs are essentials like food and water that we must have.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "saving_and_spending",
+    "subject": "ECONOMICS",
+    "topic": "personal_finance",
+    "name": "Saving and Spending",
+    "description": "Saving means setting aside money for later, while spending means using money to buy things now.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "money_definition"
+    ]
+  },
+  {
+    "conceptKey": "basic_production",
+    "subject": "ECONOMICS",
+    "topic": "business_production",
+    "name": "How Goods Are Made",
+    "description": "Production is the process of creating goods and services that people want to buy.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "goods_vs_services"
+    ]
+  },
+  {
+    "conceptKey": "trade_import_export",
+    "subject": "ECONOMICS",
+    "topic": "trade",
+    "name": "Trade and Resources",
+    "description": "Trade allows countries to buy and sell goods and resources they might not have locally.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "goods_vs_services"
+    ]
+  },
+  {
+    "conceptKey": "ai_basics",
+    "subject": "AI_LEARNING",
+    "topic": "fundamentals",
+    "name": "What is AI?",
+    "description": "Learn what artificial intelligence (AI) is and how computers can think and learn.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "machine_learning_intro",
+    "subject": "AI_LEARNING",
+    "topic": "machine_learning",
+    "name": "Introduction to Machine Learning",
+    "description": "Discover how computers can learn from data to make decisions without being explicitly programmed.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "ai_basics"
+    ]
+  },
+  {
+    "conceptKey": "data_collection",
+    "subject": "AI_LEARNING",
+    "topic": "data_handling",
+    "name": "Gathering Data",
+    "description": "Learn how collecting good data is important for training AI and machines to learn effectively.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "training_ai_models",
+    "subject": "AI_LEARNING",
+    "topic": "training",
+    "name": "Training AI Models",
+    "description": "Understand how AI systems are trained using data to recognize patterns and make predictions.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "machine_learning_intro",
+      "data_collection"
+    ]
+  },
+  {
+    "conceptKey": "ethical_ai",
+    "subject": "AI_LEARNING",
+    "topic": "ethics",
+    "name": "AI Ethics & Safety",
+    "description": "Explore how to create AI responsibly and safely, understanding the importance of ethics in AI.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "ai_basics"
+    ]
+  },
+  {
+    "conceptKey": "logic_patterns",
+    "subject": "LOGIC",
+    "topic": "patterns",
+    "name": "Recognizing Patterns",
+    "description": "Learn how to identify repeating shapes, colors, or numbers in sequences.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_true_false",
+    "subject": "LOGIC",
+    "topic": "statements",
+    "name": "True or False Statements",
+    "description": "Practice deciding if statements are true or false based on information given.",
+    "difficulty": 1,
+    "gradeLevel": 6,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_categorizing",
+    "subject": "LOGIC",
+    "topic": "classification",
+    "name": "Classifying Items",
+    "description": "Learn how to group objects or ideas into categories based on shared features.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "logic_patterns"
+    ]
+  },
+  {
+    "conceptKey": "logic_deduction",
+    "subject": "LOGIC",
+    "topic": "reasoning",
+    "name": "Simple Deductive Reasoning",
+    "description": "Use clues and facts to figure out what is true or what will happen next.",
+    "difficulty": 3,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "logic_true_false"
+    ]
+  },
+  {
+    "conceptKey": "logic_venn_diagrams",
+    "subject": "LOGIC",
+    "topic": "visual_representation",
+    "name": "Using Venn Diagrams",
+    "description": "Learn to compare groups and see how they overlap using Venn diagrams.",
+    "difficulty": 2,
+    "gradeLevel": 6,
+    "prerequisites": [
+      "logic_categorizing"
+    ]
+  },
+  {
+    "conceptKey": "ratio_understanding",
+    "subject": "MATHEMATICS",
+    "topic": "ratios",
+    "name": "Understanding Ratios",
+    "description": "Learn what ratios are and how to describe the relationship between two quantities using ratio language.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "unit_rate_definition",
+    "subject": "MATHEMATICS",
+    "topic": "rates_and_ratios",
+    "name": "Defining Unit Rates",
+    "description": "Understand what a unit rate is and how to compute it from ratios in real-world contexts.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "ratio_understanding"
+    ]
+  },
+  {
+    "conceptKey": "divide_fractions",
+    "subject": "MATHEMATICS",
+    "topic": "fractions",
+    "name": "Dividing Fractions",
+    "description": "Learn how to interpret and compute quotients of fractions and solve related word problems.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "ratio_understanding"
+    ]
+  },
+  {
+    "conceptKey": "adding_rational_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "rational_numbers",
+    "name": "Adding Rational Numbers",
+    "description": "Add and subtract rational numbers, including positive and negative numbers, in various contexts.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "solving_linear_equations",
+    "subject": "MATHEMATICS",
+    "topic": "linear_equations",
+    "name": "Solving Linear Equations",
+    "description": "Use algebraic methods to solve simple linear equations and inequalities with variables.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "scale_drawing_problems",
+    "subject": "MATHEMATICS",
+    "topic": "geometry",
+    "name": "Scale Drawings",
+    "description": "Solve problems involving scale drawings to find actual lengths and areas of geometric figures.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "proportional_relationships"
+    ]
+  },
+  {
+    "conceptKey": "physical_properties_of_matter",
+    "subject": "PHYSICS",
+    "topic": "properties_of_matter",
+    "name": "Properties of Matter",
+    "description": "Learn about different properties of materials, such as size, shape, and state, to understand how substances behave.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "atoms_and_molecules",
+    "subject": "PHYSICS",
+    "topic": "atomic_structure",
+    "name": "Atoms and Molecules",
+    "description": "Discover how atoms are the building blocks of matter and how they combine to form molecules.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "physical_properties_of_matter"
+    ]
+  },
+  {
+    "conceptKey": "thermal_energy_and_temperature",
+    "subject": "PHYSICS",
+    "topic": "thermal_energy",
+    "name": "Thermal Energy and Temperature",
+    "description": "Understand how adding or removing heat affects the motion of particles and changes the temperature of a substance.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "states_of_matter"
+    ]
+  },
+  {
+    "conceptKey": "newtons_third_law",
+    "subject": "PHYSICS",
+    "topic": "forces_and_motion",
+    "name": "Newton's Third Law",
+    "description": "Learn that for every action, there is an equal and opposite reaction and how this affects moving objects.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "waves_and_wave_properties",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Waves and Properties",
+    "description": "Explore how waves carry energy, and learn about amplitude, wavelength, and how waves behave when they encounter different materials.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "simple_molecular_structures",
+    "subject": "CHEMISTRY",
+    "topic": "atomic_composition",
+    "name": "Simple Molecular Structures",
+    "description": "Models show how atoms combine to form simple molecules, helping us understand the basic structure of common substances.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "atoms_and_molecules"
+    ]
+  },
+  {
+    "conceptKey": "chemical_reactions_signs",
+    "subject": "CHEMISTRY",
+    "topic": "reaction_properties",
+    "name": "Signs of Chemical Reactions",
+    "description": "When substances react, they often change in appearance or produce something new. Recognizing these signs helps us tell if a chemical change has happened.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "natural_vs_synthetic_materials",
+    "subject": "CHEMISTRY",
+    "topic": "materials",
+    "name": "Natural and Synthetic Materials",
+    "description": "Materials come from natural resources or are created in labs. Understanding their origins shows their impact on society.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "changes_in_particle_motion",
+    "subject": "CHEMISTRY",
+    "topic": "thermal_energy",
+    "name": "Particle Motion and Temperature",
+    "description": "Adding or removing heat causes particles to move faster or slower, leading to changes in the state of a substance like melting or boiling.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "atoms_and_molecules"
+    ]
+  },
+  {
+    "conceptKey": "law_of_conservation_of_mass",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_reactions",
+    "name": "Conservation of Mass",
+    "description": "In a chemical reaction, the total number of atoms remains the same, meaning mass is conserved even as substances change.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "atoms_and_molecules"
+    ]
+  },
+  {
+    "conceptKey": "chemical_bonding",
+    "subject": "CHEMISTRY",
+    "topic": "atomic_bonding",
+    "name": "Chemical Bonding",
+    "description": "Atoms bond together through different types of bonds, which determine the structure and properties of molecules.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "atoms_and_molecules"
+    ]
+  },
+  {
+    "conceptKey": "bio_cells",
+    "subject": "BIOLOGY",
+    "topic": "cell_structure",
+    "name": "Cells as Building Blocks",
+    "description": "Living things are made of cells; some are single-celled while others have many cells working together.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_cell_division",
+    "subject": "BIOLOGY",
+    "topic": "cell_division",
+    "name": "Cell Division and Growth",
+    "description": "Cells divide to help organisms grow, repair, and replace damaged cells.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "bio_cell_function"
+    ]
+  },
+  {
+    "conceptKey": "bio_photosynthesis",
+    "subject": "BIOLOGY",
+    "topic": "photosynthesis",
+    "name": "Photosynthesis and Energy",
+    "description": "Plants use photosynthesis to turn sunlight into energy, which is essential for their growth and for food in ecosystems.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "bio_cells"
+    ]
+  },
+  {
+    "conceptKey": "bio_food_reactions",
+    "subject": "BIOLOGY",
+    "topic": "metabolic_reactions",
+    "name": "Chemical Reactions in Food",
+    "description": "Organisms break down food molecules through chemical reactions to release energy and build new molecules.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "bio_cell_function"
+    ]
+  },
+  {
+    "conceptKey": "bio_ecosystem_flows",
+    "subject": "BIOLOGY",
+    "topic": "energy_and_matter_flow",
+    "name": "Ecosystem Energy Flow",
+    "description": "Energy moves through ecosystems from producers to consumers, and matter is cycled between living and nonliving parts.",
+    "difficulty": 4,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "bio_photosynthesis",
+      "bio_food_reactions"
+    ]
+  },
+  {
+    "conceptKey": "basics_of_algorithms",
+    "subject": "CODING",
+    "topic": "algorithms",
+    "name": "Understanding Algorithms",
+    "description": "Learn what algorithms are and how they help us solve problems step-by-step using flowcharts or pseudocode.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "variables_and_data_types",
+    "subject": "CODING",
+    "topic": "variables",
+    "name": "Variables and Data Types",
+    "description": "Discover how to create variables to store different types of data like numbers and text, and understand how to use them in programs.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "basics_of_algorithms"
+    ]
+  },
+  {
+    "conceptKey": "control_structures",
+    "subject": "CODING",
+    "topic": "control_structures",
+    "name": "Control Structures",
+    "description": "Learn to use conditionals and loops to control the flow of a program, including nested loops for complex decision making.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "decomposing_problems",
+    "subject": "CODING",
+    "topic": "problem_decomposition",
+    "name": "Decomposing Problems",
+    "description": "Practice breaking down complex problems into smaller parts to make coding easier and more manageable.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "basics_of_algorithms"
+    ]
+  },
+  {
+    "conceptKey": "creating_procedures",
+    "subject": "CODING",
+    "topic": "procedures",
+    "name": "Creating Procedures",
+    "description": "Learn to write procedures or functions with parameters to organize code, improve reusability, and simplify complex tasks.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "control_structures"
+    ]
+  },
+  {
+    "conceptKey": "testing_and_debugging",
+    "subject": "CODING",
+    "topic": "testing",
+    "name": "Testing and Debugging",
+    "description": "Explore methods to test your programs with different data and find or fix errors to improve reliability.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "creating_procedures"
+    ]
+  },
+  {
+    "conceptKey": "data_representation",
+    "subject": "CODING",
+    "topic": "data_encoding",
+    "name": "Data Representation",
+    "description": "Understand how data can be represented using different encoding schemes like binary, and how computers process this data.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "literary_elements",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "literary_devices",
+    "name": "Literary Devices",
+    "description": "An introduction to common literary devices like metaphor, simile, and personification that help create meaning in texts.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "character_analysis",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "character_development",
+    "name": "Character Analysis",
+    "description": "Learning how to examine characters' traits, motivations, and development throughout a story.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "theme_identification",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "themes",
+    "name": "Identifying Themes",
+    "description": "Discovering the central ideas or messages in a story and how authors convey them through details.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "character_analysis"
+    ]
+  },
+  {
+    "conceptKey": "plot_structure",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "story_structure",
+    "name": "Plot Structure",
+    "description": "Understanding the components of a plot, such as beginning, middle, climax, and resolution, and how they shape a story.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "point_of_view",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "narrative_perspective",
+    "name": "Point of View",
+    "description": "Exploring different narrative perspectives like first person, third person, and how they influence a story's presentation.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "plot_structure"
+    ]
+  },
+  {
+    "conceptKey": "poetry_analysis",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "poetry",
+    "name": "Poetry Analysis",
+    "description": "Learning how to analyze poetry for structure, figurative language, tone, and meaning.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "drama_elements",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "drama",
+    "name": "Drama Elements",
+    "description": "Understanding elements of drama such as dialogue, acts, scenes, and stage directions to interpret plays.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "supply_and_demand",
+    "subject": "ECONOMICS",
+    "topic": "market_mechanics",
+    "name": "Supply and Demand",
+    "description": "Supply and demand are the key forces that affect prices and availability of goods and services in a market.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "scarcity_value",
+    "subject": "ECONOMICS",
+    "topic": "scarcity",
+    "name": "Scarcity and Value",
+    "description": "Scarcity means resources are limited, which affects how we decide to use them to meet our needs and wants.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "money_as_exchange",
+    "subject": "ECONOMICS",
+    "topic": "money",
+    "name": "Money as Exchange",
+    "description": "Money is used as a tool for exchanging goods and services, making trade easier than bartering.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "production_and_consumption",
+    "subject": "ECONOMICS",
+    "topic": "producers_and_consumers",
+    "name": "Production and Consumption",
+    "description": "Production involves making goods or services, while consumption is when people use or buy those goods and services.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "scarcity_value"
+    ]
+  },
+  {
+    "conceptKey": "saving_and_investing",
+    "subject": "ECONOMICS",
+    "topic": "financial_services",
+    "name": "Saving and Investing",
+    "description": "Saving involves setting aside money for the future, while investing aims to grow money through different financial tools.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "money_as_exchange"
+    ]
+  },
+  {
+    "conceptKey": "trade_benefits",
+    "subject": "ECONOMICS",
+    "topic": "trade",
+    "name": "Benefits of Trade",
+    "description": "Trade allows countries and people to access goods and services they might not produce themselves, leading to more choices and better prices.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "supply_and_demand"
+    ]
+  },
+  {
+    "conceptKey": "market_economy",
+    "subject": "ECONOMICS",
+    "topic": "economic_systems",
+    "name": "Market Economy",
+    "description": "A market economy is a system where prices and production are determined by buyers and sellers in the marketplace.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "supply_and_demand"
+    ]
+  },
+  {
+    "conceptKey": "machine_learning_basic",
+    "subject": "AI_LEARNING",
+    "topic": "machine_learning",
+    "name": "Machine Learning Basics",
+    "description": "Discover how computers can learn from data to make decisions without being explicitly programmed.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "neural_networks_intro",
+    "subject": "AI_LEARNING",
+    "topic": "neural_networks",
+    "name": "Neural Networks Intro",
+    "description": "Explore how neural networks mimic the human brain to process information and recognize patterns.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "machine_learning_basic"
+    ]
+  },
+  {
+    "conceptKey": "ethics_in_ai",
+    "subject": "AI_LEARNING",
+    "topic": "ethics",
+    "name": "AI Ethics",
+    "description": "Understand the ethical questions and responsibilities involved in developing and using AI.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "ai_introduction"
+    ]
+  },
+  {
+    "conceptKey": "future_of_ai",
+    "subject": "AI_LEARNING",
+    "topic": "future",
+    "name": "The Future of AI",
+    "description": "Explore potential future developments and challenges in artificial intelligence technology.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "ai_applications"
+    ]
+  },
+  {
+    "conceptKey": "logic_intro_statements",
+    "subject": "LOGIC",
+    "topic": "statements",
+    "name": "Understanding Logical Statements",
+    "description": "Learn what logical statements are and how they form the building blocks of reasoning.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_truth_values",
+    "subject": "LOGIC",
+    "topic": "truth_values",
+    "name": "Truth and Falsehood",
+    "description": "Discover how statements can be true or false, and why this is important in logic.",
+    "difficulty": 1,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_intro_statements"
+    ]
+  },
+  {
+    "conceptKey": "logic_and_or_not",
+    "subject": "LOGIC",
+    "topic": "logical_operators",
+    "name": "Logical Operators: AND, OR, NOT",
+    "description": "Explore how combining statements with AND, OR, and NOT changes their meaning and truth.",
+    "difficulty": 2,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_truth_values"
+    ]
+  },
+  {
+    "conceptKey": "logic_truth_tables",
+    "subject": "LOGIC",
+    "topic": "truth_tables",
+    "name": "Using Truth Tables",
+    "description": "Learn how to create truth tables to analyze the truth of complex logical statements.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_and_or_not"
+    ]
+  },
+  {
+    "conceptKey": "logic_conditionals",
+    "subject": "LOGIC",
+    "topic": "conditionals",
+    "name": "Conditional Statements",
+    "description": "Understand if-then statements and how they relate to logical reasoning.",
+    "difficulty": 3,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_truth_tables"
+    ]
+  },
+  {
+    "conceptKey": "logic_biconditionals",
+    "subject": "LOGIC",
+    "topic": "biconditionals",
+    "name": "Biconditional Logic",
+    "description": "Learn about statements that are true when both parts are equally true or false.",
+    "difficulty": 4,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_conditionals"
+    ]
+  },
+  {
+    "conceptKey": "logic_valid_deductions",
+    "subject": "LOGIC",
+    "topic": "deductive_reasoning",
+    "name": "Valid Deductions",
+    "description": "Discover how to make valid conclusions based on given logical premises and rules.",
+    "difficulty": 4,
+    "gradeLevel": 7,
+    "prerequisites": [
+      "logic_biconditionals"
+    ]
+  },
+  {
+    "conceptKey": "unit_rate_calculation",
+    "subject": "MATHEMATICS",
+    "topic": "ratios",
+    "name": "Calculating Unit Rates",
+    "description": "Compute the unit rate from a ratio of fractions, applying this skill to real-world problems involving different units.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "ratio_understanding"
+    ]
+  },
+  {
+    "conceptKey": "multiplying_rational_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "rational_numbers",
+    "name": "Multiplying Rational Numbers",
+    "description": "Use previous understanding of fractions to multiply and divide rational numbers, including negatives.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "adding_rational_numbers"
+    ]
+  },
+  {
+    "conceptKey": "graph_proportional_relationships",
+    "subject": "MATHEMATICS",
+    "topic": "graphing",
+    "name": "Graphing Proportional Relationships",
+    "description": "Interpret and graph proportional relationships, understanding that the slope represents the unit rate.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "proportional_relationships"
+    ]
+  },
+  {
+    "conceptKey": "irrational_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "irrational_numbers",
+    "name": "Understanding Irrational Numbers",
+    "description": "Recognize that some numbers are not rational and understand their properties, including their decimal expansion.",
+    "difficulty": 4,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "physics_motion_speed",
+    "subject": "PHYSICS",
+    "topic": "motion",
+    "name": "Speed and Velocity",
+    "description": "Understanding the difference between speed and velocity helps explain how objects move in a straight line and in different directions.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "physics_kinetic_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Kinetic Energy",
+    "description": "Kinetic energy is the energy an object has because of its motion, which depends on its mass and speed.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "physics_motion_speed"
+    ]
+  },
+  {
+    "conceptKey": "physics_potential_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Potential Energy",
+    "description": "Potential energy is stored energy in an object due to its position or configuration, like a stretched spring or elevated object.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "physics_motion_speed"
+    ]
+  },
+  {
+    "conceptKey": "physics_energy_transfer",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Energy Transfer",
+    "description": "Energy can be transferred between objects or systems when their kinetic or potential energy changes, often involving work and force.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "physics_kinetic_energy",
+      "physics_potential_energy"
+    ]
+  },
+  {
+    "conceptKey": "physics_waves_amplitude_energy",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Wave Amplitude and Energy",
+    "description": "In waves, the amplitude is related to the amount of energy the wave carries; larger amplitudes mean more energy.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "physics_wave_reflection_transmission",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Wave Behavior in Materials",
+    "description": "Waves can be reflected, absorbed, or transmitted when they encounter different materials, affecting how energy moves through media.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "physics_waves_amplitude_energy"
+    ]
+  },
+  {
+    "conceptKey": "physics_force_and_motion",
+    "subject": "PHYSICS",
+    "topic": "forces",
+    "name": "Forces and Motion",
+    "description": "Forces cause changes in motion, including starting, stopping, or changing the direction of an object.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "physics_newtons_laws",
+    "subject": "PHYSICS",
+    "topic": "forces",
+    "name": "Newton's Laws",
+    "description": "Newton's Laws describe how forces affect the motion of objects, including concepts like inertia and acceleration.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "physics_force_and_motion"
+    ]
+  },
+  {
+    "conceptKey": "matter_basic_properties",
+    "subject": "CHEMISTRY",
+    "topic": "matter",
+    "name": "Properties of Matter",
+    "description": "Learn about the different properties that describe and identify matter, such as density, color, and state.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "atoms_building_blocks",
+    "subject": "CHEMISTRY",
+    "topic": "atoms",
+    "name": "Atoms as Building Blocks",
+    "description": "Understand that atoms are the smallest units of matter that retain the properties of an element.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "matter_basic_properties"
+    ]
+  },
+  {
+    "conceptKey": "periodic_table_overview",
+    "subject": "CHEMISTRY",
+    "topic": "periodic_table",
+    "name": "Periodic Table Overview",
+    "description": "Learn how elements are organized in the periodic table and what information it provides about each element.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "atoms_building_blocks"
+    ]
+  },
+  {
+    "conceptKey": "chemical_bonds",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_bonds",
+    "name": "Chemical Bonding",
+    "description": "Explore how atoms connect to form molecules through different types of chemical bonds.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "atoms_building_blocks"
+    ]
+  },
+  {
+    "conceptKey": "acids_and_bases",
+    "subject": "CHEMISTRY",
+    "topic": "acids_and_bases",
+    "name": "Acids and Bases",
+    "description": "Explore the properties of acids and bases, and how they react with each other in chemical reactions.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "chemical_reactions_intro"
+    ]
+  },
+  {
+    "conceptKey": "photosynthesis_role_in_ecosystems",
+    "subject": "BIOLOGY",
+    "topic": "photosynthesis",
+    "name": "Photosynthesis and Ecosystems",
+    "description": "Learn how photosynthesis helps plants produce energy and supports the flow of energy in ecosystems.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "chemical_reactions_in_organisms",
+    "subject": "BIOLOGY",
+    "topic": "cell_chemical_reactions",
+    "name": "Chemical Reactions in Cells",
+    "description": "Explore how food molecules are broken down and built up through chemical reactions to support growth and energy.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "photosynthesis_role_in_ecosystems"
+    ]
+  },
+  {
+    "conceptKey": "resource_availability_effects",
+    "subject": "BIOLOGY",
+    "topic": "ecosystem_resources",
+    "name": "Effects of Resources on Organisms",
+    "description": "Understand how the availability of resources like food and water influences the health and size of populations.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "food_cycle_through_organisms",
+    "subject": "BIOLOGY",
+    "topic": "energy_flow_and_matter_cycling",
+    "name": "Food and Matter Cycles",
+    "description": "Develop models showing how food energy and matter move and change through organisms and their environment.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "chemical_reactions_in_organisms"
+    ]
+  },
+  {
+    "conceptKey": "mutations_and_proteins",
+    "subject": "BIOLOGY",
+    "topic": "gene_mutations",
+    "name": "Genetic Mutations and Proteins",
+    "description": "Learn how tiny changes in genes can affect the proteins in an organism and its traits.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "reproduction_types",
+    "subject": "BIOLOGY",
+    "topic": "reproduction",
+    "name": "Asexual and Sexual Reproduction",
+    "description": "Compare how offspring are produced with identical or geneticly varied traits through different reproduction methods.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "fossil_record_patterns",
+    "subject": "BIOLOGY",
+    "topic": "fossil_record",
+    "name": "Fossil Record and Evolution",
+    "description": "Analyze patterns in fossils to understand how life has changed, diversified, and gone extinct over Earth's history.",
+    "difficulty": 4,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "genetic_variation_survival",
+    "subject": "BIOLOGY",
+    "topic": "genetic_variation",
+    "name": "Genetic Variation and Survival",
+    "description": "Explain how differences in traits within a population can help some individuals survive and reproduce better in their environment.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "mutations_and_proteins"
+    ]
+  },
+  {
+    "conceptKey": "writing_functions_with_parameters",
+    "subject": "CODING",
+    "topic": "functions",
+    "name": "Functions with Parameters",
+    "description": "Create reusable blocks of code called functions that can take parameters to perform specific tasks multiple times.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "incorporating_libraries_and_media",
+    "subject": "CODING",
+    "topic": "libraries_media",
+    "name": "Using Libraries and Media",
+    "description": "Understand how to include external libraries, media, and pre-made code to enhance your programs and give proper attribution.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "commenting_and_documentation",
+    "subject": "CODING",
+    "topic": "documentation",
+    "name": "Code Comments and Documentation",
+    "description": "Learn how to add comments to your code to explain what it does, making it easier to follow, test, and debug.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "collaborative_design_thinking",
+    "subject": "CODING",
+    "topic": "collaboration",
+    "name": "Collaborative Design",
+    "description": "Explore ways to work with others to gather feedback, refine your programs, and create solutions that meet user needs.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "basic_encryption_methods",
+    "subject": "CODING",
+    "topic": "security",
+    "name": "Basic Encryption",
+    "description": "Understand simple methods of encoding information to keep digital data secure during transmission.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "ethical_considerations_in_tech",
+    "subject": "CODING",
+    "topic": " ethics",
+    "name": "Tech Ethics and Bias",
+    "description": "Discuss issues of bias, accessibility, and privacy in technology design to create fair and inclusive digital tools.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "character_development",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "story_structure",
+    "name": "Character Development",
+    "description": "Examining how characters change and grow throughout a story and how they influence the plot.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "theme_development",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "themes",
+    "name": "Theme Development",
+    "description": "Understanding how central themes emerge and change over the course of a text and their impact on the overall message.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "symbolism_and_motifs",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "literary_devices",
+    "name": "Symbolism and Motifs",
+    "description": "Exploring how symbols and recurring motifs contribute to the meaning and depth of a literary work.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "literary_texts_structure",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "text_structure",
+    "name": "Text Structure Analysis",
+    "description": "Analyzing how the structure of a poem or drama (e.g., sonnet, soliloquy) helps convey its meaning.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "point_of_view_and_purpose",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "author_purpose",
+    "name": "Author's Perspective",
+    "description": "Determining an author's point of view or purpose and how they distinguish their position from others.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "dramatic_irony_effects",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "literary_devices",
+    "name": "Dramatic Irony and Effects",
+    "description": "Analyzing how different points of view and dramatic irony create suspense, humor, or other effects in a story.",
+    "difficulty": 4,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "scarcity",
+    "subject": "ECONOMICS",
+    "topic": "basic_needs_and_resources",
+    "name": "Understanding Scarcity",
+    "description": "Scarcity means there are limited resources to meet unlimited wants and needs, forcing people to make choices.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "opportunity_cost",
+    "subject": "ECONOMICS",
+    "topic": "making_choices",
+    "name": "Opportunity Cost",
+    "description": "Opportunity cost is what you give up when you make a choice, highlighting the benefits of the next best alternative.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "scarcity"
+    ]
+  },
+  {
+    "conceptKey": "money",
+    "subject": "ECONOMICS",
+    "topic": "money_and_currency",
+    "name": "What is Money?",
+    "description": "Money is a medium of exchange used to buy goods and services instead of bartering.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "banking",
+    "subject": "ECONOMICS",
+    "topic": "money_and_currency",
+    "name": "Banking and Savings",
+    "description": "Banking involves storing money, earning interest, and loans, which help people and businesses grow financially.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "money"
+    ]
+  },
+  {
+    "conceptKey": "entrepreneurship",
+    "subject": "ECONOMICS",
+    "topic": "business",
+    "name": "Entrepreneurship",
+    "description": "Entrepreneurship is the process of starting and running a new business to offer goods or services.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "scarcity"
+    ]
+  },
+  {
+    "conceptKey": "economies_of_scale",
+    "subject": "ECONOMICS",
+    "topic": "production_costs",
+    "name": "Economies of Scale",
+    "description": "Economies of scale occur when the cost per unit of producing goods decreases as production increases.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "entrepreneurship"
+    ]
+  },
+  {
+    "conceptKey": "interest_rates",
+    "subject": "ECONOMICS",
+    "topic": "banking_and_finance",
+    "name": "Interest Rates",
+    "description": "Interest rates are the cost of borrowing money, influencing saving and spending habits.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "banking"
+    ]
+  },
+  {
+    "conceptKey": "ai_intro_and_purpose",
+    "subject": "AI_LEARNING",
+    "topic": "introduction",
+    "name": "What Is Artificial Intelligence?",
+    "description": "Learn about what AI is and how it is used in everyday life.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "training_data_and_models",
+    "subject": "AI_LEARNING",
+    "topic": "training_process",
+    "name": "Training Data and Models",
+    "description": "Learn about training data and how machines create models to interpret data patterns.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "machine_learning_basics"
+    ]
+  },
+  {
+    "conceptKey": "natural_language_processing",
+    "subject": "AI_LEARNING",
+    "topic": "language_processing",
+    "name": "Natural Language Processing",
+    "description": "Discover how AI understands and works with human language and communication.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "ai_intro_and_purpose"
+    ]
+  },
+  {
+    "conceptKey": "computer_vision",
+    "subject": "AI_LEARNING",
+    "topic": "vision",
+    "name": "Computer Vision Basics",
+    "description": "Learn how AI systems interpret and analyze images and videos.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "ai_intro_and_purpose"
+    ]
+  },
+  {
+    "conceptKey": "ethical_ai_considerations",
+    "subject": "AI_LEARNING",
+    "topic": "ethics",
+    "name": "Ethics in AI",
+    "description": "Understand the moral and ethical issues surrounding AI development and use.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "ai_intro_and_purpose"
+    ]
+  },
+  {
+    "conceptKey": "logic_propositions",
+    "subject": "LOGIC",
+    "topic": "propositions",
+    "name": "Understanding Propositions",
+    "description": "Learn what propositions are and how they form the building blocks of logical statements.",
+    "difficulty": 1,
+    "gradeLevel": 8,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_logical_connectives",
+    "subject": "LOGIC",
+    "topic": "connectives",
+    "name": "Logical Connectives",
+    "description": "Discover common connectives like AND, OR, and NOT that connect propositions to form complex statements.",
+    "difficulty": 2,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "logic_propositions"
+    ]
+  },
+  {
+    "conceptKey": "logic_logical_inference",
+    "subject": "LOGIC",
+    "topic": "inference",
+    "name": "Logical Inference",
+    "description": "Understand how to draw logical conclusions from true premises using inference rules.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "logic_truth_tables"
+    ]
+  },
+  {
+    "conceptKey": "logic_bi_implications",
+    "subject": "LOGIC",
+    "topic": "bi_implications",
+    "name": "Biconditional Logic",
+    "description": "Explore statements that are true when two propositions are both true or both false.",
+    "difficulty": 3,
+    "gradeLevel": 8,
+    "prerequisites": [
+      "logic_conditionals"
+    ]
+  },
+  {
+    "conceptKey": "rational_and_irrational_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "number_systems",
+    "name": "Rational and Irrational Numbers",
+    "description": "Students understand the difference between rational and irrational numbers and learn how to identify and convert decimals that repeat into rational numbers.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "estimating_irrational_numbers",
+    "subject": "MATHEMATICS",
+    "topic": "number_line",
+    "name": "Estimating Irrational Numbers",
+    "description": "Students use rational approximations to compare and locate irrational numbers such as π on a number line and estimate their values.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "rational_and_irrational_numbers"
+    ]
+  },
+  {
+    "conceptKey": "properties_of_exponents",
+    "subject": "MATHEMATICS",
+    "topic": "algebra_exponents",
+    "name": "Properties of Exponents",
+    "description": "Students apply the laws of exponents to simplify and generate equivalent numerical expressions involving integer exponents.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "square_and_cube_roots",
+    "subject": "MATHEMATICS",
+    "topic": "roots",
+    "name": "Square and Cube Roots",
+    "description": "Students use square root and cube root symbols to solve equations of the form x² = p and x³ = p and evaluate of roots of perfect squares and cubes.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "properties_of_exponents"
+    ]
+  },
+  {
+    "conceptKey": "scientific_notation",
+    "subject": "MATHEMATICS",
+    "topic": "numbers_representations",
+    "name": "Scientific Notation",
+    "description": "Students learn to perform operations with numbers in scientific notation, estimating very large or small quantities and interpreting notation generated by technology.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "properties_of_exponents"
+    ]
+  },
+  {
+    "conceptKey": "slope_and_line_equations",
+    "subject": "MATHEMATICS",
+    "topic": "linear_equations",
+    "name": "Slope and Line Equations",
+    "description": "Students understand that the slope m is the same between any two points on a line and derive equations y=mx and y=mx+b.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "graph_proportional_relationships"
+    ]
+  },
+  {
+    "conceptKey": "functions_and_graphs",
+    "subject": "MATHEMATICS",
+    "topic": "functions",
+    "name": "Functions and Graphs",
+    "description": "Students understand that a function assigns exactly one output to each input, interpret various representations of functions, and explore their properties.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "solving_linear_equations"
+    ]
+  },
+  {
+    "conceptKey": "newtons_laws_of_motion",
+    "subject": "PHYSICS",
+    "topic": "motion",
+    "name": "Newton's Laws of Motion",
+    "description": "Fundamental principles explaining how objects move and respond to forces, including inertia and acceleration.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "force_and_acceleration",
+    "subject": "PHYSICS",
+    "topic": "motion",
+    "name": "Force and Acceleration",
+    "description": "Explores how the application of force causes objects to accelerate according to Newton's second law.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "newtons_laws_of_motion"
+    ]
+  },
+  {
+    "conceptKey": "energy_and_work",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Energy and Work",
+    "description": "Introduces different forms of energy and how work is done when energy is transferred by forces.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "kinetic_and_potential_energy",
+    "subject": "PHYSICS",
+    "topic": "energy",
+    "name": "Kinetic and Potential Energy",
+    "description": "Explains types of mechanical energy, how they transform into each other, and their role in motion.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "energy_and_work"
+    ]
+  },
+  {
+    "conceptKey": "waves_and_sound",
+    "subject": "PHYSICS",
+    "topic": "waves",
+    "name": "Waves and Sound",
+    "description": "Examines how waves travel through different media, including the properties of sound waves and their detection.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "light_and_reflection",
+    "subject": "PHYSICS",
+    "topic": "light",
+    "name": "Light and Reflection",
+    "description": "Describes how light behaves, including reflection, refraction, and the formation of images.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "electric_current_and_circuits",
+    "subject": "PHYSICS",
+    "topic": "electricity",
+    "name": "Electric Current and Circuits",
+    "description": "Introduces electric charge, current flow, and basic circuit components like batteries and bulbs.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "magnetism_and_magnetic_fields",
+    "subject": "PHYSICS",
+    "topic": "magnetism",
+    "name": "Magnetism and Fields",
+    "description": "Explores how magnets attract or repel and how magnetic fields are created around magnetic objects.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "electric_current_and_circuits"
+    ]
+  },
+  {
+    "conceptKey": "chemistry_matter",
+    "subject": "CHEMISTRY",
+    "topic": "matter",
+    "name": "What is Matter?",
+    "description": "An introduction to matter, including its states and properties that make up everything around us.",
+    "difficulty": 1,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "atoms_basic_structure",
+    "subject": "CHEMISTRY",
+    "topic": "atomic_structure",
+    "name": "Atom Basics",
+    "description": "Understanding atoms as the fundamental building blocks of matter, including protons, neutrons, and electrons.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "chemistry_matter"
+    ]
+  },
+  {
+    "conceptKey": "periodic_trends",
+    "subject": "CHEMISTRY",
+    "topic": "periodic_trends",
+    "name": "Periodic Trends",
+    "description": "Examining patterns such as atomic size, ionization energy, and electronegativity across periods and groups.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "periodic_table_intro"
+    ]
+  },
+  {
+    "conceptKey": "chemical_energy",
+    "subject": "CHEMISTRY",
+    "topic": "chemical_energy",
+    "name": "Chemical Energy",
+    "description": "Understanding how chemical reactions involve energy changes, including exothermic and endothermic processes.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "chemical_reactions"
+    ]
+  },
+  {
+    "conceptKey": "bio_cell_structure",
+    "subject": "BIOLOGY",
+    "topic": "cell_structure",
+    "name": "Cell Structure",
+    "description": "Learn about the parts of a cell and their functions to understand how cells carry out life processes.",
+    "difficulty": 1,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_dna_function",
+    "subject": "BIOLOGY",
+    "topic": "dna_and_protein_synthesis",
+    "name": "DNA and Proteins",
+    "description": "Discover how DNA stores genetic information and how it directs the production of proteins in cells.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_cell_structure"
+    ]
+  },
+  {
+    "conceptKey": "bio_mutations_and_effects",
+    "subject": "BIOLOGY",
+    "topic": "genetic_mutations",
+    "name": "Mutations and Effects",
+    "description": "Explore how changes to genes (mutations) can affect organism traits and health, sometimes causing harmful or beneficial effects.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_dna_function"
+    ]
+  },
+  {
+    "conceptKey": "bio_reproduction_types",
+    "subject": "BIOLOGY",
+    "topic": "reproduction",
+    "name": "Reproduction Types",
+    "description": "Understand the differences between asexual and sexual reproduction and how they influence genetic diversity.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_fossil_records",
+    "subject": "BIOLOGY",
+    "topic": "fossil_record",
+    "name": "Fossil Record",
+    "description": "Analyze fossil evidence to learn about the history of life, including species extinction and evolutionary changes.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "bio_evolutionary_relationships",
+    "subject": "BIOLOGY",
+    "topic": "evolutionary_relationships",
+    "name": "Evolutionary Relationships",
+    "description": "Compare and interpret similarities and differences among organisms to understand how they are related through evolution.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_fossil_records"
+    ]
+  },
+  {
+    "conceptKey": "bio_genetic_variation",
+    "subject": "BIOLOGY",
+    "topic": "genetic_variation",
+    "name": "Genetic Variation",
+    "description": "Study how genetic differences within a population increase survival chances and influence evolution.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_reproduction_types"
+    ]
+  },
+  {
+    "conceptKey": "bio_technology_inheritance",
+    "subject": "BIOLOGY",
+    "topic": "biotechnology",
+    "name": "Biotechnology and Inheritance",
+    "description": "Learn about technological advances that enable humans to influence inheritance and traits in organisms.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_dna_function"
+    ]
+  },
+  {
+    "conceptKey": "bio_dna_protein_relationship",
+    "subject": "BIOLOGY",
+    "topic": "dna_protein_relationship",
+    "name": "DNA and Protein Relationship",
+    "description": "Explain how the structure of DNA determines the structure and function of proteins essential for life.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "bio_dna_function"
+    ]
+  },
+  {
+    "conceptKey": "lists_and_arrays",
+    "subject": "CODING",
+    "topic": "collections",
+    "name": "Lists and Arrays",
+    "description": "Use lists and arrays to organize and manage multiple data items efficiently.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "functions_and_procedures",
+    "subject": "CODING",
+    "topic": "functions",
+    "name": "Functions and Procedures",
+    "description": "Create reusable blocks of code with functions to solve problems systematically.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "control_structures"
+    ]
+  },
+  {
+    "conceptKey": "cryptography_basics",
+    "subject": "CODING",
+    "topic": "security",
+    "name": "Cryptography Basics",
+    "description": "Explore methods of encryption to understand how information can be kept secure during transmission.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "variables_and_data_types"
+    ]
+  },
+  {
+    "conceptKey": "public_private_information",
+    "subject": "CODING",
+    "topic": "privacy",
+    "name": "Public and Private Information",
+    "description": "Learn the tradeoffs between sharing information publicly and keeping it private and secure.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "cryptography_basics"
+    ]
+  },
+  {
+    "conceptKey": "collaborative_coding",
+    "subject": "CODING",
+    "topic": "collaboration",
+    "name": "Collaborative Coding",
+    "description": "Use strategies like surveys and crowdsourcing to work effectively with many contributors on a project.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "algorithm_design",
+    "subject": "CODING",
+    "topic": "algorithms",
+    "name": "Algorithm Design",
+    "description": "Develop step-by-step procedures to solve specific problems efficiently using algorithms.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "control_structures"
+    ]
+  },
+  {
+    "conceptKey": "ethical_impacts_of_computing",
+    "subject": "CODING",
+    "topic": "ethics",
+    "name": "Ethical Impacts of Computing",
+    "description": "Evaluate how computing technologies affect society, including ethical, social, and economic considerations.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "theme_analysis",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "theme_development",
+    "name": "Theme Development",
+    "description": "Analyzing how themes or central ideas are developed and refined throughout a literary work, including character and plot influences.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "character_point_of_view",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "point_of_view",
+    "name": "Character Perspectives",
+    "description": "Examining how different points of view of characters influence the story and create effects like suspense or humor.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "textual_evidence",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "evidence_support",
+    "name": "Citing Textual Evidence",
+    "description": "Learning to cite specific evidence from a text to support analysis, inference, or argument.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "literary_analysis",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "text_analysis",
+    "name": "Literary Analysis Skills",
+    "description": "Developing skills to analyze literary texts deeply, including identifying themes, literary devices, and authors’ intent.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "author_point_of_view",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "author_purpose",
+    "name": "Author’s Point of View",
+    "description": "Determining an author's perspective or purpose in a literary work and understanding how rhetoric advances this purpose.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_analysis"
+    ]
+  },
+  {
+    "conceptKey": "literary_techniques",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "literary_devices",
+    "name": "Literary Techniques",
+    "description": "Identifying and analyzing techniques such as irony, symbolism, and metaphor used to enhance meaning.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "cultural_perspectives",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "world_literature",
+    "name": "Global Cultural Perspectives",
+    "description": "Analyzing how different cultural experiences and points of view are reflected in literature from around the world.",
+    "difficulty": 4,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_elements"
+    ]
+  },
+  {
+    "conceptKey": "writing_argument",
+    "subject": "ENGLISH_LITERATURE",
+    "topic": "persuasive_writing",
+    "name": "Writing Arguments",
+    "description": "Constructing clear and convincing arguments supported by relevant evidence and reasoning.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "literary_analysis"
+    ]
+  },
+  {
+    "conceptKey": "scarcity_economics",
+    "subject": "ECONOMICS",
+    "topic": "basic_economic_problems",
+    "name": "Understanding Scarcity",
+    "description": "Scarcity means resources are limited compared to needs and wants, which is the foundation of economic decision-making.",
+    "difficulty": 1,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "price_fluctuations",
+    "subject": "ECONOMICS",
+    "topic": "market_behavior",
+    "name": "Price Fluctuations",
+    "description": "Prices change based on shifts in supply and demand, affecting consumers and producers.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "supply_and_demand"
+    ]
+  },
+  {
+    "conceptKey": "consumer_choice",
+    "subject": "ECONOMICS",
+    "topic": "consumer_behavior",
+    "name": "Consumer Choice",
+    "description": "Consumers decide what to buy based on preferences, prices, and income levels.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "supply_and_demand"
+    ]
+  },
+  {
+    "conceptKey": "production_factors",
+    "subject": "ECONOMICS",
+    "topic": "productive_resources",
+    "name": "Factors of Production",
+    "description": "Resources like land, labor, capital, and entrepreneurship are needed to produce goods and services.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "scarcity_economics"
+    ]
+  },
+  {
+    "conceptKey": "economic_growth",
+    "subject": "ECONOMICS",
+    "topic": "economic_development",
+    "name": "Economic Growth",
+    "description": "Economic growth is an increase in a country’s production of goods and services over time.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "production_factors"
+    ]
+  },
+  {
+    "conceptKey": "inflation_deflation",
+    "subject": "ECONOMICS",
+    "topic": "price_levels",
+    "name": "Inflation and Deflation",
+    "description": "Inflation is rising prices; deflation is falling prices, both impacting purchasing power.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "price_fluctuations"
+    ]
+  },
+  {
+    "conceptKey": "ai_learning_intro",
+    "subject": "AI_LEARNING",
+    "topic": "introduction",
+    "name": "What is Artificial Intelligence?",
+    "description": "An overview of what artificial intelligence is and how it affects our daily lives.",
+    "difficulty": 1,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "data_training",
+    "subject": "AI_LEARNING",
+    "topic": "machine_learning",
+    "name": "Training Data in AI",
+    "description": "Learning about how data is used to train AI models to improve their performance.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "machine_learning_basics"
+    ]
+  },
+  {
+    "conceptKey": "machine_learning_applications",
+    "subject": "AI_LEARNING",
+    "topic": "applications",
+    "name": "AI in Real World",
+    "description": "Discovering how AI is used in fields like healthcare, gaming, and robotics.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "machine_learning_basics"
+    ]
+  },
+  {
+    "conceptKey": "bias_in_ai",
+    "subject": "AI_LEARNING",
+    "topic": "ethics",
+    "name": "Bias in Artificial Intelligence",
+    "description": "Understanding how bias can enter AI systems and ways to minimize it.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "ethical_ai"
+    ]
+  },
+  {
+    "conceptKey": "building_simple_ai",
+    "subject": "AI_LEARNING",
+    "topic": "hands_on",
+    "name": "Creating Basic AI Projects",
+    "description": "Guided activities to help students build simple AI models using accessible tools.",
+    "difficulty": 4,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "machine_learning_basics"
+    ]
+  },
+  {
+    "conceptKey": "logic_statement",
+    "subject": "LOGIC",
+    "topic": "propositions",
+    "name": "Logic Statements",
+    "description": "Understanding basic statements that can be true or false, which are the foundation of logical reasoning.",
+    "difficulty": 1,
+    "gradeLevel": 9,
+    "prerequisites": []
+  },
+  {
+    "conceptKey": "logic_conjunction",
+    "subject": "LOGIC",
+    "topic": "connectives",
+    "name": "Logical AND (Conjunction)",
+    "description": "A logical operation that results in true only if both statements involved are true.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "logic_statement"
+    ]
+  },
+  {
+    "conceptKey": "logic_disjunction",
+    "subject": "LOGIC",
+    "topic": "connectives",
+    "name": "Logical OR (Disjunction)",
+    "description": "A logical operation that results in true if at least one of the statements is true.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "logic_statement"
+    ]
+  },
+  {
+    "conceptKey": "logic_negation",
+    "subject": "LOGIC",
+    "topic": "connectives",
+    "name": "Logical NOT (Negation)",
+    "description": "A logical operation that inverts the truth value of a statement, making true into false and vice versa.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "logic_statement"
+    ]
+  },
+  {
+    "conceptKey": "truth_tables",
+    "subject": "LOGIC",
+    "topic": "truth_value_evaluation",
+    "name": "Truth Tables",
+    "description": "A chart used to determine the truth value of complex logical expressions based on their components.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "logic_statement",
+      "logic_conjunction",
+      "logic_disjunction",
+      "logic_negation"
+    ]
+  },
+  {
+    "conceptKey": "logical_equivalence",
+    "subject": "LOGIC",
+    "topic": "logical_relationships",
+    "name": "Logical Equivalence",
+    "description": "When two statements always have the same truth value in all scenarios, meaning they are logically equivalent.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "truth_tables"
+    ]
+  },
+  {
+    "conceptKey": "deductive_reasoning",
+    "subject": "LOGIC",
+    "topic": "reasoning_methods",
+    "name": "Deductive Reasoning",
+    "description": "A logical process where conclusions are drawn definitely based on general principles or premises.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "logical_equivalence"
+    ]
+  },
+  {
+    "conceptKey": "inductive_reasoning",
+    "subject": "LOGIC",
+    "topic": "reasoning_methods",
+    "name": "Inductive Reasoning",
+    "description": "A reasoning process that involves making generalizations based on specific observations or examples.",
+    "difficulty": 3,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "deductive_reasoning"
+    ]
+  },
+  {
+    "conceptKey": "logical_judgment",
+    "subject": "LOGIC",
+    "topic": "critical_thinking",
+    "name": "Logical Judgment",
+    "description": "The ability to evaluate arguments and determine whether they are valid or invalid.",
+    "difficulty": 2,
+    "gradeLevel": 9,
+    "prerequisites": [
+      "truth_tables"
+    ]
   }
 ]

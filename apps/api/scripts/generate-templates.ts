@@ -1,68 +1,114 @@
 /**
- * generate-templates.ts
+ * generate-templates.ts (generalized)
  *
- * Hybrid LLM template generator.
- * Reads rsm-topic-mapping.json, calls GPT-4 to generate 4-5 kid-friendly MCQ templates
- * per RSM concept, validates with Zod, deduplicates against existing templates,
- * and appends validated templates to question-templates.json.
+ * Generates MCQ templates for all concepts in concepts.json, using LlmClient.
+ * Supports --grade-range and --subject flags to target specific subsets.
  *
  * Usage:
  *   cd vidya/apps/api
- *   OPENAI_API_KEY=$OPENAI_API_KEY npx tsx scripts/generate-templates.ts
+ *   LLM_PROVIDER=openai OPENAI_API_KEY=xxx npx tsx scripts/generate-templates.ts
+ *   LLM_PROVIDER=openai OPENAI_API_KEY=xxx npx tsx scripts/generate-templates.ts \
+ *     --grade-range=8-9 --subject=BIOLOGY,CODING
+ *   LLM_PROVIDER=openai OPENAI_API_KEY=xxx npx tsx scripts/generate-templates.ts \
+ *     --concepts=set_theory_intro,venn_diagrams_basic
  *
  * Optional flags:
- *   --concepts set_theory_intro,venn_diagrams_basic   (comma-separated concept keys to target)
- *   --count 4                                          (templates per concept, default 4)
- *   --dry-run                                          (print output without writing to file)
+ *   --grade-range=3-9           (filter by grade range, inclusive)
+ *   --subject=MATH,PHYSICS      (comma-separated subject names)
+ *   --concepts=key1,key2        (target specific concept keys)
+ *   --count=5                   (templates per concept, default 5)
+ *   --dry-run                   (print output without writing)
+ *
+ * WARNING: question-templates.json must always contain ALL templates.
+ * seed.ts does deleteMany+createMany, so never generate into a separate file.
+ *
+ * ENV REQUIRED:
+ *   LLM_PROVIDER=openai
+ *   OPENAI_API_KEY=xxx
  */
 
 import fs from 'fs';
 import path from 'path';
-import OpenAI from 'openai';
 import { z } from 'zod';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { LlmClient } from '../src/services/llm/client';
 
-// ---------------------------------------------------------------------------
-// Schema
-// ---------------------------------------------------------------------------
+// Load .env so API keys are available when running standalone
+import { config as loadEnv } from 'dotenv';
+loadEnv();
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// ── Schema ─────────────────────────────────────────────────────────────────────
+
 const TemplateSchema = z.object({
   conceptKey: z.string().min(1),
   gradeLevel: z.number().int().min(1).max(9),
   difficulty: z.number().int().min(1).max(5),
-  questionText: z.string().min(10).max(300),
+  subject: z.string().optional(),
+  questionText: z.string().min(10).max(400),
   answerFormula: z.string().min(1),
   distractors: z.array(z.string()).length(2),
   solutionSteps: z.array(z.string()).min(2),
+  misconceptionHints: z.array(z.string()).length(2).optional(),
   tags: z.array(z.string()),
   source: z.string(),
 });
 
 type Template = z.infer<typeof TemplateSchema>;
 
-// ---------------------------------------------------------------------------
-// Paths
-// ---------------------------------------------------------------------------
-const SEED_DIR = path.join(__dirname, '../prisma/seed-data');
-const RSM_MAPPING_PATH = path.join(SEED_DIR, 'raw/rsm-topic-mapping.json');
-const TEMPLATES_PATH = path.join(SEED_DIR, 'question-templates.json');
+// ── Paths ──────────────────────────────────────────────────────────────────────
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+const SEED_DIR = join(__dirname, '../prisma/seed-data');
+const CONCEPTS_PATH = join(SEED_DIR, 'concepts.json');
+const TEMPLATES_PATH = join(SEED_DIR, 'question-templates.json');
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+interface ConceptRecord {
+  conceptKey: string;
+  subject: string;
+  topic: string;
+  name: string;
+  description: string;
+  difficulty: number;
+  gradeLevel?: number;
+  prerequisites: string[];
+}
+
+// ── CLI parsing ────────────────────────────────────────────────────────────────
+
 function parseArgs() {
   const args = process.argv.slice(2);
   const conceptsArg = args.find((a) => a.startsWith('--concepts='))?.split('=')[1];
   const countArg = args.find((a) => a.startsWith('--count='))?.split('=')[1];
+  const gradeRangeArg = args.find((a) => a.startsWith('--grade-range='))?.split('=')[1];
+  const subjectArg = args.find((a) => a.startsWith('--subject='))?.split('=')[1];
   const dryRun = args.includes('--dry-run');
+
+  let minGrade = 3, maxGrade = 9;
+  if (gradeRangeArg) {
+    const [min, max] = gradeRangeArg.split('-').map(Number);
+    minGrade = min;
+    maxGrade = max ?? min;
+  }
+
   return {
     targetConcepts: conceptsArg ? conceptsArg.split(',') : null,
-    count: countArg ? parseInt(countArg, 10) : 4,
+    count: countArg ? parseInt(countArg, 10) : 5,
     dryRun,
+    minGrade,
+    maxGrade,
+    targetSubjects: subjectArg ? subjectArg.split(',').map((s) => s.toUpperCase()) : null,
   };
 }
 
+// ── Deduplication ──────────────────────────────────────────────────────────────
+
 function levenshteinSimilarity(a: string, b: string): number {
-  const la = a.toLowerCase();
-  const lb = b.toLowerCase();
+  const la = a.toLowerCase().slice(0, 80);
+  const lb = b.toLowerCase().slice(0, 80);
   if (la === lb) return 1;
   const m = la.length, n = lb.length;
   const dp = Array.from({ length: m + 1 }, (_, i) =>
@@ -82,77 +128,140 @@ function isDuplicate(newText: string, existingTexts: string[]): boolean {
   return existingTexts.some((t) => levenshteinSimilarity(newText, t) > 0.75);
 }
 
-// ---------------------------------------------------------------------------
-// LLM call
-// ---------------------------------------------------------------------------
-const THEMES = ['Minecraft', 'cooking/kitchen', 'detective mystery', 'nature/science lab', 'sports/playground'];
+// ── Subject-specific themes and prompt hints ───────────────────────────────────
+
+const THEMES_BY_SUBJECT: Record<string, string[]> = {
+  MATHEMATICS: ['Minecraft building', 'cooking/baking', 'shopping/money', 'sports statistics', 'space exploration'],
+  PHYSICS: ['playground/sports', 'roller coasters', 'space missions', 'cooking science', 'building/engineering'],
+  CHEMISTRY: ['kitchen chemistry', 'cooking reactions', 'science lab', 'medicine', 'environment'],
+  BIOLOGY: ['nature hike', 'animal kingdom', 'human body', 'gardening', 'food and nutrition'],
+  CODING: ['game development', 'robot programming', 'website building', 'app creation', 'puzzle solving'],
+  ENGLISH_LITERATURE: ['story analysis', 'news reporting', 'book club', 'creative writing', 'debate'],
+  ECONOMICS: ['running a lemonade stand', 'school store', 'saving for a game', 'stock market simulation', 'business plan'],
+  AI_LEARNING: ['training a game AI', 'spam filter', 'recommendation system', 'self-driving cars', 'voice assistant'],
+  LOGIC: ['detective mystery', 'escape room', 'riddles', 'logic puzzles', 'strategy games'],
+  ESSAY_WRITING: ['persuasive letter', 'news article', 'book review', 'personal narrative', 'research essay'],
+};
+
+const SUBJECT_PROMPT_HINTS: Record<string, string> = {
+  MATHEMATICS: 'Use concrete numbers and calculations. Show arithmetic clearly in solutionSteps.',
+  PHYSICS: 'Include units in answers (e.g., m/s, N, J). Reference real physical phenomena.',
+  CHEMISTRY: 'Use correct chemical symbols and reaction notation where appropriate.',
+  BIOLOGY: 'Use accurate biological terminology. Connect to real organisms and systems.',
+  CODING: 'Use pseudocode or describe algorithmic steps. Focus on computational thinking.',
+  ENGLISH_LITERATURE: 'Reference specific literary devices, text structure, or author purpose. Quote or paraphrase text.',
+  ECONOMICS: 'Include dollar amounts or quantities. Require actual calculation for the answer.',
+  AI_LEARNING: 'Describe a real AI/ML scenario. Include conceptual or mathematical reasoning.',
+  LOGIC: 'Require deductive or inductive reasoning. Avoid ambiguous answers.',
+  ESSAY_WRITING: 'Focus on writing structure, argument quality, or rhetorical techniques.',
+};
+
+// ── LLM call ───────────────────────────────────────────────────────────────────
 
 async function generateTemplatesForConcept(
-  client: OpenAI,
-  conceptKey: string,
-  gradeLevel: number,
-  description: string,
+  client: LlmClient,
+  concept: ConceptRecord,
   count: number,
-  existingExamples: Template[]
+  existingTexts: string[],
 ): Promise<Template[]> {
-  const fewShot = existingExamples.slice(0, 2)
-    .map((t, i) => `Example ${i + 1}:\n${JSON.stringify(t, null, 2)}`)
-    .join('\n\n');
+  const gradeLevel = concept.gradeLevel ?? 3;
+  const subject = concept.subject ?? 'MATHEMATICS';
+  const themes = (THEMES_BY_SUBJECT[subject] ?? THEMES_BY_SUBJECT.MATHEMATICS).slice(0, count);
+  const subjectHint = SUBJECT_PROMPT_HINTS[subject] ?? '';
 
-  const themeList = THEMES.slice(0, count).join(', ');
+  const difficultyDistribution = count >= 5
+    ? `1 easy (difficulty:1), 2 medium (difficulty:2 or 3), ${count - 3} hard (difficulty:4 or 5)`
+    : `mix of difficulties 1-5 for grade ${gradeLevel}`;
 
-  const prompt = `Generate exactly ${count} kid-friendly multiple-choice question templates for this math/logic concept.
+  const prompt = `Generate exactly ${count} multiple-choice question templates for this educational concept.
 
-Concept: ${conceptKey}
+Concept key: ${concept.conceptKey}
+Name: ${concept.name}
+Subject: ${subject}
 Grade level: ${gradeLevel}
-Description: ${description}
+Description: ${concept.description}
 
-Each template must use a DIFFERENT real-world theme from: ${themeList}
+Themes to use (one per template): ${themes.join(', ')}
+Subject-specific guidance: ${subjectHint}
+Difficulty distribution: ${difficultyDistribution}
+
 Each template must follow this EXACT JSON schema:
 {
-  "conceptKey": "${conceptKey}",
+  "conceptKey": "${concept.conceptKey}",
   "gradeLevel": ${gradeLevel},
   "difficulty": <1-5 integer>,
-  "questionText": "<engaging scenario question under 250 chars>",
-  "answerFormula": "<correct answer, concise>",
-  "distractors": ["<wrong answer 1>", "<wrong answer 2>"],
-  "solutionSteps": ["<step 1>", "<step 2>", "<step 3>"],
-  "tags": ["<theme tag>"],
-  "source": "rsm-aligned"
+  "subject": "${subject}",
+  "questionText": "<engaging real-world scenario question, max 300 chars>",
+  "answerFormula": "<correct answer, concise, max 100 chars>",
+  "distractors": ["<misconception-based wrong answer 1, max 50 chars>", "<misconception-based wrong answer 2, max 50 chars>"],
+  "solutionSteps": ["<step 1: one cognitive operation>", "<step 2>", "<step 3 if needed>"],
+  "misconceptionHints": ["<what misunderstanding leads a student to pick distractor 1>", "<what misunderstanding leads to distractor 2>"],
+  "tags": ["<theme tag>", "${subject.toLowerCase()}"],
+  "source": "generated"
 }
 
 Rules:
-- The correct answer MUST NOT appear in distractors
+- The correct answerFormula MUST NOT appear in distractors
+- Each distractor MUST represent a real, common student mistake for this concept
+- misconceptionHints must have exactly 2 items (one per distractor), each under 100 chars
 - distractors must be exactly 2 items
-- solutionSteps must have at least 2 items
-- questionText must be engaging and use a real scenario (Minecraft, cooking, etc)
-- Difficulty: grade-${gradeLevel} level. For RSM concepts, err toward higher difficulty within the grade.
+- solutionSteps must have at least 2 items showing how to reach the answer
+- questionText must be an engaging real-world scenario appropriate for grade ${gradeLevel}
+- Each template must use a DIFFERENT theme from the list above
 
-${fewShot ? `Here are examples of good templates for similar concepts:\n\n${fewShot}\n\n` : ''}
+Return ONLY a valid JSON array of ${count} objects. No markdown fences, no explanation.`;
 
-Return ONLY a valid JSON array of ${count} template objects. No markdown fences, no explanation.`;
+  const raw = await client.generateText({
+    modelType: 'analysis',
+    maxTokens: 3000,
+    systemPrompt: `You are an expert K-12 curriculum designer with 15+ years of experience creating pedagogically rigorous assessment items.
 
-  const response = await client.chat.completions.create({
-    model: 'gpt-4',
-    messages: [
-      {
-        role: 'system',
-        content: 'You are an expert curriculum designer creating math question templates for kids aged 8-13. You always output valid JSON arrays only.',
-      },
-      { role: 'user', content: prompt },
-    ],
-    temperature: 0.7,
-    max_tokens: 2000,
+Your task: Generate multiple-choice question templates that are educationally sound, grade-appropriate, and useful for Socratic tutoring.
+
+CORRECTNESS (non-negotiable):
+- The answerFormula MUST be factually and mathematically correct — double-check every calculation.
+- solutionSteps must logically and sequentially lead to answerFormula; each step is ONE cognitive operation.
+- Distractors must represent REAL student misconceptions (not random wrong answers), e.g., sign errors, unit confusion, common operation mistakes.
+
+GRADE-APPROPRIATE LANGUAGE:
+- Grade 3-4: Simple sentences, concrete objects, no variables. Numbers under 100.
+- Grade 5-6: 2-step problems, fractions/decimals OK, one variable allowed.
+- Grade 7-8: Multi-step algebra, geometry, rational numbers, two variables allowed.
+- Grade 9+: Quadratics, proofs, systems, trigonometry introductions.
+
+QUESTION QUALITY:
+- questionText must be an engaging real-world scenario (NOT "Calculate X" — use a story).
+- Each question must use a DIFFERENT real-world theme (cooking, gaming, science, sports, etc.).
+- Max 300 chars for questionText. Max 50 chars per distractor. Max 100 chars for answerFormula.
+- solutionSteps: minimum 2 steps, each under 100 chars, written as a student would reason aloud.
+
+MISCONCEPTION FIELD:
+- For each distractor, identify the specific misconception pattern that leads a student to pick it.
+  E.g., "Forgot to multiply both sides", "Confused area with perimeter", "Off-by-one counting error".
+
+OUTPUT: Return ONLY a valid JSON array. No markdown fences. No explanation text outside the array.`,
+    messages: [{ role: 'user', content: prompt }],
+    usePromptCache: false,
   });
 
-  const raw = response.choices[0]?.message?.content?.trim() ?? '[]';
+  // Strip markdown fences if present
+  const cleaned = raw.replace(/```(?:json)?\n?/g, '').replace(/```/g, '').trim();
 
   let parsed: unknown[];
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(cleaned);
   } catch {
-    console.warn(`  ⚠ JSON parse failed for ${conceptKey}, raw output:\n${raw.slice(0, 200)}`);
-    return [];
+    // Try to extract JSON array
+    const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
+    if (!arrayMatch) {
+      console.warn(`  ⚠ JSON parse failed for ${concept.conceptKey}`);
+      return [];
+    }
+    try {
+      parsed = JSON.parse(arrayMatch[0]);
+    } catch {
+      return [];
+    }
   }
 
   if (!Array.isArray(parsed)) return [];
@@ -161,130 +270,75 @@ Return ONLY a valid JSON array of ${count} template objects. No markdown fences,
   for (const item of parsed) {
     const result = TemplateSchema.safeParse(item);
     if (result.success) {
-      validated.push(result.data);
+      if (!isDuplicate(result.data.questionText, existingTexts)) {
+        validated.push(result.data);
+        existingTexts.push(result.data.questionText);
+      } else {
+        console.log(`    ↩ Skipped duplicate`);
+      }
     } else {
-      console.warn(`  ⚠ Validation failed for template in ${conceptKey}:`, result.error.issues[0]);
+      console.warn(`  ⚠ Validation failed: ${result.error.issues[0]?.message}`);
     }
   }
 
   return validated;
 }
 
-// ---------------------------------------------------------------------------
-// RSM concept targets
-// ---------------------------------------------------------------------------
-const RSM_CONCEPTS_TO_GENERATE = [
-  { conceptKey: 'set_theory_intro', gradeLevel: 3, description: 'Understanding sets: defined sets, equal sets, empty sets, set membership' },
-  { conceptKey: 'venn_diagrams_basic', gradeLevel: 3, description: 'Using Venn diagrams to show set relationships, subsets, intersections' },
-  { conceptKey: 'set_operations', gradeLevel: 4, description: 'Union (A∪B), intersection (A∩B), complement of sets' },
-  { conceptKey: 'motion_problems', gradeLevel: 4, description: 'Distance = velocity × time word problems, solving for any of the three variables' },
-  { conceptKey: 'work_rate_time', gradeLevel: 4, description: 'Worker rate problems: if A finishes in 6h and B in 4h, together they finish in 12/5 hours' },
-  { conceptKey: 'cost_formula', gradeLevel: 3, description: 'Cost = price × quantity, multi-step cost problems with unit price' },
-  { conceptKey: 'compound_word_problems', gradeLevel: 4, description: 'Multi-step problems requiring 2+ operations to solve, RSM hallmark' },
-  { conceptKey: 'multi_step_equations', gradeLevel: 5, description: 'Equations like 3(x+2)=21, requiring distribution and inverse operations' },
-  { conceptKey: 'mixed_numbers', gradeLevel: 4, description: 'Converting between mixed numbers (2½) and improper fractions (5/2)' },
-  { conceptKey: 'fraction_of_number', gradeLevel: 4, description: 'Finding (3/4) of 24, linking fractions to multiplication' },
-  { conceptKey: 'percent_as_hundredths', gradeLevel: 5, description: 'Percentages as parts per hundred, converting fractions/decimals to percents' },
-  { conceptKey: 'simultaneous_motion', gradeLevel: 5, description: 'Two objects moving toward/away — combined rate and gap problems (trains problem)' },
-  { conceptKey: 'motion_graphs', gradeLevel: 5, description: 'Distance-time graphs, reading slope as speed, identifying constant vs changing speed' },
-  { conceptKey: 'right_triangle_area', gradeLevel: 5, description: 'Area = (base × height) / 2 for right triangles' },
-  { conceptKey: 'inequalities_intro', gradeLevel: 5, description: 'Solving and graphing inequalities: x+3 > 7, meaning all values > 4' },
-  { conceptKey: 'counting_principles', gradeLevel: 4, description: 'If event A has m outcomes and B has n, together m×n outcomes (shirts×pants combos)' },
-  { conceptKey: 'logical_connectives', gradeLevel: 5, description: 'If-then statements, for all (universal), there exists (existential) quantifiers' },
-  { conceptKey: 'coordinate_graphing', gradeLevel: 5, description: 'Plotting (x,y) ordered pairs on coordinate plane, reading graph coordinates' },
-];
+// ── Main ───────────────────────────────────────────────────────────────────────
 
-const THIN_COVERAGE_CONCEPTS = [
-  { conceptKey: 'forces_push_pull', gradeLevel: 3, description: 'Pushes and pulls as forces, direction of force, effect on object motion' },
-  { conceptKey: 'solutions', gradeLevel: 4, description: 'Solutes dissolving in solvents, concentration, saturation of solutions' },
-  { conceptKey: 'friction', gradeLevel: 3, description: 'Friction as a force opposing motion, rough vs smooth surfaces' },
-  { conceptKey: 'balance_weight', gradeLevel: 3, description: 'Balancing objects on a seesaw, torque and weight distribution' },
-  { conceptKey: 'light_shadows', gradeLevel: 3, description: 'Light travels in straight lines, shadows form when light is blocked' },
-  { conceptKey: 'density', gradeLevel: 5, description: 'Density = mass/volume, why objects float or sink, comparing densities' },
-  { conceptKey: 'multidigit_multiplication_2digit', gradeLevel: 4, description: '2-digit × 2-digit multiplication using standard algorithm, e.g. 34 × 56' },
-  { conceptKey: 'fraction_addition_same_denominator', gradeLevel: 4, description: 'Adding and subtracting fractions with the same denominator' },
-  { conceptKey: 'area_complex_figures', gradeLevel: 5, description: 'Area of composite shapes by decomposing into rectangles and triangles' },
-  { conceptKey: 'algebraic_patterns', gradeLevel: 5, description: 'Finding patterns in sequences and writing algebraic rules for them' },
-  { conceptKey: 'multi_step_deduction', gradeLevel: 5, description: 'Multi-step logical deduction chains, eliminating possibilities systematically' },
-  { conceptKey: 'geometry_scale_drawings', gradeLevel: 6, description: 'Scale factors in drawings and maps, proportional reasoning with measurements' },
-  { conceptKey: 'kinetic_potential_energy', gradeLevel: 5, description: 'Kinetic energy (moving objects) vs potential energy (stored), energy conversion' },
-  { conceptKey: 'wave_properties', gradeLevel: 5, description: 'Wavelength, frequency, amplitude of waves; sound and light as waves' },
-  { conceptKey: 'spatial_rotation', gradeLevel: 6, description: 'Mentally rotating 2D and 3D shapes, visualizing cross-sections' },
-];
-
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
 async function main() {
-  const { targetConcepts, count, dryRun } = parseArgs();
+  const { targetConcepts, count, dryRun, minGrade, maxGrade, targetSubjects } = parseArgs();
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error('Error: OPENAI_API_KEY environment variable is not set');
-    process.exit(1);
+  // Load all concepts
+  const allConcepts: ConceptRecord[] = JSON.parse(fs.readFileSync(CONCEPTS_PATH, 'utf-8'));
+
+  // Filter concepts
+  let concepts = allConcepts.filter((c) => {
+    const grade = c.gradeLevel ?? 3;
+    if (grade < minGrade || grade > maxGrade) return false;
+    if (targetSubjects && !targetSubjects.includes(c.subject?.toUpperCase() ?? 'MATHEMATICS')) return false;
+    if (targetConcepts && !targetConcepts.includes(c.conceptKey)) return false;
+    return true;
+  });
+
+  if (concepts.length === 0) {
+    console.log('No concepts match the given filters. Exiting.');
+    return;
   }
 
-  const client = new OpenAI({ apiKey });
+  console.log(`Generating ${count} templates per concept for ${concepts.length} concepts`);
+  console.log(`Grade range: ${minGrade}-${maxGrade}, Subjects: ${targetSubjects?.join(',') ?? 'all'}\n`);
 
   // Load existing templates
   const existingTemplates: Template[] = JSON.parse(fs.readFileSync(TEMPLATES_PATH, 'utf-8'));
   const existingTexts = existingTemplates.map((t) => t.questionText);
-  console.log(`Loaded ${existingTemplates.length} existing templates`);
+  console.log(`Loaded ${existingTemplates.length} existing templates\n`);
 
-  // Determine which concepts to target
-  const allConcepts = [...RSM_CONCEPTS_TO_GENERATE, ...THIN_COVERAGE_CONCEPTS];
-  const concepts = targetConcepts
-    ? allConcepts.filter((c) => targetConcepts.includes(c.conceptKey))
-    : allConcepts;
-
-  console.log(`Generating templates for ${concepts.length} concepts (${count} per concept)...\n`);
-
+  const client = new LlmClient();
   const newTemplates: Template[] = [];
   let successCount = 0;
-  let skipCount = 0;
 
-  for (const concept of concepts) {
-    console.log(`  Generating for: ${concept.conceptKey} (grade ${concept.gradeLevel})`);
-
-    // Get existing examples for this concept as few-shot
-    const examples = existingTemplates.filter((t) => t.conceptKey === concept.conceptKey);
+  for (let i = 0; i < concepts.length; i++) {
+    const concept = concepts[i];
+    console.log(`  [${i + 1}/${concepts.length}] ${concept.conceptKey} (G${concept.gradeLevel ?? 3}, ${concept.subject})`);
 
     try {
-      const generated = await generateTemplatesForConcept(
-        client,
-        concept.conceptKey,
-        concept.gradeLevel,
-        concept.description,
-        count,
-        examples
-      );
-
-      let added = 0;
-      for (const t of generated) {
-        if (isDuplicate(t.questionText, existingTexts)) {
-          skipCount++;
-          console.log(`    ↩ Skipped duplicate: "${t.questionText.slice(0, 60)}..."`);
-        } else {
-          newTemplates.push(t);
-          existingTexts.push(t.questionText);
-          added++;
-        }
-      }
-
-      console.log(`    ✓ Added ${added} / ${generated.length} templates`);
-      successCount += added;
-
-      // Small delay to avoid rate limiting
-      await new Promise((r) => setTimeout(r, 500));
+      const generated = await generateTemplatesForConcept(client, concept, count, existingTexts);
+      newTemplates.push(...generated);
+      successCount += generated.length;
+      console.log(`    ✓ ${generated.length} templates added`);
     } catch (err) {
-      console.error(`    ✗ Error generating for ${concept.conceptKey}:`, err instanceof Error ? err.message : err);
+      console.error(`    ✗ Error: ${(err as Error).message}`);
     }
+
+    // Rate limiting delay
+    await new Promise((r) => setTimeout(r, 600));
   }
 
-  console.log(`\nSummary: ${successCount} new templates generated, ${skipCount} duplicates skipped`);
+  console.log(`\nSummary: ${successCount} new templates generated`);
 
   if (dryRun) {
-    console.log('\n-- DRY RUN: Sample output (first 2 templates) --');
+    console.log('\n-- DRY RUN: first 2 templates --');
     console.log(JSON.stringify(newTemplates.slice(0, 2), null, 2));
     return;
   }
@@ -294,10 +348,9 @@ async function main() {
     return;
   }
 
-  // Append to existing file
   const combined = [...existingTemplates, ...newTemplates];
   fs.writeFileSync(TEMPLATES_PATH, JSON.stringify(combined, null, 2));
-  console.log(`\n✅ Written ${combined.length} total templates to ${TEMPLATES_PATH}`);
+  console.log(`\nWritten ${combined.length} total templates to ${TEMPLATES_PATH}`);
 }
 
 main().catch((err) => {

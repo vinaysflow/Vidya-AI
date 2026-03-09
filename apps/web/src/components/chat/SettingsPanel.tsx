@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Check, Key, Sun, Moon, Laptop, Mic, User, RotateCcw } from 'lucide-react';
+import { X, Check, Key, Sun, Moon, Laptop, Mic, User, RotateCcw, Trash2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import {
   useChatStore,
@@ -8,6 +8,9 @@ import {
   type Language,
 } from '../../stores/chatStore';
 import { VOICE_ENABLED } from '../../lib/featureFlags';
+import { getApiBase, getJsonHeaders } from '../../lib/api';
+
+const API_BASE = getApiBase();
 
 export function SettingsPanel() {
   const { t, i18n } = useTranslation();
@@ -442,8 +445,85 @@ export function SettingsPanel() {
               </div>
             )}
           </section>
+
+          {/* Delete My Data (COPPA compliance) */}
+          <section>
+            <DeleteMyDataButton />
+          </section>
+
+          {/* Report a Problem */}
+          <section>
+            <button
+              onClick={() => {
+                const { userId, grade, subject } = useChatStore.getState();
+                const body = encodeURIComponent(
+                  `\n\nDevice: ${navigator.userAgent}\nUserId: ${userId}\nGrade: ${grade}\nSubject: ${subject}`
+                );
+                window.open(`mailto:support@tryvidya.ai?subject=Bug Report&body=${body}`, '_blank');
+              }}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            >
+              Report a Problem
+            </button>
+          </section>
         </div>
       </div>
     </>
+  );
+}
+
+function DeleteMyDataButton() {
+  const { userId, apiKey, resetAll } = useChatStore();
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!userId) return;
+    setDeleting(true);
+    try {
+      await fetch(`${API_BASE}/api/user/${userId}/data`, {
+        method: 'DELETE',
+        headers: getJsonHeaders(apiKey),
+      });
+    } catch (_) {}
+    localStorage.removeItem('vidya-user-id');
+    resetAll();
+    setDeleting(false);
+    window.location.reload();
+  };
+
+  if (!confirming) {
+    return (
+      <button
+        onClick={() => setConfirming(true)}
+        className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+      >
+        <Trash2 className="w-3.5 h-3.5" />
+        Delete My Data
+      </button>
+    );
+  }
+
+  return (
+    <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 space-y-2">
+      <p className="text-xs text-red-600 dark:text-red-400 font-medium">
+        This permanently deletes all learning data from our servers. Cannot be undone.
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 disabled:opacity-50 transition-colors"
+        >
+          {deleting ? 'Deleting...' : 'Yes, delete everything'}
+        </button>
+        <button
+          onClick={() => setConfirming(false)}
+          className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 text-xs font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
   );
 }

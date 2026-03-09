@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ChatInterface } from './components/chat/ChatInterface';
 import { ProgressDashboard } from './components/progress/ProgressDashboard';
 import { DashboardLayout } from './components/dashboard/DashboardLayout';
+import { PrivacyNotice } from './components/PrivacyNotice';
+import { ParentReport } from './components/kid/ParentReport';
 import { useChatStore, useIsKidMode } from './stores/chatStore';
 import './i18n';
 
@@ -49,6 +51,8 @@ function App() {
           <Route path="/" element={<ChatInterface />} />
           <Route path="/progress" element={<ProgressDashboard />} />
           <Route path="/dashboard" element={<DashboardLayout />} />
+          <Route path="/privacy" element={<PrivacyNotice />} />
+          <Route path="/parent-report" element={<ParentReport />} />
         </Routes>
       </div>
     </BrowserRouter>

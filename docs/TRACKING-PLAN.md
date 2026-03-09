@@ -111,3 +111,43 @@ Since we don't have a full analytics pipeline yet, track these manually during d
 - No names, emails, or identifiable information.
 - All client data is localStorage-only (no server-side user profiles for kid mode).
 - COPPA-compliant: parent setup required, no data leaves device.
+
+---
+
+## Server-Side Analytics Policy
+
+### Current State (Dogfood Phase)
+
+All analytics during the dogfood phase are built exclusively on top of data that is **already stored for product functionality** — no additional event collection:
+
+| Source | Already stored for | Used for analytics |
+|---|---|---|
+| `Session` (messageCount, hintLevel, maxHintLevel, resolved, masteryGain) | Session end report generation | Learning KPIs |
+| `Progress` (mastery, topic, nextReview) | Spaced repetition scheduling | Mastery summaries |
+| `XPEvent`, `UserGamification`, `UserBadge` | Gamification features | Engagement KPIs |
+| `Message` (role, metadata) | Chat history, tutor context | Safety flagging |
+
+This data is queried server-side only for:
+1. The `GET /api/admin/kpis` endpoint (admin-only, protected by `X-Admin-Secret`)
+2. The `GET /api/progress/summary` endpoint (per-user, no cross-user aggregation)
+
+### Future Analytics (Post-Dogfood)
+
+Any **additional** event collection beyond existing functional data — e.g., the `quest_started`, `choice_selected`, and `session_ended` events listed above — requires the following before implementation:
+
+- [ ] Explicit parent opt-in via a consent toggle in `ParentSetupScreen`
+- [ ] Privacy policy update disclosing server-side data retention
+- [ ] Data retention policy (default: 90-day rolling window for raw events)
+- [ ] Review for COPPA compliance if users under 13 are involved
+
+**Decision checkpoint:** Revisit after dogfood when user volume justifies the infrastructure cost. Until then, the existing functional data provides sufficient signal for product iteration.
+
+### What Is Never Collected
+
+Regardless of the above, the following is never collected server-side:
+
+- Raw message text from kid mode sessions
+- Names, photos, or school information without explicit consent
+- Device identifiers, IP addresses for tracking purposes
+- Behavioral data sold to or shared with third parties
+

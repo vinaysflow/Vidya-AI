@@ -211,8 +211,9 @@ function buildResponseUserPrompt(params: {
   analysis: any;
   language: Language;
   historyText: string;
+  metadata?: Record<string, any>;
 }): string {
-  const { questionType, analysis, language, historyText } = params;
+  const { questionType, analysis, language, historyText, metadata } = params;
   const a = analysis as AnalysisResult;
 
   const languageInstruction: Record<string, string> = {
@@ -235,10 +236,14 @@ function buildResponseUserPrompt(params: {
     encouragement: 'The student is struggling. Validate their effort, then ask an easier question about something specific in the text.',
   };
 
+  const contextSection = metadata?.context
+    ? `\nPASSAGE (the student has read this — ONLY reference details from this text):\n"""\n${metadata.context}\n"""\n`
+    : '';
+
   return `
 CONVERSATION HISTORY:
 ${historyText}
-
+${contextSection}
 ANALYSIS:
 - Error type: ${a.errorType}
 - Error: ${a.errorDescription || 'none'}
@@ -252,8 +257,9 @@ CRITICAL RULES:
 2. Maximum 3-4 sentences
 3. NEVER give the interpretation or state the theme/meaning directly
 4. Be warm and encouraging
-5. Always ground in the text — point to specific words, phrases, or passages
+5. Always ground in the text — point to specific words, phrases, or passages${metadata?.context ? ' from the PASSAGE above' : ''}
 6. Use literary-analysis language (text, passage, imagery, tone, device)
+${metadata?.context ? '7. Do NOT invent details not present in the PASSAGE. All references MUST come from the provided text.' : ''}
 
 Generate the response:
   `.trim();
@@ -269,14 +275,19 @@ function buildAnalysisUserPrompt(params: {
   historyText: string;
   subject: string;
   language: string;
+  metadata?: Record<string, any>;
 }): string {
+  const passageSection = params.metadata?.context
+    ? `\nPASSAGE (the reading material the student was given):\n"""\n${params.metadata.context}\n"""\n`
+    : '';
+
   return `
 SUBJECT: ${params.subject} (English Literature / Comprehension)
 LANGUAGE: ${params.language}
 
 TEXT / PASSAGE / QUESTION:
 ${params.problem || 'Not explicitly stated'}
-
+${passageSection}
 CONVERSATION HISTORY:
 ${params.historyText}
 

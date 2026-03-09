@@ -65,33 +65,5 @@
     "tags": [
       "patterns"
     ]
-  },
-  {
-    "id": "nickels_count",
-    "title": "Count by 5s",
-    "prompt": "You have a jar of nickels. Each nickel is 5 cents. If you have 6 nickels, how many cents is that?",
-    "subject": "MATHEMATICS",
-    "topic": "operations",
-    "conceptKey": "skip_counting",
-    "prerequisites": [
-      "addition_grouping"
-    ],
-    "tags": [
-      "money",
-      "counting"
-    ]
-  },
-  {
-    "id": "shape_hunt",
-    "title": "Shape Hunt",
-    "prompt": "Look around you! Can you find something shaped like a rectangle? What makes it a rectangle and not a square?",
-    "subject": "MATHEMATICS",
-    "topic": "geometry_shapes",
-    "conceptKey": "shapes_identify",
-    "prerequisites": [],
-    "tags": [
-      "shapes",
-      "real-world"
-    ]
   }
 ]

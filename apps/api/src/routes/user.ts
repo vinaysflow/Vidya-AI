@@ -1,23 +1,34 @@
-/**
- * User profile routes (for elementary dogfooding: grade, name)
- */
 import { Router, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * DELETE /api/user/:userId/data
+ * Purges all data for a given anonymous userId (COPPA compliance / right to delete).
+ */
+router.delete('/:userId/data', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: { id: true, name: true, grade: true, preferredLang: true },
-    });
-    if (!user) {
-      return res.status(404).json({ success: false, error: 'User not found' });
+    const { userId } = req.params;
+    if (!userId || userId === 'anonymous') {
+      res.status(400).json({ success: false, error: 'Invalid userId' });
+      return;
     }
-    res.json({ success: true, user });
+
+    // Delete in dependency order to avoid FK constraint violations
+    await prisma.$transaction([
+      prisma.xPEvent.deleteMany({ where: { userId } }),
+      prisma.userBadge.deleteMany({ where: { userId } }),
+      prisma.userGamification.deleteMany({ where: { userId } }),
+      prisma.message.deleteMany({ where: { session: { userId } } }),
+      prisma.session.deleteMany({ where: { userId } }),
+      prisma.progress.deleteMany({ where: { userId } }),
+      prisma.learningPath.deleteMany({ where: { userId } }),
+      prisma.user.deleteMany({ where: { id: userId } }),
+    ]);
+
+    res.json({ success: true });
   } catch (error) {
     next(error);
   }

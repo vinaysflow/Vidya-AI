@@ -1,0 +1,128 @@
+[
+  {
+    "kumonLevel": "D",
+    "kumonTopic": "Addition and subtraction up to 4-digit numbers",
+    "kumonGradeEquivalent": 3,
+    "equivalentCommonCoreGrade": 3,
+    "suggestedConceptKeys": ["addition_multi_digit", "subtraction_regrouping", "place_value_thousands"],
+    "description": "Kumon Level D covers fluent addition and subtraction of multi-digit numbers with regrouping",
+    "notes": "CCSS 3.NBT.2. Kumon builds computational fluency through drill and repetition."
+  },
+  {
+    "kumonLevel": "D",
+    "kumonTopic": "Multiplication tables and basic multiplication",
+    "kumonGradeEquivalent": 3,
+    "equivalentCommonCoreGrade": 3,
+    "suggestedConceptKeys": ["multiplication_intro", "multiplication_tables", "multiplication_arrays"],
+    "description": "Kumon Level D introduces multiplication facts through 10x10 and basic multiplication",
+    "notes": "CCSS 3.OA.7. Kumon emphasizes memorization of multiplication facts for fluency."
+  },
+  {
+    "kumonLevel": "E",
+    "kumonTopic": "Division with remainders",
+    "kumonGradeEquivalent": 4,
+    "equivalentCommonCoreGrade": 4,
+    "suggestedConceptKeys": ["division_intro", "division_remainders", "long_division"],
+    "description": "Kumon Level E covers division including long division with remainders",
+    "notes": "CCSS 4.NBT.6. Kumon builds procedural fluency with multi-digit division."
+  },
+  {
+    "kumonLevel": "E",
+    "kumonTopic": "Fractions: equivalent fractions, adding and subtracting",
+    "kumonGradeEquivalent": 4,
+    "equivalentCommonCoreGrade": 4,
+    "suggestedConceptKeys": ["fractions_equivalent", "fractions_add_subtract", "mixed_numbers"],
+    "description": "Kumon Level E covers equivalent fractions and adding/subtracting fractions with like denominators",
+    "notes": "CCSS 4.NF. Kumon emphasizes fraction equivalence as foundation for arithmetic."
+  },
+  {
+    "kumonLevel": "F",
+    "kumonTopic": "Fractions: multiplication and division",
+    "kumonGradeEquivalent": 5,
+    "equivalentCommonCoreGrade": 5,
+    "suggestedConceptKeys": ["fractions_multiply", "fractions_divide", "fractions_mixed_operations"],
+    "description": "Kumon Level F covers multiplying and dividing fractions and mixed numbers",
+    "notes": "CCSS 5.NF. Kumon treats fraction operations with full procedural development."
+  },
+  {
+    "kumonLevel": "F",
+    "kumonTopic": "Decimals: operations and place value",
+    "kumonGradeEquivalent": 5,
+    "equivalentCommonCoreGrade": 5,
+    "suggestedConceptKeys": ["decimals_intro", "decimal_operations", "decimal_place_value"],
+    "description": "Kumon Level F covers decimal place value and all four operations with decimals",
+    "notes": "CCSS 5.NBT. Kumon builds decimal fluency progressively across worksheets."
+  },
+  {
+    "kumonLevel": "G",
+    "kumonTopic": "Ratios and proportions",
+    "kumonGradeEquivalent": 6,
+    "equivalentCommonCoreGrade": 6,
+    "suggestedConceptKeys": ["ratios_intro", "proportional_reasoning", "unit_rates"],
+    "description": "Kumon Level G introduces ratios, proportions, and unit rate reasoning",
+    "notes": "CCSS 6.RP. Kumon provides extensive practice with proportional reasoning."
+  },
+  {
+    "kumonLevel": "G",
+    "kumonTopic": "Integers: operations with positive and negative numbers",
+    "kumonGradeEquivalent": 6,
+    "equivalentCommonCoreGrade": 6,
+    "suggestedConceptKeys": ["integers_intro", "integer_operations", "absolute_value"],
+    "description": "Kumon Level G covers all operations with positive and negative integers",
+    "notes": "CCSS 6.NS. Kumon uses number line models and procedural practice."
+  },
+  {
+    "kumonLevel": "H",
+    "kumonTopic": "Linear equations in one variable",
+    "kumonGradeEquivalent": 7,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": ["linear_equations_one_var", "equation_solving", "inverse_operations"],
+    "description": "Kumon Level H covers solving linear equations and inequalities in one variable",
+    "notes": "CCSS 7.EE. Kumon builds equation-solving skills with increasing complexity."
+  },
+  {
+    "kumonLevel": "H",
+    "kumonTopic": "Simultaneous linear equations",
+    "kumonGradeEquivalent": 7,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": ["systems_equations_intro", "substitution_method", "elimination_method"],
+    "description": "Kumon Level H covers solving systems of two linear equations by substitution and elimination",
+    "notes": "CCSS 8.EE. Kumon introduces systems of equations in Level H."
+  },
+  {
+    "kumonLevel": "I",
+    "kumonTopic": "Factoring polynomials",
+    "kumonGradeEquivalent": 8,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": ["factoring_gcf", "factoring_trinomials", "difference_of_squares"],
+    "description": "Kumon Level I covers factoring polynomials including GCF, trinomials, and special cases",
+    "notes": "CCSS Algebra 1 standard. Kumon Level I builds strong polynomial algebra skills."
+  },
+  {
+    "kumonLevel": "I",
+    "kumonTopic": "Quadratic equations",
+    "kumonGradeEquivalent": 8,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": ["quadratic_equations_intro", "quadratic_formula", "parabola_graphing"],
+    "description": "Kumon Level I covers solving quadratic equations by factoring and the quadratic formula",
+    "notes": "CCSS Algebra 1 standard. Kumon builds from factoring to the quadratic formula."
+  },
+  {
+    "kumonLevel": "J",
+    "kumonTopic": "Functions and their graphs",
+    "kumonGradeEquivalent": 9,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": ["functions_intro", "linear_functions", "function_graphs"],
+    "description": "Kumon Level J covers linear and quadratic functions, their graphs, and function transformations",
+    "notes": "CCSS Algebra 1 / Functions standards. Kumon Level J bridges arithmetic to precalculus."
+  },
+  {
+    "kumonLevel": "J",
+    "kumonTopic": "Trigonometric ratios: sin, cos, tan",
+    "kumonGradeEquivalent": 9,
+    "equivalentCommonCoreGrade": 10,
+    "suggestedConceptKeys": ["trig_ratios_intro", "right_triangle_trig", "pythagorean_theorem"],
+    "description": "Kumon Level J introduces basic trigonometric ratios in right triangles",
+    "notes": "CCSS Geometry standard. Kumon introduces trig in Level J alongside functions."
+  }
+]

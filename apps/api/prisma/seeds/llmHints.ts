@@ -1,6 +1,9 @@
 import { PrismaClient, HintType } from '@prisma/client';
 import { pathToFileURL } from 'url';
+import { config as loadEnv } from 'dotenv';
 import { LlmClient } from '../../src/services/llm/client';
+
+loadEnv();
 
 const prisma = new PrismaClient();
 const client = new LlmClient();
@@ -52,6 +55,23 @@ const ELEMENTARY_TOPICS = [
   'forces_motion',
   'weather_patterns',
   'patterns_algebra',
+  // Additional topics from concepts.json grades 3-7
+  'matter',
+  'geometry',
+  'chemistry_intro',
+  'data_statistics',
+  'number_sense',
+  'algebra_intro',
+  'earth_science',
+  'biology_intro',
+  'Mechanics',
+  'Algebra',
+  'Geometry',
+  'Data',
+  'Number',
+  'Measurement',
+  'Physics',
+  'Chemistry',
 ];
 
 function normalizeType(value: string | undefined): HintType {
@@ -95,11 +115,24 @@ async function seedLlmHints() {
   const elementary = process.argv.includes('--elementary');
   const subjectsFilter = process.env.LLM_HINT_SUBJECTS?.split(',').map(s => s.trim()).filter(Boolean);
 
+  // --grade-range=3-7 flag: filter by gradeLevel range instead of (or in addition to) topic filter
+  const gradeRangeArg = process.argv.find(a => a.startsWith('--grade-range='));
+  let gradeMin: number | undefined;
+  let gradeMax: number | undefined;
+  if (gradeRangeArg) {
+    const parts = gradeRangeArg.replace('--grade-range=', '').split('-');
+    gradeMin = parseInt(parts[0] ?? '', 10);
+    gradeMax = parseInt(parts[1] ?? parts[0] ?? '', 10);
+  }
+
   const where: Record<string, unknown> = {};
   if (subjectsFilter?.length) {
     where.subject = { in: subjectsFilter as string[] };
   }
-  if (elementary) {
+  if (gradeMin != null && gradeMax != null) {
+    // Use grade range as primary filter — covers all elementary concepts regardless of topic naming
+    where.gradeLevel = { gte: gradeMin, lte: gradeMax };
+  } else if (elementary) {
     where.topic = { in: ELEMENTARY_TOPICS };
   }
 
@@ -108,38 +141,50 @@ async function seedLlmHints() {
     include: { hints: true },
   });
 
-  if (elementary) {
-    console.log(`[elementary] Found ${concepts.length} concepts in topics: ${ELEMENTARY_TOPICS.join(', ')}`);
-  }
+  const label = gradeMin != null
+    ? `grades ${gradeMin}-${gradeMax}`
+    : elementary
+    ? `topics: ${ELEMENTARY_TOPICS.join(', ')}`
+    : 'all subjects';
+  console.log(`[llmHints] Found ${concepts.length} concepts (${label})`);
+  const toSeed = concepts.filter(c => c.hints.length < 5);
+  console.log(`[llmHints] Skipping ${concepts.length - toSeed.length} already complete; seeding ${toSeed.length}`);
 
-  for (const concept of concepts) {
-    if (concept.hints.length >= 5) continue;
-    const hints = await generateHintsForConcept(
-      { name: concept.name, description: concept.description },
-      elementary
-    );
+  let done = 0;
+  for (const concept of toSeed) {
+    try {
+      const hints = await generateHintsForConcept(
+        { name: concept.name, description: concept.description },
+        elementary || gradeMin != null
+      );
 
-    for (const hint of hints) {
-      await prisma.hint.upsert({
-        where: {
-          conceptId_level: {
+      for (const hint of hints) {
+        await prisma.hint.upsert({
+          where: {
+            conceptId_level: {
+              conceptId: concept.id,
+              level: hint.level,
+            },
+          },
+          update: {
+            content: hint.content,
+            type: hint.type,
+          },
+          create: {
             conceptId: concept.id,
             level: hint.level,
+            content: hint.content,
+            type: hint.type,
           },
-        },
-        update: {
-          content: hint.content,
-          type: hint.type,
-        },
-        create: {
-          conceptId: concept.id,
-          level: hint.level,
-          content: hint.content,
-          type: hint.type,
-        },
-      });
+        });
+      }
+      done++;
+      console.log(`  [${done}/${toSeed.length}] ✓ ${concept.conceptKey}`);
+    } catch (err) {
+      console.error(`  ✗ ${concept.conceptKey}: ${(err as Error).message}`);
     }
   }
+  console.log(`\n[llmHints] Done: ${done} concepts seeded.`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

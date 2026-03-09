@@ -43,6 +43,13 @@
     "apiError": "出了点问题，请重试。",
     "sessionExpired": "会话已过期，正在创建新会话。"
   },
+  "hints": {
+    "level1": "让我们从你已知的开始。",
+    "level2": "想想涉及的概念。",
+    "level3": "考虑这种方法...",
+    "level4": "这里有一个类似的例子。",
+    "level5": "让我们把它分解成更小的步骤。"
+  },
   "settings": {
     "title": "设置",
     "language": "语言",
@@ -52,6 +59,7 @@
     "themeDark": "深色",
     "apiKey": "API 密钥",
     "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "通知",
     "about": "关于 Vid (Vidya)",
     "onboarding": "Onboarding",
     "restartOnboarding": "Restart",

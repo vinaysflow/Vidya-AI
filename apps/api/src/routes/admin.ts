@@ -318,4 +318,288 @@ router.post('/keys/:keyId/stripe-detach', async (req: Request, res: Response, ne
   }
 });
 
+// ============================================
+// KPI REPORTING
+// ============================================
+
+const KpiQuerySchema = z.object({
+  dateFrom: z.string().datetime().optional(),
+  dateTo: z.string().datetime().optional(),
+  subject: z.string().optional(),
+  grade: z.coerce.number().int().optional(),
+});
+
+/**
+ * GET /api/admin/kpis
+ * Returns aggregated KPIs from existing Session/Progress/XPEvent/UserGamification tables.
+ * All queries are read-only and use no new schema fields.
+ */
+router.get('/kpis', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const query = KpiQuerySchema.parse(req.query);
+    const dateFrom = query.dateFrom ? new Date(query.dateFrom) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const dateTo = query.dateTo ? new Date(query.dateTo) : new Date();
+
+    const sessionWhere: Record<string, unknown> = {
+      startedAt: { gte: dateFrom, lte: dateTo },
+      ...(query.subject ? { subject: query.subject } : {}),
+    };
+
+    // Engagement
+    const [totalSessions, completedSessions, sessions] = await Promise.all([
+      prisma.session.count({ where: sessionWhere }),
+      prisma.session.count({ where: { ...sessionWhere, status: 'COMPLETED' } }),
+      prisma.session.findMany({
+        where: sessionWhere,
+        select: {
+          userId: true,
+          startedAt: true,
+          endedAt: true,
+          report: true,
+          masteryGain: true,
+          hintLevel: true,
+          maxHintLevel: true,
+          effectiveGrade: true,
+          resolved: true,
+          user: { select: { grade: true } },
+        },
+      }),
+    ]);
+
+    // Session durations (from report JSON)
+    const durations: number[] = sessions
+      .map((s) => {
+        const r = s.report as Record<string, unknown> | null;
+        return typeof r?.durationMinutes === 'number' ? r.durationMinutes : null;
+      })
+      .filter((d): d is number => d !== null);
+    durations.sort((a, b) => a - b);
+    const medianDuration = durations.length > 0 ? durations[Math.floor(durations.length / 2)] : null;
+
+    // Sessions per user per week
+    const userSessionCounts: Record<string, number> = {};
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    for (const s of sessions) {
+      if (s.startedAt >= sevenDaysAgo) {
+        userSessionCounts[s.userId] = (userSessionCounts[s.userId] ?? 0) + 1;
+      }
+    }
+    const sessionsPerUserPerWeekValues = Object.values(userSessionCounts);
+    const medianSessionsPerWeek = sessionsPerUserPerWeekValues.length > 0
+      ? sessionsPerUserPerWeekValues.sort((a, b) => a - b)[Math.floor(sessionsPerUserPerWeekValues.length / 2)]
+      : 0;
+    const resolvedCount = sessions.filter((s) => s.resolved).length;
+
+    // Learning
+    const masteryGains = sessions
+      .map((s) => s.masteryGain)
+      .filter((g): g is number => g !== null);
+    masteryGains.sort((a, b) => a - b);
+    const medianMasteryGain = masteryGains.length > 0 ? masteryGains[Math.floor(masteryGains.length / 2)] : null;
+
+    const hintDist: Record<string, number> = { '0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 };
+    for (const s of sessions) {
+      const h = String(Math.min(5, Math.max(0, (s.maxHintLevel ?? s.hintLevel) as number)));
+      hintDist[h] = (hintDist[h] ?? 0) + 1;
+    }
+
+    const gradeUpSessions = sessions.filter((s) => {
+      const base = (s.user as { grade?: number | null } | null)?.grade;
+      return base != null && s.effectiveGrade != null && s.effectiveGrade > base;
+    }).length;
+
+    // Gamification
+    const [xpEvents, gamificationProfiles, badgeCount] = await Promise.all([
+      prisma.xPEvent.findMany({
+        where: { createdAt: { gte: dateFrom, lte: dateTo } },
+        select: { sessionId: true, xpAmount: true },
+      }),
+      prisma.userGamification.findMany({
+        select: { level: true, currentStreak: true },
+      }),
+      prisma.userBadge.count({
+        where: { earnedAt: { gte: dateFrom, lte: dateTo } },
+      }),
+    ]);
+
+    const xpBySession: Record<string, number> = {};
+    for (const e of xpEvents) {
+      if (e.sessionId) {
+        xpBySession[e.sessionId] = (xpBySession[e.sessionId] ?? 0) + e.xpAmount;
+      }
+    }
+    const xpValues = Object.values(xpBySession).sort((a, b) => a - b);
+    const medianXpPerSession = xpValues.length > 0 ? xpValues[Math.floor(xpValues.length / 2)] : 0;
+
+    const levelDist: Record<number, number> = {};
+    let streakSum = 0;
+    for (const g of gamificationProfiles) {
+      levelDist[g.level] = (levelDist[g.level] ?? 0) + 1;
+      streakSum += g.currentStreak;
+    }
+    const avgStreak = gamificationProfiles.length > 0
+      ? Math.round((streakSum / gamificationProfiles.length) * 10) / 10
+      : 0;
+
+    // Safety: messages where safetyEvents array is non-empty
+    const safetyMessages = await prisma.message.count({
+      where: {
+        createdAt: { gte: dateFrom, lte: dateTo },
+        role: 'ASSISTANT',
+        NOT: { metadata: { equals: null } },
+      },
+    }).then(async () => {
+      // Postgres JSON array filter — count messages with non-empty safetyEvents
+      const raw = await prisma.$queryRaw<[{ count: bigint }]>`
+        SELECT COUNT(*)::int AS count FROM "Message"
+        WHERE "createdAt" >= ${dateFrom} AND "createdAt" <= ${dateTo}
+          AND role = 'ASSISTANT'
+          AND metadata IS NOT NULL
+          AND jsonb_array_length(COALESCE((metadata->>'safetyEvents')::jsonb, '[]'::jsonb)) > 0
+      `;
+      return Number(raw[0]?.count ?? 0);
+    });
+
+    // Dogfood KPIs from AnalyticsEvent
+    const [questStartedCount, questCompletedCount, explainBackCount, diagnosticEvents] = await Promise.all([
+      prisma.analyticsEvent.count({ where: { event: 'quest_started', createdAt: { gte: dateFrom, lte: dateTo } } }),
+      prisma.analyticsEvent.count({ where: { event: 'quest_completed', createdAt: { gte: dateFrom, lte: dateTo } } }),
+      prisma.analyticsEvent.count({ where: { event: 'explain_back_attempted', createdAt: { gte: dateFrom, lte: dateTo } } }),
+      prisma.analyticsEvent.findMany({
+        where: { event: 'quest_started', createdAt: { gte: dateFrom, lte: dateTo } },
+        select: { userId: true, createdAt: true, properties: true },
+      }),
+    ]);
+
+    // Subject diversity: count distinct subjects per user
+    const subjectsByUser: Record<string, Set<string>> = {};
+    for (const e of diagnosticEvents) {
+      const p = e.properties as Record<string, unknown>;
+      if (p.subject && typeof p.subject === 'string') {
+        if (!subjectsByUser[e.userId]) subjectsByUser[e.userId] = new Set();
+        subjectsByUser[e.userId].add(p.subject);
+      }
+    }
+    const diversityCounts = Object.values(subjectsByUser).map((s) => s.size);
+    const avgSubjectDiversity = diversityCounts.length > 0
+      ? Math.round((diversityCounts.reduce((a, b) => a + b, 0) / diversityCounts.length) * 10) / 10
+      : 0;
+
+    // D1 return rate: users with quest_started on day 0 AND day 1
+    const userFirstSession: Record<string, Date> = {};
+    const userDays: Record<string, Set<number>> = {};
+    for (const e of diagnosticEvents) {
+      const day = Math.floor(e.createdAt.getTime() / (24 * 60 * 60 * 1000));
+      if (!userFirstSession[e.userId] || e.createdAt < userFirstSession[e.userId]) {
+        userFirstSession[e.userId] = e.createdAt;
+      }
+      if (!userDays[e.userId]) userDays[e.userId] = new Set();
+      userDays[e.userId].add(day);
+    }
+    const usersWithAnySession = Object.keys(userDays).length;
+    const usersD1 = Object.entries(userDays).filter(([, days]) => {
+      const sorted = Array.from(days).sort((a, b) => a - b);
+      return sorted.length >= 2 && sorted[1] - sorted[0] === 1;
+    }).length;
+    const d1ReturnRate = usersWithAnySession > 0 ? Math.round((usersD1 / usersWithAnySession) * 100) : 0;
+
+    res.json({
+      success: true,
+      period: { from: dateFrom.toISOString(), to: dateTo.toISOString() },
+      engagement: {
+        totalSessions,
+        completedSessions,
+        resolvedCount,
+        resolvedRate: totalSessions > 0 ? Math.round((resolvedCount / totalSessions) * 100) / 100 : 0,
+        medianDurationMinutes: medianDuration,
+        medianSessionsPerUserPerWeek: medianSessionsPerWeek,
+        activeUsersLast7Days: Object.keys(userSessionCounts).length,
+      },
+      learning: {
+        medianMasteryGain,
+        hintLevelDistribution: hintDist,
+        gradeUpSessions,
+      },
+      gamification: {
+        medianXpPerSession,
+        levelDistribution: levelDist,
+        newBadgesAwarded: badgeCount,
+        avgCurrentStreak: avgStreak,
+      },
+      safety: {
+        messagesWithSafetyEvents: safetyMessages,
+      },
+      dogfood: {
+        sessionCompletionRate: questStartedCount > 0 ? Math.round((questCompletedCount / questStartedCount) * 100) : null,
+        explainBackAttemptRate: questCompletedCount > 0 ? Math.round((explainBackCount / questCompletedCount) * 100) : null,
+        avgSubjectDiversityPerUser: avgSubjectDiversity,
+        d1ReturnRatePct: d1ReturnRate,
+        questStarted: questStartedCount,
+        questCompleted: questCompletedCount,
+        explainBackAttempts: explainBackCount,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/retention', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        createdAt: true,
+        grade: true,
+        sessions: {
+          select: { startedAt: true, status: true, resolved: true },
+          orderBy: { startedAt: 'asc' },
+        },
+      },
+      where: { id: { not: 'anonymous' } },
+    });
+
+    const now = new Date();
+    const cohorts: Record<string, { d1: number; d7: number; d14: number; d30: number; total: number }> = {};
+
+    for (const user of users) {
+      if (user.sessions.length === 0) continue;
+      const firstSession = user.sessions[0].startedAt;
+      const cohortWeek = firstSession.toISOString().slice(0, 10);
+
+      if (!cohorts[cohortWeek]) cohorts[cohortWeek] = { d1: 0, d7: 0, d14: 0, d30: 0, total: 0 };
+      cohorts[cohortWeek].total++;
+
+      const daysSinceFirst = (now.getTime() - firstSession.getTime()) / (1000 * 60 * 60 * 24);
+      const sessionDates = new Set(user.sessions.map(s => s.startedAt.toISOString().slice(0, 10)));
+      const firstDate = firstSession.getTime();
+
+      const hasActivityOnDay = (day: number) => {
+        const target = new Date(firstDate + day * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        return sessionDates.has(target);
+      };
+
+      if (daysSinceFirst >= 1 && hasActivityOnDay(1)) cohorts[cohortWeek].d1++;
+      if (daysSinceFirst >= 7 && hasActivityOnDay(7)) cohorts[cohortWeek].d7++;
+      if (daysSinceFirst >= 14 && hasActivityOnDay(14)) cohorts[cohortWeek].d14++;
+      if (daysSinceFirst >= 30 && hasActivityOnDay(30)) cohorts[cohortWeek].d30++;
+    }
+
+    const perUser = users
+      .filter(u => u.sessions.length > 0)
+      .map(u => ({
+        userId: u.id,
+        grade: u.grade,
+        totalSessions: u.sessions.length,
+        firstSession: u.sessions[0].startedAt,
+        lastSession: u.sessions[u.sessions.length - 1].startedAt,
+        completedSessions: u.sessions.filter(s => s.status === 'COMPLETED').length,
+      }));
+
+    res.json({ success: true, cohorts, perUser, totalUsers: users.length });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { router as adminRouter };

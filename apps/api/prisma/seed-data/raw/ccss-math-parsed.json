@@ -1,53 +1,982 @@
 [
-  { "code": "3.OA.A.1", "description": "Interpret products of whole numbers, e.g., interpret 5 × 7 as the total number of objects in 5 groups of 7 objects each.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Represent and solve problems involving multiplication and division" },
-  { "code": "3.OA.A.2", "description": "Interpret whole-number quotients of whole numbers, e.g., interpret 56 ÷ 8 as the number of objects in each share when 56 objects are partitioned equally into 8 shares.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Represent and solve problems involving multiplication and division" },
-  { "code": "3.OA.A.3", "description": "Use multiplication and division within 100 to solve word problems in situations involving equal groups, arrays, and measurement quantities.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Represent and solve problems involving multiplication and division" },
-  { "code": "3.OA.B.5", "description": "Apply properties of operations as strategies to multiply and divide.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Understand properties of multiplication and the relationship between multiplication and division" },
-  { "code": "3.OA.C.7", "description": "Fluently multiply and divide within 100, using strategies such as the relationship between multiplication and division.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Multiply and divide within 100" },
-  { "code": "3.OA.D.8", "description": "Solve two-step word problems using the four operations. Represent these problems using equations with a letter standing for the unknown quantity.", "grade": 3, "domain": "Operations and Algebraic Thinking", "cluster": "Solve problems involving the four operations, and identify and explain patterns in arithmetic" },
-  { "code": "3.NBT.A.1", "description": "Use place value understanding to round whole numbers to the nearest 10 or 100.", "grade": 3, "domain": "Number and Operations in Base Ten", "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic" },
-  { "code": "3.NBT.A.2", "description": "Fluently add and subtract within 1000 using strategies and algorithms based on place value.", "grade": 3, "domain": "Number and Operations in Base Ten", "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic" },
-  { "code": "3.NBT.A.3", "description": "Multiply one-digit whole numbers by multiples of 10 in the range 10-90 using strategies based on place value and properties of operations.", "grade": 3, "domain": "Number and Operations in Base Ten", "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic" },
-  { "code": "3.NF.A.1", "description": "Understand a fraction 1/b as the quantity formed by 1 part when a whole is partitioned into b equal parts.", "grade": 3, "domain": "Number and Operations—Fractions", "cluster": "Develop understanding of fractions as numbers" },
-  { "code": "3.MD.A.1", "description": "Tell and write time to the nearest minute and measure time intervals in minutes.", "grade": 3, "domain": "Measurement and Data", "cluster": "Solve problems involving measurement and estimation of intervals of time" },
-  { "code": "3.MD.C.5", "description": "Recognize area as an attribute of plane figures and understand concepts of area measurement.", "grade": 3, "domain": "Measurement and Data", "cluster": "Geometric measurement: understand concepts of area" },
-  { "code": "3.MD.D.8", "description": "Solve real world and mathematical problems involving perimeters of polygons.", "grade": 3, "domain": "Measurement and Data", "cluster": "Geometric measurement: recognize perimeter as an attribute" },
-  { "code": "3.G.A.1", "description": "Understand that shapes in different categories may share attributes, and that the shared attributes can define a larger category.", "grade": 3, "domain": "Geometry", "cluster": "Reason with shapes and their attributes" },
-  { "code": "4.OA.A.1", "description": "Interpret a multiplication equation as a comparison, e.g., interpret 35 = 5 × 7 as a statement that 35 is 5 times as many as 7.", "grade": 4, "domain": "Operations and Algebraic Thinking", "cluster": "Use the four operations with whole numbers to solve problems" },
-  { "code": "4.OA.A.3", "description": "Solve multistep word problems posed with whole numbers and having whole-number answers using the four operations, including problems in which remainders must be interpreted.", "grade": 4, "domain": "Operations and Algebraic Thinking", "cluster": "Use the four operations with whole numbers to solve problems" },
-  { "code": "4.OA.B.4", "description": "Find all factor pairs for a whole number in the range 1-100. Determine whether a given whole number in the range 1-100 is a multiple of a given one-digit number.", "grade": 4, "domain": "Operations and Algebraic Thinking", "cluster": "Gain familiarity with factors and multiples" },
-  { "code": "4.OA.C.5", "description": "Generate a number or shape pattern that follows a given rule. Identify apparent features of the pattern that were not explicit in the rule itself.", "grade": 4, "domain": "Operations and Algebraic Thinking", "cluster": "Generate and analyze patterns" },
-  { "code": "4.NBT.A.1", "description": "Recognize that in a multi-digit whole number, a digit in one place represents ten times what it represents in the place to its right.", "grade": 4, "domain": "Number and Operations in Base Ten", "cluster": "Generalize place value understanding for multi-digit whole numbers" },
-  { "code": "4.NBT.B.5", "description": "Multiply a whole number of up to four digits by a one-digit whole number, and multiply two two-digit numbers, using strategies based on place value.", "grade": 4, "domain": "Number and Operations in Base Ten", "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic" },
-  { "code": "4.NF.A.1", "description": "Explain why a fraction a/b is equivalent to a fraction (n × a)/(n × b) by using visual fraction models.", "grade": 4, "domain": "Number and Operations—Fractions", "cluster": "Extend understanding of fraction equivalence and ordering" },
-  { "code": "4.NF.B.3", "description": "Understand a fraction a/b with a > 1 as a sum of fractions 1/b. Decompose a fraction into a sum of fractions with the same denominator.", "grade": 4, "domain": "Number and Operations—Fractions", "cluster": "Build fractions from unit fractions" },
-  { "code": "4.MD.A.1", "description": "Know relative sizes of measurement units within one system of units. Convert larger units to smaller units within measurement systems.", "grade": 4, "domain": "Measurement and Data", "cluster": "Solve problems involving measurement and conversion of measurements" },
-  { "code": "4.MD.A.3", "description": "Apply the area and perimeter formulas for rectangles in real world and mathematical problems.", "grade": 4, "domain": "Measurement and Data", "cluster": "Solve problems involving measurement and conversion of measurements" },
-  { "code": "4.G.A.1", "description": "Draw points, lines, line segments, rays, angles (right, acute, obtuse), and perpendicular and parallel lines.", "grade": 4, "domain": "Geometry", "cluster": "Draw and identify lines and angles" },
-  { "code": "5.OA.A.1", "description": "Use parentheses, brackets, or braces in numerical expressions, and evaluate expressions with these symbols.", "grade": 5, "domain": "Operations and Algebraic Thinking", "cluster": "Write and interpret numerical expressions" },
-  { "code": "5.OA.B.3", "description": "Generate two numerical patterns using two given rules. Identify apparent relationships between corresponding terms.", "grade": 5, "domain": "Operations and Algebraic Thinking", "cluster": "Analyze patterns and relationships" },
-  { "code": "5.NBT.A.1", "description": "Recognize that in a multi-digit number, a digit in one place represents 1/10 of what it represents in the place to its left.", "grade": 5, "domain": "Number and Operations in Base Ten", "cluster": "Understand the place value system" },
-  { "code": "5.NBT.B.7", "description": "Add, subtract, multiply, and divide decimals to hundredths, using concrete models or drawings and strategies based on place value.", "grade": 5, "domain": "Number and Operations in Base Ten", "cluster": "Perform operations with multi-digit whole numbers and with decimals to hundredths" },
-  { "code": "5.NF.A.1", "description": "Add and subtract fractions with unlike denominators by replacing given fractions with equivalent fractions with like denominators.", "grade": 5, "domain": "Number and Operations—Fractions", "cluster": "Use equivalent fractions as a strategy to add and subtract fractions" },
-  { "code": "5.NF.B.3", "description": "Interpret a fraction as division of the numerator by the denominator (a/b = a ÷ b). Solve word problems involving division of whole numbers leading to answers in the form of fractions or mixed numbers.", "grade": 5, "domain": "Number and Operations—Fractions", "cluster": "Apply and extend previous understandings of multiplication and division" },
-  { "code": "5.MD.C.3", "description": "Recognize volume as an attribute of solid figures and understand concepts of volume measurement.", "grade": 5, "domain": "Measurement and Data", "cluster": "Geometric measurement: understand concepts of volume" },
-  { "code": "5.G.A.1", "description": "Use a pair of perpendicular number lines, called axes, to define a coordinate system, with the intersection of the lines (the origin) arranged to coincide with the 0 on each line.", "grade": 5, "domain": "Geometry", "cluster": "Graph points on the coordinate plane" },
-  { "code": "6.RP.A.1", "description": "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities.", "grade": 6, "domain": "Ratios and Proportional Relationships", "cluster": "Understand ratio concepts and use ratio reasoning to solve problems" },
-  { "code": "6.RP.A.2", "description": "Understand the concept of a unit rate a/b associated with a ratio a:b with b ≠ 0, and use rate language in the context of a ratio relationship.", "grade": 6, "domain": "Ratios and Proportional Relationships", "cluster": "Understand ratio concepts and use ratio reasoning to solve problems" },
-  { "code": "6.RP.A.3", "description": "Use ratio and rate reasoning to solve real-world and mathematical problems, e.g., by reasoning about tables of equivalent ratios, tape diagrams, double number line diagrams, or equations.", "grade": 6, "domain": "Ratios and Proportional Relationships", "cluster": "Understand ratio concepts and use ratio reasoning to solve problems" },
-  { "code": "6.NS.A.1", "description": "Interpret and compute quotients of fractions, and solve word problems involving division of fractions by fractions.", "grade": 6, "domain": "The Number System", "cluster": "Apply and extend previous understandings of multiplication and division to divide fractions" },
-  { "code": "6.NS.C.5", "description": "Understand that positive and negative numbers are used together to describe quantities having opposite directions or values.", "grade": 6, "domain": "The Number System", "cluster": "Apply and extend previous understandings of numbers to the system of rational numbers" },
-  { "code": "6.EE.A.1", "description": "Write and evaluate numerical expressions involving whole-number exponents.", "grade": 6, "domain": "Expressions and Equations", "cluster": "Apply and extend previous understandings of arithmetic to algebraic expressions" },
-  { "code": "6.EE.A.2", "description": "Write, read, and evaluate expressions in which letters stand for numbers.", "grade": 6, "domain": "Expressions and Equations", "cluster": "Apply and extend previous understandings of arithmetic to algebraic expressions" },
-  { "code": "6.EE.B.5", "description": "Understand solving an equation or inequality as a process of answering a question: which values from a specified set, if any, make the equation or inequality true?", "grade": 6, "domain": "Expressions and Equations", "cluster": "Reason about and solve one-variable equations and inequalities" },
-  { "code": "6.SP.A.1", "description": "Recognize a statistical question as one that anticipates variability in the data related to the question and accounts for it in the answers.", "grade": 6, "domain": "Statistics and Probability", "cluster": "Develop understanding of statistical variability" },
-  { "code": "7.RP.A.1", "description": "Compute unit rates associated with ratios of fractions, including ratios of lengths, areas and other quantities measured in like or different units.", "grade": 7, "domain": "Ratios and Proportional Relationships", "cluster": "Analyze proportional relationships and use them to solve real-world and mathematical problems" },
-  { "code": "7.RP.A.2", "description": "Recognize and represent proportional relationships between quantities.", "grade": 7, "domain": "Ratios and Proportional Relationships", "cluster": "Analyze proportional relationships and use them to solve real-world and mathematical problems" },
-  { "code": "7.NS.A.1", "description": "Apply and extend previous understandings of addition and subtraction to add and subtract rational numbers.", "grade": 7, "domain": "The Number System", "cluster": "Apply and extend previous understandings of operations with fractions" },
-  { "code": "7.NS.A.2", "description": "Apply and extend previous understandings of multiplication and division and of fractions to multiply and divide rational numbers.", "grade": 7, "domain": "The Number System", "cluster": "Apply and extend previous understandings of operations with fractions" },
-  { "code": "7.EE.A.1", "description": "Apply properties of operations as strategies to add, subtract, factor, and expand linear expressions with rational coefficients.", "grade": 7, "domain": "Expressions and Equations", "cluster": "Use properties of operations to generate equivalent expressions" },
-  { "code": "7.EE.B.4", "description": "Use variables to represent quantities in a real-world or mathematical problem, and construct simple equations and inequalities to solve problems.", "grade": 7, "domain": "Expressions and Equations", "cluster": "Solve real-life and mathematical problems using numerical and algebraic expressions and equations" },
-  { "code": "7.G.A.1", "description": "Solve problems involving scale drawings of geometric figures, including computing actual lengths and areas from a scale drawing.", "grade": 7, "domain": "Geometry", "cluster": "Draw, construct and describe geometrical figures and describe the relationships between them" },
-  { "code": "7.SP.A.1", "description": "Understand that statistics can be used to gain information about a population by examining a sample of the population; generalizations about a population from a sample are valid only if the sample is representative of that population.", "grade": 7, "domain": "Statistics and Probability", "cluster": "Use random sampling to draw inferences about a population" },
-  { "code": "7.SP.C.5", "description": "Understand that the probability of a chance event is a number between 0 and 1 that expresses the likelihood of the event occurring.", "grade": 7, "domain": "Statistics and Probability", "cluster": "Investigate chance processes and develop, use, and evaluate probability models" }
+  {
+    "code": "3.OA.A.1",
+    "description": "Interpret products of whole numbers, e.g., interpret 5 \u00d7 7 as the total number of objects in 5 groups of 7 objects each.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Represent and solve problems involving multiplication and division"
+  },
+  {
+    "code": "3.OA.A.2",
+    "description": "Interpret whole-number quotients of whole numbers, e.g., interpret 56 \u00f7 8 as the number of objects in each share when 56 objects are partitioned equally into 8 shares.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Represent and solve problems involving multiplication and division"
+  },
+  {
+    "code": "3.OA.A.3",
+    "description": "Use multiplication and division within 100 to solve word problems in situations involving equal groups, arrays, and measurement quantities.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Represent and solve problems involving multiplication and division"
+  },
+  {
+    "code": "3.OA.B.5",
+    "description": "Apply properties of operations as strategies to multiply and divide.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Understand properties of multiplication and the relationship between multiplication and division"
+  },
+  {
+    "code": "3.OA.C.7",
+    "description": "Fluently multiply and divide within 100, using strategies such as the relationship between multiplication and division.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Multiply and divide within 100"
+  },
+  {
+    "code": "3.OA.D.8",
+    "description": "Solve two-step word problems using the four operations. Represent these problems using equations with a letter standing for the unknown quantity.",
+    "grade": 3,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Solve problems involving the four operations, and identify and explain patterns in arithmetic"
+  },
+  {
+    "code": "3.NBT.A.1",
+    "description": "Use place value understanding to round whole numbers to the nearest 10 or 100.",
+    "grade": 3,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic"
+  },
+  {
+    "code": "3.NBT.A.2",
+    "description": "Fluently add and subtract within 1000 using strategies and algorithms based on place value.",
+    "grade": 3,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic"
+  },
+  {
+    "code": "3.NBT.A.3",
+    "description": "Multiply one-digit whole numbers by multiples of 10 in the range 10-90 using strategies based on place value and properties of operations.",
+    "grade": 3,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic"
+  },
+  {
+    "code": "3.NF.A.1",
+    "description": "Understand a fraction 1/b as the quantity formed by 1 part when a whole is partitioned into b equal parts.",
+    "grade": 3,
+    "domain": "Number and Operations\u2014Fractions",
+    "cluster": "Develop understanding of fractions as numbers"
+  },
+  {
+    "code": "3.MD.A.1",
+    "description": "Tell and write time to the nearest minute and measure time intervals in minutes.",
+    "grade": 3,
+    "domain": "Measurement and Data",
+    "cluster": "Solve problems involving measurement and estimation of intervals of time"
+  },
+  {
+    "code": "3.MD.C.5",
+    "description": "Recognize area as an attribute of plane figures and understand concepts of area measurement.",
+    "grade": 3,
+    "domain": "Measurement and Data",
+    "cluster": "Geometric measurement: understand concepts of area"
+  },
+  {
+    "code": "3.MD.D.8",
+    "description": "Solve real world and mathematical problems involving perimeters of polygons.",
+    "grade": 3,
+    "domain": "Measurement and Data",
+    "cluster": "Geometric measurement: recognize perimeter as an attribute"
+  },
+  {
+    "code": "3.G.A.1",
+    "description": "Understand that shapes in different categories may share attributes, and that the shared attributes can define a larger category.",
+    "grade": 3,
+    "domain": "Geometry",
+    "cluster": "Reason with shapes and their attributes"
+  },
+  {
+    "code": "4.OA.A.1",
+    "description": "Interpret a multiplication equation as a comparison, e.g., interpret 35 = 5 \u00d7 7 as a statement that 35 is 5 times as many as 7.",
+    "grade": 4,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Use the four operations with whole numbers to solve problems"
+  },
+  {
+    "code": "4.OA.A.3",
+    "description": "Solve multistep word problems posed with whole numbers and having whole-number answers using the four operations, including problems in which remainders must be interpreted.",
+    "grade": 4,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Use the four operations with whole numbers to solve problems"
+  },
+  {
+    "code": "4.OA.B.4",
+    "description": "Find all factor pairs for a whole number in the range 1-100. Determine whether a given whole number in the range 1-100 is a multiple of a given one-digit number.",
+    "grade": 4,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Gain familiarity with factors and multiples"
+  },
+  {
+    "code": "4.OA.C.5",
+    "description": "Generate a number or shape pattern that follows a given rule. Identify apparent features of the pattern that were not explicit in the rule itself.",
+    "grade": 4,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Generate and analyze patterns"
+  },
+  {
+    "code": "4.NBT.A.1",
+    "description": "Recognize that in a multi-digit whole number, a digit in one place represents ten times what it represents in the place to its right.",
+    "grade": 4,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Generalize place value understanding for multi-digit whole numbers"
+  },
+  {
+    "code": "4.NBT.B.5",
+    "description": "Multiply a whole number of up to four digits by a one-digit whole number, and multiply two two-digit numbers, using strategies based on place value.",
+    "grade": 4,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Use place value understanding and properties of operations to perform multi-digit arithmetic"
+  },
+  {
+    "code": "4.NF.A.1",
+    "description": "Explain why a fraction a/b is equivalent to a fraction (n \u00d7 a)/(n \u00d7 b) by using visual fraction models.",
+    "grade": 4,
+    "domain": "Number and Operations\u2014Fractions",
+    "cluster": "Extend understanding of fraction equivalence and ordering"
+  },
+  {
+    "code": "4.NF.B.3",
+    "description": "Understand a fraction a/b with a > 1 as a sum of fractions 1/b. Decompose a fraction into a sum of fractions with the same denominator.",
+    "grade": 4,
+    "domain": "Number and Operations\u2014Fractions",
+    "cluster": "Build fractions from unit fractions"
+  },
+  {
+    "code": "4.MD.A.1",
+    "description": "Know relative sizes of measurement units within one system of units. Convert larger units to smaller units within measurement systems.",
+    "grade": 4,
+    "domain": "Measurement and Data",
+    "cluster": "Solve problems involving measurement and conversion of measurements"
+  },
+  {
+    "code": "4.MD.A.3",
+    "description": "Apply the area and perimeter formulas for rectangles in real world and mathematical problems.",
+    "grade": 4,
+    "domain": "Measurement and Data",
+    "cluster": "Solve problems involving measurement and conversion of measurements"
+  },
+  {
+    "code": "4.G.A.1",
+    "description": "Draw points, lines, line segments, rays, angles (right, acute, obtuse), and perpendicular and parallel lines.",
+    "grade": 4,
+    "domain": "Geometry",
+    "cluster": "Draw and identify lines and angles"
+  },
+  {
+    "code": "5.OA.A.1",
+    "description": "Use parentheses, brackets, or braces in numerical expressions, and evaluate expressions with these symbols.",
+    "grade": 5,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Write and interpret numerical expressions"
+  },
+  {
+    "code": "5.OA.B.3",
+    "description": "Generate two numerical patterns using two given rules. Identify apparent relationships between corresponding terms.",
+    "grade": 5,
+    "domain": "Operations and Algebraic Thinking",
+    "cluster": "Analyze patterns and relationships"
+  },
+  {
+    "code": "5.NBT.A.1",
+    "description": "Recognize that in a multi-digit number, a digit in one place represents 1/10 of what it represents in the place to its left.",
+    "grade": 5,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Understand the place value system"
+  },
+  {
+    "code": "5.NBT.B.7",
+    "description": "Add, subtract, multiply, and divide decimals to hundredths, using concrete models or drawings and strategies based on place value.",
+    "grade": 5,
+    "domain": "Number and Operations in Base Ten",
+    "cluster": "Perform operations with multi-digit whole numbers and with decimals to hundredths"
+  },
+  {
+    "code": "5.NF.A.1",
+    "description": "Add and subtract fractions with unlike denominators by replacing given fractions with equivalent fractions with like denominators.",
+    "grade": 5,
+    "domain": "Number and Operations\u2014Fractions",
+    "cluster": "Use equivalent fractions as a strategy to add and subtract fractions"
+  },
+  {
+    "code": "5.NF.B.3",
+    "description": "Interpret a fraction as division of the numerator by the denominator (a/b = a \u00f7 b). Solve word problems involving division of whole numbers leading to answers in the form of fractions or mixed numbers.",
+    "grade": 5,
+    "domain": "Number and Operations\u2014Fractions",
+    "cluster": "Apply and extend previous understandings of multiplication and division"
+  },
+  {
+    "code": "5.MD.C.3",
+    "description": "Recognize volume as an attribute of solid figures and understand concepts of volume measurement.",
+    "grade": 5,
+    "domain": "Measurement and Data",
+    "cluster": "Geometric measurement: understand concepts of volume"
+  },
+  {
+    "code": "5.G.A.1",
+    "description": "Use a pair of perpendicular number lines, called axes, to define a coordinate system, with the intersection of the lines (the origin) arranged to coincide with the 0 on each line.",
+    "grade": 5,
+    "domain": "Geometry",
+    "cluster": "Graph points on the coordinate plane"
+  },
+  {
+    "code": "6.RP.A.1",
+    "description": "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities.",
+    "grade": 6,
+    "domain": "Ratios and Proportional Relationships",
+    "cluster": "Understand ratio concepts and use ratio reasoning to solve problems"
+  },
+  {
+    "code": "6.RP.A.2",
+    "description": "Understand the concept of a unit rate a/b associated with a ratio a:b with b \u2260 0, and use rate language in the context of a ratio relationship.",
+    "grade": 6,
+    "domain": "Ratios and Proportional Relationships",
+    "cluster": "Understand ratio concepts and use ratio reasoning to solve problems"
+  },
+  {
+    "code": "6.RP.A.3",
+    "description": "Use ratio and rate reasoning to solve real-world and mathematical problems, e.g., by reasoning about tables of equivalent ratios, tape diagrams, double number line diagrams, or equations.",
+    "grade": 6,
+    "domain": "Ratios and Proportional Relationships",
+    "cluster": "Understand ratio concepts and use ratio reasoning to solve problems"
+  },
+  {
+    "code": "6.NS.A.1",
+    "description": "Interpret and compute quotients of fractions, and solve word problems involving division of fractions by fractions.",
+    "grade": 6,
+    "domain": "The Number System",
+    "cluster": "Apply and extend previous understandings of multiplication and division to divide fractions"
+  },
+  {
+    "code": "6.NS.C.5",
+    "description": "Understand that positive and negative numbers are used together to describe quantities having opposite directions or values.",
+    "grade": 6,
+    "domain": "The Number System",
+    "cluster": "Apply and extend previous understandings of numbers to the system of rational numbers"
+  },
+  {
+    "code": "6.EE.A.1",
+    "description": "Write and evaluate numerical expressions involving whole-number exponents.",
+    "grade": 6,
+    "domain": "Expressions and Equations",
+    "cluster": "Apply and extend previous understandings of arithmetic to algebraic expressions"
+  },
+  {
+    "code": "6.EE.A.2",
+    "description": "Write, read, and evaluate expressions in which letters stand for numbers.",
+    "grade": 6,
+    "domain": "Expressions and Equations",
+    "cluster": "Apply and extend previous understandings of arithmetic to algebraic expressions"
+  },
+  {
+    "code": "6.EE.B.5",
+    "description": "Understand solving an equation or inequality as a process of answering a question: which values from a specified set, if any, make the equation or inequality true?",
+    "grade": 6,
+    "domain": "Expressions and Equations",
+    "cluster": "Reason about and solve one-variable equations and inequalities"
+  },
+  {
+    "code": "6.SP.A.1",
+    "description": "Recognize a statistical question as one that anticipates variability in the data related to the question and accounts for it in the answers.",
+    "grade": 6,
+    "domain": "Statistics and Probability",
+    "cluster": "Develop understanding of statistical variability"
+  },
+  {
+    "code": "7.RP.A.1",
+    "description": "Compute unit rates associated with ratios of fractions, including ratios of lengths, areas and other quantities measured in like or different units.",
+    "grade": 7,
+    "domain": "Ratios and Proportional Relationships",
+    "cluster": "Analyze proportional relationships and use them to solve real-world and mathematical problems"
+  },
+  {
+    "code": "7.RP.A.2",
+    "description": "Recognize and represent proportional relationships between quantities.",
+    "grade": 7,
+    "domain": "Ratios and Proportional Relationships",
+    "cluster": "Analyze proportional relationships and use them to solve real-world and mathematical problems"
+  },
+  {
+    "code": "7.NS.A.1",
+    "description": "Apply and extend previous understandings of addition and subtraction to add and subtract rational numbers.",
+    "grade": 7,
+    "domain": "The Number System",
+    "cluster": "Apply and extend previous understandings of operations with fractions"
+  },
+  {
+    "code": "7.NS.A.2",
+    "description": "Apply and extend previous understandings of multiplication and division and of fractions to multiply and divide rational numbers.",
+    "grade": 7,
+    "domain": "The Number System",
+    "cluster": "Apply and extend previous understandings of operations with fractions"
+  },
+  {
+    "code": "7.EE.A.1",
+    "description": "Apply properties of operations as strategies to add, subtract, factor, and expand linear expressions with rational coefficients.",
+    "grade": 7,
+    "domain": "Expressions and Equations",
+    "cluster": "Use properties of operations to generate equivalent expressions"
+  },
+  {
+    "code": "7.EE.B.4",
+    "description": "Use variables to represent quantities in a real-world or mathematical problem, and construct simple equations and inequalities to solve problems.",
+    "grade": 7,
+    "domain": "Expressions and Equations",
+    "cluster": "Solve real-life and mathematical problems using numerical and algebraic expressions and equations"
+  },
+  {
+    "code": "7.G.A.1",
+    "description": "Solve problems involving scale drawings of geometric figures, including computing actual lengths and areas from a scale drawing.",
+    "grade": 7,
+    "domain": "Geometry",
+    "cluster": "Draw, construct and describe geometrical figures and describe the relationships between them"
+  },
+  {
+    "code": "7.SP.A.1",
+    "description": "Understand that statistics can be used to gain information about a population by examining a sample of the population; generalizations about a population from a sample are valid only if the sample is representative of that population.",
+    "grade": 7,
+    "domain": "Statistics and Probability",
+    "cluster": "Use random sampling to draw inferences about a population"
+  },
+  {
+    "code": "7.SP.C.5",
+    "description": "Understand that the probability of a chance event is a number between 0 and 1 that expresses the likelihood of the event occurring.",
+    "grade": 7,
+    "domain": "Statistics and Probability",
+    "cluster": "Investigate chance processes and develop, use, and evaluate probability models"
+  },
+  {
+    "code": "8.NS.A.1",
+    "description": "Know that numbers that are not rational are called irrational. Understand informally that every number has a decimal expansion; for rational numbers show that the decimal expansion repeats eventually, and convert a decimal expansion which repeats eventually into a rational number.",
+    "grade": 8,
+    "domain": "The Number System",
+    "cluster": "The Number System"
+  },
+  {
+    "code": "8.NS.A.2",
+    "description": "Use rational approximations of irrational numbers to compare the size of irrational numbers, locate them approximately on a number line diagram, and estimate the value of expressions (e.g., \u03c02).",
+    "grade": 8,
+    "domain": "The Number System",
+    "cluster": "The Number System"
+  },
+  {
+    "code": "8.EE.A.1",
+    "description": "Know and apply the properties of integer exponents to generate equivalent numerical expressions.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.A.2",
+    "description": "Use square root and cube root symbols to represent solutions to equations of the form x\u00b2 = p and x\u00b3 = p, where p is a positive rational number. Evaluate square roots of small perfect squares and cube roots of small perfect cubes. Know that \u221a2 is irrational.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.A.3",
+    "description": "Use numbers expressed in the form of a single digit times an integer power of 10 to estimate very large or very small quantities, and to express how many times as much one is than the other.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.A.4",
+    "description": "Perform operations with numbers expressed in scientific notation, including problems where both decimal and scientific notation are used. Use scientific notation and choose units of appropriate size for measurements of very large or very small quantities (e.g., use millimeters per year for seafloor spreading). Interpret scientific notation that has been generated by technology",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.B.5",
+    "description": "Graph proportional relationships, interpreting the unit rate as the slope of the graph. Compare two different proportional relationships represented in different ways.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.B.6",
+    "description": "Use similar triangles to explain why the slope m is the same between any two distinct points on a non-vertical line in the coordinate plane; derive the equation y = mx for a line through the origin and the equation y = mx + b for a line intercepting the vertical axis at b.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.C.7",
+    "description": "Solve linear equations in one variable.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.EE.C.8",
+    "description": "Analyze and solve pairs of simultaneous linear equations.",
+    "grade": 8,
+    "domain": "Expressions and Equations",
+    "cluster": "Expressions and Equations"
+  },
+  {
+    "code": "8.F.A.1",
+    "description": "Understand that a function is a rule that assigns to each input exactly one output. The graph of a function is the set of ordered pairs consisting of an input and the corresponding output.",
+    "grade": 8,
+    "domain": "Functions",
+    "cluster": "Functions"
+  },
+  {
+    "code": "8.F.A.2",
+    "description": "Compare properties of two functions each represented in a different way (algebraically, graphically, numerically in tables, or by verbal descriptions).",
+    "grade": 8,
+    "domain": "Functions",
+    "cluster": "Functions"
+  },
+  {
+    "code": "8.F.A.3",
+    "description": "Interpret the equation y = mx + b as defining a linear function, whose graph is a straight line; give examples of functions that are not linear.",
+    "grade": 8,
+    "domain": "Functions",
+    "cluster": "Functions"
+  },
+  {
+    "code": "8.F.B.4",
+    "description": "Construct a function to model a linear relationship between two quantities. Determine the rate of change\u00a0 and initial value of the function from a description of a relationship or from two (x, y) values, including reading these from a table or from a graph. Interpret the rate of change and initial value of a linear function in terms of the situation it models, and in terms of its graph or a table of values.",
+    "grade": 8,
+    "domain": "Functions",
+    "cluster": "Functions"
+  },
+  {
+    "code": "8.F.B.5",
+    "description": "Describe qualitatively the functional relationship between two quantities by analyzing a graph (e.g., where the function is increasing or decreasing, linear or nonlinear). Sketch a graph that exhibits the qualitative features of a function that has been described verbally.",
+    "grade": 8,
+    "domain": "Functions",
+    "cluster": "Functions"
+  },
+  {
+    "code": "8.G.A.1",
+    "description": "Verify experimentally the properties of rotations, reflections, and translations:",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.A.2",
+    "description": "Understand that a two-dimensional figure is congruent to another if the second can be obtained from the first by a sequence of rotations, reflections, and translations; given two congruent figures, describe a sequence that exhibits the congruence between them.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.A.3",
+    "description": "Describe the effect of dilations, translations, rotations, and reflections on two-dimensional figures using coordinates.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.A.4",
+    "description": "Understand that a two-dimensional figure is similar to another if the second can be obtained from the first by a sequence of rotations, reflections, translations, and dilations; given two similar two-dimensional figures, describe a sequence that exhibits the similarity between them.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.A.5",
+    "description": "Use informal arguments to establish facts about the angle sum and exterior angle of triangles, about the angles created when parallel lines are cut by a transversal, and the angle-angle criterion for similarity of triangles.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.B.6",
+    "description": "Explain a proof of the Pythagorean Theorem and its converse.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.B.7",
+    "description": "Apply the Pythagorean Theorem to determine unknown side lengths in right triangles in real-world and mathematical problems in two and three dimensions.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.B.8",
+    "description": "Apply the Pythagorean Theorem to find the distance between two points in a coordinate system.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.G.C.9",
+    "description": "Know the formulas for the volumes of cones, cylinders, and spheres and use them to solve real-world and mathematical problems.",
+    "grade": 8,
+    "domain": "Geometry",
+    "cluster": "Geometry"
+  },
+  {
+    "code": "8.SP.A.1",
+    "description": "Construct and interpret scatter plots for bivariate measurement data to investigate patterns of association between two quantities. Describe patterns such as clustering, outliers, positive or negative association, linear association, and nonlinear association.",
+    "grade": 8,
+    "domain": "Statistics and Probability",
+    "cluster": "Statistics and Probability"
+  },
+  {
+    "code": "8.SP.A.2",
+    "description": "Know that straight lines are widely used to model relationships between two quantitative variables. For scatter plots that suggest a linear association, informally fit a straight line, and informally assess the model fit by judging the closeness of the data points to the line.",
+    "grade": 8,
+    "domain": "Statistics and Probability",
+    "cluster": "Statistics and Probability"
+  },
+  {
+    "code": "8.SP.A.3",
+    "description": "Use the equation of a linear model to solve problems in the context of bivariate measurement data, interpreting the slope and intercept.",
+    "grade": 8,
+    "domain": "Statistics and Probability",
+    "cluster": "Statistics and Probability"
+  },
+  {
+    "code": "8.SP.A.4",
+    "description": "Understand that patterns of association can also be seen in bivariate categorical data by displaying frequencies and relative frequencies in a two-way table. Construct and interpret a two-way table summarizing data on two categorical variables collected from the same subjects. Use relative frequencies calculated for rows or columns to describe possible association between the two variables.",
+    "grade": 8,
+    "domain": "Statistics and Probability",
+    "cluster": "Statistics and Probability"
+  },
+  {
+    "code": "HSA.SSE.A.1",
+    "description": "Interpret expressions that represent a quantity in terms of its context.",
+    "grade": 9,
+    "domain": "Seeing Structure in Expressions",
+    "cluster": "High School: Algebra: Seeing Structure in Expressions"
+  },
+  {
+    "code": "HSA.SSE.A.2",
+    "description": "Use the structure of an expression to identify ways to rewrite it.",
+    "grade": 9,
+    "domain": "Seeing Structure in Expressions",
+    "cluster": "High School: Algebra: Seeing Structure in Expressions"
+  },
+  {
+    "code": "HSA.SSE.B.3",
+    "description": "Choose and produce an equivalent form of an expression to reveal and explain properties of the quantity represented by the expression.",
+    "grade": 9,
+    "domain": "Seeing Structure in Expressions",
+    "cluster": "High School: Algebra: Seeing Structure in Expressions"
+  },
+  {
+    "code": "HSA.SSE.B.4",
+    "description": "Derive the formula for the sum of a finite geometric series (when the common ratio is not 1), and use the formula to solve problems.",
+    "grade": 9,
+    "domain": "Seeing Structure in Expressions",
+    "cluster": "High School: Algebra: Seeing Structure in Expressions"
+  },
+  {
+    "code": "HSA.APR.A.1",
+    "description": "Understand that polynomials form a system analogous to the integers, namely, they are closed under the operations of addition, subtraction, and multiplication; add, subtract, and multiply polynomials.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.B.2",
+    "description": "Know and apply the Remainder Theorem: For a polynomial p(x) and a number a, the remainder on division by x - a is p(a), so p(a) = 0 if and only if (x - a) is a factor of p(x).",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.B.3",
+    "description": "Identify zeros of polynomials when suitable factorizations are available, and use the zeros to construct a rough graph of the function defined by the polynomial.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.C.4",
+    "description": "Prove polynomial identities and use them to describe numerical relationships.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.C.5",
+    "description": "(+) Know and apply the Binomial Theorem for the expansion of (x + y)n in powers of x and y for a positive integer n, where x and y are any numbers, with coefficients determined for example by Pascal's Triangle.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.D.6",
+    "description": "Rewrite simple rational expressions in different forms; write a(x)/b(x) in the form q(x) + r(x)/b(x), where a(x), b(x), q(x), and r(x) are polynomials with the degree of r(x) less than the degree of b(x), using inspection, long division, or, for the more complicated examples, a computer algebra system.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.APR.D.7",
+    "description": "(+) Understand that rational expressions form a system analogous to the rational numbers, closed under addition, subtraction, multiplication, and division by a nonzero rational expression; add, subtract, multiply, and divide rational expressions.",
+    "grade": 9,
+    "domain": "Arithmetic with Polynomials and Rational Expressions",
+    "cluster": "High School: Algebra: Arithmetic with Polynomials and Rational Expressions"
+  },
+  {
+    "code": "HSA.REI.A.1",
+    "description": "Explain each step in solving a simple equation as following from the equality of numbers asserted at the previous step, starting from the assumption that the original equation has a solution. Construct a viable argument to justify a solution method.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.A.2",
+    "description": "Solve simple rational and radical equations in one variable, and give examples showing how extraneous solutions may arise.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.B.3",
+    "description": "Solve linear equations and inequalities in one variable, including equations with coefficients represented by letters.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.B.4",
+    "description": "Solve quadratic equations in one variable.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.C.5",
+    "description": "Prove that, given a system of two equations in two variables, replacing one equation by the sum of that equation and a multiple of the other produces a system with the same solutions.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.C.6",
+    "description": "Solve systems of linear equations exactly and approximately (e.g., with graphs), focusing on pairs of linear equations in two variables.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.C.7",
+    "description": "Solve a simple system consisting of a linear equation and a quadratic equation in two variables algebraically and graphically.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.C.8",
+    "description": "(+) Represent a system of linear equations as a single matrix equation in a vector variable.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.C.9",
+    "description": "(+) Find the inverse of a matrix if it exists and use it to solve systems of linear equations (using technology for matrices of dimension 3 \u00d7 3 or greater).",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.D.10",
+    "description": "Understand that the graph of an equation in two variables is the set of all its solutions plotted in the coordinate plane, often forming a curve (which could be a line).",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.D.11",
+    "description": "Explain why the x-coordinates of the points where the graphs of the equations y = f(x) and y = g(x) intersect are the solutions of the equation f(x) = g(x); find the solutions approximately, e.g., using technology to graph the functions, make tables of values, or find successive approximations. Include cases where f(x) and/or g(x) are linear, polynomial, rational, absolute value, exponential, and logarithmic functions.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSA.REI.D.12",
+    "description": "Graph the solutions to a linear inequality in two variables as a half-plane (excluding the boundary in the case of a strict inequality), and graph the solution set to a system of linear inequalities in two variables as the intersection of the corresponding half-planes.",
+    "grade": 9,
+    "domain": "Reasoning with Equations and Inequalities",
+    "cluster": "High School: Algebra: Reasoning with Equations and Inequalities"
+  },
+  {
+    "code": "HSF.IF.A.1",
+    "description": "Understand that a function from one set (called the domain) to another set (called the range) assigns to each element of the domain exactly one element of the range. If f is a function and x is an element of its domain, then f(x) denotes the output of f corresponding to the input x. The graph of f is the graph of the equation y = f(x).",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.A.2",
+    "description": "Use function notation, evaluate functions for inputs in their domains, and interpret statements that use function notation in terms of a context.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.A.3",
+    "description": "Recognize that sequences are functions, sometimes defined recursively, whose domain is a subset of the integers.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.B.4",
+    "description": "For a function that models a relationship between two quantities, interpret key features of graphs and tables in terms of the quantities, and sketch graphs showing key features given a verbal description of the relationship. Key features include: intercepts; intervals where the function is increasing, decreasing, positive, or negative; relative maximums and minimums; symmetries; end behavior; and periodicity.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.B.5",
+    "description": "Relate the domain of a function to its graph and, where applicable, to the quantitative relationship it describes.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.B.6",
+    "description": "Calculate and interpret the average rate of change of a function (presented symbolically or as a table) over a specified interval. Estimate the rate of change from a graph.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.C.7",
+    "description": "Graph functions expressed symbolically and show key features of the graph, by hand in simple cases and using technology for more complicated cases.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.C.8",
+    "description": "Write a function defined by an expression in different but equivalent forms to reveal and explain different properties of the function.",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.IF.C.9",
+    "description": "Compare properties of two functions each represented in a different way (algebraically, graphically, numerically in tables, or by verbal descriptions).",
+    "grade": 9,
+    "domain": "Interpreting Functions",
+    "cluster": "High School: Functions: Interpreting Functions"
+  },
+  {
+    "code": "HSF.BF.A.1",
+    "description": "Write a function that describes a relationship between two quantities.",
+    "grade": 9,
+    "domain": "Building Functions",
+    "cluster": "High School: Functions: Building Functions"
+  },
+  {
+    "code": "HSF.BF.A.2",
+    "description": "Write arithmetic and geometric sequences both recursively and with an explicit formula, use them to model situations, and translate between the two forms.",
+    "grade": 9,
+    "domain": "Building Functions",
+    "cluster": "High School: Functions: Building Functions"
+  },
+  {
+    "code": "HSF.BF.B.3",
+    "description": "Identify the effect on the graph of replacing f(x) by f(x) + k, k f(x), f(kx), and f(x + k) for specific values of k (both positive and negative); find the value of k given the graphs. Experiment with cases and illustrate an explanation of the effects on the graph using technology. Include recognizing even and odd functions from their graphs and algebraic expressions for them.",
+    "grade": 9,
+    "domain": "Building Functions",
+    "cluster": "High School: Functions: Building Functions"
+  },
+  {
+    "code": "HSF.BF.B.4",
+    "description": "Find inverse functions.",
+    "grade": 9,
+    "domain": "Building Functions",
+    "cluster": "High School: Functions: Building Functions"
+  },
+  {
+    "code": "HSF.BF.B.5",
+    "description": "(+) Understand the inverse relationship between exponents and logarithms and use this relationship to solve problems involving logarithms and exponents.",
+    "grade": 9,
+    "domain": "Building Functions",
+    "cluster": "High School: Functions: Building Functions"
+  },
+  {
+    "code": "HSG.CO.A.1",
+    "description": "Know precise definitions of angle, circle, perpendicular line, parallel line, and line segment, based on the undefined notions of point, line, distance along a line, and distance around a circular arc.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.A.2",
+    "description": "Represent transformations in the plane using, e.g., transparencies and geometry software; describe transformations as functions that take points in the plane as inputs and give other points as outputs. Compare transformations that preserve distance and angle to those that do not (e.g., translation versus horizontal stretch).",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.A.3",
+    "description": "Given a rectangle, parallelogram, trapezoid, or regular polygon, describe the rotations and reflections that carry it onto itself.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.A.4",
+    "description": "Develop definitions of rotations, reflections, and translations in terms of angles, circles, perpendicular lines, parallel lines, and line segments.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.A.5",
+    "description": "Given a geometric figure and a rotation, reflection, or translation, draw the transformed figure using, e.g., graph paper, tracing paper, or geometry software. Specify a sequence of transformations that will carry a given figure onto another.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.B.6",
+    "description": "Use geometric descriptions of rigid motions to transform figures and to predict the effect of a given rigid motion on a given figure; given two figures, use the definition of congruence in terms of rigid motions to decide if they are congruent.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.B.7",
+    "description": "Use the definition of congruence in terms of rigid motions to show that two triangles are congruent if and only if corresponding pairs of sides and corresponding pairs of angles are congruent.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.B.8",
+    "description": "Explain how the criteria for triangle congruence (ASA, SAS, and SSS) follow from the definition of congruence in terms of rigid motions.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.C.10",
+    "description": "Prove theorems about triangles. Theorems include: measures of interior angles of a triangle sum to 180\u00b0; base angles of isosceles triangles are congruent; the segment joining midpoints of two sides of a triangle is parallel to the third side and half the length; the medians of a triangle meet at a point.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.C.11",
+    "description": "Prove theorems about parallelograms. Theorems include: opposite sides are congruent, opposite angles are congruent, the diagonals of a parallelogram bisect each other, and conversely, rectangles are parallelograms with congruent diagonals.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.C.9",
+    "description": "Prove theorems about lines and angles. Theorems include: vertical angles are congruent; when a transversal crosses parallel lines, alternate interior angles are congruent and corresponding angles are congruent; points on a perpendicular bisector of a line segment are exactly those equidistant from the segment's endpoints.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.D.12",
+    "description": "Make formal geometric constructions with a variety of tools and methods (compass and straightedge, string, reflective devices, paper folding, dynamic geometric software, etc.). Copying a segment; copying an angle; bisecting a segment; bisecting an angle; constructing perpendicular lines, including the perpendicular bisector of a line segment; and constructing a line parallel to a given line through a point not on the line.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.CO.D.13",
+    "description": "Construct an equilateral triangle, a square, and a regular hexagon inscribed in a circle.",
+    "grade": 9,
+    "domain": "Congruence",
+    "cluster": "High School: Geometry: Congruence"
+  },
+  {
+    "code": "HSG.SRT.A.1",
+    "description": "Verify experimentally the properties of dilations given by a center and a scale factor:",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.A.2",
+    "description": "Given two figures, use the definition of similarity in terms of similarity transformations to decide if they are similar; explain using similarity transformations the meaning of similarity for triangles as the equality of all corresponding pairs of angles and the proportionality of all corresponding pairs of sides.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.A.3",
+    "description": "Use the properties of similarity transformations to establish the AA criterion for two triangles to be similar.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.B.4",
+    "description": "Prove theorems about triangles. Theorems include: a line parallel to one side of a triangle divides the other two proportionally, and conversely; the Pythagorean Theorem proved using triangle similarity.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.B.5",
+    "description": "Use congruence and similarity criteria for triangles to solve problems and to prove relationships in geometric figures.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.C.6",
+    "description": "Understand that by similarity, side ratios in right triangles are properties of the angles in the triangle, leading to definitions of trigonometric ratios for acute angles.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.C.7",
+    "description": "Explain and use the relationship between the sine and cosine of complementary angles.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.C.8",
+    "description": "Use trigonometric ratios and the Pythagorean Theorem to solve right triangles in applied problems.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.D.10",
+    "description": "(+) Prove the Laws of Sines and Cosines and use them to solve problems.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.D.11",
+    "description": "(+) Understand and apply the Law of Sines and the Law of Cosines to find unknown measurements in right and non-right triangles (e.g., surveying problems, resultant forces).",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  },
+  {
+    "code": "HSG.SRT.D.9",
+    "description": "(+) Derive the formula A = 1/2 ab sin(C) for the area of a triangle by drawing an auxiliary line from a vertex perpendicular to the opposite side.",
+    "grade": 9,
+    "domain": "Similarity, Right Triangles, and Trigonometry",
+    "cluster": "High School: Geometry: Similarity, Right Triangles, and Trigonometry"
+  }
 ]

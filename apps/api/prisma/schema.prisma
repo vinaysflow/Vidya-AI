@@ -232,7 +232,8 @@ model Session {
   
   // Session metrics
   messageCount Int           @default(0)
-  hintLevel    Int           @default(0)  // 0-5, how many hints given
+  hintLevel    Int           @default(0)  // 0-5, current hint level (last seen)
+  maxHintLevel Int           @default(0)  // 0-5, highest hint level reached this session
   resolved     Boolean       @default(false)
   noFinalAnswer Boolean      @default(false)  // Strict mode: no final answers
   
@@ -242,6 +243,7 @@ model Session {
   
   // Session end report (generated on session completion)
   report       Json?         // { summary, strengths, areasForImprovement, nextSteps, ... }
+  parentInsight String?      // One plain-language sentence for parents, e.g. "Your child explained why 3/4 > 2/3 using a pizza analogy"
 
   // Counselor context (multi-client support)
   clientContext  Json?        // Full client context (PathWiz: CounselorClientContext; ODEE: careerContext)
@@ -359,19 +361,66 @@ model Hint {
 }
 
 model QuestionTemplate {
-  id            String   @id @default(cuid())
-  conceptKey    String
-  gradeLevel    Int
-  difficulty    Int      @default(1)
-  questionText  String   @db.Text
-  answerFormula String
-  distractors   String[]
-  solutionSteps String[]
-  tags          String[]
-  source        String?
-  createdAt     DateTime @default(now())
+  id              String   @id @default(cuid())
+  conceptKey      String
+  gradeLevel      Int
+  difficulty      Int      @default(1)
+  subject         Subject  @default(MATHEMATICS)
+  questionText    String   @db.Text
+  answerFormula   String
+  distractors     String[]
+  solutionSteps   String[]
+  tags            String[]
+  source          String?
+  misconceptions  Json?
+  diagnostic      Boolean  @default(false)
+  createdAt       DateTime @default(now())
 
   @@index([conceptKey, gradeLevel])
+  @@index([subject, gradeLevel])
+  @@index([diagnostic])
+}
+
+// ============================================
+// CONTENT ANALYTICS
+// Deferred dashboard — tracked from session end hooks.
+// Surface templates where >40% pick wrong distractor,
+// or completion rate is <30%, after dogfood launch.
+// ============================================
+
+model TemplatePerformance {
+  id                   String   @id @default(cuid())
+  templateId           String   @unique
+  attempts             Int      @default(0)
+  correctCount         Int      @default(0)
+  avgTimeMs            Float    @default(0)
+  hintEscalationRate   Float    @default(0)
+  distractorCounts     Json     @default("{}")
+  lastUpdatedAt        DateTime @default(now()) @updatedAt
+
+  @@index([templateId])
+}
+
+// ============================================
+// DOGFOOD ANALYTICS
+// Lightweight append-only event log for 10-family dogfood.
+// Provides session completion rate, explain-back rate,
+// D1/D7 return, hint escalation, and subject diversity KPIs.
+// Fire-and-forget: never blocks a request.
+// ============================================
+
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  sessionId  String?
+  event      String
+  properties Json     @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([event])
+  @@index([createdAt])
+  @@index([sessionId])
 }
 
 // ============================================

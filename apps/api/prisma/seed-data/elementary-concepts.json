@@ -24,7 +24,9 @@
     "name": "Introduction to Multiplication",
     "description": "Multiplication as repeated addition",
     "difficulty": 1,
-    "prerequisites": ["addition_grouping"]
+    "prerequisites": [
+      "addition_grouping"
+    ]
   },
   {
     "conceptKey": "multiplication_arrays",
@@ -32,8 +34,10 @@
     "topic": "operations",
     "name": "Multiplication as Arrays",
     "description": "Understanding rows and columns (e.g., 3×4 = 12)",
-    "difficulty": 2,
-    "prerequisites": ["multiplication_intro"]
+    "difficulty": 1,
+    "prerequisites": [
+      "multiplication_intro"
+    ]
   },
   {
     "conceptKey": "shapes_identify",
@@ -61,95 +65,5 @@
     "description": "Forces cause objects to move or change",
     "difficulty": 1,
     "prerequisites": []
-  },
-  {
-    "conceptKey": "states_of_matter",
-    "subject": "CHEMISTRY",
-    "topic": "states_of_matter",
-    "name": "States of Matter",
-    "description": "Solids, liquids, and gases — and how heat changes them",
-    "difficulty": 1,
-    "prerequisites": []
-  },
-  {
-    "conceptKey": "mixtures",
-    "subject": "CHEMISTRY",
-    "topic": "mixtures",
-    "name": "Mixtures",
-    "description": "Combining two or more materials that can be separated",
-    "difficulty": 1,
-    "prerequisites": []
-  },
-  {
-    "conceptKey": "solutions",
-    "subject": "CHEMISTRY",
-    "topic": "solutions",
-    "name": "Solutions",
-    "description": "One substance dissolves into another (like sugar in water)",
-    "difficulty": 2,
-    "prerequisites": ["mixtures"]
-  },
-  {
-    "conceptKey": "fractions_intro",
-    "subject": "MATHEMATICS",
-    "topic": "fractions",
-    "name": "Introduction to Fractions",
-    "description": "Parts of a whole — halves, thirds, quarters",
-    "difficulty": 2,
-    "prerequisites": ["addition_grouping"]
-  },
-  {
-    "conceptKey": "friction",
-    "subject": "PHYSICS",
-    "topic": "forces_motion",
-    "name": "Friction",
-    "description": "A force that slows things down when surfaces rub together",
-    "difficulty": 2,
-    "prerequisites": ["forces_push_pull"]
-  },
-  {
-    "conceptKey": "balance_weight",
-    "subject": "PHYSICS",
-    "topic": "forces_motion",
-    "name": "Balance and Weight",
-    "description": "Heavier objects need more force to balance; seesaws show this",
-    "difficulty": 1,
-    "prerequisites": ["forces_push_pull"]
-  },
-  {
-    "conceptKey": "light_shadows",
-    "subject": "PHYSICS",
-    "topic": "light_shadows",
-    "name": "Light and Shadows",
-    "description": "Shadows form when objects block light; shadow length depends on the sun's angle",
-    "difficulty": 1,
-    "prerequisites": []
-  },
-  {
-    "conceptKey": "symmetry",
-    "subject": "MATHEMATICS",
-    "topic": "geometry_shapes",
-    "name": "Symmetry",
-    "description": "A shape is symmetrical when both sides mirror each other",
-    "difficulty": 1,
-    "prerequisites": ["shapes_identify"]
-  },
-  {
-    "conceptKey": "density",
-    "subject": "PHYSICS",
-    "topic": "density",
-    "name": "Density and Floating",
-    "description": "Dense objects sink; less dense objects float — it's about how tightly packed the matter is",
-    "difficulty": 2,
-    "prerequisites": []
-  },
-  {
-    "conceptKey": "subtraction",
-    "subject": "MATHEMATICS",
-    "topic": "operations",
-    "name": "Subtraction",
-    "description": "Taking away from a group to find how many are left",
-    "difficulty": 1,
-    "prerequisites": ["addition_grouping"]
   }
 ]

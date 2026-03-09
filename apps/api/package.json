@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "npx prisma db push --accept-data-loss --schema prisma/schema.prisma 2>&1 || true && node dist/index.js",
+    "start": "node dist/index.js",
+    "db:migrate": "npx prisma db push --schema prisma/schema.prisma",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",

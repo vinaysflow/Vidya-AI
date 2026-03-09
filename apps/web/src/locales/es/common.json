@@ -43,6 +43,13 @@
     "apiError": "Algo salio mal. Intentalo de nuevo.",
     "sessionExpired": "Sesion expirada. Iniciando nueva sesion."
   },
+  "hints": {
+    "level1": "Comencemos con lo que ya sabes.",
+    "level2": "Piensa en los conceptos involucrados.",
+    "level3": "Considera este enfoque...",
+    "level4": "Aqui hay un ejemplo similar.",
+    "level5": "Dividamos esto en pasos mas pequeños."
+  },
   "settings": {
     "title": "Ajustes",
     "language": "Idioma",
@@ -52,6 +59,7 @@
     "themeDark": "Oscuro",
     "apiKey": "Clave API",
     "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "Notificaciones",
     "about": "Acerca de Vid (Vidya)",
     "onboarding": "Onboarding",
     "restartOnboarding": "Restart",

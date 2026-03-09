@@ -37,7 +37,8 @@ export interface TutorInput {
   clientContext?: Record<string, any>;  // Full client context (PathWiz or ODEE shape)
   variant?: string;                     // 'COLLEGE_US' | 'CAREER_INDIA'
   clientUserId?: string;                // Opaque client user ID
-  rsmTrack?: boolean;                   // Student attends Russian School of Math
+  rsmTrack?: boolean | string;           // Enrichment track name or boolean
+  context?: string;                      // Supplementary material (reading passage, graph description, code snippet, etc.)
 }
 
 export interface TutorResponse {

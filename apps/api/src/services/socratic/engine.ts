@@ -15,11 +15,13 @@
  */
 
 import type { Language, Subject } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { getModule, registerModule } from './registry';
 import type { TutorModule } from './module';
 import { cache, CACHE_TTL } from '../cache';
 import { LlmClient, BudgetExceededError } from '../llm/client';
 import { resolveModelPolicy } from './routingPolicy';
+import { buildElementaryOverlay } from './prompts/elementary-overlay';
 import {
   getOrCreateSessionSummary,
   buildHistoryText,
@@ -32,7 +34,8 @@ import {
 } from './quiz';
 import { generateVisualContent } from './visualGenerator';
 import { getConceptBankAddendum } from './conceptBank';
-import { getExampleQuestions } from '../learning/templateLookup';
+import { getExampleQuestions, getMisconceptionContext, buildMisconceptionAddendum } from '../learning/templateLookup';
+import { getMasteryByConceptKey } from '../learning/masteryTracker';
 
 // Import and register modules
 import { stemModule } from './modules/stem';
@@ -168,14 +171,17 @@ export class SocraticEngine {
 
     // Step 1: Check if we need the student to show work first
     // Counselor mode skips the attempt gate — it's conversational
+    // Kid mode (grade <= 9) also skips — kids use choice cards, not free-form written work,
+    // so the attempt gate never applies and must not return scaffold meta-choices.
     const isCounseling = subject === 'COUNSELING';
-    if (!isCounseling && this.needsAttemptFirst(conversationHistory, userMessage, mod, language, { grade: input.grade })) {
-      return this.promptForAttempt(language, mod, input.grade);
+    const isKidMode = input.grade != null && input.grade <= 9;
+    if (!isCounseling && !isKidMode && this.needsAttemptFirst(conversationHistory, userMessage, mod, language, { grade: input.grade })) {
+      return this.promptForAttempt(language, mod);
     }
 
     // Kid quest intro: first turn skips analysis entirely — the user message is just the problem statement
     const isFirstTurn = conversationHistory.filter(m => m.role === 'USER').length <= 1;
-    if (input.grade != null && input.grade <= 5 && isFirstTurn) {
+    if (input.grade != null && input.grade <= 9 && isFirstTurn) {
       return this.generateKidQuestIntro(input, mod);
     }
 
@@ -202,6 +208,7 @@ export class SocraticEngine {
         // Counselor metadata
         clientContext: input.clientContext,
         variant: input.variant,
+        context: input.context,
       }
     });
 
@@ -225,7 +232,7 @@ export class SocraticEngine {
     const STEM_SUBJECTS: Subject[] = ['PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY'];
     const isStemSubject = STEM_SUBJECTS.includes(subject);
 
-    if (grade != null && grade <= 5 && questionType === 'celebration' && isStemSubject) {
+    if (grade != null && grade <= 9 && questionType === 'celebration' && isStemSubject) {
       const a = analysis as { distanceFromSolution?: number };
       if ((a.distanceFromSolution ?? 100) < 15) {
         const lastAssistant = conversationHistory.filter((m) => m.role === 'ASSISTANT').pop();
@@ -312,16 +319,14 @@ export class SocraticEngine {
         // Counselor metadata
         clientContext: input.clientContext,
         variant: input.variant,
+        context: input.context,
       }
     });
 
     // Step 4b: Retry if kid mode response is missing [A]/[B]/[C] choices
-    if (grade != null && grade <= 7) {
+    if (grade != null && grade <= 9) {
       const hasChoices = /\[A\]/i.test(response.text) && /\[B\]/i.test(response.text);
-      console.log(`[DEBUG-CHOICES] grade=${grade} questionType=${questionType} hasChoices=${hasChoices} responseLen=${response.text.length}`);
-      console.log(`[DEBUG-CHOICES] responseText: ${response.text.substring(0, 300)}`);
       if (!hasChoices) {
-        console.log(`[DEBUG-CHOICES] No [A]/[B]/[C] found, retrying...`);
         try {
           const retryHistory = [
             ...conversationHistory,
@@ -358,12 +363,11 @@ export class SocraticEngine {
             },
           });
           const retryHasChoices = /\[A\]/i.test(retryResponse.text) && /\[B\]/i.test(retryResponse.text);
-          console.log(`[DEBUG-CHOICES] retryHasChoices=${retryHasChoices} retryText: ${retryResponse.text.substring(0, 300)}`);
           if (retryHasChoices) {
             Object.assign(response, retryResponse);
           }
         } catch (retryErr) {
-          console.error(`[DEBUG-CHOICES] Retry failed:`, retryErr);
+          // Retry is non-critical; proceed with original response
         }
       }
     }
@@ -659,6 +663,21 @@ Analyze this and respond with JSON only.
       systemPrompt += `\n\n${bankAddendum}`;
     }
 
+    // If the student picked a specific distractor and we have misconception data,
+    // inject a targeted Socratic response suggestion.
+    const pickedDistractorIndex = metadata?.pickedDistractorIndex as 0 | 1 | undefined;
+    const activeTemplateId = metadata?.activeTemplateId as string | undefined;
+    if (pickedDistractorIndex != null && activeTemplateId) {
+      const misconceptions = await getMisconceptionContext(activeTemplateId).catch(() => null);
+      if (misconceptions) {
+        const addendum = buildMisconceptionAddendum(misconceptions, pickedDistractorIndex);
+        if (addendum) {
+          systemPrompt += `\n\n${addendum}`;
+          safetyEvents.push('misconception_targeted');
+        }
+      }
+    }
+
     if (scaffoldMode) {
       systemPrompt += [
         '',
@@ -671,6 +690,14 @@ Analyze this and respond with JSON only.
         '4) Keep your response short (2-3 sentences max before the question).',
         'Do NOT provide worked examples, solutions, or multi-step explanations.',
       ].join('\n');
+    }
+
+    // Engine-level elementary overlay injection for ALL modules.
+    // STEM applies this via its own buildResponseSystemAddendum; other modules need it here.
+    if (metadata?.grade != null && metadata.grade <= 9 && !systemPrompt.includes('ELEMENTARY MODE')) {
+      const effectiveGrade = (metadata?.effectiveGrade ?? metadata.grade) as number;
+      const overlay = buildElementaryOverlay(metadata.grade as number, effectiveGrade);
+      systemPrompt += '\n\n' + overlay;
     }
 
     // Build user prompt
@@ -700,6 +727,51 @@ Generate the response:
       `.trim();
     }
 
+    // Engine-level quest intro override: when a module doesn't handle isQuestIntro
+    // (only STEM does), replace the user prompt with the standard quest intro format
+    // so ALL subjects produce proper [A]/[B]/[C] content choices on the first turn.
+    const isKidGrade = metadata?.grade != null && metadata.grade <= 9;
+    if (isKidGrade && metadata?.isQuestIntro && !userPrompt.includes('PROBLEM (use this EXACT question')) {
+      const langInst: Record<string, string> = {
+        EN: 'Respond in English.',
+        HI: 'हिंदी में जवाब दें। Technical terms English में रख सकते हैं।',
+        FR: 'Répondez en français.',
+        DE: 'Antworten Sie auf Deutsch.',
+        ES: 'Responde en español.',
+        ZH: '用中文回答。技术术语可以保持英文。',
+      };
+      const contextBlock = metadata?.context
+        ? `\nCONTEXT (the student has already read this material — base your question and choices ONLY on these details):\n"""\n${metadata.context}\n"""\n`
+        : '';
+      userPrompt = `
+PROBLEM (use this EXACT question — do NOT rephrase or invent a new question):
+"${metadata?.problemText || '(not provided)'}"
+${contextBlock}
+TASK: You are starting a new quest with a young student. This is the VERY FIRST message.
+The student has NOT attempted anything yet — they just picked this quest.
+Your ONLY job: add 1 fun sentence of context, then ask the EXACT question from the PROBLEM above (you may simplify wording for a kid but keep the same meaning and answer).
+
+Do NOT say "good start", "nice", "great job", or anything that implies they already worked on it.
+Do NOT reference any previous work or attempts.
+Do NOT invent a different question. Do NOT change what is being asked.
+${metadata?.context ? 'Do NOT invent details outside the CONTEXT above. All choices MUST reference details from the CONTEXT.' : ''}
+
+${langInst[language] || langInst.EN}
+
+CRITICAL RULES:
+1. Ask the SAME question as the PROBLEM above. Do NOT substitute a different question.
+2. Maximum 1 short sentence + the question. Think NPC speech bubble.
+3. NEVER give the answer or solve the problem
+4. The choices you provide (per the system instructions) MUST directly answer the question. One must be correct. Others must be plausible wrong answers.
+
+Generate the response:
+      `.trim();
+    }
+
+    // Non-intro kid-mode choice injection is handled by the elementary overlay
+    // injected into the system prompt above. No additional user prompt injection needed —
+    // doubling up causes the LLM to duplicate [A]/[B]/[C] blocks.
+
     try {
       const responsePolicy = resolveModelPolicy(mod.modelPolicy?.response);
       const baseMax = mod.maxResponseTokens || 400;
@@ -716,8 +788,6 @@ Generate the response:
       });
 
       const modelUsed = { provider: result.provider, model: result.model, fallbackUsed: result.fallbackUsed };
-      console.log(`[DEBUG-LLM] provider=${result.provider} model=${result.model} fallback=${result.fallbackUsed} rawLen=${result.text.length}`);
-      console.log(`[DEBUG-LLM] rawText: ${result.text.trim().substring(0, 400)}`);
       if (result.fallbackUsed) {
         safetyEvents.push('llm_fallback');
       }
@@ -725,9 +795,6 @@ Generate the response:
       // Validate the response doesn't leak answers/content
       const validation = await this.validateResponseWithModule(result.text.trim(), mod, conversationHistory);
       safetyEvents.push(...validation.safetyEvents);
-      if (validation.text !== result.text.trim()) {
-        console.log(`[DEBUG-LLM] validation changed text! safetyEvents=${validation.safetyEvents.join(',')} validatedText: ${validation.text.substring(0, 300)}`);
-      }
 
       // Ensure response contains a question
       if (!validation.text.includes('?')) {
@@ -909,6 +976,7 @@ Generate the response:
         problemText,
         masteryContext: input.masteryContext,
         isQuestIntro: true,
+        context: input.context,
       },
     });
 
@@ -951,8 +1019,8 @@ Generate the response:
     if (userMessages.length === 0) return false;
     if (userMessages.length !== 1) return false;
 
-    // Elementary relaxation: grade <= 5 gets more leeway (shorter messages count as attempt)
-    if (metadata?.grade != null && metadata.grade <= 5 && currentMessage.length >= 8) {
+    // Kid mode relaxation: grade <= 9 gets more leeway (shorter messages count as attempt)
+    if (metadata?.grade != null && metadata.grade <= 9 && currentMessage.length >= 8) {
       return false;
     }
     return !mod.containsAttempt(currentMessage, language);
@@ -962,13 +1030,9 @@ Generate the response:
    * Generate a prompt asking student to show their work.
    * Uses the module's attempt prompts.
    */
-  private promptForAttempt(language: Language, mod: TutorModule, grade?: number | null): TutorResponse {
+  private promptForAttempt(language: Language, mod: TutorModule): TutorResponse {
     // Use the module's attempt prompt for the given language (fallback to EN)
-    let promptText = mod.attemptPrompts[language] || mod.attemptPrompts.EN || mod.attemptPrompts[Object.keys(mod.attemptPrompts)[0]];
-    // Elementary kids need [A]/[B]/[C] choices so QuestScene can render them
-    if (grade != null && grade <= 5) {
-      promptText += '\n\n[A] I think I know!\n[B] Give me a hint\n[C] Show me how to start';
-    }
+    const promptText = mod.attemptPrompts[language] || mod.attemptPrompts.EN || mod.attemptPrompts[Object.keys(mod.attemptPrompts)[0]];
     const responseLanguage = mod.supportedLanguages.includes(language) ? language : mod.supportedLanguages[0];
 
     return {
@@ -1376,6 +1440,54 @@ Respond with JSON only.
   private extractProblem(history: Message[]): string {
     const firstUserMessage = history.find(m => m.role === 'USER');
     return firstUserMessage?.content || '';
+  }
+
+  /**
+   * generateWarmUp
+   *
+   * Picks one concept the user has already mastered (mastery >= 40) and
+   * returns a warm-up problem formatted for kid-mode [A]/[B]/[C] choice cards.
+   *
+   * Called from /session/start when the user is in kid mode and has mastered
+   * at least one concept. Returns null if no mastered concepts exist.
+   */
+  async generateWarmUp(userId: string, subject: string): Promise<{
+    conceptKey: string;
+    questionText: string;
+    answerFormula: string;
+    distractors: string[];
+    isWarmUp: true;
+  } | null> {
+    try {
+      const masteryMap = await getMasteryByConceptKey(userId, subject as any);
+      const mastered = masteryMap.filter((m) => (m as any).mastery >= 40);
+      if (mastered.length === 0) return null;
+
+      // Pick a random mastered concept
+      const pick = mastered[Math.floor(Math.random() * mastered.length)];
+      const conceptKey = (pick as any).conceptKey as string;
+
+      // Find a template for that concept using a fresh prisma client
+      const prismaForWarmup = new PrismaClient();
+      const templates = await prismaForWarmup.questionTemplate.findMany({
+        where: { conceptKey },
+        take: 3,
+      });
+      await prismaForWarmup.$disconnect();
+
+      if (templates.length === 0) return null;
+
+      const tmpl = templates[Math.floor(Math.random() * templates.length)];
+      return {
+        conceptKey,
+        questionText: (tmpl as any).questionText ?? '',
+        answerFormula: (tmpl as any).answerFormula ?? '',
+        distractors: (tmpl as any).distractors ?? [],
+        isWarmUp: true,
+      };
+    } catch {
+      return null;
+    }
   }
 }
 

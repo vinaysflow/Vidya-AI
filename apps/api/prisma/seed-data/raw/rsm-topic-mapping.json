@@ -4,7 +4,10 @@
     "rsmGrade": 3,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["set_theory_intro", "venn_diagrams_basic"],
+    "suggestedConceptKeys": [
+      "set_theory_intro",
+      "venn_diagrams_basic"
+    ],
     "description": "Understanding sets and their properties - RSM introduces this in grade 3, well above US standards",
     "notes": "Set theory is foundational for logic and later algebra. US Common Core introduces this implicitly in grade 4-5."
   },
@@ -13,7 +16,10 @@
     "rsmGrade": 3,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["venn_diagrams_basic", "subset_relations"],
+    "suggestedConceptKeys": [
+      "venn_diagrams_basic",
+      "subset_relations"
+    ],
     "description": "Using Venn diagrams to show relationships between sets",
     "notes": "Visual logic tool. Bridges set theory to later probability and statistics."
   },
@@ -22,7 +28,9 @@
     "rsmGrade": 3,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["multidigit_multiplication_1digit"],
+    "suggestedConceptKeys": [
+      "multidigit_multiplication_1digit"
+    ],
     "description": "Multiplying numbers like 234 x 6 using standard algorithm",
     "notes": "CCSS places 4.NBT.B.5 at grade 4. RSM does this in grade 3."
   },
@@ -31,7 +39,10 @@
     "rsmGrade": 3,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["powers_of_ten", "place_value_advanced"],
+    "suggestedConceptKeys": [
+      "powers_of_ten",
+      "place_value_advanced"
+    ],
     "description": "Understanding how multiplying/dividing by 10, 100, 1000 shifts digits",
     "notes": "Connects to place value understanding. CCSS 4.NBT.A.1."
   },
@@ -40,7 +51,10 @@
     "rsmGrade": 3,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["measurement_units", "unit_conversion"],
+    "suggestedConceptKeys": [
+      "measurement_units",
+      "unit_conversion"
+    ],
     "description": "Converting between measurement units and solving measurement word problems",
     "notes": "CCSS 4.MD.A.1. RSM includes more complex conversions."
   },
@@ -49,7 +63,9 @@
     "rsmGrade": 3,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["multidigit_multiplication_2digit"],
+    "suggestedConceptKeys": [
+      "multidigit_multiplication_2digit"
+    ],
     "description": "Multiplying numbers like 34 x 56 or 123 x 45",
     "notes": "CCSS 4.NBT.B.5 covers 2-digit multiplication. RSM extends to 3-digit in grade 3."
   },
@@ -58,7 +74,10 @@
     "rsmGrade": 3,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["symmetry", "geometric_transformations"],
+    "suggestedConceptKeys": [
+      "symmetry",
+      "geometric_transformations"
+    ],
     "description": "Line symmetry, reflection, translation of shapes on a plane",
     "notes": "CCSS addresses this in grade 4 (4.G.A.3) and grade 5 geometry."
   },
@@ -67,34 +86,45 @@
     "rsmGrade": 3,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["variables_intro", "simple_equations"],
+    "suggestedConceptKeys": [
+      "variables_intro",
+      "simple_equations"
+    ],
     "description": "Using letters to represent unknown quantities in simple equations",
     "notes": "CCSS introduces expressions in grade 5 (5.OA.A). RSM does this in grade 3 Q2."
   },
   {
-    "rsmTopic": "Distance-velocity-time formulas (d = v × t)",
+    "rsmTopic": "Distance-velocity-time formulas (d = v \u00d7 t)",
     "rsmGrade": 3,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["distance_velocity_time", "rate_problems"],
-    "description": "Solving word problems using the distance formula d = v × t",
+    "suggestedConceptKeys": [
+      "distance_velocity_time",
+      "rate_problems"
+    ],
+    "description": "Solving word problems using the distance formula d = v \u00d7 t",
     "notes": "This is formally a middle school topic (grade 6-7 in US). RSM covers it in grade 3. Requires multi-digit multiplication."
   },
   {
-    "rsmTopic": "Cost formula (cost = price × quantity)",
+    "rsmTopic": "Cost formula (cost = price \u00d7 quantity)",
     "rsmGrade": 3,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["cost_formula", "multiplication_applications"],
+    "suggestedConceptKeys": [
+      "cost_formula",
+      "multiplication_applications"
+    ],
     "description": "Applying multiplication to real-world cost calculations",
     "notes": "Practical application of multiplication. Builds formula-thinking habits."
   },
   {
-    "rsmTopic": "Work formula (work = rate × time)",
+    "rsmTopic": "Work formula (work = rate \u00d7 time)",
     "rsmGrade": 3,
     "rsmQuarter": 4,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["work_rate_time"],
+    "suggestedConceptKeys": [
+      "work_rate_time"
+    ],
     "description": "Solving problems about work done at a given rate over time",
     "notes": "This is typically a grade 6-7 concept in US curriculum. RSM introduces it in grade 3."
   },
@@ -103,7 +133,9 @@
     "rsmGrade": 3,
     "rsmQuarter": 4,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["multistep_word_problems"],
+    "suggestedConceptKeys": [
+      "multistep_word_problems"
+    ],
     "description": "Solving word problems that require 3 or more operations",
     "notes": "CCSS grade 3 covers 2-step problems. RSM grade 3 Q4 covers compound multi-step problems."
   },
@@ -112,7 +144,10 @@
     "rsmGrade": 4,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["fraction_equivalence", "fraction_comparison"],
+    "suggestedConceptKeys": [
+      "fraction_equivalence",
+      "fraction_comparison"
+    ],
     "description": "Finding equivalent fractions and comparing fractions with different denominators",
     "notes": "Aligns well with CCSS grade 4 (4.NF.A.1, 4.NF.A.2)."
   },
@@ -121,7 +156,9 @@
     "rsmGrade": 4,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["fraction_addition_subtraction"],
+    "suggestedConceptKeys": [
+      "fraction_addition_subtraction"
+    ],
     "description": "Adding and subtracting fractions with like and unlike denominators",
     "notes": "CCSS places unlike denominators at grade 5 (5.NF.A.1). RSM covers at grade 4."
   },
@@ -130,7 +167,10 @@
     "rsmGrade": 4,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 4,
-    "suggestedConceptKeys": ["decimal_notation", "decimal_place_value"],
+    "suggestedConceptKeys": [
+      "decimal_notation",
+      "decimal_place_value"
+    ],
     "description": "Reading, writing, and comparing decimal numbers",
     "notes": "Aligns with CCSS grade 4 (4.NF.C.6, 4.NF.C.7)."
   },
@@ -139,7 +179,10 @@
     "rsmGrade": 4,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["area_complex_figures", "perimeter_advanced"],
+    "suggestedConceptKeys": [
+      "area_complex_figures",
+      "perimeter_advanced"
+    ],
     "description": "Computing area and perimeter of L-shapes and composite figures",
     "notes": "CCSS covers this at grade 5-6."
   },
@@ -148,7 +191,9 @@
     "rsmGrade": 4,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["coordinate_plane_intro"],
+    "suggestedConceptKeys": [
+      "coordinate_plane_intro"
+    ],
     "description": "Plotting points using (x, y) coordinates in the first quadrant",
     "notes": "CCSS grade 5 (5.G.A.1)."
   },
@@ -157,7 +202,10 @@
     "rsmGrade": 4,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["simple_equations", "solving_for_unknown"],
+    "suggestedConceptKeys": [
+      "simple_equations",
+      "solving_for_unknown"
+    ],
     "description": "Solving equations of the form x + 5 = 12 or 3x = 18",
     "notes": "Extends the variable intro from grade 3."
   },
@@ -166,7 +214,10 @@
     "rsmGrade": 5,
     "rsmQuarter": 1,
     "equivalentCommonCoreGrade": 5,
-    "suggestedConceptKeys": ["fraction_multiplication", "fraction_division"],
+    "suggestedConceptKeys": [
+      "fraction_multiplication",
+      "fraction_division"
+    ],
     "description": "Multiplying and dividing fractions and mixed numbers",
     "notes": "CCSS grade 5 (5.NF.B.4, 5.NF.B.7)."
   },
@@ -175,7 +226,10 @@
     "rsmGrade": 5,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["ratios_intro", "proportional_reasoning"],
+    "suggestedConceptKeys": [
+      "ratios_intro",
+      "proportional_reasoning"
+    ],
     "description": "Understanding ratio notation and solving proportions",
     "notes": "CCSS grade 6 (6.RP.A.1-3). RSM introduces at grade 5."
   },
@@ -184,7 +238,10 @@
     "rsmGrade": 5,
     "rsmQuarter": 2,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["percentages_intro", "percent_problems"],
+    "suggestedConceptKeys": [
+      "percentages_intro",
+      "percent_problems"
+    ],
     "description": "Converting between fractions, decimals, and percentages. Percent of a number.",
     "notes": "CCSS addresses formally at grade 6. RSM covers at grade 5."
   },
@@ -193,7 +250,10 @@
     "rsmGrade": 5,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["negative_numbers", "absolute_value"],
+    "suggestedConceptKeys": [
+      "negative_numbers",
+      "absolute_value"
+    ],
     "description": "Number line with negative numbers, ordering, and absolute value",
     "notes": "CCSS grade 6 (6.NS.C.5-7)."
   },
@@ -202,7 +262,9 @@
     "rsmGrade": 5,
     "rsmQuarter": 4,
     "equivalentCommonCoreGrade": 7,
-    "suggestedConceptKeys": ["linear_equations_one_variable"],
+    "suggestedConceptKeys": [
+      "linear_equations_one_variable"
+    ],
     "description": "Solving one-variable linear equations with variables on both sides",
     "notes": "CCSS grade 7 (7.EE.B.4). RSM covers at grade 5."
   },
@@ -211,7 +273,10 @@
     "rsmGrade": 5,
     "rsmQuarter": 3,
     "equivalentCommonCoreGrade": 6,
-    "suggestedConceptKeys": ["mean_median_mode", "data_analysis_basic"],
+    "suggestedConceptKeys": [
+      "mean_median_mode",
+      "data_analysis_basic"
+    ],
     "description": "Computing and interpreting measures of central tendency",
     "notes": "CCSS grade 6 (6.SP.B.5)."
   },
@@ -220,8 +285,364 @@
     "rsmGrade": 4,
     "rsmQuarter": 4,
     "equivalentCommonCoreGrade": 7,
-    "suggestedConceptKeys": ["counting_principles", "tree_diagrams"],
+    "suggestedConceptKeys": [
+      "counting_principles",
+      "tree_diagrams"
+    ],
     "description": "Systematic counting, fundamental counting principle, tree diagrams",
     "notes": "Combinatorics is a RSM specialty. Introduced informally in grade 4, more formally in grade 5-6."
+  },
+  {
+    "rsmTopic": "Systems of linear equations (two variables)",
+    "rsmGrade": 6,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "systems_of_equations",
+      "substitution_method"
+    ],
+    "description": "Solving systems of two linear equations using substitution and graphing",
+    "notes": "CCSS grade 8 (8.EE.C.8). RSM introduces at grade 6."
+  },
+  {
+    "rsmTopic": "Functions and graphs",
+    "rsmGrade": 6,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "function_definition",
+      "function_graphs"
+    ],
+    "description": "Understanding the concept of a function, domain, range, and graphing linear functions",
+    "notes": "CCSS grade 8 (8.F.A). RSM introduces at grade 6."
+  },
+  {
+    "rsmTopic": "Inequalities and their graphs",
+    "rsmGrade": 6,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": [
+      "inequality_solve",
+      "inequality_graphing"
+    ],
+    "description": "Solving linear inequalities and representing solutions on a number line",
+    "notes": "CCSS grade 7 (7.EE.B.4b). RSM formalizes at grade 6."
+  },
+  {
+    "rsmTopic": "Exponents and scientific notation",
+    "rsmGrade": 6,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "exponent_rules",
+      "scientific_notation"
+    ],
+    "description": "Integer exponents, product rule, power rule, and scientific notation",
+    "notes": "CCSS grade 8 (8.EE.A.1-4). RSM covers at grade 6."
+  },
+  {
+    "rsmTopic": "Pythagorean theorem and applications",
+    "rsmGrade": 6,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "pythagorean_theorem",
+      "distance_formula"
+    ],
+    "description": "Understanding and applying the Pythagorean theorem to find side lengths and distances",
+    "notes": "CCSS grade 8 (8.G.B.7-8). RSM introduces at grade 6."
+  },
+  {
+    "rsmTopic": "Probability: theoretical and experimental",
+    "rsmGrade": 6,
+    "rsmQuarter": 4,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": [
+      "theoretical_probability",
+      "experimental_probability"
+    ],
+    "description": "Computing theoretical probability, running experiments, comparing results",
+    "notes": "CCSS grade 7 (7.SP.C.5-7). RSM covers at grade 6."
+  },
+  {
+    "rsmTopic": "Polynomial arithmetic",
+    "rsmGrade": 6,
+    "rsmQuarter": 4,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "polynomial_addition_subtraction",
+      "polynomial_multiplication"
+    ],
+    "description": "Adding, subtracting, and multiplying polynomials (intro level)",
+    "notes": "High school Algebra 1 (CCSS HSA-APR.A.1). RSM introduces at grade 6."
+  },
+  {
+    "rsmTopic": "Factoring: GCF and difference of squares",
+    "rsmGrade": 7,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "factoring_gcf",
+      "factoring_difference_of_squares"
+    ],
+    "description": "Factoring polynomials using greatest common factor and difference of squares pattern",
+    "notes": "CCSS Algebra 1 (HSA-SSE.A.2). RSM introduces at grade 7."
+  },
+  {
+    "rsmTopic": "Quadratic equations: factoring and quadratic formula",
+    "rsmGrade": 7,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "quadratic_factoring",
+      "quadratic_formula"
+    ],
+    "description": "Solving quadratic equations by factoring and using the quadratic formula",
+    "notes": "CCSS Algebra 1 (HSA-REI.B.4). RSM introduces at grade 7."
+  },
+  {
+    "rsmTopic": "Proportional geometry: similar triangles and scale factors",
+    "rsmGrade": 7,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "similar_triangles",
+      "scale_factor_geometry"
+    ],
+    "description": "Identifying similar triangles, finding scale factors, solving for unknown side lengths",
+    "notes": "CCSS grade 8 (8.G.A.4-5). RSM formalizes at grade 7."
+  },
+  {
+    "rsmTopic": "Logic: proofs and deductive reasoning",
+    "rsmGrade": 7,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 10,
+    "suggestedConceptKeys": [
+      "deductive_reasoning",
+      "geometric_proof_intro"
+    ],
+    "description": "Introduction to logical arguments, if-then statements, and two-column geometric proofs",
+    "notes": "Geometry proofs are CCSS grade 9-10. RSM introduces deductive reasoning at grade 7."
+  },
+  {
+    "rsmTopic": "Combinatorics: permutations and combinations",
+    "rsmGrade": 7,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 11,
+    "suggestedConceptKeys": [
+      "permutations",
+      "combinations",
+      "counting_advanced"
+    ],
+    "description": "Factorial notation, nPr, nCr, and applying counting methods to probability problems",
+    "notes": "CCSS Statistics in Algebra 2 / grade 11. RSM covers at grade 7."
+  },
+  {
+    "rsmTopic": "Systems of linear equations: substitution and elimination",
+    "rsmGrade": 6,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "systems_equations_intro",
+      "linear_equations_two_vars",
+      "substitution_method"
+    ],
+    "description": "Solving systems of two linear equations using substitution and elimination methods",
+    "notes": "CCSS introduces systems at grade 8. RSM covers at grade 6 with full algebraic approach."
+  },
+  {
+    "rsmTopic": "Inequalities and their graphs on a number line",
+    "rsmGrade": 6,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": [
+      "inequalities_intro",
+      "graphing_inequalities",
+      "compound_inequalities"
+    ],
+    "description": "Understanding and solving linear inequalities, representing solutions on number lines",
+    "notes": "CCSS grade 7 algebra standard. RSM treats these earlier with more rigor."
+  },
+  {
+    "rsmTopic": "Number theory: prime factorization, GCF, LCM",
+    "rsmGrade": 6,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 6,
+    "suggestedConceptKeys": [
+      "prime_factorization",
+      "greatest_common_factor",
+      "least_common_multiple"
+    ],
+    "description": "Finding prime factorizations, computing GCF and LCM using prime factorization",
+    "notes": "Aligned with CCSS grade 6 NS standards, but RSM emphasizes Euclidean algorithm approach."
+  },
+  {
+    "rsmTopic": "Geometric proofs: congruence and similarity using axioms",
+    "rsmGrade": 6,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 10,
+    "suggestedConceptKeys": [
+      "triangle_congruence",
+      "similarity_ratios",
+      "geometric_proof_intro"
+    ],
+    "description": "Formal two-column proofs for triangle congruence (SSS, SAS, ASA) and similarity",
+    "notes": "CCSS Geometry standard (grade 10). RSM introduces formal proof at grade 6."
+  },
+  {
+    "rsmTopic": "Ratios, proportions, and percent change",
+    "rsmGrade": 6,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": [
+      "ratios_intro",
+      "proportional_reasoning",
+      "percent_change"
+    ],
+    "description": "Setting up and solving proportions; calculating percent increase and decrease",
+    "notes": "CCSS grade 7 RP standard. RSM emphasizes cross-multiplication and algebraic setups."
+  },
+  {
+    "rsmTopic": "Integer exponents and scientific notation",
+    "rsmGrade": 6,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "integer_exponents",
+      "scientific_notation",
+      "exponent_rules"
+    ],
+    "description": "Properties of integer exponents (including negative exponents), converting to/from scientific notation",
+    "notes": "CCSS grade 8 EE standard. RSM covers at grade 6 to prepare for algebra."
+  },
+  {
+    "rsmTopic": "Coordinate geometry: distance and midpoint formulas",
+    "rsmGrade": 6,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "distance_formula",
+      "midpoint_formula",
+      "coordinate_geometry"
+    ],
+    "description": "Computing distances between points and finding midpoints using coordinate methods",
+    "notes": "CCSS grade 8 / Geometry standard. RSM introduces at grade 6 alongside algebra."
+  },
+  {
+    "rsmTopic": "Combinatorics: counting principle and tree diagrams",
+    "rsmGrade": 6,
+    "rsmQuarter": 4,
+    "equivalentCommonCoreGrade": 7,
+    "suggestedConceptKeys": [
+      "counting_principle",
+      "tree_diagrams",
+      "sample_space"
+    ],
+    "description": "Fundamental counting principle, tree diagrams, and sample spaces for probability",
+    "notes": "CCSS grade 7 Statistics. RSM emphasizes systematic counting methods."
+  },
+  {
+    "rsmTopic": "Arithmetic and geometric sequences",
+    "rsmGrade": 7,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "arithmetic_sequences",
+      "geometric_sequences",
+      "sequence_notation"
+    ],
+    "description": "Finding nth terms, sums, and identifying patterns in arithmetic and geometric sequences",
+    "notes": "CCSS Algebra 1 standard. RSM covers at grade 7 to build algebraic fluency."
+  },
+  {
+    "rsmTopic": "Polynomials: addition, subtraction, multiplication",
+    "rsmGrade": 7,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "polynomials_intro",
+      "polynomial_operations",
+      "FOIL_method"
+    ],
+    "description": "Adding, subtracting, and multiplying polynomials including FOIL and special products",
+    "notes": "CCSS Algebra 1 / grade 9 standard. RSM introduces polynomial algebra at grade 7."
+  },
+  {
+    "rsmTopic": "Factoring polynomials: GCF, trinomials, difference of squares",
+    "rsmGrade": 7,
+    "rsmQuarter": 2,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "factoring_gcf",
+      "factoring_trinomials",
+      "difference_of_squares"
+    ],
+    "description": "Factoring techniques: pulling out GCF, factoring ax\u00b2+bx+c trinomials, recognizing special forms",
+    "notes": "CCSS Algebra 1 standard. RSM covers complete factoring at grade 7."
+  },
+  {
+    "rsmTopic": "Functions: definition, domain, range, and notation",
+    "rsmGrade": 7,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "functions_intro",
+      "domain_range",
+      "function_notation"
+    ],
+    "description": "Understanding functions as mappings, notation f(x), vertical line test, domain and range",
+    "notes": "CCSS grade 8 F standards. RSM introduces function concept formally at grade 7."
+  },
+  {
+    "rsmTopic": "Quadratic equations: solving by factoring and quadratic formula",
+    "rsmGrade": 7,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "quadratic_equations_intro",
+      "quadratic_formula",
+      "completing_the_square"
+    ],
+    "description": "Solving ax\u00b2+bx+c=0 by factoring, completing the square, and the quadratic formula",
+    "notes": "CCSS Algebra 1 standard. RSM covers all quadratic methods at grade 7."
+  },
+  {
+    "rsmTopic": "Probability: theoretical vs. experimental, conditional probability",
+    "rsmGrade": 7,
+    "rsmQuarter": 4,
+    "equivalentCommonCoreGrade": 8,
+    "suggestedConceptKeys": [
+      "probability_theoretical",
+      "probability_experimental",
+      "conditional_probability"
+    ],
+    "description": "Computing theoretical probabilities, comparing to experimental results, introducing P(A|B)",
+    "notes": "CCSS grade 7-8 Statistics. RSM adds conditional probability context at grade 7."
+  },
+  {
+    "rsmTopic": "Number theory: divisibility rules and modular arithmetic",
+    "rsmGrade": 7,
+    "rsmQuarter": 1,
+    "equivalentCommonCoreGrade": 11,
+    "suggestedConceptKeys": [
+      "divisibility_rules",
+      "modular_arithmetic",
+      "number_theory_intro"
+    ],
+    "description": "Divisibility tests for 2-12, clock arithmetic, and basic modular congruences",
+    "notes": "Not in CCSS. RSM covers number theory systematically as enrichment/competition prep."
+  },
+  {
+    "rsmTopic": "Word problems involving rates, mixtures, and work",
+    "rsmGrade": 7,
+    "rsmQuarter": 3,
+    "equivalentCommonCoreGrade": 9,
+    "suggestedConceptKeys": [
+      "rate_problems",
+      "mixture_problems",
+      "work_rate_problems"
+    ],
+    "description": "Setting up and solving systems of equations for classic rate, distance, mixture, and work problems",
+    "notes": "Applied algebra problem types emphasized in RSM and competition math at grade 7."
   }
 ]

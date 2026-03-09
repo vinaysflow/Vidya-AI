@@ -1,0 +1,240 @@
+[
+  {
+    "code": "3-LS1-1",
+    "description": "Develop models to describe that organisms have unique and diverse life cycles but all have in common birth, growth, reproduction, and death.",
+    "grade": 3,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "life_cycles"
+  },
+  {
+    "code": "3-LS2-1",
+    "description": "Construct an argument that some animals form groups that help members survive.",
+    "grade": 3,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "3-LS3-1",
+    "description": "Analyze and interpret data to provide evidence that plants and animals have traits inherited from parents and that variation of these traits exists in a group of similar organisms.",
+    "grade": 3,
+    "coreIdea": "LS3: Heredity: Inheritance and Variation of Traits",
+    "topic": "heredity"
+  },
+  {
+    "code": "3-LS3-2",
+    "description": "Use evidence to support the explanation that traits can be influenced by the environment.",
+    "grade": 3,
+    "coreIdea": "LS3: Heredity: Inheritance and Variation of Traits",
+    "topic": "heredity"
+  },
+  {
+    "code": "3-LS4-1",
+    "description": "Analyze and interpret data from fossils to provide evidence of the organisms and the environments in which they lived long ago.",
+    "grade": 3,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "evolution"
+  },
+  {
+    "code": "3-LS4-2",
+    "description": "Use evidence to construct an explanation for how the variations in characteristics among individuals of the same species may provide advantages in surviving, finding mates, and reproducing.",
+    "grade": 3,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "evolution"
+  },
+  {
+    "code": "3-LS4-3",
+    "description": "Construct an argument with evidence that in a particular habitat some organisms can survive well, some survive less well, and some cannot survive at all.",
+    "grade": 3,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "4-LS1-1",
+    "description": "Construct an argument that plants and animals have internal and external structures that function to support survival, growth, behavior, and reproduction.",
+    "grade": 4,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "body_systems"
+  },
+  {
+    "code": "4-LS1-2",
+    "description": "Use a model to describe that animals receive different types of information through their senses, process the information in their brain, and respond to the information in different ways.",
+    "grade": 4,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "body_systems"
+  },
+  {
+    "code": "5-LS1-1",
+    "description": "Support an argument that plants get the materials they need for growth chiefly from air and water.",
+    "grade": 5,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "photosynthesis"
+  },
+  {
+    "code": "5-LS2-1",
+    "description": "Develop a model to describe the movement of matter among plants, animals, decomposers, and the environment.",
+    "grade": 5,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "food_webs"
+  },
+  {
+    "code": "MS-LS1-1",
+    "description": "Conduct an investigation to provide evidence that living things are made of cells; either one cell or many different numbers and types of cells.",
+    "grade": 6,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "cell_biology"
+  },
+  {
+    "code": "MS-LS1-2",
+    "description": "Develop and use a model to describe the function of a cell as a whole and ways parts of cells contribute to the function.",
+    "grade": 6,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "cell_biology"
+  },
+  {
+    "code": "MS-LS1-3",
+    "description": "Use argument supported by evidence for how the body is a system of interacting subsystems composed of groups of cells.",
+    "grade": 6,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "body_systems"
+  },
+  {
+    "code": "MS-LS1-4",
+    "description": "Use argument and evidence to explain the relationship between cell division and growth and repair of multicellular organisms.",
+    "grade": 6,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "cell_biology"
+  },
+  {
+    "code": "MS-LS1-5",
+    "description": "Construct a scientific explanation based on evidence for how environmental and genetic factors influence the growth of organisms.",
+    "grade": 6,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "heredity"
+  },
+  {
+    "code": "MS-LS1-6",
+    "description": "Construct a scientific explanation based on evidence for the role of photosynthesis in the cycling of matter and flow of energy into and out of organisms.",
+    "grade": 7,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "photosynthesis"
+  },
+  {
+    "code": "MS-LS1-7",
+    "description": "Develop a model to describe how food is rearranged through chemical reactions forming new molecules that support growth and/or release energy as this matter moves through an organism.",
+    "grade": 7,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "cellular_respiration"
+  },
+  {
+    "code": "MS-LS2-1",
+    "description": "Analyze and interpret data to provide evidence for the effects of resource availability on organisms and populations of organisms in an ecosystem.",
+    "grade": 7,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "MS-LS2-2",
+    "description": "Construct an explanation that predicts patterns of interactions among organisms across multiple ecosystems.",
+    "grade": 7,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "food_webs"
+  },
+  {
+    "code": "MS-LS2-3",
+    "description": "Develop a model to describe the cycling of matter and flow of energy among living and nonliving parts of an ecosystem.",
+    "grade": 7,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "MS-LS2-4",
+    "description": "Construct an argument supported by empirical evidence that changes to physical or biological components of an ecosystem affect populations.",
+    "grade": 7,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "MS-LS3-1",
+    "description": "Develop and use a model to describe why structural changes to genes (mutations) located on chromosomes may affect proteins and may result in harmful, beneficial, or neutral effects to the structure and function of the organism.",
+    "grade": 8,
+    "coreIdea": "LS3: Heredity: Inheritance and Variation of Traits",
+    "topic": "genetics"
+  },
+  {
+    "code": "MS-LS3-2",
+    "description": "Develop and use a model to describe why asexual reproduction results in offspring with identical genetic information and sexual reproduction results in offspring with genetic variation.",
+    "grade": 8,
+    "coreIdea": "LS3: Heredity: Inheritance and Variation of Traits",
+    "topic": "genetics"
+  },
+  {
+    "code": "MS-LS4-1",
+    "description": "Analyze and interpret data for patterns in the fossil record that document the existence, diversity, extinction, and change of life forms throughout the history of life on Earth.",
+    "grade": 8,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "evolution"
+  },
+  {
+    "code": "MS-LS4-2",
+    "description": "Apply scientific ideas to construct an explanation for the anatomical similarities and differences among modern organisms and between modern and fossil organisms.",
+    "grade": 8,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "evolution"
+  },
+  {
+    "code": "MS-LS4-4",
+    "description": "Construct an explanation based on evidence that describes how genetic variations of traits in a population increase some individuals' probability of surviving and reproducing in a specific environment.",
+    "grade": 8,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "natural_selection"
+  },
+  {
+    "code": "MS-LS4-5",
+    "description": "Gather and synthesize information about the technologies that have changed the way humans influence the inheritance of desired traits in organisms.",
+    "grade": 8,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "genetics"
+  },
+  {
+    "code": "HS-LS1-1",
+    "description": "Construct an explanation based on evidence for how the structure of DNA determines the structure of proteins which carry out the essential functions of life through systems of specialized cells.",
+    "grade": 9,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "dna_proteins"
+  },
+  {
+    "code": "HS-LS1-2",
+    "description": "Develop and use a model to illustrate the hierarchical organization of interacting systems that provide specific functions within multicellular organisms.",
+    "grade": 9,
+    "coreIdea": "LS1: From Molecules to Organisms: Structures and Processes",
+    "topic": "body_systems"
+  },
+  {
+    "code": "HS-LS2-1",
+    "description": "Use mathematical and/or computational representations to support explanations of factors that affect carrying capacity of ecosystems at different scales.",
+    "grade": 9,
+    "coreIdea": "LS2: Ecosystems: Interactions, Energy, and Dynamics",
+    "topic": "ecosystems"
+  },
+  {
+    "code": "HS-LS3-1",
+    "description": "Ask questions to clarify relationships about the role of DNA and chromosomes in coding the instructions for characteristic traits passed from parents to offspring.",
+    "grade": 9,
+    "coreIdea": "LS3: Heredity: Inheritance and Variation of Traits",
+    "topic": "genetics"
+  },
+  {
+    "code": "HS-LS4-1",
+    "description": "Communicate scientific information that common ancestry and biological evolution are supported by multiple lines of empirical evidence.",
+    "grade": 9,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "evolution"
+  },
+  {
+    "code": "HS-LS4-2",
+    "description": "Construct an explanation based on evidence that the process of evolution primarily results from four factors: the potential for a species to increase in number, the heritable genetic variation of individuals in a species, competition for limited resources, and the proliferation of those organisms that are better able to survive and reproduce in the environment.",
+    "grade": 9,
+    "coreIdea": "LS4: Biological Evolution: Unity and Diversity",
+    "topic": "natural_selection"
+  }
+]

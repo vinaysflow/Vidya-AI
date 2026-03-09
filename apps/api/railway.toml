@@ -3,10 +3,10 @@
 
 [build]
 builder = "nixpacks"
-buildCommand = "npm install && npx prisma generate --schema prisma/schema.prisma && npm run build"
+buildCommand = "corepack enable && pnpm install --frozen-lockfile && npx prisma generate --schema prisma/schema.prisma && pnpm run build"
 
 [deploy]
-startCommand = "npx prisma db push --accept-data-loss --schema prisma/schema.prisma 2>&1 || true && node dist/index.js"
+startCommand = "node dist/index.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"

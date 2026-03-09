@@ -128,6 +128,21 @@ async function main() {
     }
   }
 
+  // Build conceptKey -> Subject map from concepts.json for template subject population
+  const conceptSubjectMap = new Map<string, Subject>();
+  const conceptsPathForMap = join(__dirname, 'seed-data', 'concepts.json');
+  try {
+    const conceptsForMap = JSON.parse(readFileSync(conceptsPathForMap, 'utf-8')) as Array<{
+      conceptKey: string;
+      subject: string;
+    }>;
+    for (const c of conceptsForMap) {
+      conceptSubjectMap.set(c.conceptKey, c.subject as Subject);
+    }
+  } catch {
+    // If concepts.json not found, subject defaults to MATHEMATICS
+  }
+
   // Seed question templates from generated JSON
   const templatesPath = join(__dirname, 'seed-data', 'question-templates.json');
   try {
@@ -135,6 +150,7 @@ async function main() {
       conceptKey: string;
       gradeLevel: number;
       difficulty: number;
+      subject?: string;
       questionText: string;
       answerFormula: string;
       distractors: string[];
@@ -144,7 +160,13 @@ async function main() {
     }>;
     // Clear existing templates and re-seed for idempotency
     await prisma.questionTemplate.deleteMany({});
-    await prisma.questionTemplate.createMany({ data: templatesData.map(t => ({ ...t, source: t.source ?? 'generated' })) });
+    await prisma.questionTemplate.createMany({
+      data: templatesData.map(t => ({
+        ...t,
+        subject: (t.subject as Subject | undefined) ?? conceptSubjectMap.get(t.conceptKey) ?? Subject.MATHEMATICS,
+        source: t.source ?? 'generated',
+      }))
+    });
     console.log(`Seeded ${templatesData.length} question templates.`);
   } catch (e) {
     if ((e as NodeJS.ErrnoException).code === 'ENOENT') {

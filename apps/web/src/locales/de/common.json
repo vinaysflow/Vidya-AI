@@ -43,6 +43,13 @@
     "apiError": "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
     "sessionExpired": "Sitzung abgelaufen. Neue Sitzung wird gestartet."
   },
+  "hints": {
+    "level1": "Fangen wir mit dem an, was du weißt.",
+    "level2": "Denke an die beteiligten Konzepte.",
+    "level3": "Betrachte diesen Ansatz...",
+    "level4": "Hier ist ein ähnliches Beispiel.",
+    "level5": "Lass uns das in kleinere Schritte aufteilen."
+  },
   "settings": {
     "title": "Einstellungen",
     "language": "Sprache",
@@ -52,6 +59,7 @@
     "themeDark": "Dunkel",
     "apiKey": "API-Schluessel",
     "apiKeyPlaceholder": "vk_live_...",
+    "notifications": "Benachrichtigungen",
     "about": "Ueber Vid (Vidya)",
     "onboarding": "Onboarding",
     "restartOnboarding": "Restart",

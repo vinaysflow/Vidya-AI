@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import type { Subject } from '../../stores/chatStore';
+import { useChatStore } from '../../stores/chatStore';
 import { getApiBase, getAuthHeader } from '../../lib/api';
 
 const API_BASE = getApiBase();
@@ -12,9 +13,10 @@ interface SkillRadarProps {
 export function SkillRadar({ subject }: SkillRadarProps) {
   const [data, setData] = useState<Array<{ concept: string; mastery: number }>>([]);
   const [loading, setLoading] = useState(true);
+  const { userId } = useChatStore();
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/progress/radar/${subject}?userId=anonymous`, {
+    fetch(`${API_BASE}/api/progress/radar/${subject}?userId=${encodeURIComponent(userId || 'anonymous')}`, {
       headers: getAuthHeader(),
     })
       .then((r) => r.json())

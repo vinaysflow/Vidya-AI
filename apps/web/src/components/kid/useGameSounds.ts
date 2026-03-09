@@ -4,9 +4,12 @@
  * Uses the Web Audio API to synthesize tones directly — no audio files,
  * no external dependencies, works offline/PWA. Each sound is generated
  * once and played on demand.
+ *
+ * Respects calmMode from chatStore: all sounds are muted when enabled.
  */
 
 import { useCallback, useRef } from 'react';
+import { useChatStore } from '../../stores/chatStore';
 
 type SoundName = 'correct' | 'wrong' | 'complete' | 'questStart' | 'levelUp' | 'tap';
 
@@ -56,11 +59,12 @@ const SOUNDS: Record<SoundName, (ctx: AudioContext) => void> = {
     { freq: 784, start: 0.22, duration: 0.25 }, // G5
   ], 'sine'),
 
-  // Low soft bonk — descending
+  // Neutral double-chime — signals "hmm, let's think" not "you failed"
+  // Research: descending tones trigger avoidance; a flat/gentle chime stays emotionally neutral
   wrong: (ctx) => playTone(ctx, [
-    { freq: 300, start: 0,    duration: 0.15, gain: 0.25 },
-    { freq: 220, start: 0.12, duration: 0.20, gain: 0.2  },
-  ], 'triangle'),
+    { freq: 440, start: 0,    duration: 0.10, gain: 0.18 }, // A4 — soft, familiar
+    { freq: 440, start: 0.14, duration: 0.14, gain: 0.12 }, // repeat at lower gain — double-chime
+  ], 'sine'),
 
   // Short bright chime — two ascending notes, signals "adventure begin"
   questStart: (ctx) => playTone(ctx, [
@@ -96,8 +100,10 @@ const SOUNDS: Record<SoundName, (ctx: AudioContext) => void> = {
 
 export function useGameSounds() {
   const ctxRef = useRef<AudioContext | null>(null);
+  const { calmMode } = useChatStore();
 
   const play = useCallback((name: SoundName) => {
+    if (calmMode) return; // mute all sounds in calm mode
     try {
       if (!ctxRef.current) {
         ctxRef.current = createAudioContext();
@@ -114,7 +120,7 @@ export function useGameSounds() {
     } catch {
       // Sound is best-effort — never crash the game
     }
-  }, []);
+  }, [calmMode]);
 
   return { play };
 }

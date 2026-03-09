@@ -17,12 +17,43 @@ export interface SceneCanvasProps {
 }
 
 const CHAPTER_BG_IMAGES: Record<string, string> = {
+  // Original chapters
   'Minecraft Builder': '/scenes/minecraft-builder.png',
   'Kitchen Scientist': '/scenes/kitchen-scientist.png',
   'Playground Lab': '/scenes/playground-lab.png',
   'Pattern Detective': '/scenes/pattern-detective.png',
   'Nature Explorer': '/scenes/nature-explorer.png',
   'Logic Detective': '/scenes/logic-detective.png',
+  'Space Explorer': '/scenes/space-explorer.png',
+  'Dragon Academy': '/scenes/dragon-academy.png',
+  'Ocean Discovery': '/scenes/ocean-discovery.png',
+  'Enchanted Forest': '/scenes/enchanted-forest.png',
+  // Biology chapters
+  'Body Detective': '/scenes/body-detective.png',
+  'Ecosystem Explorer': '/scenes/ecosystem-explorer.png',
+  'Genetics Lab': '/scenes/genetics-lab.png',
+  // Coding chapters
+  'Bug Hunter': '/scenes/bug-hunter.png',
+  'Algorithm Arena': '/scenes/algorithm-arena.png',
+  'Code Architect': '/scenes/code-architect.png',
+  // English Lit chapters
+  'Story Detective': '/scenes/story-detective.png',
+  'Poetry Explorer': '/scenes/poetry-explorer.png',
+  'Argument Builder': '/scenes/argument-builder.png',
+  // Economics chapters
+  'Market Maker': '/scenes/market-maker.png',
+  'Money Master': '/scenes/money-master.png',
+  // AI/ML chapters
+  'Robot Trainer': '/scenes/robot-trainer.png',
+  'Bias Detective': '/scenes/bias-detective.png',
+  // Earth/Space Science chapters
+  'Planet Patrol': '/scenes/planet-patrol.png',
+  'Weather Watcher': '/scenes/weather-watcher.png',
+  // Logic/Essay chapters
+  'Puzzle Palace': '/scenes/puzzle-palace.png',
+  'Story Crafter': '/scenes/story-crafter.png',
+  'Persuasion Pro': '/scenes/persuasion-pro.png',
+  // Fallback
   'Adventures': '/scenes/adventures.png',
 };
 
