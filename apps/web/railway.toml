@@ -1,12 +1,13 @@
 # Railway deployment configuration for Vidya Web App
-# This file is used when Railway service Root Directory = apps/web
+# If Railway Root Directory = apps/web, the full repo is still available above.
+# We navigate to the monorepo root for pnpm workspace resolution.
 
 [build]
 builder = "nixpacks"
-buildCommand = "pnpm install && pnpm run build"
+buildCommand = "cd ../.. && corepack enable && pnpm install --frozen-lockfile && pnpm --filter @vidya/web run build"
 
 [deploy]
-startCommand = "npx vite preview --host 0.0.0.0 --port $PORT"
+startCommand = "npx vite preview --host 0.0.0.0 --port ${PORT:-3000}"
 healthcheckPath = "/"
 healthcheckTimeout = 30
 restartPolicyType = "on_failure"

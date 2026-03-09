@@ -65,7 +65,9 @@ export default defineConfig({
   preview: {
     allowedHosts: [
       'vidya-socratica-ai-app-production.up.railway.app',
-      'vidya-socraticai-app-production.up.railway.app'
+      'vidya-socraticai-app-production.up.railway.app',
+      'vidya-socratical-app-production.up.railway.app',
+      '.up.railway.app',
     ]
   },
   define: {
