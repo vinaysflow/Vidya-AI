@@ -93,6 +93,20 @@ export async function apiKeyAuth(req: Request, res: Response, next: NextFunction
   }
 
   try {
+    // Allow requests that match the PUBLIC_API_KEY env var (bypasses DB lookup)
+    const publicKey = process.env.PUBLIC_API_KEY;
+    if (publicKey && plainKey === publicKey) {
+      req.apiKey = {
+        id: 'public-key',
+        name: 'Public Web App',
+        ownerEmail: 'system@vidya.ai',
+        tier: 'PREMIUM' as ApiKeyTier,
+        rateLimit: 1000,
+        allowedOrigins: ['*']
+      };
+      return next();
+    }
+
     const hashedKey = hashApiKey(plainKey);
 
     const apiKey = await prisma.apiKey.findUnique({

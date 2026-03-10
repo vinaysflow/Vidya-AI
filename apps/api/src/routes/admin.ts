@@ -7,7 +7,7 @@
 
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { generateApiKey, hashApiKey } from '../middleware/auth';
 import { getStripe } from '../services/stripe';
 
@@ -446,7 +446,7 @@ router.get('/kpis', async (req: Request, res: Response, next: NextFunction) => {
       where: {
         createdAt: { gte: dateFrom, lte: dateTo },
         role: 'ASSISTANT',
-        NOT: { metadata: { equals: null } },
+        NOT: { metadata: { equals: Prisma.JsonNull } },
       },
     }).then(async () => {
       // Postgres JSON array filter — count messages with non-empty safetyEvents

@@ -387,7 +387,7 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
     });
 
     // #region agent log
-    fetch('http://127.0.0.1:7258/ingest/09f127b4-9a7c-48a0-a7b8-b19ad9b82ba1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8ec7da'},body:JSON.stringify({sessionId:'8ec7da',location:'tutor.ts:sendMessage',message:'Turn response',data:{questionType:response.metadata?.questionType,hintLevel:response.metadata?.hintLevel,scaffoldMode:response.metadata?.scaffoldMode,responseText:response.message?.slice(0,500),subject:session.subject,userMsg:data.message?.slice(0,200),grade:(session as any).grade,conceptKey:(session as any).conceptKey},timestamp:Date.now(),hypothesisId:'H1-turn-response'})}).catch(()=>{});
+    fetch('http://127.0.0.1:7258/ingest/09f127b4-9a7c-48a0-a7b8-b19ad9b82ba1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8ec7da'},body:JSON.stringify({sessionId:'8ec7da',location:'tutor.ts:sendMessage',message:'Turn response',data:{questionType:response.metadata?.questionType,hintLevel:response.metadata?.hintLevel,scaffoldMode:(response.metadata as any)?.scaffoldMode,responseText:response.message?.slice(0,500),subject:session.subject,userMsg:data.message?.slice(0,200),grade:(session as any).grade,conceptKey:(session as any).conceptKey},timestamp:Date.now(),hypothesisId:'H1-turn-response'})}).catch(()=>{});
     // #endregion
 
     // Save assistant response (serialize metadata for Prisma Json)
