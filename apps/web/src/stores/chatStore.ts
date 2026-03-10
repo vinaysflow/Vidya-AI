@@ -406,7 +406,11 @@ export const useChatStore = create<ChatState>()(
             })
           });
 
-          if (!response.ok) throw new Error('Failed to start session');
+          if (!response.ok) {
+            const errBody = await response.json().catch(() => ({}));
+            console.error('Session start API error:', response.status, errBody);
+            throw new Error(errBody?.error || errBody?.message || `Failed to start session (${response.status})`);
+          }
           const data = await response.json();
 
           if (data.success) {
@@ -481,7 +485,11 @@ export const useChatStore = create<ChatState>()(
             body: JSON.stringify(body)
           });
 
-          if (!response.ok) throw new Error('Failed to send message');
+          if (!response.ok) {
+            const errBody = await response.json().catch(() => ({}));
+            console.error('Send message API error:', response.status, errBody);
+            throw new Error(errBody?.error || errBody?.message || `Failed to send message (${response.status})`);
+          }
           const data = await response.json();
 
           if (data.success) {
