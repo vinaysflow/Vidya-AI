@@ -4,7 +4,7 @@
 
 [build]
 builder = "nixpacks"
-buildCommand = "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @vidya/web run build"
+buildCommand = "npm install -g corepack@0.24.1 && corepack enable && pnpm install --frozen-lockfile && pnpm --filter @vidya/web run build"
 
 [deploy]
 startCommand = "npx --yes serve apps/web/dist -s -l tcp://0.0.0.0:${PORT:-3000}"
