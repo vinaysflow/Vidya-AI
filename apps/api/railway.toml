@@ -1,9 +1,9 @@
-# Railway deployment configuration for Vidya API (service-level)
-# Root railway.toml takes precedence when deploying from git at repo root
+# Railway deployment configuration for Vidya API
+# Root Directory must be set to "apps/api" in Railway dashboard
 
 [build]
 builder = "nixpacks"
-buildCommand = "corepack enable && pnpm install --frozen-lockfile && npx prisma generate --schema prisma/schema.prisma && pnpm run build"
+buildCommand = "npm install && npx prisma generate --schema prisma/schema.prisma && npm run build"
 
 [deploy]
 startCommand = "node dist/index.js"
