@@ -101,9 +101,13 @@ async function flushBuffer(): Promise<void> {
 
   try {
     await Promise.all(upserts);
-  } catch (error) {
+  } catch (error: any) {
     console.error('[UsageTracker] Flush error:', error);
-    // Re-add failed entries back to buffer (best effort)
+    // Permanent DB errors (FK violations, constraint failures) should not be retried
+    if (error?.code?.startsWith?.('P')) {
+      return;
+    }
+    // Re-add failed entries back to buffer (best effort for transient errors)
     for (const [key, entry] of entries) {
       const existing = buffer.get(key);
       if (existing) {
@@ -142,6 +146,11 @@ process.on('SIGINT', async () => {
 export function usageTracker(req: Request, res: Response, next: NextFunction): void {
   // Only track authenticated requests
   if (!req.apiKey) {
+    return next();
+  }
+
+  // Skip tracking for the public web app key — it has no real ApiKey row in the DB
+  if (req.apiKey.id === 'public-key') {
     return next();
   }
 

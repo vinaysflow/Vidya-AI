@@ -363,8 +363,9 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     if (userId && userId !== 'anonymous' && !progressSummary) {
       setProgressLoading(true);
       try {
-        const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
-        const res = await fetch(`${API_BASE}/api/progress/summary?userId=${encodeURIComponent(userId)}`);
+        const res = await fetch(`${getApiBase()}/api/progress/summary?userId=${encodeURIComponent(userId)}`, {
+          headers: getJsonHeaders(),
+        });
         if (res.ok) {
           const data = await res.json() as { success: boolean; summary: typeof progressSummary };
           if (data.success && data.summary) setProgressSummary(data.summary);

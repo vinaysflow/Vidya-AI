@@ -9,7 +9,7 @@ export function getApiBase(): string {
 function getStoredApiKey(): string | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = localStorage.getItem('vidya-chat-storage');
+    const raw = localStorage.getItem('vidya-chat-storage-v2');
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { apiKey?: string | null };
     const key = parsed?.apiKey;
