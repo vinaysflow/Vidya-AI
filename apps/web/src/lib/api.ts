@@ -1,5 +1,6 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const PUBLIC_API_KEY = import.meta.env.VITE_PUBLIC_API_KEY || '';
+// Force rebuild to pick up VITE_API_URL
 
 export function getApiBase(): string {
   return API_BASE;
