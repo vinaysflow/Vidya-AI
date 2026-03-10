@@ -7,7 +7,7 @@ builder = "nixpacks"
 buildCommand = "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @vidya/web run build"
 
 [deploy]
-startCommand = "npx serve apps/web/dist -s -l tcp://0.0.0.0:${PORT:-3000}"
+startCommand = "npx --yes serve apps/web/dist -s -l tcp://0.0.0.0:${PORT:-3000}"
 healthcheckPath = "/"
 healthcheckTimeout = 30
 restartPolicyType = "on_failure"
