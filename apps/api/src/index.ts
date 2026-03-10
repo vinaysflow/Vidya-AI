@@ -47,10 +47,18 @@ app.use(cors({
     // Allow requests with no origin (server-to-server, curl, Postman)
     if (!origin) return callback(null, true);
 
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || [
-      'http://localhost:3000',
-      'http://localhost:5173'
-    ];
+    const rawAllowed = process.env.ALLOWED_ORIGINS;
+
+    // If ALLOWED_ORIGINS is not set in production, allow all origins with a warning
+    // rather than hard-blocking (avoids a misconfigured env var taking down the whole app)
+    if (!rawAllowed) {
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`[CORS] ALLOWED_ORIGINS not set — allowing origin: ${origin}`);
+      }
+      return callback(null, true);
+    }
+
+    const allowedOrigins = rawAllowed.split(',').map(o => o.trim());
 
     // Always allow configured origins
     if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
@@ -62,6 +70,7 @@ app.use(cors({
       return callback(null, true);
     }
 
+    console.warn(`[CORS] Blocked origin: ${origin} (allowed: ${allowedOrigins.join(', ')})`);
     callback(new Error(`Origin ${origin} not allowed by CORS`));
   },
   credentials: true,
