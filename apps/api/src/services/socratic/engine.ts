@@ -1009,7 +1009,7 @@ Generate the response:
           conceptsIdentified: [],
           distanceFromSolution: 100,
           topic: input.topic,
-          grounding: 'validation',
+          grounding: 'reasoned',
           confidence: 1,
           safetyEvents: [],
         }
