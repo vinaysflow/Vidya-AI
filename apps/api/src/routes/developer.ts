@@ -9,11 +9,10 @@
  */
 
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { listModules } from '../services/socratic/registry';
 
 const router: Router = Router();
-const prisma = new PrismaClient();
 
 // ============================================
 // GET /api/developer/status

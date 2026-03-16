@@ -5,11 +5,11 @@
 
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { PrismaClient, Subject } from '@prisma/client';
+import { Subject } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { generateSceneImage } from '../services/game/sceneImageGenerator';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const SceneImageSchema = z.object({
   questTitle: z.string().min(1).max(200),

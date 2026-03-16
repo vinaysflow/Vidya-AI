@@ -12,13 +12,13 @@
  * Schedule via cron (e.g. daily at 00:05 UTC) or call programmatically.
  */
 
-import { PrismaClient } from '@prisma/client';
+
 import { config } from 'dotenv';
 import { reportOverageToStripe } from '../services/stripe';
+import { prisma } from '../lib/prisma';
 
 config();
 
-const prisma = new PrismaClient();
 
 function yesterdayDate(): string {
   const d = new Date();

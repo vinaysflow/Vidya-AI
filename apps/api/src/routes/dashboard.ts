@@ -1,11 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
 import { generateStudentSummary, generateClassSummary } from '../services/reporting/digestGenerator';
 import crypto from 'crypto';
 
 const router: Router = Router();
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 
 router.get('/student/:id/summary', async (req: Request, res: Response, next: NextFunction) => {
   try {

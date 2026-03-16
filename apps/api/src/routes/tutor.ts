@@ -6,7 +6,8 @@
 
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { PrismaClient, Language, Subject } from '@prisma/client';
+import { Language, Subject } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { SocraticEngine } from '../services/socratic/engine';
 import type { SessionReport } from '../services/socratic/engine';
 import { awardXP, updateStreak, checkBadges } from '../services/gamification/engine';
@@ -17,7 +18,6 @@ import { getAdaptiveState, computeEffectiveGrade, updateAdaptiveState, buildPerf
 import { logEvent } from '../services/analytics/eventLogger';
 
 const router: express.Router = Router();
-const prisma = new PrismaClient();
 const engine = new SocraticEngine();
 
 // ============================================

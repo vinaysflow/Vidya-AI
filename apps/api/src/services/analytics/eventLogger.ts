@@ -16,9 +16,10 @@
  *   - Warm-up success rate
  */
 
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+
+
+import { prisma } from '../../lib/prisma';
 
 export type DogfoodEvent =
   | 'quest_started'           // { questId, chapter, subject, conceptKey, gradeLevel }

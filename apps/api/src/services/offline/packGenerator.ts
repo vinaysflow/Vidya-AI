@@ -1,6 +1,6 @@
-import { PrismaClient, Subject } from '@prisma/client';
+import { Subject } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 
-const prisma = new PrismaClient();
 
 export interface OfflinePack {
   subject: string;

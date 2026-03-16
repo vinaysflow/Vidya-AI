@@ -5,10 +5,9 @@ import {
   getLeaderboard,
   updateStreak,
 } from '../services/gamification/engine';
-import { PrismaClient } from '@prisma/client';
 
 const router: Router = Router();
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 
 const UserIdSchema = z.object({
   userId: z.string().min(1),

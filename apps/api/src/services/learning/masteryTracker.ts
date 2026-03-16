@@ -1,6 +1,6 @@
-import { PrismaClient, Subject } from '@prisma/client';
+import { Subject } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 
-const prisma = new PrismaClient();
 
 const P_GUESS = 0.25;
 const P_SLIP = 0.1;

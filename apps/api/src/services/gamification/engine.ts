@@ -1,7 +1,7 @@
-import { PrismaClient, XPEventType, BadgeType } from '@prisma/client';
+import { XPEventType, BadgeType } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import { XP_TABLE, LEVEL_XP, STREAK_FREEZE_MILESTONES } from './xpTable';
 
-const prisma = new PrismaClient();
 
 async function ensureUser(userId: string): Promise<void> {
   await prisma.user.upsert({

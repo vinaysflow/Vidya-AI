@@ -7,12 +7,12 @@
 
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { generateApiKey, hashApiKey } from '../middleware/auth';
 import { getStripe } from '../services/stripe';
+import { prisma } from '../lib/prisma';
 
 const router: express.Router = Router();
-const prisma = new PrismaClient();
 
 /**
  * Admin auth middleware - requires ADMIN_SECRET header

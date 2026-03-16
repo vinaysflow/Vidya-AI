@@ -8,12 +8,12 @@
  */
 
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient, SchoolSelectivity, PromptCategory, PromptType } from '@prisma/client';
+import { SchoolSelectivity, PromptCategory, PromptType } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { z } from 'zod';
 import { cache, CACHE_TTL } from '../services/cache';
 
 const router: express.Router = Router();
-const prisma = new PrismaClient();
 
 const DEFAULT_YEAR = '2025-2026';
 

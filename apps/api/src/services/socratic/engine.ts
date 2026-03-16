@@ -15,7 +15,7 @@
  */
 
 import type { Language, Subject } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import { getModule, registerModule } from './registry';
 import type { TutorModule } from './module';
 import { cache, CACHE_TTL } from '../cache';
@@ -1521,13 +1521,11 @@ Respond with JSON only.
       const pick = mastered[Math.floor(Math.random() * mastered.length)];
       const conceptKey = (pick as any).conceptKey as string;
 
-      // Find a template for that concept using a fresh prisma client
-      const prismaForWarmup = new PrismaClient();
-      const templates = await prismaForWarmup.questionTemplate.findMany({
+      // Find a template for that concept
+      const templates = await prisma.questionTemplate.findMany({
         where: { conceptKey },
         take: 3,
       });
-      await prismaForWarmup.$disconnect();
 
       if (templates.length === 0) return null;
 

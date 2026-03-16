@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { Subject, PrismaClient } from '@prisma/client';
+import { Subject } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { getMasteryMap, getMasteryByConceptKey, getDueReviews, getRadarData, updateMastery } from '../services/learning/masteryTracker';
 import { generatePath, getRecommendedNext } from '../services/learning/pathGenerator';
 import { getAdaptiveState } from '../services/learning/adaptiveDifficulty';
 import { logEvent } from '../services/analytics/eventLogger';
 
 const router: Router = Router();
-const prisma = new PrismaClient();
 
 router.get('/mastery', async (req: Request, res: Response, next: NextFunction) => {
   try {

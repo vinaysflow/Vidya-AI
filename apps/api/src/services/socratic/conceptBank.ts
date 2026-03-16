@@ -1,6 +1,6 @@
-import { PrismaClient, type Subject, type Prisma } from '@prisma/client';
+import { type Subject, type Prisma } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 
-const prisma = new PrismaClient();
 const CACHE_TTL_MS = 30 * 60 * 1000;
 const cache = new Map<string, { value: string; expiresAt: number }>();
 

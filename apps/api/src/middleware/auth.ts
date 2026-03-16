@@ -9,10 +9,9 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient, ApiKeyTier } from '@prisma/client';
+import { ApiKeyTier } from '@prisma/client';
 import crypto from 'crypto';
-
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 
 // Extend Express Request to include API key context
 declare global {

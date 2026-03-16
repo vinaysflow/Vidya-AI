@@ -12,9 +12,9 @@
  */
 
 import Stripe from 'stripe';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 
-const prisma = new PrismaClient();
+
 
 let stripeClient: Stripe | null = null;
 
