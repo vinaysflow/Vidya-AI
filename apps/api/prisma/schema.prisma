@@ -333,12 +333,23 @@ model Concept {
   difficulty    Int      @default(1) // 1-5
   gradeLevel    Int      @default(3)  // Grade level 3-9
   
+  // 10x Content Seeding fields
+  standard            String?                      // "CCSS.MATH.CONTENT.5.NF.A.1"
+  misconceptionsData  Json?                        // [{ id, description, frequency }]
+  relatedConcepts     Json?                        // [{ id, subject, relationship }]
+  enrichmentTags      String[]   @default([])      // ["RSM-Level-4", "KUMON-E"]
+  isDiagnostic        Boolean    @default(false)
+  parentExplanation   String?    @db.Text          // 2-sentence parent-facing explanation
+  source              String?                      // "seed-v1" for seeded content
+
   hints         Hint[]
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
   @@index([subject, topic])
+  @@index([isDiagnostic])
+  @@index([source])
 }
 
 model Hint {
@@ -374,11 +385,23 @@ model QuestionTemplate {
   source          String?
   misconceptions  Json?
   diagnostic      Boolean  @default(false)
+
+  // 10x Content Seeding fields
+  correctAnswer         String?                    // Explicit correct answer string
+  distractorsStructured Json?                      // [{ text, misconceptionId }]
+  hintsStructured       Json?                      // { level1_orient, level2_reframe, level3_structure, level4_targeted: { [miscId]: string }, level5_scaffold }
+  explainBackPrompt     String?    @db.Text
+  explainBackFollowUp   String?    @db.Text
+  interestContexts      Json?                      // { gaming: "...", cooking: "...", ... }
+  choiceCardFormat      Boolean    @default(true)
+  seedSource            String?                    // "seed-v1"
+
   createdAt       DateTime @default(now())
 
   @@index([conceptKey, gradeLevel])
   @@index([subject, gradeLevel])
   @@index([diagnostic])
+  @@index([seedSource])
 }
 
 // ============================================
@@ -399,6 +422,71 @@ model TemplatePerformance {
   lastUpdatedAt        DateTime @default(now()) @updatedAt
 
   @@index([templateId])
+}
+
+// ============================================
+// QUEST MODELS
+// ============================================
+
+model Quest {
+  id                String      @id @default(cuid())
+  questKey          String?     @unique              // "quest-math-kitchen-lab-g5-001"
+  
+  subject           Subject
+  title             String
+  description       String      @db.Text
+  gradeLevel        Int
+  chapter           String?
+  theme             String?                          // "Space Explorer", "Kitchen Lab"
+  interestTags      String[]    @default([])
+  narrative         String?     @db.Text
+  
+  // Content references (stored as string arrays of conceptKeys / template IDs)
+  conceptKeys       String[]    @default([])         // concept keys covered
+  templateIds       String[]    @default([])         // template IDs in this quest
+  
+  questType         QuestType   @default(TEACH)
+  difficultyBand    Json?                            // { min, max, curve }
+  reasoningArc      Json?                            // { steps: [activate, introduce, challenge, transfer, articulate] }
+  estimatedMinutes  Int?
+  problemCount      Int         @default(6)
+  
+  // Cross-subject quest data
+  crossSubjectData  Json?                            // { subjects, stages, thinkingSkill, crossLinkReflection }
+  
+  // Metadata
+  seedSource        String?                          // "seed-v1"
+  isActive          Boolean     @default(true)
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  @@index([subject, gradeLevel])
+  @@index([questType])
+  @@index([theme])
+  @@index([seedSource])
+  @@index([isActive])
+}
+
+model DiagnosticQuest {
+  id              String    @id @default(cuid())
+  subject         Subject
+  gradeBand       String                            // "3-4", "5-6", "7-8", "9"
+  title           String
+  description     String    @db.Text
+  
+  stages          Json                              // [{ questionNumber, conceptId, templateId, skipToIfCorrect, skipToIfWrong }]
+  placementLogic  Json                              // [{ correctRange, placementConceptKey, placementGrade }]
+  
+  seedSource      String?                           // "seed-v1"
+  isActive        Boolean   @default(true)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@unique([subject, gradeBand])
+  @@index([subject])
+  @@index([isActive])
 }
 
 // ============================================
@@ -558,6 +646,8 @@ enum Subject {
   ECONOMICS
   AI_LEARNING
   LOGIC
+  ML_CONCEPTS        // NEW
+  ENGLISH_READING    // NEW
 }
 
 enum Exam {
@@ -585,6 +675,11 @@ enum HintType {
   EXAMPLE       // Similar worked example
   VISUAL        // Diagram or visualization hint
   FORMULA       // Relevant formula reminder
+  ORIENT        // Level 1: activates prior knowledge
+  REFRAME       // Level 2: new perspective on the problem
+  STRUCTURE     // Level 3: breaks problem into steps
+  TARGET        // Level 4: addresses specific misconception
+  SCAFFOLD      // Level 5: near-solution structure
 }
 
 enum SchoolSelectivity {
@@ -650,4 +745,12 @@ enum GuardianRole {
   PARENT
   TEACHER
   GUARDIAN
+}
+
+enum QuestType {
+  TEACH
+  REVIEW
+  DIAGNOSTIC
+  CHALLENGE
+  CROSS_SUBJECT
 }

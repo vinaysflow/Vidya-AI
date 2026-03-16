@@ -29,6 +29,7 @@ const SynthesizeSchema = z.object({
     'PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY',
     'ESSAY_WRITING', 'COUNSELING', 'CODING',
     'ENGLISH_LITERATURE', 'ECONOMICS', 'AI_LEARNING',
+    'LOGIC', 'ML_CONCEPTS', 'ENGLISH_READING',
   ]).default('PHYSICS'),
 });
 

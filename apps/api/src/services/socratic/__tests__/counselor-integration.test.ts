@@ -15,12 +15,13 @@
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
 
 // ============================================
-// MOCK ANTHROPIC (hoisted so it's available in vi.mock factory)
+// MOCK BOTH ANTHROPIC AND OPENAI (hoisted so available in vi.mock factory)
 // ============================================
 
-const { mockCreate } = vi.hoisted(() => {
+const { mockCreate, mockOpenAICreate } = vi.hoisted(() => {
   const mockCreate = vi.fn();
-  return { mockCreate };
+  const mockOpenAICreate = vi.fn();
+  return { mockCreate, mockOpenAICreate };
 });
 
 vi.mock('@anthropic-ai/sdk', () => {
@@ -29,6 +30,54 @@ vi.mock('@anthropic-ai/sdk', () => {
       constructor() {}
       messages = { create: mockCreate };
     },
+  };
+});
+
+vi.mock('openai', () => {
+  return {
+    default: class MockOpenAI {
+      constructor() {}
+      chat = { completions: { create: mockOpenAICreate } };
+    },
+  };
+});
+
+// Mock the LLM client module so the engine's internal client uses our mocks
+// regardless of which provider env vars are set
+vi.mock('../../llm/client', async (importOriginal) => {
+  const original = await importOriginal<typeof import('../../llm/client')>();
+  return {
+    ...original,
+    LlmClient: class MockLlmClient {
+      constructor() {}
+      async generateText(params: any): Promise<string> {
+        return mockOpenAICreate(params).then((r: any) => r.choices[0].message.content);
+      }
+      async generateTextWithMeta(params: any): Promise<{ text: string; provider: string; model: string; fallbackUsed: boolean }> {
+        const text = await this.generateText(params);
+        return { text, provider: 'openai', model: 'gpt-4.1-nano', fallbackUsed: false };
+      }
+    },
+    BudgetExceededError: original.BudgetExceededError,
+  };
+});
+
+// Mock Prisma to avoid database dependency in tests
+vi.mock('@prisma/client', () => {
+  const mockPrisma = {
+    concept: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findUnique: vi.fn().mockResolvedValue(null),
+    },
+    questionTemplate: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findUnique: vi.fn().mockResolvedValue(null),
+    },
+    $disconnect: vi.fn().mockResolvedValue(undefined),
+  };
+  return {
+    PrismaClient: vi.fn(() => mockPrisma),
+    default: { PrismaClient: vi.fn(() => mockPrisma) },
   };
 });
 
@@ -133,20 +182,52 @@ const MOCK_RESPONSE_TEXT = "It sounds like you're thoughtfully building your sch
 // HELPER
 // ============================================
 
+/**
+ * Extract the system prompt from a mock call.
+ * The LlmClient mock passes LlmGenerateParams which has a .systemPrompt field.
+ */
+function extractSystemPrompt(call: any): string {
+  if (!call) return '';
+  const params = call[0];
+  // LlmGenerateParams shape (our mock passes params directly)
+  if (typeof params?.systemPrompt === 'string') return params.systemPrompt;
+  // Anthropic native shape
+  if (params?.system) {
+    if (Array.isArray(params.system)) return params.system[0]?.text ?? '';
+    return params.system as string;
+  }
+  // OpenAI native shape
+  if (Array.isArray(params?.messages)) {
+    const sys = params.messages.find((m: any) => m.role === 'system');
+    if (sys) return typeof sys.content === 'string' ? sys.content : sys.content?.[0]?.text ?? '';
+  }
+  return '';
+}
+
+/**
+ * Extract the user/first message from a mock call.
+ */
+function extractUserPrompt(call: any): string {
+  if (!call) return '';
+  const params = call[0];
+  // LlmGenerateParams: messages is an array with role/content
+  if (Array.isArray(params?.messages)) {
+    const user = params.messages.find((m: any) => m.role === 'user');
+    if (user) return typeof user.content === 'string' ? user.content : user.content?.[0]?.text ?? '';
+  }
+  return '';
+}
+
 function setupMockLLM() {
-  let callIndex = 0;
-  mockCreate.mockImplementation(async () => {
-    callIndex++;
-    if (callIndex === 1) {
-      // First call = analysis (Haiku)
-      return {
-        content: [{ type: 'text', text: JSON.stringify(MOCK_ANALYSIS_RESULT) }],
-      };
+  let openAICallIndex = 0;
+  mockOpenAICreate.mockImplementation(async (params: any) => {
+    openAICallIndex++;
+    if (openAICallIndex === 1) {
+      // First call = analysis
+      return { choices: [{ message: { content: JSON.stringify(MOCK_ANALYSIS_RESULT) } }] };
     }
-    // Second call = response (Sonnet)
-    return {
-      content: [{ type: 'text', text: MOCK_RESPONSE_TEXT }],
-    };
+    // Second call = response
+    return { choices: [{ message: { content: MOCK_RESPONSE_TEXT } }] };
   });
 }
 
@@ -163,6 +244,7 @@ describe('Counselor Integration: COLLEGE_US (PathWiz)', () => {
 
   beforeEach(() => {
     mockCreate.mockReset();
+    mockOpenAICreate.mockReset();
   });
 
   it('processes a counselor message end-to-end with COLLEGE_US context', async () => {
@@ -201,17 +283,15 @@ describe('Counselor Integration: COLLEGE_US (PathWiz)', () => {
     expect(response.metadata.counselorSuggestedFocus).toBe('helping the student evaluate their school list balance');
 
     // ---- Verify LLM was called twice (analysis + response) ----
-    expect(mockCreate).toHaveBeenCalledTimes(2);
+    expect(mockOpenAICreate).toHaveBeenCalledTimes(2);
 
     // ---- Verify analysis call included client context ----
-    const analysisCall = mockCreate.mock.calls[0][0];
-    const analysisUserPrompt = analysisCall.messages[0].content;
+    const analysisUserPrompt = extractUserPrompt(mockOpenAICreate.mock.calls[0]);
     expect(analysisUserPrompt).toContain('COLLEGE_US');
     expect(analysisUserPrompt).toContain('safety schools');
 
     // ---- Verify response call included variant overlay ----
-    const responseCall = mockCreate.mock.calls[1][0];
-    const responseSystemPrompt = responseCall.system[0].text;
+    const responseSystemPrompt = extractSystemPrompt(mockOpenAICreate.mock.calls[1]);
     expect(responseSystemPrompt).toContain('Vidya'); // Base prompt
     expect(responseSystemPrompt).toContain('College Counselling (US)'); // Variant overlay
     expect(responseSystemPrompt).toContain('STUDENT CONTEXT (COLLEGE_US)'); // Client context
@@ -254,6 +334,7 @@ describe('Counselor Integration: CAREER_INDIA (ODEE)', () => {
 
   beforeEach(() => {
     mockCreate.mockReset();
+    mockOpenAICreate.mockReset();
   });
 
   it('processes a counselor message with CAREER_INDIA context', async () => {
@@ -280,21 +361,19 @@ describe('Counselor Integration: CAREER_INDIA (ODEE)', () => {
     expect(response.message.length).toBeGreaterThan(0);
 
     // Verify the CAREER_INDIA overlay was injected
-    const responseCall = mockCreate.mock.calls[1][0];
-    const systemPrompt = responseCall.system[0].text;
-    expect(systemPrompt).toContain('India K-12 Career Exploration Counselor');
-    expect(systemPrompt).toContain('STUDENT CONTEXT (CAREER_INDIA)');
-    expect(systemPrompt).toContain('EXPLORATION'); // bucket
-    expect(systemPrompt).toContain('Software Engineering'); // careerGoal
-    expect(systemPrompt).toContain('Investigative'); // RIASEC
-    expect(systemPrompt).toContain('Science'); // streamHint
-    expect(systemPrompt).toContain('Family Context'); // family
-    expect(systemPrompt).toContain('engineering or medicine'); // family expectation
+    const responseSystemPrompt = extractSystemPrompt(mockOpenAICreate.mock.calls[1]);
+    expect(responseSystemPrompt).toContain('India K-12 Career Exploration Counselor');
+    expect(responseSystemPrompt).toContain('STUDENT CONTEXT (CAREER_INDIA)');
+    expect(responseSystemPrompt).toContain('EXPLORATION'); // bucket
+    expect(responseSystemPrompt).toContain('Software Engineering'); // careerGoal
+    expect(responseSystemPrompt).toContain('Investigative'); // RIASEC
+    expect(responseSystemPrompt).toContain('Science'); // streamHint
+    expect(responseSystemPrompt).toContain('Family Context'); // family
+    expect(responseSystemPrompt).toContain('engineering or medicine'); // family expectation
 
     // Verify analysis included CAREER_INDIA
-    const analysisCall = mockCreate.mock.calls[0][0];
-    const analysisPrompt = analysisCall.messages[0].content;
-    expect(analysisPrompt).toContain('CAREER_INDIA');
+    const analysisUserPrompt = extractUserPrompt(mockOpenAICreate.mock.calls[0]);
+    expect(analysisUserPrompt).toContain('CAREER_INDIA');
   });
 });
 
@@ -307,6 +386,7 @@ describe('Counselor Integration: edge cases', () => {
 
   beforeEach(() => {
     mockCreate.mockReset();
+    mockOpenAICreate.mockReset();
   });
 
   it('handles missing clientContext gracefully', async () => {
@@ -331,11 +411,10 @@ describe('Counselor Integration: edge cases', () => {
   });
 
   it('handles analysis error gracefully', async () => {
-    // Make the analysis call fail
-    mockCreate.mockRejectedValueOnce(new Error('LLM unavailable'));
-    // Response call succeeds
-    mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: 'What matters most to you about this decision?' }],
+    // Make the analysis call fail, response call succeeds
+    mockOpenAICreate.mockRejectedValueOnce(new Error('LLM unavailable'));
+    mockOpenAICreate.mockResolvedValueOnce({
+      choices: [{ message: { content: 'What matters most to you about this decision?' } }],
     });
 
     const input: TutorInput = {

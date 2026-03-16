@@ -29,7 +29,7 @@ const isImageReference = (value: string) =>
 
 const StartSessionSchema = z.object({
   userId: z.string().optional(),
-  subject: z.enum(['PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY', 'ESSAY_WRITING', 'COUNSELING', 'CODING', 'ENGLISH_LITERATURE', 'ECONOMICS', 'AI_LEARNING', 'LOGIC']),
+  subject: z.enum(['PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY', 'ESSAY_WRITING', 'COUNSELING', 'CODING', 'ENGLISH_LITERATURE', 'ECONOMICS', 'AI_LEARNING', 'LOGIC', 'ML_CONCEPTS', 'ENGLISH_READING']),
   language: z.enum(['EN', 'HI', 'KN', 'FR', 'DE', 'ES', 'ZH']).default('EN'),
   problemText: z.string().min(1).max(5000),
   problemImage: z.string().max(200000).refine(isImageReference, {
