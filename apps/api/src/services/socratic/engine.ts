@@ -954,6 +954,40 @@ Generate the response:
   // ============================================
 
   /**
+   * Detect whether a math/science problem is missing key numerical data needed to solve it.
+   * Returns a human-readable description of what's missing, or null if the question looks solvable.
+   *
+   * Heuristic: a comparison/difference question (how many more/fewer/less/extra) that contains
+   * exactly one number is almost certainly missing the second value it's comparing against.
+   */
+  private detectIncompleteQuestion(problemText: string): string | null {
+    const text = problemText.trim();
+
+    // Extract all numbers mentioned in the question
+    const numbers = text.match(/\b\d+(\.\d+)?\b/g) ?? [];
+
+    // "how many more/fewer/less/extra/taller/longer/older/younger/heavier" — requires 2 quantities
+    const isComparisonQuestion = /how many (more|fewer|less|extra|additional)|(how much (more|less|taller|longer|heavier|older|younger|faster|slower|farther|further))/i.test(text);
+    if (isComparisonQuestion && numbers.length < 2) {
+      return `This question asks for a comparison (how many more/fewer) but only mentions one number (${numbers[0] ?? 'none'}). It needs a second value to compare against.`;
+    }
+
+    // "what is X% of ___" or "X% more than ___" with a blank or missing value
+    const hasPercentage = /%/.test(text);
+    if (hasPercentage && numbers.length < 2) {
+      return `This percentage question is missing a value to apply the percentage to.`;
+    }
+
+    // Multi-step word problem with "how many left/remain/total" but zero numbers
+    const isQuantityQuestion = /how many|how much|what is the (total|sum|difference|product|quotient)/i.test(text);
+    if (isQuantityQuestion && numbers.length === 0) {
+      return `This question asks for a quantity but contains no numbers to work with.`;
+    }
+
+    return null;
+  }
+
+  /**
    * Dedicated first-turn path for kid mode quests.
    * Skips analysis entirely — the user message is the problem statement, not a student attempt.
    * Generates a "present the problem" response with [A]/[B]/[C] choices.
@@ -961,6 +995,26 @@ Generate the response:
   private async generateKidQuestIntro(input: TutorInput, mod: TutorModule): Promise<TutorResponse> {
     const { sessionId, language, conversationHistory, subject } = input;
     const problemText = this.extractProblem(conversationHistory);
+
+    // Guard: detect incomplete questions before calling the LLM
+    const incompleteness = this.detectIncompleteQuestion(problemText);
+    if (incompleteness) {
+      const responseLanguage = mod.supportedLanguages.includes(language) ? language : mod.supportedLanguages[0];
+      return {
+        message: `Hmm, I think this question might be missing some information! 🤔\n\n${incompleteness}\n\nCould you check if the full question has all the numbers? For example, it should say something like "15 students like the playground activity and 10 like climbing — how many more like the playground?"`,
+        language: responseLanguage,
+        metadata: {
+          questionType: 'clarifying',
+          hintLevel: 0,
+          conceptsIdentified: [],
+          distanceFromSolution: 100,
+          topic: input.topic,
+          grounding: 'validation',
+          confidence: 1,
+          safetyEvents: [],
+        }
+      };
+    }
 
     const response = await this.runResponseGeneration({
       mod,
