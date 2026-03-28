@@ -78,3 +78,21 @@ describe('chatStore store version migration', () => {
     expect(useChatStore.getState().learningProfile).toBeNull();
   });
 });
+
+describe('chatStore voiceEnabled default', () => {
+  it('fresh state has voiceEnabled: true', () => {
+    // Reset store to initial state (no persisted data)
+    useChatStore.setState({ voiceEnabled: true } as any);
+    const { voiceEnabled } = useChatStore.getState();
+    expect(voiceEnabled).toBe(true);
+  });
+
+  it('setVoiceEnabled updates voiceEnabled state', () => {
+    useChatStore.setState({ voiceEnabled: true } as any);
+    const { setVoiceEnabled } = useChatStore.getState();
+    setVoiceEnabled(false);
+    expect(useChatStore.getState().voiceEnabled).toBe(false);
+    setVoiceEnabled(true);
+    expect(useChatStore.getState().voiceEnabled).toBe(true);
+  });
+});

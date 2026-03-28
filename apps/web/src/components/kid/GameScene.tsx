@@ -15,7 +15,6 @@ import Lottie from 'lottie-react';
 import { Volume2 } from 'lucide-react';
 import { VidyaCharacter, type VidyaState } from './VidyaCharacter';
 import { SceneCanvas } from './SceneCanvas';
-import { AudioPlayer } from '../voice/AudioPlayer';
 import { cn } from '../../lib/utils';
 import { getTheme, parseChoices, CHAPTER_THEMES } from './questSceneTheme';
 import { useChatStore, type Message } from '../../stores/chatStore';
@@ -24,6 +23,8 @@ import { useGameSounds } from './useGameSounds';
 import { confettiData, sparkleData } from './lottieData';
 import { TransitionCard } from './TransitionCard';
 import { getTransitionMessage } from './getTransitionMessage';
+import { useVidyaVoice } from '../../hooks/useVidyaVoice';
+import type { VoicePlayOptions } from '../../hooks/useVidyaVoice';
 
 // Optional AI-generated scene images — only enabled when VITE_ENABLE_AI_SCENES=true
 const AI_SCENES_ENABLED = import.meta.env.VITE_ENABLE_AI_SCENES === 'true';
@@ -156,10 +157,8 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   } | null>(null);
   const [progressLoading, setProgressLoading] = useState(false);
 
-  // TTS state for speech bubble
-  const [bubbleAudioUrl, setBubbleAudioUrl] = useState<string | null>(null);
-  const [ttsLoading, setTtsLoading] = useState(false);
-  const ttsCacheRef = useRef<Map<string, string>>(new Map());
+  // Voice hook -- replaces inline TTS state/callbacks
+  const { play: playVoice, stop: stopVoice, isPlaying: voiceIsPlaying, isLoading: voiceIsLoading } = useVidyaVoice();
   const [transitionMessage, setTransitionMessage] = useState<string | null>(null);
 
   const lastAssistant = messages.filter((m) => m.role === 'assistant').pop();
@@ -188,43 +187,20 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     ? truncateForBubble(rawBubble.replace(questPrompt, '').trim() || 'Pick the right answer!')
     : truncateForBubble(rawBubble);
 
-  // TTS: synthesize speech bubble text
-  const synthesizeBubble = useCallback(async (text: string) => {
-    if (!text || !voiceEnabled) return;
-    const cacheKey = text.slice(0, 100);
-    const cached = ttsCacheRef.current.get(cacheKey);
-    if (cached) { setBubbleAudioUrl(cached); return; }
+  // Derive tone from game state for emotionally intelligent voice
+  const voiceTone: VoicePlayOptions['tone'] =
+    questionType === 'celebration' || questionType === 'celebrate_then_explain_back' ? 'celebratory' :
+    questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement' ? 'patient' :
+    'supportive';
 
-    setTtsLoading(true);
-    try {
-      const API_BASE = getApiBase();
-      const res = await fetch(`${API_BASE}/api/voice/synthesize`, {
-        method: 'POST',
-        headers: getJsonHeaders(apiKey),
-        body: JSON.stringify({ text: text.slice(0, 4000), language, subject }),
-      });
-      if (res.ok) {
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        ttsCacheRef.current.set(cacheKey, url);
-        setBubbleAudioUrl(url);
-      }
-    } catch (_) {}
-    finally { setTtsLoading(false); }
-  }, [voiceEnabled, language, subject, apiKey]);
-
-  // Keep a stable ref to synthesizeBubble to avoid adding its dependency chain
-  // (voiceEnabled, language, subject, apiKey) to the displayText effect below.
-  const synthesizeBubbleRef = useRef(synthesizeBubble);
-  useEffect(() => { synthesizeBubbleRef.current = synthesizeBubble; }, [synthesizeBubble]);
-
+  // TTS: play speech bubble via useVidyaVoice hook
   useEffect(() => {
     if (displayText && voiceEnabled) {
-      synthesizeBubbleRef.current(displayText);
+      playVoice(displayText, { tone: voiceTone, speed: calmMode ? 0.8 : 0.9, calmMode: calmMode ?? false, language, subject });
     } else {
-      setBubbleAudioUrl(null);
+      stopVoice();
     }
-  }, [displayText, voiceEnabled]);
+  }, [displayText, voiceEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const theme = getTheme(activeQuest?.chapter ?? 'Adventures');
 
@@ -305,6 +281,9 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     const msg = getTransitionMessage(questionType, activeQuest);
     if (msg) {
       setTransitionMessage(msg);
+      if (voiceEnabled) {
+        playVoice(msg, { tone: 'supportive', speed: 0.9, calmMode: calmMode ?? false, language, subject });
+      }
       const timer = setTimeout(() => setTransitionMessage(null), 2000);
       return () => clearTimeout(timer);
     }
@@ -585,12 +564,12 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                 {displayText || '…'}
               </p>
             )}
-            {bubbleAudioUrl && !isLoading && (
-              <div className="mt-1">
-                <AudioPlayer audioUrl={bubbleAudioUrl} autoPlay={true} />
+            {voiceIsPlaying && !isLoading && (
+              <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+                <Volume2 className="w-3.5 h-3.5 animate-pulse text-indigo-400 shrink-0" aria-label="Playing audio" />
               </div>
             )}
-            {ttsLoading && !isLoading && (
+            {voiceIsLoading && !isLoading && (
               <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
                 <Volume2 className="w-3.5 h-3.5 animate-pulse text-indigo-400 shrink-0" />
                 <span>Reading aloud...</span>

@@ -1,154 +1,186 @@
 /**
- * GameScene TTS tests.
+ * GameScene TTS tests -- hook-based architecture.
  *
- * Tests the TTS synthesizeBubble behavior:
- *  1. With voiceEnabled=false: synthesize not called on mount
- *  2. With voiceEnabled=true: synthesize called when displayText available
- *
- * Note: GameScene uses import.meta.env, so we test the TTS logic
- * via the underlying synthesizeBubble pattern rather than full component mount.
- * The ref pattern change (Phase 3.1) is tested through the hook behavior.
+ * Tests that GameScene correctly delegates TTS to useVidyaVoice hook,
+ * derives tone from game state, and handles voice on/off toggling.
+ * Full component mounting is avoided; instead we test the TTS logic
+ * through a minimal component that mirrors GameScene's hook usage.
  */
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect } from 'react';
 import { render, act } from '@testing-library/react';
 
+// Mock useVidyaVoice so we can track calls without hitting the API
+jest.mock('../../../hooks/useVidyaVoice', () => ({
+  useVidyaVoice: jest.fn(() => ({
+    play: jest.fn(),
+    stop: jest.fn(),
+    isPlaying: false,
+    isLoading: false,
+    isUnavailable: false,
+  })),
+}));
+
+import { useVidyaVoice } from '../../../hooks/useVidyaVoice';
+import type { VoicePlayOptions } from '../../../hooks/useVidyaVoice';
+
+type QuestionType = 'celebration' | 'celebrate_then_explain_back' | 'hint_with_question' | 'foundational' | 'encouragement' | 'socratic' | 'attempt_prompt' | null;
+
 /**
- * Minimal hook that reproduces the exact pattern from GameScene's TTS useEffect fix.
- * Tests that the ref pattern correctly responds to voiceEnabled changes.
+ * Minimal component mirroring GameScene's voice useEffect pattern.
+ * This isolates the TTS-specific behavior from the complex GameScene rendering.
  */
-function useTtsEffect(displayText: string, voiceEnabled: boolean, onSynthesize: (text: string) => void) {
-  const synthesizeBubbleRef = useRef(onSynthesize);
-  useEffect(() => { synthesizeBubbleRef.current = onSynthesize; }, [onSynthesize]);
+function VoiceEffectHarness({
+  displayText,
+  voiceEnabled,
+  questionType,
+  calmMode = false,
+}: {
+  displayText: string;
+  voiceEnabled: boolean;
+  questionType: QuestionType;
+  calmMode?: boolean;
+}) {
+  const { play, stop } = useVidyaVoice();
+
+  const voiceTone: VoicePlayOptions['tone'] =
+    questionType === 'celebration' || questionType === 'celebrate_then_explain_back'
+      ? 'celebratory'
+      : questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement'
+      ? 'patient'
+      : 'supportive';
 
   useEffect(() => {
     if (displayText && voiceEnabled) {
-      synthesizeBubbleRef.current(displayText);
+      play(displayText, { tone: voiceTone, speed: calmMode ? 0.8 : 0.9, calmMode });
+    } else {
+      stop();
     }
-  }, [displayText, voiceEnabled]);
+  }, [displayText, voiceEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return <div data-testid="harness" />;
 }
 
-function TestHookComponent({ displayText, voiceEnabled, onSynthesize }: {
-  displayText: string;
-  voiceEnabled: boolean;
-  onSynthesize: (text: string) => void;
-}) {
-  useTtsEffect(displayText, voiceEnabled, onSynthesize);
-  return <div data-testid="hook-host" />;
+function getPlayMock() {
+  return (useVidyaVoice as jest.Mock).mock.results[
+    (useVidyaVoice as jest.Mock).mock.results.length - 1
+  ]?.value?.play as jest.Mock;
 }
 
-describe('GameScene TTS ref pattern (Phase 3.1)', () => {
-  it('does NOT call synthesize when voiceEnabled is false', () => {
-    const onSynthesize = jest.fn();
+function getStopMock() {
+  return (useVidyaVoice as jest.Mock).mock.results[
+    (useVidyaVoice as jest.Mock).mock.results.length - 1
+  ]?.value?.stop as jest.Mock;
+}
+
+describe('GameScene TTS -- hook-based architecture', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useVidyaVoice as jest.Mock).mockReturnValue({
+      play: jest.fn(),
+      stop: jest.fn(),
+      isPlaying: false,
+      isLoading: false,
+      isUnavailable: false,
+    });
+  });
+
+  it('calls play with displayText when voiceEnabled is true', () => {
     render(
-      <TestHookComponent
+      <VoiceEffectHarness
         displayText="What is 2 + 2?"
-        voiceEnabled={false}
-        onSynthesize={onSynthesize}
+        voiceEnabled={true}
+        questionType={null}
       />,
     );
-    expect(onSynthesize).not.toHaveBeenCalled();
+    expect(getPlayMock()).toHaveBeenCalledWith('What is 2 + 2?', expect.any(Object));
   });
 
-  it('calls synthesize with displayText when voiceEnabled is true on mount', () => {
-    const onSynthesize = jest.fn();
+  it('does NOT call play when voiceEnabled is false', () => {
     render(
-      <TestHookComponent
-        displayText="What is 2 + 2?"
-        voiceEnabled={true}
-        onSynthesize={onSynthesize}
-      />,
-    );
-    expect(onSynthesize).toHaveBeenCalledWith('What is 2 + 2?');
-  });
-
-  it('calls synthesize when voiceEnabled changes from false to true', () => {
-    const onSynthesize = jest.fn();
-    const { rerender } = render(
-      <TestHookComponent
+      <VoiceEffectHarness
         displayText="What is 2 + 2?"
         voiceEnabled={false}
-        onSynthesize={onSynthesize}
+        questionType={null}
       />,
     );
-    expect(onSynthesize).not.toHaveBeenCalled();
-
-    // Toggle voiceEnabled to true
-    rerender(
-      <TestHookComponent
-        displayText="What is 2 + 2?"
-        voiceEnabled={true}
-        onSynthesize={onSynthesize}
-      />,
-    );
-    expect(onSynthesize).toHaveBeenCalledWith('What is 2 + 2?');
+    expect(getPlayMock()).not.toHaveBeenCalled();
   });
 
-  it('calls synthesize again when displayText changes', () => {
-    const onSynthesize = jest.fn();
-    const { rerender } = render(
-      <TestHookComponent
-        displayText="First question"
-        voiceEnabled={true}
-        onSynthesize={onSynthesize}
-      />,
-    );
-    expect(onSynthesize).toHaveBeenCalledWith('First question');
-
-    rerender(
-      <TestHookComponent
-        displayText="Second question"
-        voiceEnabled={true}
-        onSynthesize={onSynthesize}
-      />,
-    );
-    expect(onSynthesize).toHaveBeenCalledWith('Second question');
-    expect(onSynthesize).toHaveBeenCalledTimes(2);
-  });
-
-  it('does NOT call synthesize when displayText is empty', () => {
-    const onSynthesize = jest.fn();
+  it('calls stop when voiceEnabled is false', () => {
     render(
-      <TestHookComponent
-        displayText=""
-        voiceEnabled={true}
-        onSynthesize={onSynthesize}
+      <VoiceEffectHarness
+        displayText="What is 2 + 2?"
+        voiceEnabled={false}
+        questionType={null}
       />,
     );
-    expect(onSynthesize).not.toHaveBeenCalled();
+    expect(getStopMock()).toHaveBeenCalled();
   });
 
-  it('uses the latest version of onSynthesize via ref (stale closure prevention)', () => {
-    const onSynthesize1 = jest.fn();
-    const onSynthesize2 = jest.fn();
-
-    const { rerender } = render(
-      <TestHookComponent
-        displayText="Question"
-        voiceEnabled={false}
-        onSynthesize={onSynthesize1}
-      />,
-    );
-
-    // Update synthesize callback (simulates parent re-render updating useCallback)
-    rerender(
-      <TestHookComponent
-        displayText="Question"
-        voiceEnabled={false}
-        onSynthesize={onSynthesize2}
-      />,
-    );
-
-    // Now enable voice — should call onSynthesize2 (latest), not onSynthesize1
-    rerender(
-      <TestHookComponent
-        displayText="Question"
+  it('tone is celebratory on correct answer (celebration questionType)', () => {
+    render(
+      <VoiceEffectHarness
+        displayText="Great job!"
         voiceEnabled={true}
-        onSynthesize={onSynthesize2}
+        questionType="celebration"
       />,
     );
+    expect(getPlayMock()).toHaveBeenCalledWith(
+      'Great job!',
+      expect.objectContaining({ tone: 'celebratory' }),
+    );
+  });
 
-    expect(onSynthesize2).toHaveBeenCalledWith('Question');
-    expect(onSynthesize1).not.toHaveBeenCalled();
+  it('tone is patient on wrong answer (hint_with_question questionType)', () => {
+    render(
+      <VoiceEffectHarness
+        displayText="Let me give you a hint."
+        voiceEnabled={true}
+        questionType="hint_with_question"
+      />,
+    );
+    expect(getPlayMock()).toHaveBeenCalledWith(
+      'Let me give you a hint.',
+      expect.objectContaining({ tone: 'patient' }),
+    );
+  });
+
+  it('tone is supportive on new question (socratic questionType)', () => {
+    render(
+      <VoiceEffectHarness
+        displayText="Think about this…"
+        voiceEnabled={true}
+        questionType="socratic"
+      />,
+    );
+    expect(getPlayMock()).toHaveBeenCalledWith(
+      'Think about this…',
+      expect.objectContaining({ tone: 'supportive' }),
+    );
+  });
+
+  it('calls play again when displayText changes', () => {
+    const { rerender } = render(
+      <VoiceEffectHarness displayText="First" voiceEnabled={true} questionType={null} />,
+    );
+    rerender(<VoiceEffectHarness displayText="Second" voiceEnabled={true} questionType={null} />);
+    expect(getPlayMock()).toHaveBeenCalledTimes(2);
+    expect(getPlayMock()).toHaveBeenLastCalledWith('Second', expect.any(Object));
+  });
+
+  it('uses slower speed in calmMode', () => {
+    render(
+      <VoiceEffectHarness
+        displayText="Hello"
+        voiceEnabled={true}
+        questionType={null}
+        calmMode={true}
+      />,
+    );
+    expect(getPlayMock()).toHaveBeenCalledWith(
+      'Hello',
+      expect.objectContaining({ speed: 0.8, calmMode: true }),
+    );
   });
 });

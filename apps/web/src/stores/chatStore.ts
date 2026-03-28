@@ -301,7 +301,7 @@ export const useChatStore = create<ChatState>()(
       noFinalAnswerMode: false,
       planTier: 'FREE',
       theme: 'SYSTEM',
-      voiceEnabled: false,
+      voiceEnabled: true,
   parentViewEnabled: false,
   gamification: null,
   rsmTrack: null,

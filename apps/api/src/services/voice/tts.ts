@@ -1,47 +1,34 @@
-import OpenAI from 'openai';
 import type { Subject, Language } from '@prisma/client';
+import type { VoiceOptions } from './toneMap';
+import { synthesizeElevenLabs } from './providers/elevenlabs';
+import { synthesizeOpenAI } from './providers/openai';
+// TODO: Wire Azure as fallback 2 post-demo
+// import { synthesizeAzure } from './providers/azure';
 
-type Voice = 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
-
-const SUBJECT_VOICE: Partial<Record<Subject, Voice>> = {
-  PHYSICS: 'nova',
-  MATHEMATICS: 'nova',
-  CHEMISTRY: 'nova',
-  BIOLOGY: 'nova',
-  CODING: 'echo',
-  AI_LEARNING: 'echo',
-  ESSAY_WRITING: 'shimmer',
-  ENGLISH_LITERATURE: 'shimmer',
-  COUNSELING: 'alloy',
-  ECONOMICS: 'fable',
-};
-
-function stripMath(text: string): string {
-  return text
-    .replace(/\$\$([^$]+)\$\$/g, (_, expr) => expr.replace(/[\\{}^_]/g, ' '))
-    .replace(/\$([^$]+)\$/g, (_, expr) => expr.replace(/[\\{}^_]/g, ' '))
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1');
-}
+export type { VoiceOptions };
 
 export async function synthesizeSpeech(
   text: string,
-  language: Language,
-  subject: Subject,
+  _language: Language,
+  _subject: Subject,
+  options: VoiceOptions = {},
 ): Promise<Buffer> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error('OPENAI_API_KEY not set');
+  const hasElevenLabs = !!process.env.ELEVENLABS_API_KEY;
+  const hasOpenAI = !!process.env.OPENAI_API_KEY;
 
-  const openai = new OpenAI({ apiKey });
-  const voice = SUBJECT_VOICE[subject] || 'nova';
-  const cleanText = stripMath(text).slice(0, 4096);
+  if (!hasElevenLabs && !hasOpenAI) {
+    throw new Error('No TTS provider configured. Set ELEVENLABS_API_KEY or OPENAI_API_KEY.');
+  }
 
-  const response = await openai.audio.speech.create({
-    model: 'tts-1',
-    voice,
-    input: cleanText,
-  });
+  if (hasElevenLabs) {
+    try {
+      return await synthesizeElevenLabs(text, options);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[TTS] ElevenLabs failed, falling back to OpenAI', msg);
+      if (!hasOpenAI) throw err;
+    }
+  }
 
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  return synthesizeOpenAI(text, options);
 }

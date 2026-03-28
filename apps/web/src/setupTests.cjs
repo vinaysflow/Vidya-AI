@@ -30,3 +30,52 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
     })),
   });
 }
+
+// Polyfill window.Audio for jsdom (HTMLAudioElement has no playback in jsdom)
+if (typeof window !== 'undefined') {
+  global.Audio = jest.fn().mockImplementation(() => ({
+    play: jest.fn(() => Promise.resolve()),
+    pause: jest.fn(),
+    src: '',
+    onended: null,
+    onerror: null,
+    load: jest.fn(),
+  }));
+}
+
+// Polyfill window.speechSynthesis for jsdom
+if (typeof window !== 'undefined' && !window.speechSynthesis) {
+  Object.defineProperty(window, 'speechSynthesis', {
+    writable: true,
+    configurable: true,
+    value: {
+      speak: jest.fn(),
+      cancel: jest.fn(),
+      getVoices: jest.fn(() => []),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    },
+  });
+}
+
+// Polyfill SpeechSynthesisUtterance for jsdom
+if (typeof global.SpeechSynthesisUtterance === 'undefined') {
+  global.SpeechSynthesisUtterance = function SpeechSynthesisUtterance(text) {
+    this.text = text || '';
+    this.rate = 1;
+    this.pitch = 1;
+    this.volume = 1;
+    this.voice = null;
+    this.lang = '';
+  };
+}
+
+// Polyfill URL.createObjectURL / revokeObjectURL for jsdom
+if (typeof URL !== 'undefined') {
+  if (!URL.createObjectURL) {
+    URL.createObjectURL = jest.fn(() => 'blob:mock-url');
+  }
+  if (!URL.revokeObjectURL) {
+    URL.revokeObjectURL = jest.fn();
+  }
+}

@@ -99,7 +99,7 @@ export function renderWithStore(
       isLoading: false,
       error: null,
       sessionId: null,
-      voiceEnabled: false,
+      voiceEnabled: true,
       grade: null,
       effectiveGrade: null,
     } as any);

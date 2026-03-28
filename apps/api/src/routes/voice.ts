@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { transcribeAudio } from '../services/voice/stt';
 import { synthesizeSpeech } from '../services/voice/tts';
 import type { Language, Subject } from '@prisma/client';
+import type { VoiceOptions } from '../services/voice/tts';
 
 const router: Router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -31,12 +32,16 @@ const SynthesizeSchema = z.object({
     'ENGLISH_LITERATURE', 'ECONOMICS', 'AI_LEARNING',
     'LOGIC', 'ML_CONCEPTS', 'ENGLISH_READING',
   ]).default('PHYSICS'),
+  tone: z.enum(['supportive', 'celebratory', 'patient', 'challenging']).optional().default('supportive'),
+  speed: z.number().min(0.5).max(1.5).optional().default(0.9),
+  calmMode: z.boolean().optional().default(false),
 });
 
 router.post('/synthesize', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { text, language, subject } = SynthesizeSchema.parse(req.body);
-    const audioBuffer = await synthesizeSpeech(text, language as Language, subject as Subject);
+    const { text, language, subject, tone, speed, calmMode } = SynthesizeSchema.parse(req.body);
+    const voiceOptions: VoiceOptions = { tone, speed, calmMode };
+    const audioBuffer = await synthesizeSpeech(text, language as Language, subject as Subject, voiceOptions);
     res.set({ 'Content-Type': 'audio/mpeg', 'Content-Length': audioBuffer.length.toString() });
     res.send(audioBuffer);
   } catch (error) {

@@ -18,7 +18,7 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import { Map as MapIcon, ChevronRight, Loader2 } from 'lucide-react';
+import { Map as MapIcon, ChevronRight, Loader2, Volume2 } from 'lucide-react';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
 import { useChatStore } from '../../stores/chatStore';
 import { cn } from '../../lib/utils';
@@ -28,6 +28,7 @@ import {
   buildChoices,
   shouldComplete,
 } from '../../services/diagnosticEngine';
+import { useVidyaVoice } from '../../hooks/useVidyaVoice';
 
 const API_BASE = getApiBase();
 
@@ -51,7 +52,7 @@ interface DiagnosticQuizScreenProps {
 const MAP_FRAGMENTS = ['🗺️', '🌄', '🏔️', '🌊', '⭐'];
 
 export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplete, onSkip }: DiagnosticQuizScreenProps) {
-  const { apiKey, calmMode } = useChatStore();
+  const { apiKey, calmMode, voiceEnabled, language } = useChatStore();
   const [templates, setTemplates] = useState<DiagnosticTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,6 +60,8 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
   const [picked, setPicked] = useState<string | null>(null);
   const [results, setResults] = useState<Array<{ conceptKey: string; gradeLevel: number; correct: boolean }>>([]);
   const [acknowledged, setAcknowledged] = useState(false);
+
+  const { play: playVoice, isPlaying: voiceIsPlaying } = useVidyaVoice();
 
   useEffect(() => {
     setLoading(true);
@@ -89,6 +92,14 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentIdx, templates]
   );
+
+  // Read each question aloud when it changes (stealth assessment reduces reading confound)
+  useEffect(() => {
+    const q = templates[currentIdx];
+    if (q && voiceEnabled) {
+      playVoice(q.questionText, { tone: 'supportive', speed: 0.85, language, subject });
+    }
+  }, [currentIdx, voiceEnabled, templates]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePick = (choice: string) => {
     if (acknowledged || !current) return;
@@ -168,6 +179,11 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
       <div className="w-full bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md mb-4 border border-slate-100 dark:border-slate-700">
         <p className="text-sm font-semibold text-slate-500 mb-1">Grade {current.gradeLevel} · {current.subject.replace('_', ' ')}</p>
         <p className="text-base font-medium text-slate-800 dark:text-white leading-snug">{current.questionText}</p>
+        {voiceIsPlaying && (
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+            <Volume2 className="w-3.5 h-3.5 animate-pulse text-indigo-400 shrink-0" aria-label="Reading aloud" />
+          </div>
+        )}
       </div>
 
       {/* Choices — neutral acknowledgment only, no correctness colors */}

@@ -14,11 +14,26 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { DiagnosticQuizScreen } from '../DiagnosticQuizScreen';
 import { useChatStore } from '../../../stores/chatStore';
 
+// Mock useVidyaVoice so we can track play calls
+jest.mock('../../../hooks/useVidyaVoice', () => ({
+  useVidyaVoice: jest.fn(() => ({
+    play: jest.fn(),
+    stop: jest.fn(),
+    isPlaying: false,
+    isLoading: false,
+    isUnavailable: false,
+  })),
+}));
+
+import { useVidyaVoice } from '../../../hooks/useVidyaVoice';
+
 // -- Mock the chatStore minimally ---
 jest.mock('../../../stores/chatStore', () => ({
   useChatStore: jest.fn(() => ({
     apiKey: 'test-key',
     calmMode: false,
+    voiceEnabled: false,
+    language: 'EN',
   })),
 }));
 
@@ -27,6 +42,12 @@ jest.mock('../../../lib/api', () => ({
   getApiBase: () => 'http://localhost:4000',
   getJsonHeaders: () => ({ 'Content-Type': 'application/json' }),
 }));
+
+function getPlayMock() {
+  return (useVidyaVoice as jest.Mock).mock.results[
+    (useVidyaVoice as jest.Mock).mock.results.length - 1
+  ]?.value?.play as jest.Mock;
+}
 
 const MOCK_QUIZ = [
   {
@@ -203,5 +224,55 @@ describe('DiagnosticQuizScreen — stealth assessment', () => {
   it('shows skip link', async () => {
     await renderQuiz();
     expect(screen.getByText(/skip/i)).toBeTruthy();
+  });
+});
+
+describe('DiagnosticQuizScreen — voice behavior', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useVidyaVoice as jest.Mock).mockReturnValue({
+      play: jest.fn(),
+      stop: jest.fn(),
+      isPlaying: false,
+      isLoading: false,
+      isUnavailable: false,
+    });
+  });
+
+  it('does NOT call play when voiceEnabled is false', async () => {
+    (useChatStore as jest.Mock).mockReturnValue({
+      apiKey: 'test-key', calmMode: false, voiceEnabled: false, language: 'EN',
+    });
+    await renderQuiz();
+    expect(getPlayMock()).not.toHaveBeenCalled();
+  });
+
+  it('calls play with first question text when voiceEnabled is true', async () => {
+    (useChatStore as jest.Mock).mockReturnValue({
+      apiKey: 'test-key', calmMode: false, voiceEnabled: true, language: 'EN',
+    });
+    await renderQuiz();
+    expect(getPlayMock()).toHaveBeenCalledWith(
+      'What is 2 + 2?',
+      expect.objectContaining({ tone: 'supportive', speed: 0.85 }),
+    );
+  });
+
+  it('calls play with next question text after answering', async () => {
+    (useChatStore as jest.Mock).mockReturnValue({
+      apiKey: 'test-key', calmMode: false, voiceEnabled: true, language: 'EN',
+    });
+    await renderQuiz();
+
+    // Answer first question
+    fireEvent.click(screen.getByText('4').closest('button')!);
+    act(() => { jest.advanceTimersByTime(800); });
+
+    await waitFor(() => {
+      expect(getPlayMock()).toHaveBeenCalledWith(
+        'What is 10 - 3?',
+        expect.any(Object),
+      );
+    });
   });
 });
