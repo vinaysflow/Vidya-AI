@@ -1,0 +1,13 @@
+# Railway deployment configuration for Vidya Web App
+# The API service should have config-as-code DISABLED in its dashboard
+# so it doesn't pick up this file.
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile.web"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
