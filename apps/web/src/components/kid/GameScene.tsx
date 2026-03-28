@@ -193,14 +193,27 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement' ? 'patient' :
     'supportive';
 
-  // TTS: play speech bubble via useVidyaVoice hook
+  // Full text for TTS — never truncated so the voice doesn't cut off mid-sentence.
+  // Visual bubble uses truncated `displayText`; voice uses the complete content.
+  const fullVoiceText = isSameAsPrompt
+    ? rawBubble.replace(questPrompt, '').trim()
+    : rawBubble;
+
+  // TTS: read the quest prompt aloud on quest start, then full speech bubble on subsequent turns
+  const questPromptReadRef = useRef<string | null>(null);
   useEffect(() => {
-    if (displayText && voiceEnabled) {
-      playVoice(displayText, { tone: voiceTone, speed: calmMode ? 0.8 : 0.9, calmMode: calmMode ?? false, language, subject });
-    } else {
-      stopVoice();
+    if (!voiceEnabled) { stopVoice(); return; }
+    // On quest start (or quest change), read the actual question prompt first
+    if (activeQuest?.prompt && questPromptReadRef.current !== activeQuest.prompt) {
+      questPromptReadRef.current = activeQuest.prompt;
+      playVoice(activeQuest.prompt, { tone: 'supportive', speed: calmMode ? 0.8 : 0.85, calmMode: calmMode ?? false, language, subject });
+      return;
     }
-  }, [displayText, voiceEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
+    // On subsequent turns, read the FULL response (not the truncated display text)
+    if (fullVoiceText) {
+      playVoice(fullVoiceText, { tone: voiceTone, speed: calmMode ? 0.8 : 0.9, calmMode: calmMode ?? false, language, subject });
+    }
+  }, [fullVoiceText, voiceEnabled, activeQuest?.prompt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const theme = getTheme(activeQuest?.chapter ?? 'Adventures');
 
@@ -506,9 +519,9 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
       <div className="shrink-0 px-3 pt-2">
         <div
           data-testid="quest-prompt"
-          className="rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700/50 px-4 py-2"
+          className="rounded-xl bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-300 dark:border-amber-700/50 px-4 py-3"
         >
-          <p className="text-sm font-medium leading-snug text-amber-900 dark:text-amber-200">
+          <p className="text-base font-semibold leading-relaxed text-amber-900 dark:text-amber-200">
             <span className="mr-1.5">&#128218;</span>
             {activeQuest.prompt}
           </p>
