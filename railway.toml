@@ -1,5 +1,5 @@
 # Railway deployment configuration for Vidya API
-# Root Directory in Railway dashboard: / (repo root)
+# Root Directory in Railway dashboard: / (blank / repo root)
 # Uses Dockerfile.api for monorepo-aware builds
 
 [build]
