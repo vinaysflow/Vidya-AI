@@ -1,13 +1,7 @@
 # Railway deployment configuration for Vidya API
-# Root Directory in Railway dashboard: / (repo root)
-# Uses Dockerfile.api for monorepo-aware builds
-
-[build]
-builder = "dockerfile"
-dockerfilePath = "Dockerfile.api"
-
-[deploy]
-healthcheckPath = "/health"
-healthcheckTimeout = 60
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
+# Configure in Railway dashboard (not via this file):
+#   Root Directory: / (blank / repo root)
+#   Builder: Dockerfile
+#   Dockerfile Path: Dockerfile.api
+#   Start Command: (leave blank, uses Dockerfile CMD)
+#   Healthcheck: /health
