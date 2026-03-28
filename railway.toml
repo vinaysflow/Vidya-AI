@@ -7,6 +7,7 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile.api"
 
 [deploy]
+startCommand = "node apps/api/dist/index.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
