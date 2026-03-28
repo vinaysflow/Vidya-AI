@@ -4,6 +4,31 @@ const router = Router();
 import { prisma } from '../lib/prisma';
 
 /**
+ * GET /api/user/:userId
+ * Fetch a user's stored profile (grade, adaptiveState, preferredLang).
+ * Returns { success: true, user: null } when the user hasn't started a session yet —
+ * the User record is created lazily on first POST /api/tutor/session/start.
+ */
+router.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params;
+    if (!userId || userId === 'anonymous') {
+      res.status(400).json({ success: false, error: 'Invalid userId' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { grade: true, adaptiveState: true, preferredLang: true },
+    });
+
+    res.json({ success: true, user: user ?? null });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * DELETE /api/user/:userId/data
  * Purges all data for a given anonymous userId (COPPA compliance / right to delete).
  */

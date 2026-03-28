@@ -191,3 +191,71 @@ ${masteryContext.gapConcepts.map((c) => `- ${c.name} (mastery: ${c.mastery}%)`).
 
   return overlay.trim();
 }
+
+/**
+ * buildLearningProfileOverlay
+ *
+ * Converts a learningProfile (collected in ParentSetupScreen) into a prompt addendum
+ * that nudges the LLM to adapt hint modality, pacing, and accessibility style.
+ *
+ * This is a soft nudge — the LLM interprets and applies these signals contextually.
+ * Not a hard constraint.
+ */
+export function buildLearningProfileOverlay(learningProfile: {
+  learnsBestBy?: string[];
+  focusHelpers?: string[];
+  hardSubjects?: string[];
+  accommodations?: string[];
+}): string {
+  const parts: string[] = ['\n\n### LEARNER PROFILE'];
+
+  const { learnsBestBy, focusHelpers, hardSubjects, accommodations } = learningProfile;
+
+  if (learnsBestBy?.length) {
+    const styles: Record<string, string> = {
+      visual: 'Use diagrams, spatial descriptions, and "picture this" language. Draw step-by-step in words.',
+      listening: 'Use conversational language, read-aloud-friendly phrasing, and narrate each step.',
+      'hands-on': 'Use "try it yourself" framing, describe physical manipulatives, and emphasize doing over reading.',
+      reading: 'Use clear written explanations with labeled steps and definitions.',
+    };
+    const knownStyles = learnsBestBy.filter((s) => styles[s]);
+    if (knownStyles.length > 0) {
+      parts.push('How this student learns best:');
+      knownStyles.forEach((s) => parts.push(`- ${styles[s]}`));
+    }
+  }
+
+  if (focusHelpers?.includes('short-sessions')) {
+    parts.push('Pacing: Keep each hint brief (1–2 sentences max). Do not overload with information at once.');
+  }
+  if (focusHelpers?.includes('frequent-breaks')) {
+    parts.push('Pacing: Celebrate small wins frequently. Suggest a pause if the student shows frustration.');
+  }
+  if (focusHelpers?.includes('quiet-mode')) {
+    parts.push('Tone: Use calm, minimal language. Avoid exclamation marks and high-energy phrases.');
+  }
+
+  if (hardSubjects?.includes('math')) {
+    parts.push('Math support: Extra patience on arithmetic. Break each step into tiny sub-steps. Use concrete numbers before abstract rules.');
+  }
+  if (hardSubjects?.includes('reading')) {
+    parts.push('Reading support: Use short sentences. Avoid complex vocabulary unless defining it immediately.');
+  }
+  if (hardSubjects?.includes('staying-focused')) {
+    parts.push('Focus support: Ask one question at a time. Acknowledge progress after each step.');
+  }
+
+  if (accommodations?.includes('extra-time')) {
+    parts.push('Accommodations: Never rush. Wait for the student to respond before providing hints.');
+  }
+  if (accommodations?.includes('read-aloud')) {
+    parts.push('Accommodations: Structure responses for text-to-speech — short sentences, no complex lists.');
+  }
+  if (accommodations?.includes('visual-aids')) {
+    parts.push('Accommodations: Describe visuals in words (e.g., "imagine a number line from 0 to 10").');
+  }
+
+  if (parts.length === 1) return ''; // No meaningful profile data
+
+  return parts.join('\n');
+}

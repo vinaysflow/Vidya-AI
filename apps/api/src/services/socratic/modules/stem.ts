@@ -13,7 +13,7 @@ import { SOCRATIC_SYSTEM_PROMPT, getLanguageContext, SUBJECT_QUESTIONS, STEM_TOP
 import { ANALYSIS_PROMPT } from '../prompts/analysis';
 import { HINT_LEVEL_PROMPTS } from '../../../prompts/socratic-system-prompt';
 import { classifyPhysicsTopic, buildPhysicsDepthAddendum } from '../prompts/physics-depth';
-import { buildElementaryOverlay } from '../prompts/elementary-overlay';
+import { buildElementaryOverlay, buildLearningProfileOverlay } from '../prompts/elementary-overlay';
 import { getExampleQuestions } from '../../learning/templateLookup';
 
 // ============================================
@@ -495,6 +495,13 @@ export const stemModule: TutorModule = {
       const fewShotExamples = metadata?.fewShotExamples as string[] | undefined;
       const rsmTrack = metadata?.rsmTrack as boolean | string | undefined;
       addendum = buildElementaryOverlay(grade, effectiveGrade, masteryContext, fewShotExamples, rsmTrack) + '\n\n';
+
+      // Learning profile overlay: soft nudge for neurodiverse / accommodation needs
+      const learningProfile = metadata?.clientContext?.learningProfile;
+      if (learningProfile) {
+        const profileOverlay = buildLearningProfileOverlay(learningProfile);
+        if (profileOverlay) addendum += profileOverlay + '\n\n';
+      }
     }
 
     const subjectKey = (metadata?.subject || 'PHYSICS') as keyof typeof SUBJECT_QUESTIONS;

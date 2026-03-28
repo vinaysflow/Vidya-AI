@@ -68,6 +68,54 @@ export async function resolveConceptKey(
   return byName?.conceptKey ?? null;
 }
 
+/**
+ * Seed initial BKT mastery from a diagnostic placement result.
+ * Uses explicit mastery values (35 for correct, 5 for wrong) as placement priors,
+ * rather than running BKT from default prior 10.
+ *
+ * This is intentionally separate from updateMastery (which tracks ongoing learning)
+ * because diagnostic seeding is a one-time placement signal, not a learning update.
+ *
+ * Correct → 35  (above floor: student shows evidence of prior knowledge)
+ * Wrong   → 5   (below default: active gap signal)
+ */
+export async function seedFromDiagnostic(
+  userId: string,
+  conceptKey: string,
+  correct: boolean,
+): Promise<void> {
+  const concept = await prisma.concept.findUnique({ where: { conceptKey } });
+  if (!concept) {
+    throw new Error(`Concept not found: ${conceptKey}`);
+  }
+
+  const mastery = correct ? 35 : 5;
+  const successes = correct ? 1 : 0;
+  const nextReview = calculateNextReview(mastery, 1);
+
+  await prisma.progress.upsert({
+    where: { userId_conceptId: { userId, conceptId: concept.id } },
+    create: {
+      userId,
+      conceptId: concept.id,
+      subject: concept.subject,
+      topic: concept.topic,
+      mastery,
+      attempts: 1,
+      successes,
+      lastSeen: new Date(),
+      nextReview,
+    },
+    update: {
+      mastery,
+      attempts: 1,
+      successes,
+      lastSeen: new Date(),
+      nextReview,
+    },
+  });
+}
+
 export async function updateMastery(
   userId: string,
   conceptKey: string,

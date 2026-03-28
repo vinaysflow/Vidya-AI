@@ -4,9 +4,38 @@ import { ShieldCheck } from 'lucide-react';
 import { useChatStore } from '../../stores/chatStore';
 import { cn } from '../../lib/utils';
 import { DiagnosticQuizScreen } from './DiagnosticQuizScreen';
+import { ProfileQuestionGroup } from './ProfileQuestionGroup';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
+import type { LearningProfile } from '../../types/learningProfile';
 
 const API_BASE = getApiBase();
+
+const LEARNS_BEST_OPTIONS = [
+  { id: 'visual', label: 'Visual', emoji: '👁️' },
+  { id: 'listening', label: 'Listening', emoji: '👂' },
+  { id: 'hands-on', label: 'Hands-on', emoji: '🤲' },
+  { id: 'reading', label: 'Reading', emoji: '📖' },
+];
+
+const FOCUS_HELPERS_OPTIONS = [
+  { id: 'short-sessions', label: 'Short sessions', emoji: '⏱️' },
+  { id: 'frequent-breaks', label: 'Frequent breaks', emoji: '🌿' },
+  { id: 'quiet-mode', label: 'Quiet mode', emoji: '🔇' },
+];
+
+const HARD_SUBJECTS_OPTIONS = [
+  { id: 'reading', label: 'Reading', emoji: '📚' },
+  { id: 'math', label: 'Math', emoji: '🔢' },
+  { id: 'writing', label: 'Writing', emoji: '✏️' },
+  { id: 'staying-focused', label: 'Staying focused', emoji: '🎯' },
+];
+
+const ACCOMMODATIONS_OPTIONS = [
+  { id: 'extra-time', label: 'Extra time', emoji: '🕐' },
+  { id: 'read-aloud', label: 'Read aloud', emoji: '🔊' },
+  { id: 'visual-aids', label: 'Visual aids', emoji: '🗺️' },
+  { id: 'none', label: 'None', emoji: '✓' },
+];
 
 const GRADES = [
   { grade: 3, label: 'Grade 3', emoji: '🌟' },
@@ -37,10 +66,25 @@ const COMPLIANCE_ITEMS = [
 ];
 
 export function ParentSetupScreen() {
-  const { setGrade, setEffectiveGrade, setRsmTrack, setInterests, rsmTrack, grade, voiceEnabled, setVoiceEnabled, interests, userId, apiKey, calmMode, setCalmMode } = useChatStore();
+  const { setGrade, setEffectiveGrade, setRsmTrack, setInterests, setLearningProfile, rsmTrack, grade, voiceEnabled, setVoiceEnabled, interests, userId, apiKey, calmMode, setCalmMode } = useChatStore();
   const [selected, setSelected] = useState<number | null>(grade ?? null);
   const [selectedInterests, setSelectedInterests] = useState<string[]>(interests ?? []);
   const [showDiagnostic, setShowDiagnostic] = useState(false);
+
+  // Learning profile state (4 questions)
+  const [learnsBestBy, setLearnsBestBy] = useState<string[]>([]);
+  const [focusHelpers, setFocusHelpers] = useState<string[]>([]);
+  const [hardSubjects, setHardSubjects] = useState<string[]>([]);
+  const [accommodations, setAccommodations] = useState<string[]>([]);
+
+  const toggleLearnsBestBy = (id: string) =>
+    setLearnsBestBy((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
+  const toggleFocusHelpers = (id: string) =>
+    setFocusHelpers((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
+  const toggleHardSubjects = (id: string) =>
+    setHardSubjects((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
+  const toggleAccommodations = (id: string) =>
+    setAccommodations((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
 
   const toggleInterest = (id: string) => {
     setSelectedInterests((prev) =>
@@ -51,6 +95,13 @@ export function ParentSetupScreen() {
   const handleLetsGo = () => {
     if (selected != null) {
       setInterests(selectedInterests);
+      // Save learning profile to store (collection only — no adaptation logic yet)
+      setLearningProfile({
+        learnsBestBy: learnsBestBy as LearningProfile['learnsBestBy'],
+        focusHelpers: focusHelpers as LearningProfile['focusHelpers'],
+        hardSubjects: hardSubjects as LearningProfile['hardSubjects'],
+        accommodations: accommodations as LearningProfile['accommodations'],
+      });
       setShowDiagnostic(true);
     }
   };
@@ -191,6 +242,37 @@ export function ParentSetupScreen() {
             <span>{interest.label}</span>
           </button>
         ))}
+      </div>
+
+      {/* Learning profile questions (optional — personalizes tutoring for neurodiverse children) */}
+      <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3 self-start mt-4">
+        Help us personalize the experience (optional)
+      </p>
+      <div className="w-full" data-testid="learning-profile-section">
+        <ProfileQuestionGroup
+          label="How does your child learn best?"
+          options={LEARNS_BEST_OPTIONS}
+          selected={learnsBestBy}
+          onToggle={toggleLearnsBestBy}
+        />
+        <ProfileQuestionGroup
+          label="What helps your child focus?"
+          options={FOCUS_HELPERS_OPTIONS}
+          selected={focusHelpers}
+          onToggle={toggleFocusHelpers}
+        />
+        <ProfileQuestionGroup
+          label="What subjects feel hard?"
+          options={HARD_SUBJECTS_OPTIONS}
+          selected={hardSubjects}
+          onToggle={toggleHardSubjects}
+        />
+        <ProfileQuestionGroup
+          label="Any accommodations at school?"
+          options={ACCOMMODATIONS_OPTIONS}
+          selected={accommodations}
+          onToggle={toggleAccommodations}
+        />
       </div>
 
       {/* Read aloud (TTS) toggle */}

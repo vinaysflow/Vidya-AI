@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Subject } from '@prisma/client';
 import { prisma } from '../lib/prisma';
-import { getMasteryMap, getMasteryByConceptKey, getDueReviews, getRadarData, updateMastery } from '../services/learning/masteryTracker';
+import { getMasteryMap, getMasteryByConceptKey, getDueReviews, getRadarData, updateMastery, seedFromDiagnostic } from '../services/learning/masteryTracker';
 import { generatePath, getRecommendedNext } from '../services/learning/pathGenerator';
 import { getAdaptiveState } from '../services/learning/adaptiveDifficulty';
 import { logEvent } from '../services/analytics/eventLogger';
@@ -205,11 +205,12 @@ router.post('/init-from-diagnostic', async (req: Request, res: Response, next: N
       return res.status(400).json({ success: false, error: 'userId and results are required' });
     }
 
-    // Use updateMastery to seed BKT priors (it handles concept lookup + upsert correctly)
+    // Seed BKT priors from diagnostic: correct → mastery 35, wrong → mastery 5
+    // Uses seedFromDiagnostic (not updateMastery) to set explicit placement priors.
     let initialized = 0;
     for (const r of results) {
       try {
-        await updateMastery(userId, r.conceptKey, r.correct);
+        await seedFromDiagnostic(userId, r.conceptKey, r.correct);
         initialized++;
       } catch {
         // If concept not found in DB, skip silently

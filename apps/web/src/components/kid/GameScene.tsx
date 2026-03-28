@@ -12,6 +12,7 @@
 
 import { useEffect, useCallback, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
+import { Volume2 } from 'lucide-react';
 import { VidyaCharacter, type VidyaState } from './VidyaCharacter';
 import { SceneCanvas } from './SceneCanvas';
 import { AudioPlayer } from '../voice/AudioPlayer';
@@ -21,6 +22,8 @@ import { useChatStore, type Message } from '../../stores/chatStore';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
 import { useGameSounds } from './useGameSounds';
 import { confettiData, sparkleData } from './lottieData';
+import { TransitionCard } from './TransitionCard';
+import { getTransitionMessage } from './getTransitionMessage';
 
 // Optional AI-generated scene images — only enabled when VITE_ENABLE_AI_SCENES=true
 const AI_SCENES_ENABLED = import.meta.env.VITE_ENABLE_AI_SCENES === 'true';
@@ -157,6 +160,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   const [bubbleAudioUrl, setBubbleAudioUrl] = useState<string | null>(null);
   const [ttsLoading, setTtsLoading] = useState(false);
   const ttsCacheRef = useRef<Map<string, string>>(new Map());
+  const [transitionMessage, setTransitionMessage] = useState<string | null>(null);
 
   const lastAssistant = messages.filter((m) => m.role === 'assistant').pop();
   const questionType = lastAssistant?.metadata?.questionType as string | undefined;
@@ -209,13 +213,18 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     finally { setTtsLoading(false); }
   }, [voiceEnabled, language, subject, apiKey]);
 
+  // Keep a stable ref to synthesizeBubble to avoid adding its dependency chain
+  // (voiceEnabled, language, subject, apiKey) to the displayText effect below.
+  const synthesizeBubbleRef = useRef(synthesizeBubble);
+  useEffect(() => { synthesizeBubbleRef.current = synthesizeBubble; }, [synthesizeBubble]);
+
   useEffect(() => {
     if (displayText && voiceEnabled) {
-      synthesizeBubble(displayText);
+      synthesizeBubbleRef.current(displayText);
     } else {
       setBubbleAudioUrl(null);
     }
-  }, [displayText]); // intentionally only depend on displayText
+  }, [displayText, voiceEnabled]);
 
   const theme = getTheme(activeQuest?.chapter ?? 'Adventures');
 
@@ -290,6 +299,18 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     }
   }, [questionType, setScenePhase, incrementCombo, resetCombo]);
 
+  // Transition warning card: show before each meaningful phase change
+  useEffect(() => {
+    if (!questionType) return;
+    const msg = getTransitionMessage(questionType, activeQuest);
+    if (msg) {
+      setTransitionMessage(msg);
+      const timer = setTimeout(() => setTransitionMessage(null), 2000);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [questionType]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Quest complete sound
   useEffect(() => {
     if (isQuestComplete) playSound('complete');
@@ -321,16 +342,19 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   useEffect(() => {
     if (!AI_SCENES_ENABLED || !activeQuest) return;
     setAiSceneUrl(null);
-    const params = new URLSearchParams({
-      questTitle: activeQuest.title,
-      chapter: activeQuest.chapter,
-      tags: (activeQuest.tags ?? []).join(','),
-      phase: 'playing',
-    });
-    fetch(`/api/game/scene-image?${params}`)
+    fetch(`${getApiBase()}/api/game/scene-image`, {
+      method: 'POST',
+      headers: getJsonHeaders(apiKey),
+      body: JSON.stringify({
+        questTitle: activeQuest.title,
+        chapter: activeQuest.chapter,
+        tags: activeQuest.tags ?? [],
+        phase: 'playing',
+      }),
+    })
       .then((r) => r.json())
-      .then((data: { imageUrl?: string | null }) => {
-        if (data?.imageUrl) setAiSceneUrl(data.imageUrl);
+      .then((data: { success?: boolean; imageUrl?: string | null }) => {
+        if (data?.success && data.imageUrl) setAiSceneUrl(data.imageUrl);
       })
       .catch(() => { /* silently fall back to SVG scene */ });
   }, [activeQuest?.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -567,7 +591,10 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
               </div>
             )}
             {ttsLoading && !isLoading && (
-              <div className="mt-1 text-xs text-slate-400">Reading aloud...</div>
+              <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+                <Volume2 className="w-3.5 h-3.5 animate-pulse text-indigo-400 shrink-0" />
+                <span>Reading aloud...</span>
+              </div>
             )}
           </div>
         </div>
@@ -844,6 +871,15 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
             </button>
           </div>
         </div>
+      )}
+
+      {/* Transition warning card — phase change preview for neurodiverse learners */}
+      {transitionMessage && (
+        <TransitionCard
+          message={transitionMessage}
+          onDismiss={() => setTransitionMessage(null)}
+          calmMode={calmMode}
+        />
       )}
     </div>
   );

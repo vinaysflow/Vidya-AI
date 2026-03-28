@@ -1,22 +1,33 @@
 /**
  * DiagnosticQuizScreen
  *
- * A 5-question placement quiz in "Explorer's Map" theme.
+ * A 5-question stealth placement quiz in "Explorer's Map" theme.
  * Shown after grade selection in ParentSetupScreen.
- * Results are used to calibrate BKT initial priors and suggest an effectiveGrade.
+ *
+ * Design principle (Dr. Escobar / academic research):
+ *   Correct/incorrect signals are consumed ONLY by the backend (BKT seeding).
+ *   The child sees a neutral "Got it!" acknowledgment — no green/red, no ✅/❌.
+ *   This prevents assessment anxiety and avoids math identity labeling at ages 6–9.
  *
  * Flow:
  *   1. Load 5 diagnostic templates from /api/game/diagnostic-quiz
  *   2. Show one question at a time with A/B/C choices
- *   3. Reveal correct/wrong with a brief map-reveal animation
- *   4. After 5 questions: show summary + call onComplete(score, suggestedGrade)
+ *   3. Neutral pulse acknowledgment (no correctness signal) → 800ms → next
+ *   4. After 5 questions: call onComplete(score, suggestedGrade, results)
+ *      where results contains { correct } for backend BKT seeding only
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import { Map as MapIcon, CheckCircle, XCircle, ChevronRight, Loader2 } from 'lucide-react';
+import { Map as MapIcon, ChevronRight, Loader2 } from 'lucide-react';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
 import { useChatStore } from '../../stores/chatStore';
 import { cn } from '../../lib/utils';
+import {
+  computeSuggestedGrade,
+  evaluateAnswer,
+  buildChoices,
+  shouldComplete,
+} from '../../services/diagnosticEngine';
 
 const API_BASE = getApiBase();
 
@@ -39,14 +50,6 @@ interface DiagnosticQuizScreenProps {
 
 const MAP_FRAGMENTS = ['🗺️', '🌄', '🏔️', '🌊', '⭐'];
 
-function computeSuggestedGrade(results: Array<{ gradeLevel: number; correct: boolean }>, baseGrade: number): number {
-  const correct = results.filter((r) => r.correct);
-  if (correct.length === 0) return Math.max(3, baseGrade - 1);
-  if (correct.length <= 2) return baseGrade;
-  const avgCorrectGrade = correct.reduce((s, r) => s + r.gradeLevel, 0) / correct.length;
-  return Math.round(Math.min(9, Math.max(3, avgCorrectGrade)));
-}
-
 export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplete, onSkip }: DiagnosticQuizScreenProps) {
   const { apiKey, calmMode } = useChatStore();
   const [templates, setTemplates] = useState<DiagnosticTemplate[]>([]);
@@ -55,7 +58,7 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
   const [currentIdx, setCurrentIdx] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [results, setResults] = useState<Array<{ conceptKey: string; gradeLevel: number; correct: boolean }>>([]);
-  const [revealed, setRevealed] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -82,33 +85,32 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
 
   // Must be declared before any early returns — Rules of Hooks
   const choices = useMemo(
-    () => current
-      ? [current.answerFormula, ...current.distractors].sort(() => Math.random() - 0.5)
-      : [],
+    () => current ? buildChoices(current.answerFormula, current.distractors) : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentIdx, templates]
   );
 
   const handlePick = (choice: string) => {
-    if (revealed || !current) return;
+    if (acknowledged || !current) return;
     setPicked(choice);
-    setRevealed(true);
+    setAcknowledged(true);
 
-    const isCorrect = choice === current.answerFormula;
-    const newResults = [...results, { conceptKey: current.conceptKey, gradeLevel: current.gradeLevel, correct: isCorrect }];
+    // Evaluate answer for backend BKT — correctness never shown to child
+    const result = evaluateAnswer(choice, current.answerFormula, current.conceptKey, current.gradeLevel);
+    const newResults = [...results, result];
     setResults(newResults);
 
     setTimeout(() => {
-      if (currentIdx + 1 >= templates.length) {
+      if (shouldComplete(currentIdx, templates.length)) {
         const score = newResults.filter((r) => r.correct).length;
         const suggestedGrade = computeSuggestedGrade(newResults, grade);
         onComplete(score, suggestedGrade, newResults);
       } else {
         setCurrentIdx((i) => i + 1);
         setPicked(null);
-        setRevealed(false);
+        setAcknowledged(false);
       }
-    }, 1400);
+    }, 800);
   };
 
   if (loading) {
@@ -143,7 +145,7 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
         </span>
       </div>
 
-      {/* Map progress */}
+      {/* Progress map — neutral dots only, no correctness coloring */}
       <div className="flex gap-2 mb-6">
         {MAP_FRAGMENTS.map((frag, i) => (
           <div
@@ -151,15 +153,13 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
             className={cn(
               'w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all duration-500',
               i < answeredCount
-                ? results[i]?.correct
-                  ? 'bg-emerald-100 border-2 border-emerald-400 scale-110'
-                  : 'bg-red-100 border-2 border-red-300 opacity-60'
+                ? 'bg-indigo-100 border-2 border-indigo-300 scale-105'
                 : i === currentIdx
                 ? cn('bg-indigo-100 border-2 border-indigo-400', !calmMode && 'animate-pulse')
                 : 'bg-slate-100 border-2 border-slate-200 opacity-40'
             )}
           >
-            {i < answeredCount ? (results[i]?.correct ? '✅' : '❌') : frag}
+            {i < answeredCount ? '✦' : frag}
           </div>
         ))}
       </div>
@@ -170,37 +170,40 @@ export function DiagnosticQuizScreen({ grade, subject = 'MATHEMATICS', onComplet
         <p className="text-base font-medium text-slate-800 dark:text-white leading-snug">{current.questionText}</p>
       </div>
 
-      {/* Choices */}
+      {/* Choices — neutral acknowledgment only, no correctness colors */}
       <div className="w-full flex flex-col gap-2">
         {choices.map((choice, i) => {
           const letter = ['A', 'B', 'C'][i];
-          const isCorrect = choice === current.answerFormula;
-          const isPicked = picked === choice;
+          const isThisPicked = picked === choice;
 
           let style = 'border-slate-200 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200';
-          if (revealed) {
-            if (isCorrect) style = 'border-emerald-400 bg-emerald-50 text-emerald-800';
-            else if (isPicked) style = 'border-red-300 bg-red-50 text-red-700';
-            else style = 'border-slate-100 bg-slate-50 text-slate-400 opacity-60';
+          if (acknowledged) {
+            if (isThisPicked) {
+              // Neutral indigo "Got it!" pulse — no correctness signal
+              style = 'border-indigo-400 bg-indigo-50 text-indigo-800';
+            } else {
+              style = 'border-slate-100 bg-slate-50 text-slate-400 opacity-60';
+            }
           }
 
           return (
             <button
               key={choice}
               onClick={() => handlePick(choice)}
-              disabled={revealed}
+              disabled={acknowledged}
               className={cn(
                 'w-full flex items-center gap-3 px-4 py-3 rounded-2xl border-2 font-medium text-sm transition-all',
                 style,
-                !revealed && 'hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer'
+                !acknowledged && 'hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer'
               )}
             >
               <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0">
                 {letter}
               </span>
               <span className="flex-1 text-left">{choice}</span>
-              {revealed && isCorrect && <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />}
-              {revealed && isPicked && !isCorrect && <XCircle className="w-4 h-4 text-red-400 shrink-0" />}
+              {acknowledged && isThisPicked && (
+                <span className="text-indigo-400 text-xs font-semibold">Got it!</span>
+              )}
             </button>
           );
         })}

@@ -184,11 +184,6 @@ interface ChatState {
   lastChoiceCorrect: boolean | null;
   streakCombo: number;
   lastParentInsight: string | null;
-  diagnosticResults: {
-    score: number;
-    suggestedGrade: number;
-    results: Array<{ conceptKey: string; gradeLevel: number; correct: boolean }>;
-  } | null;
   pendingWarmUp: {
     conceptKey: string;
     questionText: string;
@@ -197,11 +192,13 @@ interface ChatState {
     isWarmUp: true;
   } | null;
   calmMode: boolean;
+  learningProfile: import('../types/learningProfile').LearningProfile | null;
 
   setRsmTrack: (rsmTrack: string | null) => void;
   setKidModeEnabled: (enabled: boolean) => void;
   setInterests: (interests: string[]) => void;
   setCalmMode: (enabled: boolean) => void;
+  setLearningProfile: (profile: import('../types/learningProfile').LearningProfile) => void;
 
   essayMeta: { type?: string; promptText?: string; wordLimit?: number; category?: string } | null;
   setEssayMeta: (meta: ChatState['essayMeta']) => void;
@@ -318,16 +315,17 @@ export const useChatStore = create<ChatState>()(
   lastChoiceCorrect: null,
   streakCombo: 0,
   lastParentInsight: null,
-  diagnosticResults: null,
   pendingWarmUp: null,
   calmMode: typeof window !== 'undefined'
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false,
+  learningProfile: null,
 
       setRsmTrack: (rsmTrack) => set({ rsmTrack }),
       setKidModeEnabled: (kidModeEnabled) => set({ kidModeEnabled }),
       setInterests: (interests) => set({ interests }),
       setCalmMode: (calmMode) => set({ calmMode }),
+      setLearningProfile: (learningProfile) => set({ learningProfile }),
   setEssayMeta: (essayMeta) => set({ essayMeta }),
   setActiveQuest: (activeQuest) => set({ activeQuest }),
   setScenePhase: (scenePhase) => set({ scenePhase }),
@@ -379,7 +377,7 @@ export const useChatStore = create<ChatState>()(
       setOnboardingStep: (onboardingStep) => set({ onboardingStep }),
 
       startSession: async (problem: string, problemImage?: string) => {
-        const { language, subject, apiKey, noFinalAnswerMode, userId, grade, questConceptKey, rsmTrack, essayMeta, activeQuest } = get();
+        const { language, subject, apiKey, noFinalAnswerMode, userId, grade, questConceptKey, rsmTrack, essayMeta, activeQuest, learningProfile } = get();
         set({ isLoading: true, error: null });
 
         try {
@@ -397,6 +395,7 @@ export const useChatStore = create<ChatState>()(
               ...(problemImage ? { problemImage } : {}),
               ...(rsmTrack ? { rsmTrack } : {}),
               ...(activeQuest?.context ? { context: activeQuest.context } : {}),
+              ...(learningProfile ? { clientContext: { learningProfile } } : {}),
               ...(subject === 'ESSAY_WRITING' && essayMeta ? {
                 essayType: essayMeta.type,
                 essayPromptText: essayMeta.promptText,
@@ -825,8 +824,9 @@ export const useChatStore = create<ChatState>()(
         kidModeEnabled: state.kidModeEnabled,
         interests: state.interests,
         calmMode: state.calmMode,
+        learningProfile: state.learningProfile,
       }),
-      version: 3,
+      version: 4,
       migrate: (persisted: any, version: number) => {
         if (version === 0) {
           const s = persisted as any;
@@ -838,8 +838,11 @@ export const useChatStore = create<ChatState>()(
             s.kidModeEnabled = null;
           }
         }
-        // v2+: subject is no longer persisted — always delete stale value so it
-        // never pins the subject badge on the welcome screen.
+        // v4: learningProfile added — default to null for existing users
+        if (version < 4) {
+          (persisted as any).learningProfile = (persisted as any).learningProfile ?? null;
+        }
+        // v2+: subject is no longer persisted
         delete (persisted as any).subject;
         return persisted;
       },

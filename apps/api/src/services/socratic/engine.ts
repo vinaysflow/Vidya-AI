@@ -1031,6 +1031,7 @@ Generate the response:
         masteryContext: input.masteryContext,
         isQuestIntro: true,
         context: input.context,
+        clientContext: input.clientContext,
       },
     });
 
