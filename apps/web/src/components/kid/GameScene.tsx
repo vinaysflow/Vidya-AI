@@ -20,7 +20,7 @@ import { getTheme, parseChoices, CHAPTER_THEMES } from './questSceneTheme';
 import { useChatStore, type Message } from '../../stores/chatStore';
 import { getApiBase, getJsonHeaders } from '../../lib/api';
 import { useGameSounds } from './useGameSounds';
-import { confettiData, sparkleData } from './lottieData';
+import { confettiData } from './lottieData';
 import { TransitionCard } from './TransitionCard';
 import { getTransitionMessage } from './getTransitionMessage';
 import { useVidyaVoice } from '../../hooks/useVidyaVoice';
@@ -29,8 +29,8 @@ import type { VoicePlayOptions } from '../../hooks/useVidyaVoice';
 // Optional AI-generated scene images — only enabled when VITE_ENABLE_AI_SCENES=true
 const AI_SCENES_ENABLED = import.meta.env.VITE_ENABLE_AI_SCENES === 'true';
 
-// Show up to 2 sentences in the speech bubble so the kid sees both
-// encouragement ("Great job!") and the follow-up question.
+// Show up to 2 sentences in the speech bubble so the kid sees the full response
+// and the follow-up question.
 function truncateForBubble(text: string): string {
   if (!text) return '';
   const sentences = text.match(/[^.!?]+[.!?]+/g);
@@ -49,13 +49,13 @@ function truncateForBubble(text: string): string {
 }
 
 const KID_HEADERS: Record<string, string> = {
-  celebration: '🎉 Amazing!',
-  celebrate_then_explain_back: '🤖 Teach the robot!',
-  socratic: '🤔 Think about this…',
-  hint_with_question: "💡 Here's a hint…",
-  foundational: "🔍 Let's figure it out!",
-  attempt_prompt: '⚡ Your turn!',
-  encouragement: '💪 Keep going!',
+  celebration: 'Got it.',
+  celebrate_then_explain_back: 'Walk me through it.',
+  socratic: 'Think about this…',
+  hint_with_question: 'Think about this…',
+  foundational: "Let's figure it out.",
+  attempt_prompt: 'Your turn.',
+  encouragement: 'Keep going.',
 };
 
 const CHOICE_COLORS = [
@@ -115,11 +115,6 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   const {
     activeQuest,
     setScenePhase,
-    lastChoiceCorrect,
-    setLastChoiceCorrect,
-    incrementCombo,
-    resetCombo,
-    streakCombo,
     clearChat,
     userId,
     fetchProfileAndMastery,
@@ -135,12 +130,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   } = useChatStore();
 
   const { play: playSound } = useGameSounds();
-  const pendingChoiceFeedbackRef = useRef(false);
-  const prevAssistantCountRef = useRef(0);
   const [choiceAnimKey, setChoiceAnimKey] = useState(0);
-  // Duolingo-style feedback: which choice letter was clicked + XP pop state
-  const [clickedLetter, setClickedLetter] = useState<string | null>(null);
-  const [showXpPop, setShowXpPop] = useState(false);
   // Adaptive level-up celebration
   const [showAdaptiveLevelUp, setShowAdaptiveLevelUp] = useState(false);
   const [newChallengeLevel, setNewChallengeLevel] = useState(1);
@@ -234,11 +224,6 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     lastAsstMsg?.metadata?.questionType === 'celebration' &&
     prevAsstMsg?.metadata?.questionType === 'celebrate_then_explain_back';
 
-  // lastResult for SceneCanvas animation
-  const lastResult: 'correct' | 'wrong' | null =
-    lastChoiceCorrect === true ? 'correct' :
-    lastChoiceCorrect === false ? 'wrong' : null;
-
   // VidyaCharacter state
   const vidyaState: VidyaState =
     isLoading ? 'thinking' :
@@ -246,47 +231,15 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement' ? 'puzzled' :
     questionType === 'attempt_prompt' || questionType === 'socratic' ? 'talking' : 'idle';
 
-  // Track correct/wrong feedback when assistant responds
-  useEffect(() => {
-    const assistantCount = messages.filter((m) => m.role === 'assistant').length;
-    if (pendingChoiceFeedbackRef.current && assistantCount > prevAssistantCountRef.current && lastAssistant) {
-      const qt = lastAssistant.metadata?.questionType;
-      const correct = qt === 'celebration' || qt === 'celebrate_then_explain_back';
-      const wrong = qt === 'hint_with_question' || qt === 'foundational' || qt === 'encouragement';
-      if (correct) {
-        setLastChoiceCorrect(true);
-        playSound('correct');
-        setShowXpPop(true);
-        setTimeout(() => setShowXpPop(false), 1100);
-      } else if (wrong) {
-        setLastChoiceCorrect(false);
-        playSound('wrong');
-      }
-      pendingChoiceFeedbackRef.current = false;
-      prevAssistantCountRef.current = assistantCount;
-      const delay = correct ? 1200 : 800;
-      const t = setTimeout(() => {
-        setLastChoiceCorrect(null);
-        setClickedLetter(null);
-      }, delay);
-      return () => clearTimeout(t);
-    }
-    prevAssistantCountRef.current = assistantCount;
-  }, [messages, lastAssistant, setLastChoiceCorrect]);
-
   // Scene phase tracking
   useEffect(() => {
     if (questionType === 'celebrate_then_explain_back') setScenePhase('explain-back');
     else if (questionType === 'celebration') {
       setScenePhase('celebration');
-      incrementCombo();
     } else {
       setScenePhase('playing');
-      if (questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement') {
-        resetCombo();
-      }
     }
-  }, [questionType, setScenePhase, incrementCombo, resetCombo]);
+  }, [questionType, setScenePhase]);
 
   // Transition warning card: show before each meaningful phase change
   useEffect(() => {
@@ -352,15 +305,12 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   }, [activeQuest?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChoice = useCallback(
-    (text: string, letter?: string) => {
+    (text: string, _letter?: string) => {
       playSound('tap');
-      pendingChoiceFeedbackRef.current = true;
-      setLastChoiceCorrect(null);
-      setClickedLetter(letter ?? null);
       setChoiceAnimKey((k) => k + 1);
       onSendMessage(text);
     },
-    [onSendMessage, setLastChoiceCorrect, playSound]
+    [onSendMessage, playSound]
   );
 
   const quickActions = [
@@ -428,17 +378,11 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         <div className="flex flex-col items-center gap-4 pt-6 animate-[starAppear_0.5s_ease-out]">
           <div className="text-5xl">&#127942;</div>
           <h2 className="font-fredoka text-3xl text-amber-500 dark:text-amber-400">
-            Quest Complete!
+            Quest complete.
           </h2>
           <p className="text-center text-slate-600 dark:text-slate-300 text-sm max-w-xs">
-            You crushed it! Ready for the next challenge?
+            You worked through it. Ready for the next one?
           </p>
-          {streakCombo > 0 && (
-            <div className="flex items-center gap-1 text-orange-500 font-bold text-lg">
-              <span>&#128293;</span> {streakCombo} streak!
-            </div>
-          )}
-
           {/* Parent insight card — gives child language to share with parent */}
           {lastParentInsight && (
             <div className="w-full max-w-xs rounded-2xl bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700 px-4 py-3">
@@ -456,7 +400,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
             onClick={handleNextAdventure}
             className="mt-2 px-10 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-lg font-bold hover:from-amber-600 hover:to-orange-600 active:scale-95 transition-all shadow-lg"
           >
-            Next Adventure!
+            Next adventure
           </button>
         </div>
       </div>
@@ -494,7 +438,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         <SceneCanvas
           chapter={activeQuest.chapter}
           progress={progress}
-          lastResult={lastResult}
+          lastResult={null}
         />
       </div>
 
@@ -530,23 +474,11 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
 
       {/* ── 2b. Speech Bubble (Vidya's latest response) ───────────────── */}
       <div className="relative shrink-0 px-3 pt-2">
-        {/* Sparkle animation overlaying the bubble on correct answer */}
-        {lastChoiceCorrect === true && (
-          <Lottie
-            key={`sparkle-${choiceAnimKey}`}
-            animationData={sparkleData}
-            loop={false}
-            className="pointer-events-none absolute inset-0 z-10 h-full w-full"
-            aria-hidden="true"
-          />
-        )}
         <div
           data-testid="vidya-bubble"
           className={cn(
             'flex items-start gap-3 rounded-2xl border-2 bg-white/95 px-4 py-3 shadow-lg dark:bg-slate-800/95',
-            theme.border,
-            lastChoiceCorrect === true && 'ring-2 ring-emerald-400 animate-[correctFlash_0.5s_ease-out]',
-            lastChoiceCorrect === false && 'animate-[wrongShake_0.4s_ease-out] ring-2 ring-red-300'
+            theme.border
           )}
         >
           {/* Vidya avatar */}
@@ -618,14 +550,6 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
             )}
           >
             {choices.map((c, i) => {
-              const wasClicked = clickedLetter === c.letter;
-              const flashClass = wasClicked
-                ? lastChoiceCorrect === true
-                  ? 'animate-btn-correct'
-                  : lastChoiceCorrect === false
-                  ? 'animate-btn-wrong'
-                  : ''
-                : '';
               return (
                 <div key={i} className="relative">
                   <button
@@ -636,8 +560,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                     className={cn(
                       'group relative overflow-hidden w-full flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-1 rounded-2xl px-4 py-3 sm:py-4 text-left sm:text-center font-bold text-white shadow-md transition-all active:scale-95 disabled:opacity-40',
                       CHOICE_COLORS[i % 3],
-                      'animate-[bubbleAppear_0.2s_ease-out]',
-                      flashClass
+                      'animate-[bubbleAppear_0.2s_ease-out]'
                     )}
                     style={{ animationDelay: `${i * 60}ms`, minHeight: 56 }}
                   >
@@ -645,23 +568,11 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                       {c.letter}
                     </span>
                     <span className="text-sm leading-tight">{c.text}</span>
-                    {wasClicked && lastChoiceCorrect === true && (
-                      <span className="relative inline-flex items-center gap-1">
-                        <span>✓</span>
-                        <span className="animate-[starBurst_0.5s_ease-out_both] absolute -top-1 -right-1 text-yellow-400 text-xs pointer-events-none">★</span>
-                      </span>
-                    )}
                     {/* Shimmer on hover */}
                     <span className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
                       <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     </span>
                   </button>
-                  {/* Floating +XP badge on the correct button */}
-                  {wasClicked && showXpPop && (
-                    <div className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 animate-xp-pop">
-                      <span className="font-fredoka text-sm text-emerald-500 drop-shadow font-bold">+10 XP</span>
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -736,14 +647,6 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                 </div>
               );
             })()}
-            {streakCombo > 1 && (
-              <span
-                data-testid="streak-combo"
-                className="ml-2 animate-[comboPop_0.3s_ease-out] rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-amber-900"
-              >
-                {streakCombo}🔥
-              </span>
-            )}
             {/* Difficulty stars — shown when above base grade */}
             {(() => {
               const boost = Math.max(0, (effectiveGrade ?? grade ?? 3) - (grade ?? 3));
@@ -832,7 +735,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
               onClick={() => setShowProgressOverlay(false)}
               className="mt-5 bg-amber-500 text-white rounded-2xl px-6 py-2 font-bold text-sm hover:bg-amber-600 transition-colors"
             >
-              Keep Adventuring!
+              Back to it
             </button>
           </div>
         </div>
@@ -850,16 +753,16 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           >
             <div className="text-6xl mb-3">🌟</div>
             <h2 className="font-bold text-2xl text-amber-600 mb-2">
-              Challenge Level {newChallengeLevel} Unlocked!
+              Challenge Level {newChallengeLevel}
             </h2>
             <p className="text-slate-500 text-sm mb-4">
-              You're solving these so fast — harder adventures await!
+              Harder problems ahead.
             </p>
             <button
               onClick={() => setShowAdaptiveLevelUp(false)}
               className="bg-amber-500 text-white rounded-2xl px-6 py-2 font-bold text-sm hover:bg-amber-600 transition-colors"
             >
-              Let's Go! 🚀
+              Let's go
             </button>
           </div>
         </div>

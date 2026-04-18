@@ -21,10 +21,10 @@ export function getTransitionMessage(questionType: QuestionType, quest: QuestRef
 
   switch (questionType) {
     case 'celebrate_then_explain_back':
-      return '✏️ Next: explain your thinking!';
+      return '✏️ Your turn — explain how you got there';
 
     case 'celebration':
-      return '🏆 Quest complete! Great job!';
+      return '✨ Nice thinking — onto the next one';
 
     case 'hint_with_question':
     case 'foundational': {

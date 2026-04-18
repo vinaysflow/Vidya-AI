@@ -14,9 +14,10 @@ describe('getTransitionMessage pure function', () => {
     expect(msg).toContain('explain');
   });
 
-  it('returns quest complete message for celebration', () => {
+  it('returns acknowledgment string for celebration (was: "quest complete") — changed per P5/plan-1E', () => {
     const msg = getTransitionMessage('celebration', null);
-    expect(msg?.toLowerCase()).toContain('quest');
+    // Changed from '🏆 Quest complete! Great job!' to neutral acknowledgment per P5
+    expect(msg).toBe('✨ Nice thinking — onto the next one');
   });
 
   it('returns next question message for hint_with_question with quest context', () => {
