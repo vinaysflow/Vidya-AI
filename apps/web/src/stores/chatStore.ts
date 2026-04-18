@@ -28,7 +28,7 @@ if (typeof window !== 'undefined') {
 // TYPES
 // ============================================
 
-export type Language = 'EN' | 'HI' | 'KN' | 'FR' | 'DE' | 'ES' | 'ZH';
+export type Language = 'EN' | 'FR' | 'DE' | 'ES';
 
 export type Subject =
   | 'PHYSICS' | 'CHEMISTRY' | 'MATHEMATICS' | 'BIOLOGY'
@@ -855,8 +855,9 @@ export const useChatStore = create<ChatState>()(
 // ============================================
 
 function getOfflineFallback(language: Language): string {
-  const fallbacks: Record<Language, string> = {
+  const fallbacks: Record<string, string> = {
     EN: "I'm having trouble connecting right now. Please check your internet connection and try again.",
+    // DEPRECATED(i18n): HI/KN/ZH strings retained for future native-speaker review (Phase 1 Prompt 1-B)
     HI: "अभी connection में problem है। कृपया internet check करें और दोबारा try करें।",
     KN: "ಈಗ connection ಸಮಸ್ಯೆ ಇದೆ. ದಯವಿಟ್ಟು internet ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
     FR: "Probleme de connexion. Veuillez verifier votre connexion internet.",
@@ -873,12 +874,12 @@ function getOfflineFallback(language: Language): string {
 
 export const LANGUAGE_META: Record<Language, { label: string; native: string; flag: string }> = {
   EN: { label: 'English', native: 'English', flag: '🇬🇧' },
-  HI: { label: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
-  KN: { label: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
   FR: { label: 'French', native: 'Français', flag: '🇫🇷' },
   DE: { label: 'German', native: 'Deutsch', flag: '🇩🇪' },
   ES: { label: 'Spanish', native: 'Español', flag: '🇪🇸' },
-  ZH: { label: 'Chinese', native: '中文', flag: '🇨🇳' },
+  // Hindi, Kannada, Chinese deprecated pending native-speaker
+  // review (see Phase 1 Prompt 1-B). Re-enable when
+  // acknowledgment tone is validated by a native speaker.
 };
 
 export type SubjectCategory = 'stem' | 'humanities' | 'skills';
@@ -887,7 +888,7 @@ export interface SubjectMeta {
   id: Subject;
   category: SubjectCategory;
   color: string;
-  label: Record<Language, string>;
+  label: Record<string, string>;
   comingSoon?: boolean;
 }
 
@@ -919,7 +920,7 @@ export const SUBJECT_META: SubjectMeta[] = [
 /** True when parent has explicitly enabled kid mode */
 export const useIsKidMode = () => useChatStore((s) => s.kidModeEnabled === true);
 
-export const CATEGORY_LABELS: Record<SubjectCategory, Record<Language, string>> = {
+export const CATEGORY_LABELS: Record<SubjectCategory, Record<string, string>> = {
   stem: { EN: 'Science & Tech', HI: 'विज्ञान', KN: 'ವಿಜ್ಞಾನ', FR: 'Sciences', DE: 'Wissenschaft', ES: 'Ciencias', ZH: '理科' },
   humanities: { EN: 'Humanities', HI: 'मानविकी', KN: 'ಮಾನವಿಕ', FR: 'Lettres', DE: 'Geisteswiss.', ES: 'Humanidades', ZH: '文科' },
   skills: { EN: 'Skills', HI: 'कौशल', KN: 'ಕೌಶಲ', FR: 'Competences', DE: 'Kompetenzen', ES: 'Habilidades', ZH: '技能' },

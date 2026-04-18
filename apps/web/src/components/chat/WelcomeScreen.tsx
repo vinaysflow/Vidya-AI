@@ -657,7 +657,7 @@ export function WelcomeScreen({ onStarterClick }: WelcomeScreenProps) {
       {prompts.length > 0 && (
         <div className="w-full mt-6">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 px-1">
-            {language === 'HI' ? 'शुरू करें' : language === 'ZH' ? '快速开始' : 'Try asking'}
+            {(language as string) === 'HI' ? 'शुरू करें' : (language as string) === 'ZH' ? '快速开始' : 'Try asking'}
           </h3>
           <div className="space-y-2">
             {prompts.map((prompt, i) => (

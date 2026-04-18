@@ -206,9 +206,9 @@ export function ChatInterface() {
         { label: 'Say it differently', icon: '~' },
       ]
     : [
-        { label: language === 'HI' ? 'मुझे समझ नहीं आया' : language === 'ZH' ? '我不理解' : language === 'FR' ? 'Je ne comprends pas' : language === 'DE' ? 'Ich verstehe nicht' : language === 'ES' ? 'No entiendo' : "I don't understand", icon: '?' },
-        { label: language === 'HI' ? 'एक hint दीजिए' : language === 'ZH' ? '给我一个提示' : language === 'FR' ? 'Un indice' : language === 'DE' ? 'Ein Hinweis' : language === 'ES' ? 'Una pista' : 'Give me a hint', icon: '!' },
-        { label: language === 'HI' ? 'दूसरे तरीके से समझाइए' : language === 'ZH' ? '换种方式解释' : language === 'FR' ? 'Expliquez autrement' : language === 'DE' ? 'Anders erklaeren' : language === 'ES' ? 'Explica de otra forma' : 'Explain differently', icon: '~' },
+        { label: (language as string) === 'HI' ? 'मुझे समझ नहीं आया' : (language as string) === 'ZH' ? '我不理解' : language === 'FR' ? 'Je ne comprends pas' : language === 'DE' ? 'Ich verstehe nicht' : language === 'ES' ? 'No entiendo' : "I don't understand", icon: '?' },
+        { label: (language as string) === 'HI' ? 'एक hint दीजिए' : (language as string) === 'ZH' ? '给我一个提示' : language === 'FR' ? 'Un indice' : language === 'DE' ? 'Ein Hinweis' : language === 'ES' ? 'Una pista' : 'Give me a hint', icon: '!' },
+        { label: (language as string) === 'HI' ? 'दूसरे तरीके से समझाइए' : (language as string) === 'ZH' ? '换种方式解释' : language === 'FR' ? 'Expliquez autrement' : language === 'DE' ? 'Anders erklaeren' : language === 'ES' ? 'Explica de otra forma' : 'Explain differently', icon: '~' },
       ];
 
   return (
