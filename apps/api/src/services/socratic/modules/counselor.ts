@@ -140,7 +140,7 @@ export function validateResponseWithVariant(
 const COUNSELOR_FALLBACKS: Record<string, string> = {
   clarifying: "I want to make sure I understand you correctly. Could you tell me a bit more about what you're thinking?",
   socratic: "That's an interesting point. What do you think would be the most important factor to consider here?",
-  celebration: "It sounds like you've made great progress! What's the next step you're most excited about?",
+  celebration: "That sounds like real progress. What's the next step you're most excited about?",
   foundational: "Let's start from the beginning. What matters most to you as you think about your future?",
   hint_with_question: "I have some thoughts on this. But first — what options have you already considered?",
   encouragement: "This process can feel overwhelming, but you're doing the right thing by thinking through it carefully. What feels most manageable to tackle first?",
@@ -542,6 +542,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE Socratic question that helps the student think critically about: "${a.suggestedFocus}". Guide, don't prescribe.`,
     hint_with_question: `Gently point them toward thinking about "${a.suggestedFocus}" and ask a guiding question. Don't give the answer directly.`,
     foundational: `The student seems early in their thinking. Help them articulate: "${a.suggestedFocus}". Be warm and encouraging.`,
+    // Acknowledgment-only framing (aligns with acknowledgment-overlay.ts — P5)
     celebration: 'Acknowledge their progress and ask what they want to focus on next.',
     encouragement: `The student seems ${a.sentimentTone || 'anxious'}. Validate their feelings, then ask a simpler, more manageable question about their situation.`,
   };
