@@ -22,7 +22,7 @@ export function RoleSelectorScreen() {
         >
           <span className="text-4xl shrink-0">👨‍👩‍👧</span>
           <div>
-            <div className="text-lg font-bold text-slate-700">Set up Kid Mode</div>
+            <div className="text-lg font-bold text-slate-700">Set up for your child</div>
             <div className="text-xs text-slate-400 mt-0.5">I am a parent or guardian</div>
           </div>
         </button>
