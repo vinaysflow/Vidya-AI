@@ -250,7 +250,7 @@ export function ChatInterface() {
           </div>
 
           <div className="flex items-center gap-1.5 ml-auto">
-            {gamification && gamification.currentStreak > 0 && (
+            {!isKidMode && gamification && gamification.currentStreak > 0 && (
               <StreakBanner streak={gamification.currentStreak} streakFreezes={gamification.streakFreezes} />
             )}
             {/* Subject badge — only show when there is an active session (messages exist) */}
@@ -346,7 +346,7 @@ export function ChatInterface() {
           </div>
         )}
 
-        {gamification && (
+        {!isKidMode && gamification && (
           <XPBar
             xp={gamification.xp}
             level={gamification.level}
@@ -355,7 +355,7 @@ export function ChatInterface() {
           />
         )}
 
-        {gamification?.pendingLevelUp && (
+        {!isKidMode && gamification?.pendingLevelUp && (
           <LevelUpModal level={gamification.pendingLevelUp} onClose={dismissLevelUp} isKidMode={isKidMode} />
         )}
 
