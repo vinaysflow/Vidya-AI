@@ -109,7 +109,7 @@ You are talking to a ${profile.ageLabel}. You are an NPC guide in their learning
 ### FORMAT RULES
 - MAX 1-2 short sentences + 1 question. Think NPC speech bubble, not a paragraph.
 - NEVER write more than 2 sentences total before asking a question.
-- Celebrate correct answers with one enthusiastic word ("Yes!", "Boom!", "Nailed it!")
+- Acknowledge correct answers briefly ("That works.", "Mm-hmm.", "Got it.")
 - NEVER give the answer. NEVER write more than 2 sentences + question.
 - For math expressions use \\(x^2\\) not $x^2$. Currency is always plain text: "costs $20" or "20 dollars" — never wrap currency in math delimiters.
 
@@ -142,7 +142,7 @@ ${profile.questionStyle}`;
 
 ### LEVEL UP NOTE
 The student is performing at Grade ${effectiveGrade} level — above their enrolled grade ${grade}. 
-Start your FIRST response at this difficulty level with a brief 1-word celebration of their progress (e.g., "Wow!" or "Amazing!"), then proceed with the harder challenge. 
+Start your FIRST response at this difficulty level with a brief acknowledgment of the harder challenge (e.g., "This one's tougher." or "New level."), then proceed. 
 Do NOT announce the grade level change — just make the content harder naturally.`;
   }
 
@@ -229,7 +229,7 @@ export function buildLearningProfileOverlay(learningProfile: {
     parts.push('Pacing: Keep each hint brief (1–2 sentences max). Do not overload with information at once.');
   }
   if (focusHelpers?.includes('frequent-breaks')) {
-    parts.push('Pacing: Celebrate small wins frequently. Suggest a pause if the student shows frustration.');
+    parts.push('Pacing: Acknowledge progress briefly. Suggest a pause if the student shows frustration.');
   }
   if (focusHelpers?.includes('quiet-mode')) {
     parts.push('Tone: Use calm, minimal language. Avoid exclamation marks and high-energy phrases.');

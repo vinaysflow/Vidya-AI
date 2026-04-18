@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildLearningProfileOverlay } from '../elementary-overlay';
+import { buildLearningProfileOverlay, buildElementaryOverlay } from '../elementary-overlay';
 
 describe('buildLearningProfileOverlay', () => {
   it('returns empty string when profile is empty', () => {
@@ -78,5 +78,34 @@ describe('buildLearningProfileOverlay', () => {
     });
     // Unknown value should not crash, but also not produce instruction text
     expect(result).toBe('');
+  });
+});
+
+// Tests for praise-removal from buildElementaryOverlay (plan 2C, P8 — structural enforcement)
+describe('buildElementaryOverlay — praise language removed', () => {
+  it('does NOT contain "Celebrate" instruction', () => {
+    const result = buildElementaryOverlay(5, 5);
+    expect(result).not.toContain('Celebrate correct answers');
+  });
+
+  it('does NOT contain "Yes!" as celebration instruction', () => {
+    const result = buildElementaryOverlay(5, 5);
+    expect(result).not.toContain('"Yes!", "Boom!", "Nailed it!"');
+  });
+
+  it('does NOT contain "Amazing" as celebration instruction in level-up note', () => {
+    const result = buildElementaryOverlay(5, 6); // effectiveGrade > grade triggers level-up note
+    expect(result).not.toContain('"Amazing!"');
+    expect(result).not.toContain('"Wow!"');
+  });
+
+  it('does NOT contain "Celebrate small wins" instruction', () => {
+    const result = buildElementaryOverlay(5, 5);
+    expect(result).not.toContain('Celebrate small wins');
+  });
+
+  it('DOES contain "Acknowledge" as replacement instruction', () => {
+    const result = buildElementaryOverlay(5, 5);
+    expect(result).toContain('Acknowledge correct answers');
   });
 });

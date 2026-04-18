@@ -22,6 +22,7 @@ import { cache, CACHE_TTL } from '../cache';
 import { LlmClient, BudgetExceededError } from '../llm/client';
 import { resolveModelPolicy } from './routingPolicy';
 import { buildElementaryOverlay } from './prompts/elementary-overlay';
+import { buildAcknowledgmentOverlay } from './prompts/acknowledgment-overlay';
 import {
   getOrCreateSessionSummary,
   buildHistoryText,
@@ -690,6 +691,19 @@ Analyze this and respond with JSON only.
         '4) Keep your response short (2-3 sentences max before the question).',
         'Do NOT provide worked examples, solutions, or multi-step explanations.',
       ].join('\n');
+    }
+
+    // Engine-level acknowledgment overlay injection for kid mode.
+    // Blocks cheerleader praise language. Fires on the same condition
+    // as the elementary overlay below (grade <= 9).
+    if (metadata?.grade != null && metadata.grade <= 9 &&
+        !systemPrompt.includes('RESPONSE TONE CONSTRAINTS')) {
+      const effectiveGrade = (metadata?.effectiveGrade ?? metadata.grade) as number;
+      const ackOverlay = buildAcknowledgmentOverlay(
+        metadata.grade as number,
+        effectiveGrade,
+      );
+      systemPrompt += '\n\n' + ackOverlay;
     }
 
     // Engine-level elementary overlay injection for ALL modules.
