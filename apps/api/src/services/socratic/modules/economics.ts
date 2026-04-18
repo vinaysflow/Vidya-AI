@@ -160,7 +160,7 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 const FALLBACKS: Record<string, Record<string, string>> = {
   EN: {
     socratic: "That's interesting reasoning! Can you trace through the chain of effects step by step?",
-    celebration: "Excellent economic thinking! Can you explain why this particular model applies here?",
+    celebration: "That works. Can you explain why this particular model applies here?",
     foundational: "Let's take a step back. What economic concept or model might help us analyze this?",
     default: "Tell me more about how you're reasoning through this economic problem.",
   },
@@ -178,19 +178,19 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   FR: {
     socratic: "Raisonnement intéressant ! Pouvez-vous retracer la chaîne d'effets étape par étape ?",
-    celebration: "Excellente pensée économique ! Pouvez-vous expliquer pourquoi ce modèle s'applique ici ?",
+    celebration: "Ça marche. Pouvez-vous expliquer pourquoi ce modèle s'applique ici ?",
     foundational: "Revenons en arrière. Quel concept ou modèle économique pourrait nous aider ?",
     default: "Dites-moi en plus sur votre raisonnement économique.",
   },
   DE: {
     socratic: "Interessante Argumentation! Können Sie die Wirkungskette Schritt für Schritt nachverfolgen?",
-    celebration: "Ausgezeichnetes wirtschaftliches Denken! Können Sie erklären, warum dieses Modell hier passt?",
+    celebration: "Das funktioniert. Können Sie erklären, warum dieses Modell hier passt?",
     foundational: "Gehen wir einen Schritt zurück. Welches Konzept oder Modell könnte hier helfen?",
     default: "Erzählen Sie mir mehr über Ihre wirtschaftliche Argumentation.",
   },
   ES: {
     socratic: "¡Razonamiento interesante! ¿Puedes trazar la cadena de efectos paso a paso?",
-    celebration: "¡Excelente pensamiento económico! ¿Puedes explicar por qué este modelo aplica aquí?",
+    celebration: "Eso funciona. ¿Puedes explicar por qué este modelo aplica aquí?",
     foundational: "Vamos un paso atrás. ¿Qué concepto o modelo económico podría ayudarnos?",
     default: "Cuéntame más sobre tu razonamiento económico.",
   },
@@ -231,7 +231,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE question that guides them toward understanding: "${a.conceptGaps?.[0] || 'the economic principle'}". Do NOT give the answer.`,
     hint_with_question: `Give a small hint about "${a.suggestedFocus}", then ask a guiding question. Still NO direct answers.`,
     foundational: `The student seems lost. Ask about a foundational concept: "${a.conceptGaps?.[0] || 'basics'}". Be encouraging.`,
-    celebration: 'Celebrate their economic reasoning! Then ask them to extend it — what are the broader implications?',
+    celebration: "Open with ONE neutral acknowledgment: 'That works.', 'Mm-hmm.', or 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Then ask them to extend their reasoning — what are the broader implications?",
     encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier real-world example.',
   };
 
