@@ -158,7 +158,7 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 
 const ESSAY_FALLBACKS: Record<string, string> = {
   socratic: "That's a great start! What's one specific moment from this experience that really stands out to you?",
-  celebration: "This is coming together nicely! What do you want the reader to feel when they finish reading?",
+  celebration: "This is coming together. What do you want the reader to feel when they finish reading?",
   foundational: "Let's find the heart of your essay. What's the one moment or experience you keep coming back to?",
   hint_with_question: "I notice your essay could be more specific in places. Can you describe one scene in vivid detail — what did you see, hear, or feel?",
   encouragement: "You're making progress — every draft gets you closer. What's one small thing you could add to make this feel more like you?",
@@ -285,7 +285,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE question that guides them toward: "${a.suggestedFocus}". Do NOT write any part of their essay.`,
     hint_with_question: `Point to the area "${a.suggestedFocus}" and ask a guiding question. Do NOT rewrite or supply sentences.`,
     foundational: `The student seems early in their process. Ask about the core moment or experience: "${a.gaps?.[0] || 'what matters most to you'}". Be encouraging.`,
-    celebration: 'Celebrate what works in their draft! Then ask them to explain what they want the reader to take away.',
+    celebration: "Open with ONE neutral acknowledgment: 'That works.', 'Mm-hmm.', or 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Note what specifically works in their draft, then ask them to explain what they want the reader to take away.",
     encouragement: 'Validate their effort. Then ask a simpler question about one specific moment in their essay.'
   };
 
