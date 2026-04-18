@@ -73,6 +73,7 @@ const FORBIDDEN_PHRASES = [
   'great grasp',
   'great reading',
   'great strong reading',
+  "you've got a great",
   'nice work',
   'nice answer',
   'nice job',
@@ -99,6 +100,7 @@ const FORBIDDEN_PHRASES = [
   'celebrate their economic',
   'celebrate their strong',
   'celebrate what works',
+  "celebrate what",
   // Specific observed hardcoded leaks
   'excellent economic thinking',
   'excellent travail',
@@ -151,6 +153,76 @@ describe('No praise in kid-mode module system prompt addenda', () => {
           `Found praise in ${subject}/${questionType}: [${hits.join(', ')}]\n\nAddendum (first 2000 chars):\n${addendum.substring(0, 2000)}`,
         ).toEqual([]);
       });
+    }
+  }
+});
+
+// ============================================
+// Surface 2: buildResponseUserPrompt typeInstructions
+// ============================================
+
+describe('No praise in buildResponseUserPrompt typeInstructions', () => {
+  const LATIN_LANGUAGES = ['EN', 'FR', 'DE', 'ES'] as const;
+
+  for (const subject of SUBJECTS_TO_TEST) {
+    for (const questionType of KID_MODE_QUESTION_TYPES) {
+      for (const language of LATIN_LANGUAGES) {
+        it(`${subject} / ${questionType} / ${language}: no praise in user prompt`, () => {
+          const mod = getModule(subject);
+          if (!mod.buildResponseUserPrompt) return;
+
+          const analysis = {
+            conceptGaps: ['test concept'],
+            suggestedFocus: 'test focus',
+            distanceFromSolution: 50,
+            studentStrengths: ['trying'],
+            conceptsIdentified: ['attempting'],
+            errorType: 'none',
+            errorDescription: '',
+          };
+
+          const prompt = mod.buildResponseUserPrompt({
+            questionType: questionType as any,
+            analysis,
+            language: language as any,
+            historyText: 'Student: test message',
+            metadata: { grade: 4, effectiveGrade: 4, subject },
+          });
+
+          const hits = containsPraise(prompt);
+          expect(
+            hits,
+            `Found praise in buildResponseUserPrompt ${subject}/${questionType}/${language}: [${hits.join(', ')}]\n\nPrompt (first 1000 chars):\n${prompt.substring(0, 1000)}`,
+          ).toEqual([]);
+        });
+      }
+    }
+  }
+});
+
+// ============================================
+// Surface 3: getFallbackResponse hardcoded localized strings (EN/FR/DE/ES only)
+// ============================================
+
+describe('No praise in getFallbackResponse hardcoded strings', () => {
+  const LATIN_LANGUAGES = ['EN', 'FR', 'DE', 'ES'];
+
+  for (const subject of SUBJECTS_TO_TEST) {
+    for (const questionType of KID_MODE_QUESTION_TYPES) {
+      for (const language of LATIN_LANGUAGES) {
+        it(`${subject} / ${questionType} / ${language}: no praise in fallback response`, () => {
+          const mod = getModule(subject);
+          const fallback = mod.getFallbackResponse(questionType, language);
+
+          if (!fallback) return;
+
+          const hits = containsPraise(fallback);
+          expect(
+            hits,
+            `Found praise in getFallbackResponse ${subject}/${questionType}/${language}: [${hits.join(', ')}]\n\nFallback text: ${fallback}`,
+          ).toEqual([]);
+        });
+      }
     }
   }
 });

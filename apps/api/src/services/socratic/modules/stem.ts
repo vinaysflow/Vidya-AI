@@ -146,7 +146,7 @@ const FALLBACKS: Record<string, Record<string, string>> = {
     socratic: "That's an interesting approach! Can you walk me through your reasoning step by step?",
     hint_with_question: "Let's try a simpler question! How many would you have if you started with 1?\n\n[A] 1\n[B] 2\n[C] 0",
     foundational: "Let's go back to basics! What do we do when we need to combine two groups?\n\n[A] Add them together\n[B] Multiply them\n[C] Subtract one from the other",
-    celebration: "Great work! Can you explain why this approach works?",
+    celebration: "That works. Can you explain why this approach works?",
     default: "Let's try this one step at a time!\n\n[A] Show me the first step\n[B] Can I try a simpler version?\n[C] Let me start over"
   },
   HI: {
@@ -165,19 +165,19 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   FR: {
     socratic: "Approche intéressante ! Pouvez-vous me guider pas à pas dans votre raisonnement ?",
-    celebration: "Excellent travail ! Pouvez-vous expliquer pourquoi cette approche fonctionne ?",
+    celebration: "Ça marche. Pouvez-vous expliquer pourquoi cette approche fonctionne ?",
     foundational: "Revenons en arrière. Quel est le concept clé ici ?",
     default: "Dites-moi en plus sur votre réflexion."
   },
   DE: {
     socratic: "Interessanter Ansatz! Können Sie mir Schritt für Schritt durch Ihre Überlegung führen?",
-    celebration: "Großartige Arbeit! Können Sie erklären, warum dieser Ansatz funktioniert?",
+    celebration: "Das funktioniert. Können Sie erklären, warum dieser Ansatz funktioniert?",
     foundational: "Gehen wir einen Schritt zurück. Was ist das Kernkonzept hier?",
     default: "Erzählen Sie mir mehr über Ihre Überlegungen."
   },
   ES: {
     socratic: "¡Enfoque interesante! ¿Puedes guiarme paso a paso por tu razonamiento?",
-    celebration: "¡Gran trabajo! ¿Puedes explicar por qué funciona este enfoque?",
+    celebration: "Eso funciona. ¿Puedes explicar por qué funciona este enfoque?",
     foundational: "Vamos un paso atrás. ¿Cuál es el concepto clave aquí?",
     default: "Cuéntame más sobre cómo estás pensando en este problema."
   },
