@@ -95,7 +95,7 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 const FALLBACKS: Record<string, Record<string, string>> = {
   EN: {
     socratic: "Interesting thinking! Can you give me a real-world example of that idea?",
-    celebration: "You've got a great grasp of this! Can you explain it to me as if I were 10 years old?",
+    celebration: "That works. Can you explain it to me as if I were 10 years old?",
     foundational: "Let's start simpler. If you had to sort your toys into groups, what groups would you make?",
     default: "Tell me more — what do you think AI or machine learning is all about?",
   },
@@ -171,7 +171,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE Socratic question using a concrete analogy to guide them toward: "${a.conceptGaps?.[0] || 'the concept'}". Do NOT define the concept.`,
     hint_with_question: `Give a small hint using an everyday analogy about "${a.suggestedFocus}", then ask a guiding question.`,
     foundational: `The student seems unfamiliar. Start with a very concrete, relatable example and ask: "${a.conceptGaps?.[0] || 'what do you already know?'}".`,
-    celebration: 'Celebrate their understanding! Ask them to explain the concept in their own words or give a new example.',
+    celebration: "Open with ONE neutral acknowledgment: 'That works.', 'Mm-hmm.', or 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Ask them to explain the concept in their own words or give a new example.",
     encouragement: 'Acknowledge their effort and curiosity. Simplify with a more concrete analogy.',
   };
 
