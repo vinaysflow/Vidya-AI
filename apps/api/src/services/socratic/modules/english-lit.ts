@@ -160,7 +160,7 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 const FALLBACKS: Record<string, Record<string, string>> = {
   EN: {
     socratic: "That's an interesting observation! What specific words or phrases in the text support that reading?",
-    celebration: "Great analysis! Can you explain how you moved from the text to that interpretation?",
+    celebration: "That works. Can you explain how you moved from the text to that interpretation?",
     foundational: "Let's start with what you notice. Is there a word, image, or moment that stands out to you?",
     default: "Tell me more about what you're seeing in this text.",
   },
@@ -178,19 +178,19 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   FR: {
     socratic: "Observation intéressante ! Quels mots ou phrases spécifiques dans le texte soutiennent cette lecture ?",
-    celebration: "Excellente analyse ! Comment êtes-vous passé du texte à cette interprétation ?",
+    celebration: "Ça marche. Comment êtes-vous passé du texte à cette interprétation ?",
     foundational: "Commençons. Y a-t-il un mot, une image ou un moment qui vous a frappé ?",
     default: "Dites-moi en plus sur ce que vous voyez dans ce texte.",
   },
   DE: {
     socratic: "Interessante Beobachtung! Welche spezifischen Wörter oder Phrasen im Text unterstützen diese Lesart?",
-    celebration: "Ausgezeichnete Analyse! Wie sind Sie vom Text zu dieser Interpretation gekommen?",
+    celebration: "Das funktioniert. Wie sind Sie vom Text zu dieser Interpretation gekommen?",
     foundational: "Fangen wir an. Gibt es ein Wort, ein Bild oder einen Moment, der Ihnen aufgefallen ist?",
     default: "Erzählen Sie mir mehr darüber, was Sie in diesem Text sehen.",
   },
   ES: {
     socratic: "¡Observación interesante! ¿Qué palabras o frases específicas del texto apoyan esa lectura?",
-    celebration: "¡Excelente análisis! ¿Cómo pasaste del texto a esa interpretación?",
+    celebration: "Eso funciona. ¿Cómo pasaste del texto a esa interpretación?",
     foundational: "Empecemos. ¿Hay alguna palabra, imagen o momento que te haya llamado la atención?",
     default: "Cuéntame más sobre lo que ves en este texto.",
   },
@@ -232,7 +232,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE question that guides them toward a deeper reading of: "${a.conceptGaps?.[0] || 'the text'}". Do NOT give the interpretation.`,
     hint_with_question: `Point to a specific passage or device related to "${a.suggestedFocus}", then ask a guiding question. Do NOT interpret it for them.`,
     foundational: `The student seems unsure how to begin. Ask about something concrete they noticed: "${a.conceptGaps?.[0] || 'a word or image that stood out'}". Be encouraging.`,
-    celebration: 'Celebrate their strong reading! Then ask them to deepen it — how does this connect to the broader text?',
+    celebration: "Open with ONE neutral acknowledgment: 'That works.', 'Mm-hmm.', or 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Then ask them to deepen the reading — how does this connect to the broader text?",
     encouragement: 'The student is struggling. Validate their effort, then ask an easier question about something specific in the text.',
   };
 
