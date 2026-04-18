@@ -153,12 +153,14 @@ const FALLBACKS: Record<string, Record<string, string>> = {
     socratic: "दिलचस्प approach है! क्या आप मुझे step by step बता सकते हैं?",
     hint_with_question: "एक आसान सवाल! अगर हमारे पास 2 चीज़ें हैं और हम 1 और जोड़ें तो कितनी होंगी?\n\n[A] 3\n[B] 2\n[C] 4",
     foundational: "चलो आसान शुरुआत करें! जब हम दो groups को मिलाते हैं तो क्या करते हैं?\n\n[A] जोड़ते हैं\n[B] गुणा करते हैं\n[C] घटाते हैं",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "बहुत बढ़िया! क्या आप बता सकते हैं कि यह तरीका क्यों काम करता है?",
     default: "मुझे और बताइए कि आप इस problem के बारे में कैसे सोच रहे हैं।"
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ approach! ನಿಮ್ಮ reasoning step by step ಹೇಳಬಹುದೇ?",
     hint_with_question: "ಒಂದು ಸರಳ ಪ್ರಶ್ನೆ! 2 ವಸ್ತುಗಳಿಗೆ 1 ಸೇರಿಸಿದರೆ ಎಷ್ಟಾಗುತ್ತದೆ?\n\n[A] 3\n[B] 2\n[C] 4",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "ಅತ್ಯುತ್ತಮ! ಈ approach ಏಕೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ ಎಂದು ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಸ್ವಲ್ಪ ಹಿಂದೆ ಹೋಗೋಣ. ಇಲ್ಲಿ main concept ಏನು?",
     default: "ಈ problem ಬಗ್ಗೆ ನೀವು ಹೇಗೆ ಯೋಚಿಸುತ್ತಿದ್ದೀರಿ ಎಂದು ಇನ್ನೂ ಹೇಳಿ."
@@ -183,6 +185,7 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   ZH: {
     socratic: "有趣的方法！能一步一步地跟我讲讲你的推理吗？",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "做得好！能解释一下为什么这个方法有效吗？",
     foundational: "我们退一步想想。这里的核心概念是什么？",
     default: "告诉我更多关于你如何思考这个问题的。"

@@ -166,12 +166,14 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   HI: {
     socratic: "दिलचस्प observation! Text में कौन से specific words या phrases इसे support करते हैं?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "बहुत बढ़िया analysis! आप text से इस interpretation तक कैसे पहुंचे?",
     foundational: "चलो शुरू करते हैं। कोई word, image, या moment है जो आपको stand out करता है?",
     default: "इस text में आप और क्या देख रहे हैं, मुझे बताइए।",
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ observation! Text ನಲ್ಲಿ ಯಾವ specific words ಅಥವಾ phrases ಇದನ್ನು support ಮಾಡುತ್ತವೆ?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "ಅತ್ಯುತ್ತಮ analysis! Text ನಿಂದ ಈ interpretation ಗೆ ಹೇಗೆ ಬಂದಿರಿ ಎಂದು ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಶುರು ಮಾಡೋಣ. ಯಾವ word, image, ಅಥವಾ moment stand out ಆಗುತ್ತದೆ?",
     default: "ಈ text ನಲ್ಲಿ ನೀವು ಏನು ನೋಡುತ್ತಿದ್ದೀರಿ ಎಂದು ಇನ್ನೂ ಹೇಳಿ.",
@@ -196,6 +198,7 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   ZH: {
     socratic: "有趣的观察！文本中哪些具体的词语或短语支持这种理解？",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "优秀的分析！你是如何从文本得出这个解读的？",
     foundational: "我们开始吧。有没有什么词语、意象或时刻让你印象深刻？",
     default: "告诉我更多关于你在这段文本中看到了什么。",

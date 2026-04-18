@@ -160,12 +160,14 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   HI: {
     socratic: "दिलचस्प approach है! क्या आप एक छोटे example के साथ trace कर सकते हैं?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "बहुत बढ़िया! क्या बता सकते हैं कि यह approach सही result क्यों देता है?",
     foundational: "चलो थोड़ा पीछे जाते हैं। कौन सा data structure या algorithm pattern fit करेगा?",
     default: "मुझे और बताइए कि आप इस problem के बारे में कैसे सोच रहे हैं।",
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ approach! ಒಂದು ಸಣ್ಣ example ನೊಂದಿಗೆ trace ಮಾಡಬಹುದೇ?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "ಅತ್ಯುತ್ತಮ! ಈ approach ಸರಿಯಾದ result ಏಕೆ ಕೊಡುತ್ತದೆ ಎಂದು ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಸ್ವಲ್ಪ ಹಿಂದೆ ಹೋಗೋಣ. ಯಾವ data structure ಅಥವಾ algorithm pattern fit ಆಗಬಹುದು?",
     default: "ಈ problem ಬಗ್ಗೆ ನೀವು ಹೇಗೆ ಯೋಚಿಸುತ್ತಿದ್ದೀರಿ ಎಂದು ಇನ್ನೂ ಹೇಳಿ.",
@@ -190,6 +192,7 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   ZH: {
     socratic: "有趣的方法！能用一个小例子来验证一下吗？",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "做得好！能解释一下为什么这个方法能得到正确结果吗？",
     foundational: "我们退一步想想。什么数据结构或算法模式可能适合这里？",
     default: "告诉我更多关于你是如何思考这个问题的。",

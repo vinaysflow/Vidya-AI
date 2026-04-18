@@ -166,12 +166,14 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   HI: {
     socratic: "दिलचस्प reasoning! क्या आप step by step effects की chain trace कर सकते हैं?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "बहुत बढ़िया economic thinking! क्या बता सकते हैं कि यह model यहाँ क्यों apply होता है?",
     foundational: "चलो पीछे जाते हैं। कौन सा economic concept या model help करेगा?",
     default: "इस economic problem के बारे में आप कैसे reason कर रहे हैं, और बताइए।",
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ reasoning! Step by step effects ನ chain trace ಮಾಡಬಹುದೇ?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "ಅತ್ಯುತ್ತಮ economic thinking! ಈ model ಇಲ್ಲಿ ಏಕೆ apply ಆಗುತ್ತದೆ ಎಂದು ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಸ್ವಲ್ಪ ಹಿಂದೆ ಹೋಗೋಣ. ಯಾವ economic concept ಅಥವಾ model help ಮಾಡಬಹುದು?",
     default: "ಈ economic problem ಬಗ್ಗೆ ನೀವು ಹೇಗೆ reason ಮಾಡುತ್ತಿದ್ದೀರಿ ಎಂದು ಇನ್ನೂ ಹೇಳಿ.",
@@ -196,6 +198,7 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   ZH: {
     socratic: "有趣的推理！能一步一步地追踪因果链吗？",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "出色的经济学思维！能解释一下为什么这个模型适用于这里吗？",
     foundational: "我们退一步想想。什么经济概念或模型可能有帮助？",
     default: "告诉我更多关于你的经济学推理。",

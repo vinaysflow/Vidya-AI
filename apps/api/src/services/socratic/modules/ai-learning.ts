@@ -101,12 +101,14 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   HI: {
     socratic: "दिलचस्प सोच! क्या आप एक real-world example दे सकते हैं?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "बहुत बढ़िया समझ! क्या मुझे ऐसे समझा सकते हैं जैसे मैं 10 साल का हूं?",
     foundational: "चलो आसान से शुरू करते हैं। अगर अपने toys को groups में sort करना हो, तो कैसे करोगे?",
     default: "और बताओ — तुम्हें क्या लगता है AI या machine learning क्या है?",
   },
   KN: {
     socratic: "ಆಸಕ್ತಿದಾಯಕ ಯೋಚನೆ! ಒಂದು real-world example ಕೊಡಬಹುದೇ?",
+    // DEPRECATED(i18n): not production-ready pending native-speaker review (P5)
     celebration: "ಅತ್ಯುತ್ತಮ ತಿಳುವಳಿಕೆ! ನನಗೆ 10 ವರ್ಷದವನಿಗೆ ಹೇಳುವಂತೆ ವಿವರಿಸಬಹುದೇ?",
     foundational: "ಸರಳವಾಗಿ ಶುರು ಮಾಡೋಣ. ನಿಮ್ಮ toys ಅನ್ನು groups ಗೆ sort ಮಾಡಿ ಎಂದರೆ ಹೇಗೆ ಮಾಡುತ್ತೀರಿ?",
     default: "ಇನ್ನೂ ಹೇಳಿ — AI ಅಥವಾ machine learning ಎಂದರೇನು ಎಂದು ನಿಮಗೆ ಅನಿಸುತ್ತದೆ?",
