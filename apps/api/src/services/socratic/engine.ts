@@ -23,6 +23,7 @@ import { LlmClient, BudgetExceededError } from '../llm/client';
 import { resolveModelPolicy } from './routingPolicy';
 import { buildElementaryOverlay } from './prompts/elementary-overlay';
 import { buildAcknowledgmentOverlay } from './prompts/acknowledgment-overlay';
+import { resolveProductionLanguage } from './i18n/languageGuard';
 import {
   getOrCreateSessionSummary,
   buildHistoryText,
@@ -161,11 +162,14 @@ export class SocraticEngine {
     const {
       sessionId,
       userMessage,
-      language,
       conversationHistory,
       subject,
       currentHintLevel,
     } = input;
+
+    // Route deprecated non-Latin languages (HI/KN/ZH) to EN at runtime.
+    // Strings remain in module files for future native-speaker review (P5).
+    const language = resolveProductionLanguage(input.language ?? 'EN');
 
     // Get the module for this subject
     const mod = getModule(subject);
