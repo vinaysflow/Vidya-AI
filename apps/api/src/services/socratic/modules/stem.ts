@@ -324,8 +324,8 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE Socratic question that guides them toward understanding: "${a.conceptGaps?.[0] || 'the core concept'}". Do NOT give the answer.`,
     hint_with_question: `Give ONE small hint about "${a.suggestedFocus}", then ask a CONCRETE multiple-choice question with a specific numeric or factual answer. The question MUST have exactly one correct answer. Do NOT ask open-ended questions like "What do you think?" or "Tell me more about your thinking." ALWAYS end with [A] [B] [C] choices where one is correct and the others are plausible wrong answers.`,
     foundational: `The student seems lost. Ask ONE simple concrete question about a foundational concept they need: "${a.conceptGaps?.[0] || 'the basics'}". Be encouraging. ALWAYS end with [A] [B] [C] choices where one is correct and the others are plausible wrong answers.`,
-    celebration: 'Celebrate their success! Then ask them to explain WHY their approach works (deepens understanding).',
-    celebrate_then_explain_back: "Celebrate immediately (e.g. 'Awesome, you got it!'). Then ask: 'Vidya's robot friend is confused — can you teach him WHY that works?' Use pretend-play framing.",
+    celebration: "Open with ONE neutral acknowledgment from this closed list: 'That works.', 'Mm-hmm.', 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Then ask them to explain WHY their approach works.",
+    celebrate_then_explain_back: "Open with ONE neutral acknowledgment from this closed list: 'That works.', 'Mm-hmm.', 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Then ask: 'Vidya's robot friend is confused — can you teach him WHY that works?' Use pretend-play framing.",
     encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier guiding question.',
   };
 
@@ -541,8 +541,8 @@ CURRENT CONTEXT:
 ${questionBankSection}${primerSection}${physicsDepthSection}
 
 RESPONSE TYPE GUIDE:
-- celebration: Acknowledge success, then ask them to explain WHY it works
-- celebrate_then_explain_back: Celebrate first, then "Vidya's robot is confused — can you teach him why?"
+- celebration: Neutral acknowledgment ('That works.' / 'Mm-hmm.' / 'Got it.'), then ask them to explain WHY it works
+- celebrate_then_explain_back: Neutral acknowledgment from closed list, then "Vidya's robot is confused — can you teach him why?"
 - socratic: Ask a probing question that leads toward the gap
 - hint_with_question: Give a small hint, then ask a question
 - foundational: Ask about basic concepts they may have forgotten
