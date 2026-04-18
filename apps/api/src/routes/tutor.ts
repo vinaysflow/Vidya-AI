@@ -30,7 +30,7 @@ const isImageReference = (value: string) =>
 const StartSessionSchema = z.object({
   userId: z.string().optional(),
   subject: z.enum(['PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY', 'ESSAY_WRITING', 'COUNSELING', 'CODING', 'ENGLISH_LITERATURE', 'ECONOMICS', 'AI_LEARNING', 'LOGIC', 'ML_CONCEPTS', 'ENGLISH_READING']),
-  language: z.enum(['EN', 'HI', 'KN', 'FR', 'DE', 'ES', 'ZH']).default('EN'),
+  language: z.enum(['EN', 'FR', 'DE', 'ES']).default('EN'),
   problemText: z.string().min(1).max(5000),
   problemImage: z.string().max(200000).refine(isImageReference, {
     message: 'problemImage must be a http(s) URL or data:image/* base64 string',
@@ -54,7 +54,7 @@ const StartSessionSchema = z.object({
 const SendMessageSchema = z.object({
   sessionId: z.string(),
   message: z.string().min(1).max(5000),
-  language: z.enum(['EN', 'HI', 'KN', 'FR', 'DE', 'ES', 'ZH']).optional(),
+  language: z.enum(['EN', 'FR', 'DE', 'ES']).optional(),
   noFinalAnswer: z.boolean().optional(),
   messageImage: z.string().max(500000).optional(),
 });
@@ -65,7 +65,7 @@ const GetSessionSchema = z.object({
 
 const QuizRequestSchema = z.object({
   count: z.number().int().min(1).max(5).optional(),
-  language: z.enum(['EN', 'HI', 'KN', 'FR', 'DE', 'ES', 'ZH']).optional(),
+  language: z.enum(['EN', 'FR', 'DE', 'ES']).optional(),
 });
 
 // ============================================

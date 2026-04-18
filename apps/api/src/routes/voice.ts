@@ -25,7 +25,7 @@ router.post('/transcribe', upload.single('audio'), async (req: Request, res: Res
 
 const SynthesizeSchema = z.object({
   text: z.string().min(1).max(5000),
-  language: z.enum(['EN', 'HI', 'KN', 'FR', 'DE', 'ES', 'ZH']).default('EN'),
+  language: z.enum(['EN', 'FR', 'DE', 'ES']).default('EN'),
   subject: z.enum([
     'PHYSICS', 'CHEMISTRY', 'MATHEMATICS', 'BIOLOGY',
     'ESSAY_WRITING', 'COUNSELING', 'CODING',
