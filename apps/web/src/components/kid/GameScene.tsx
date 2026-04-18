@@ -23,6 +23,7 @@ import { useGameSounds } from './useGameSounds';
 import { confettiData } from './lottieData';
 import { TransitionCard } from './TransitionCard';
 import { getTransitionMessage } from './getTransitionMessage';
+import { NarrativeExit } from './NarrativeExit';
 import { useVidyaVoice } from '../../hooks/useVidyaVoice';
 import type { VoicePlayOptions } from '../../hooks/useVidyaVoice';
 
@@ -58,8 +59,19 @@ const KID_HEADERS: Record<string, string> = {
   encouragement: 'Keep going.',
 };
 
+// Maps quest chapter names to narrativeExits theme keys.
+const CHAPTER_TO_NARRATIVE_THEME: Record<string, string> = {
+  'Minecraft Builder': 'gaming',
+  'Space Explorer': 'space',
+  'Kitchen Scientist': 'cooking',
+  'Nature Explorer': 'animals',
+  'Sports Analyst': 'sports',
+  'Robot Engineer': 'robots',
+  'Money Matters': 'money',
+  'YouTube Creator': 'youtube',
+};
+
 const CHOICE_COLORS = [
-  'bg-blue-500 hover:bg-blue-600 active:bg-blue-700',
   'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700',
   'bg-violet-500 hover:bg-violet-600 active:bg-violet-700',
 ];
@@ -146,6 +158,8 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     gradeLevelsUp: number;
   } | null>(null);
   const [progressLoading, setProgressLoading] = useState(false);
+  // NarrativeExit: shown when student taps "End adventure" instead of jumping straight out
+  const [showNarrativeExit, setShowNarrativeExit] = useState(false);
 
   // Voice hook -- replaces inline TTS state/callbacks
   const { play: playVoice, stop: stopVoice, isPlaying: voiceIsPlaying, isLoading: voiceIsLoading } = useVidyaVoice();
@@ -673,7 +687,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           {/* End adventure */}
           <button
             data-testid="end-adventure"
-            onClick={onEndSession}
+            onClick={() => setShowNarrativeExit(true)}
             className="rounded-lg bg-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300"
           >
             End adventure
@@ -774,6 +788,19 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           message={transitionMessage}
           onDismiss={() => setTransitionMessage(null)}
           calmMode={calmMode}
+        />
+      )}
+
+      {/* Narrative exit — calm session end, replaces abrupt navigation */}
+      {showNarrativeExit && (
+        <NarrativeExit
+          questTheme={
+            activeQuest?.chapter
+              ? CHAPTER_TO_NARRATIVE_THEME[activeQuest.chapter] ?? null
+              : null
+          }
+          onDismiss={onEndSession}
+          calmMode={calmMode ?? false}
         />
       )}
     </div>
