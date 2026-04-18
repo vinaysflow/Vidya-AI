@@ -154,7 +154,7 @@ function validateResponse(response: string): { isClean: boolean; fallbackMessage
 const FALLBACKS: Record<string, Record<string, string>> = {
   EN: {
     socratic: "That's an interesting approach! Can you trace through your logic with a small example?",
-    celebration: "Great work! Can you explain why this approach gives the correct result?",
+    celebration: "That works. Can you explain why this approach gives the correct result?",
     foundational: "Let's take a step back. What data structure or algorithm pattern might fit this problem?",
     default: "Tell me more about how you're thinking about this problem.",
   },
@@ -172,19 +172,19 @@ const FALLBACKS: Record<string, Record<string, string>> = {
   },
   FR: {
     socratic: "Approche intéressante ! Pouvez-vous la tester avec un petit exemple ?",
-    celebration: "Excellent travail ! Pouvez-vous expliquer pourquoi cette approche donne le bon résultat ?",
+    celebration: "Ça marche. Pouvez-vous expliquer pourquoi cette approche donne le bon résultat ?",
     foundational: "Revenons en arrière. Quelle structure de données ou quel algorithme pourrait convenir ici ?",
     default: "Dites-moi en plus sur votre approche de ce problème.",
   },
   DE: {
     socratic: "Interessanter Ansatz! Können Sie ihn mit einem kleinen Beispiel durchgehen?",
-    celebration: "Großartige Arbeit! Können Sie erklären, warum dieser Ansatz das richtige Ergebnis liefert?",
+    celebration: "Das funktioniert. Können Sie erklären, warum dieser Ansatz das richtige Ergebnis liefert?",
     foundational: "Gehen wir einen Schritt zurück. Welche Datenstruktur oder welches Algorithmus-Pattern könnte hier passen?",
     default: "Erzählen Sie mir mehr über Ihren Ansatz.",
   },
   ES: {
     socratic: "¡Enfoque interesante! ¿Puedes probarlo con un ejemplo pequeño?",
-    celebration: "¡Gran trabajo! ¿Puedes explicar por qué este enfoque da el resultado correcto?",
+    celebration: "Eso funciona. ¿Puedes explicar por qué este enfoque da el resultado correcto?",
     foundational: "Vamos un paso atrás. ¿Qué estructura de datos o patrón de algoritmo podría funcionar aquí?",
     default: "Cuéntame más sobre cómo estás abordando este problema.",
   },
@@ -225,7 +225,7 @@ function buildResponseUserPrompt(params: {
     socratic: `Ask ONE Socratic question that guides them toward understanding: "${a.conceptGaps?.[0] || 'the core concept'}". Do NOT give the solution.`,
     hint_with_question: `Give a small hint about "${a.suggestedFocus}", then ask a guiding question. Still NO direct solutions or complete code.`,
     foundational: `The student seems lost. Ask about a foundational concept they need: "${a.conceptGaps?.[0] || 'basics'}". Be encouraging.`,
-    celebration: 'Celebrate their solution! Then ask them to explain WHY it works or to analyze its time/space complexity.',
+    celebration: "Open with ONE neutral acknowledgment: 'That works.', 'Mm-hmm.', or 'Got it.' Do NOT invent alternatives. Do NOT use praise words. Then ask them to explain WHY it works or to analyze its time/space complexity.",
     encouragement: 'The student is struggling. Acknowledge their effort, then simplify with an easier guiding question.',
   };
 
