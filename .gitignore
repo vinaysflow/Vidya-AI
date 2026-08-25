@@ -23,3 +23,6 @@ pnpm-debug.log*
 
 # Seed data (large JSON files, not part of app deployment)
 data/
+
+# One-off / scratch scripts
+apps/web/tmp-shot.mjs

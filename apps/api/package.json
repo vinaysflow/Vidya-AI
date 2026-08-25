@@ -13,8 +13,11 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "load-test": "tsx scripts/load-test.ts",
+    "learner:smoke": "tsx -r dotenv/config scripts/learner-smoke.ts",
+    "learner:maintenance": "tsx -r dotenv/config scripts/learner-maintenance.ts",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "learner:release": "prisma db push --schema prisma/schema.prisma && tsx -r dotenv/config scripts/learner-maintenance.ts sync-catalog",
     "db:studio": "prisma studio"
   },
   "dependencies": {

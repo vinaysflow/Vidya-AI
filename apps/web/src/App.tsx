@@ -5,6 +5,10 @@ import { ProgressDashboard } from './components/progress/ProgressDashboard';
 import { DashboardLayout } from './components/dashboard/DashboardLayout';
 import { PrivacyNotice } from './components/PrivacyNotice';
 import { ParentReport } from './components/kid/ParentReport';
+import { ProtoIndex } from './proto/ProtoIndex';
+import { PixiPrototype } from './proto/PixiPrototype';
+import { R3FPrototype } from './proto/R3FPrototype';
+import { InteractionLab } from './interactions/InteractionLab';
 import { useChatStore, useIsKidMode } from './stores/chatStore';
 import './i18n';
 
@@ -53,6 +57,10 @@ function App() {
           <Route path="/dashboard" element={<DashboardLayout />} />
           <Route path="/privacy" element={<PrivacyNotice />} />
           <Route path="/parent-report" element={<ParentReport />} />
+          <Route path="/proto" element={<ProtoIndex />} />
+          <Route path="/proto/pixi" element={<PixiPrototype />} />
+          <Route path="/proto/r3f" element={<R3FPrototype />} />
+          <Route path="/proto/interactions" element={<InteractionLab />} />
         </Routes>
       </div>
     </BrowserRouter>

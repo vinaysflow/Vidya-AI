@@ -25,10 +25,29 @@ interface MasteredConcept {
   mastery: number;
 }
 
+type Trend = 'up' | 'flat' | 'down';
+interface HabitScore { score: number; trend: Trend; }
+interface LearnerTraits {
+  habits: Record<string, HabitScore>;
+  channelWeights: Record<string, number>;
+  struggleTolerance: number;
+  frustrationProneness: number;
+  bestChannel: string | null;
+}
+interface ResolvedMisconception {
+  key: string;
+  conceptKey: string;
+  parentLabel: string | null;
+  description: string;
+  resolvedAt: string | null;
+}
+
 export function ParentReport() {
   const { userId, apiKey, grade } = useChatStore();
   const [summary, setSummary] = useState<Summary | null>(null);
   const [masteredConcepts, setMasteredConcepts] = useState<MasteredConcept[]>([]);
+  const [traits, setTraits] = useState<LearnerTraits | null>(null);
+  const [resolvedMisconceptions, setResolvedMisconceptions] = useState<ResolvedMisconception[]>([]);
   const [loading, setLoading] = useState(false);
   const [gateHeld, setGateHeld] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
@@ -67,8 +86,15 @@ export function ParentReport() {
       fetch(`${API_BASE}/api/progress/mastery-by-concept?userId=${encodeURIComponent(userId)}`, {
         headers: getJsonHeaders(apiKey),
       }).then(r => r.json()),
+      // Learner model: habits of mind + channel insight, refreshed on open.
+      fetch(`${API_BASE}/api/learner/traits?userId=${encodeURIComponent(userId)}&refresh=true`, {
+        headers: getJsonHeaders(apiKey),
+      }).then(r => r.json()).catch(() => ({ success: false })),
+      fetch(`${API_BASE}/api/learner/misconceptions?userId=${encodeURIComponent(userId)}`, {
+        headers: getJsonHeaders(apiKey),
+      }).then(r => r.json()).catch(() => ({ success: false })),
     ])
-      .then(([summaryData, masteryData]) => {
+      .then(([summaryData, masteryData, traitsData, misconceptionsData]) => {
         if (summaryData.success) setSummary(summaryData.summary);
         if (masteryData.success && Array.isArray(masteryData.mastery)) {
           const mastered = (masteryData.mastery as MasteredConcept[])
@@ -76,6 +102,10 @@ export function ParentReport() {
             .sort((a, b) => b.mastery - a.mastery)
             .slice(0, 6);
           setMasteredConcepts(mastered);
+        }
+        if (traitsData?.success && traitsData.traits) setTraits(traitsData.traits as LearnerTraits);
+        if (misconceptionsData?.success && Array.isArray(misconceptionsData.resolved)) {
+          setResolvedMisconceptions(misconceptionsData.resolved as ResolvedMisconception[]);
         }
       })
       .catch(() => {})
@@ -245,7 +275,127 @@ export function ParentReport() {
         </div>
       )}
 
+      {traits && <HabitsOfMindCard traits={traits} />}
+
+      {resolvedMisconceptions.length > 0 && (
+        <MisconceptionsResolvedCard items={resolvedMisconceptions} />
+      )}
+
+      {traits?.bestChannel && <ChannelInsightCard channel={traits.bestChannel} />}
+
       <BenchmarkCard summary={summary} />
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Habits of Mind — the no-scores feedback currency.
+// Five traits with trend arrows; this is what we tell parents about,
+// instead of right/wrong scores.
+// -------------------------------------------------------
+const HABIT_META: Record<string, { label: string; blurb: string; emoji: string }> = {
+  persistence: { label: 'Persistence', blurb: 'Keeps going after a wrong answer', emoji: '🧗' },
+  patternSeeking: { label: 'Pattern-seeking', blurb: 'Spots structure and shortcuts', emoji: '🔍' },
+  precision: { label: 'Precision', blurb: 'Careful, few slip-ups', emoji: '🎯' },
+  selfCorrection: { label: 'Self-correction', blurb: 'Catches and fixes own mistakes', emoji: '🔁' },
+  explanation: { label: 'Explaining', blurb: 'Puts thinking into words', emoji: '🗣️' },
+};
+const HABIT_ORDER = ['persistence', 'patternSeeking', 'precision', 'selfCorrection', 'explanation'];
+
+function TrendArrow({ trend }: { trend: Trend }) {
+  if (trend === 'up') return <span className="text-emerald-500 text-xs font-bold">↑ growing</span>;
+  if (trend === 'down') return <span className="text-amber-500 text-xs font-bold">↓ dipped</span>;
+  return <span className="text-slate-400 text-xs">→ steady</span>;
+}
+
+function HabitsOfMindCard({ traits }: { traits: LearnerTraits }) {
+  const habits = traits.habits ?? {};
+  const present = HABIT_ORDER.filter((k) => habits[k]);
+  if (present.length === 0) return null;
+
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm mb-4">
+      <div className="flex items-center gap-2 mb-1">
+        <Brain className="w-4 h-4 text-violet-500" />
+        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Habits of Mind</span>
+      </div>
+      <p className="text-xs text-slate-400 mb-3">How your child is growing as a thinker — not a score.</p>
+      <div className="space-y-3">
+        {present.map((k) => {
+          const h = habits[k];
+          const meta = HABIT_META[k];
+          const pct = Math.round(h.score * 100);
+          return (
+            <div key={k}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                  {meta.emoji} {meta.label}
+                </span>
+                <TrendArrow trend={h.trend} />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-700"
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">{meta.blurb}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Misconceptions resolved — kid-friendly "used to ... now solid"
+// -------------------------------------------------------
+function MisconceptionsResolvedCard({ items }: { items: ResolvedMisconception[] }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm mb-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Award className="w-4 h-4 text-emerald-500" />
+        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Mix-ups Cleared Up</span>
+      </div>
+      <div className="space-y-2">
+        {items.slice(0, 5).map((m) => (
+          <div key={m.key} className="flex gap-2 items-start">
+            <span className="text-emerald-500 mt-0.5">✓</span>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-snug">
+              Used to <span className="font-semibold">{(m.parentLabel ?? m.description).toLowerCase()}</span> — now solid.
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------
+// Channel insight — how this child learns fastest
+// -------------------------------------------------------
+const CHANNEL_META: Record<string, { label: string; blurb: string; emoji: string }> = {
+  manipulative: { label: 'hands-on tools', blurb: 'learns fastest with manipulatives they can move around', emoji: '🧮' },
+  visual: { label: 'pictures & diagrams', blurb: 'learns fastest when ideas are drawn out', emoji: '🖼️' },
+  symbolic: { label: 'numbers & symbols', blurb: 'learns fastest working directly with the math', emoji: '🔢' },
+  story: { label: 'stories & context', blurb: 'learns fastest when problems are wrapped in a story', emoji: '📖' },
+};
+
+function ChannelInsightCard({ channel }: { channel: string }) {
+  const meta = CHANNEL_META[channel];
+  if (!meta) return null;
+  return (
+    <div className="bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 rounded-2xl p-4 mb-4">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-lg">{meta.emoji}</span>
+        <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">How They Learn Best</span>
+      </div>
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Your child {meta.blurb}. Vidya now leans on {meta.label} when introducing something new.
+      </p>
     </div>
   );
 }

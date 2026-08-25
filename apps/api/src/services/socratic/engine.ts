@@ -325,6 +325,8 @@ export class SocraticEngine {
         clientContext: input.clientContext,
         variant: input.variant,
         context: input.context,
+        // Tutor Director: current session-phase directive
+        directorDirective: input.directorDirective,
       }
     });
 
@@ -681,6 +683,15 @@ Analyze this and respond with JSON only.
           safetyEvents.push('misconception_targeted');
         }
       }
+    }
+
+    // Tutor Director: bias this turn toward the current session-phase plan
+    // (mode + best representation). The director owns phase selection; the engine
+    // just honors the directive for this turn.
+    const directorDirective = metadata?.directorDirective as string | undefined;
+    if (directorDirective && directorDirective.trim().length > 0) {
+      systemPrompt += `\n\nSESSION PLAN DIRECTIVE (from the Tutor Director — follow this for the current phase):\n${directorDirective}`;
+      safetyEvents.push('director_directive');
     }
 
     if (scaffoldMode) {

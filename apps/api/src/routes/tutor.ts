@@ -16,6 +16,11 @@ import { generatePath } from '../services/learning/pathGenerator';
 import { extractProblemFromImage } from '../services/vision/ocr';
 import { getAdaptiveState, computeEffectiveGrade, updateAdaptiveState, buildPerformanceEntry, persistAdaptiveState } from '../services/learning/adaptiveDifficulty';
 import { logEvent } from '../services/analytics/eventLogger';
+import { recordTurnEvents, logLearnerEvent } from '../services/learner/learnerEvents';
+import { inferMisconceptionForTurn, applyCorrectTowardResolution } from '../services/learner/misconceptionTracker';
+import { rollupLearnerModel } from '../services/learner/learnerTraits';
+import { syncBuddyFromSession } from '../services/learner/buddyState';
+import { buildSessionPlan, type SessionPlan } from '../services/learner/tutorDirector';
 
 const router: express.Router = Router();
 const engine = new SocraticEngine();
@@ -57,6 +62,12 @@ const SendMessageSchema = z.object({
   language: z.enum(['EN', 'FR', 'DE', 'ES']).optional(),
   noFinalAnswer: z.boolean().optional(),
   messageImage: z.string().max(500000).optional(),
+  // Learner-model signals (kid mode): which choice card / template the student
+  // acted on, the representation that was on screen, and client-measured latency.
+  pickedDistractorIndex: z.number().int().min(0).max(5).optional(),
+  activeTemplateId: z.string().max(100).optional(),
+  representation: z.enum(['manipulative', 'visual', 'symbolic', 'story']).optional(),
+  responseTimeMs: z.number().int().min(0).max(3_600_000).optional(),
 });
 
 const GetSessionSchema = z.object({
@@ -185,6 +196,19 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       } catch (_) { /* non-critical */ }
     }
 
+    // Tutor Director: build an adaptive session plan from the learner model and
+    // bias the first turn toward its "learn" phase (concept + best representation).
+    // Kid mode only; non-critical.
+    let sessionPlan: SessionPlan | null = null;
+    let directorDirective: string | undefined;
+    if (userId !== 'anonymous' && grade != null && grade <= 5) {
+      try {
+        sessionPlan = await buildSessionPlan(userId, data.subject as Subject, { conceptKey: data.conceptKey ?? null });
+        directorDirective = sessionPlan.phases.find((p) => p.mode === 'learn')?.directive
+          ?? sessionPlan.phases[0]?.directive;
+      } catch (_) { /* director is non-critical */ }
+    }
+
     // Generate initial response (will ask for attempt)
     const response = await engine.processMessage({
       sessionId: session.id,
@@ -212,6 +236,8 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
       rsmTrack: data.rsmTrack,
       // Supplementary material (reading passage, graph description, etc.)
       context: data.context,
+      // Tutor Director: current-phase directive
+      directorDirective,
     });
 
     // Save assistant response (serialize metadata for Prisma Json)
@@ -262,6 +288,7 @@ router.post('/session/start', async (req: Request, res: Response, next: NextFunc
         effectiveGrade: effectiveGrade ?? null,
       },
       warmUp: warmUp ?? null,
+      plan: sessionPlan ?? null,
       messages: [
         {
           id: userMessage.id,
@@ -448,6 +475,53 @@ router.post('/message', async (req: Request, res: Response, next: NextFunction) 
       conceptKey: (session as any).conceptKey ?? null,
       subject: session.subject,
     }, session.id);
+
+    // ── Learner model: structured telemetry + misconception inference ──
+    // These run only for known users in kid-mode subjects and never block the
+    // response (all writes are fire-and-forget inside their services).
+    if (session.userId !== 'anonymous') {
+      const conceptKey = (session as any).conceptKey ?? null;
+      const lastMsgAt = session.messages.length
+        ? session.messages[session.messages.length - 1].createdAt.getTime()
+        : null;
+      const latencyMs = data.responseTimeMs
+        ?? (lastMsgAt ? Math.max(0, Date.now() - lastMsgAt) : null);
+
+      // Phase 1: infer which named misconception this wrong turn reveals.
+      let misconceptionId: string | null = null;
+      try {
+        if (!isCorrectTurn) {
+          misconceptionId = await inferMisconceptionForTurn({
+            userId: session.userId,
+            conceptKey,
+            subject: session.subject,
+            templateId: data.activeTemplateId ?? null,
+            pickedDistractorIndex: data.pickedDistractorIndex ?? null,
+            errorType: response.metadata.analysisResult?.errorType ?? null,
+            errorDescription: response.metadata.analysisResult?.errorDescription ?? null,
+          });
+        } else {
+          // A correct turn moves any active misconceptions on this concept
+          // toward RESOLVING -> RESOLVED.
+          await applyCorrectTowardResolution(session.userId, conceptKey, session.subject);
+        }
+      } catch (_) { /* inference is non-critical */ }
+
+      // Phase 0: write the structured per-turn events (spine).
+      recordTurnEvents({
+        userId: session.userId,
+        sessionId: session.id,
+        conceptKey,
+        templateId: data.activeTemplateId ?? null,
+        metadata: response.metadata,
+        prevHintLevel: (session as any).hintLevel ?? 0,
+        newHintLevel,
+        latencyMs,
+        representation: data.representation ?? null,
+        pickedDistractorIndex: data.pickedDistractorIndex ?? null,
+        misconceptionId,
+      }).catch(() => {});
+    }
 
     // Analytics: hint_escalated (when hint level increased this turn)
     const prevHintLevel = (session as any).hintLevel ?? 0;
@@ -680,6 +754,26 @@ router.post('/session/:sessionId/end', async (req: Request, res: Response, next:
       }
       await generatePath(session.userId, session.subject).catch(() => {});
     } catch (_) { /* mastery tracking is non-critical */ }
+
+    // Learner model: session-end rollup (habits + channel + struggle/affect) and
+    // buddy sync (mirrors taught concepts). Non-critical; runs after mastery so
+    // the buddy reflects the latest mastery values. Skipped for anonymous users.
+    if (session.userId !== 'anonymous') {
+      try {
+        // A clean session end with no abandonment signal yet — record an end marker
+        // so the rollup has a complete picture.
+        await logLearnerEvent({
+          userId: session.userId,
+          sessionId,
+          conceptKey: (session as any).conceptKey ?? null,
+          kind: isResolved ? 'BREAKTHROUGH' : 'STALL',
+          correct: isResolved,
+          hintLevel: (session as any).maxHintLevel ?? session.hintLevel ?? 0,
+        });
+        await rollupLearnerModel(session.userId);
+        await syncBuddyFromSession(session.userId, sessionId);
+      } catch (_) { /* learner rollup is non-critical */ }
+    }
 
     // Analytics: quest_completed
     const sessionMessages = session.messages ?? [];

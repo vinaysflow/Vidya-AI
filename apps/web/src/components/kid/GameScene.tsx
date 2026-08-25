@@ -10,10 +10,12 @@
  * - Progress driven by correct-answer count, not total assistant messages
  */
 
-import { useEffect, useCallback, useRef, useState } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
 import { Volume2 } from 'lucide-react';
 import { VidyaCharacter, type VidyaState } from './VidyaCharacter';
+import { Companion, type CompanionMood } from './Companion';
+import { SceneHero } from './SceneHero';
 import { SceneCanvas } from './SceneCanvas';
 import { cn } from '../../lib/utils';
 import { getTheme, parseChoices, CHAPTER_THEMES } from './questSceneTheme';
@@ -26,9 +28,16 @@ import { getTransitionMessage } from './getTransitionMessage';
 import { NarrativeExit } from './NarrativeExit';
 import { useVidyaVoice } from '../../hooks/useVidyaVoice';
 import type { VoicePlayOptions } from '../../hooks/useVidyaVoice';
+import { InteractionRenderer } from '../../interactions/registry';
+import { synthesizeInteraction } from '../../interactions/synthesize';
+import type { InteractionResult } from '../../interactions/types';
+import { colorOf } from '../../interactions/colorTokens';
 
 // Optional AI-generated scene images — only enabled when VITE_ENABLE_AI_SCENES=true
 const AI_SCENES_ENABLED = import.meta.env.VITE_ENABLE_AI_SCENES === 'true';
+
+// The RM hero art — background removed + tightly cropped (true transparent PNG).
+const BUDDY_AVATAR_SRC = '/proto/rm-hero-cut.png';
 
 // Show up to 2 sentences in the speech bubble so the kid sees the full response
 // and the follow-up question.
@@ -48,6 +57,55 @@ function truncateForBubble(text: string): string {
   // No sentence boundary: cap at 200 chars
   return text.length > 200 ? text.slice(0, 197).trimEnd() + '…' : text;
 }
+
+function significantWords(text: string): Set<string> {
+  return new Set(
+    text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w.length > 3)
+  );
+}
+
+// Fraction of the bubble's significant words that also appear in the prompt.
+// Used to detect when the buddy is just re-reading the problem.
+function promptOverlap(bubble: string, prompt: string): number {
+  const b = significantWords(bubble);
+  if (b.size === 0) return 0;
+  const p = significantWords(prompt);
+  let shared = 0;
+  b.forEach((w) => { if (p.has(w)) shared++; });
+  return shared / b.size;
+}
+
+function lastSentence(text: string): string {
+  const s = text.match(/[^.!?]+[.!?]+/g);
+  return s && s.length > 0 ? s[s.length - 1].trim() : text.trim();
+}
+
+// Collapse consecutive duplicate sentences ("How many in all? How many in all?")
+// — the LLM occasionally repeats its question verbatim, which reads as a glitch.
+function dedupeSentences(text: string): string {
+  if (!text) return '';
+  const parts = text.match(/[^.!?]+[.!?]+/g);
+  if (!parts || parts.length < 2) return text;
+  const seen = new Set<string>();
+  const kept: string[] = [];
+  for (const p of parts) {
+    const key = p.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    kept.push(p.trim());
+  }
+  return kept.join(' ');
+}
+
+// Kid-facing habits of mind ("Thinking Powers") — collected as the child learns.
+const KID_HABIT_META: Record<string, { label: string; emoji: string }> = {
+  persistence: { label: 'Never Gives Up', emoji: '🧗' },
+  patternSeeking: { label: 'Pattern Spotter', emoji: '🔍' },
+  precision: { label: 'Careful Thinker', emoji: '🎯' },
+  selfCorrection: { label: 'Fixes Mistakes', emoji: '🔁' },
+  explanation: { label: 'Great Explainer', emoji: '🗣️' },
+};
+const KID_HABIT_ORDER = ['persistence', 'patternSeeking', 'precision', 'selfCorrection', 'explanation'];
 
 const KID_HEADERS: Record<string, string> = {
   celebration: 'Got it.',
@@ -71,9 +129,11 @@ const CHAPTER_TO_NARRATIVE_THEME: Record<string, string> = {
   'YouTube Creator': 'youtube',
 };
 
+// Edgy, high-energy gradients for the answer cards (cycled by index).
 const CHOICE_COLORS = [
-  'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700',
-  'bg-violet-500 hover:bg-violet-600 active:bg-violet-700',
+  'from-emerald-400 to-teal-600 shadow-emerald-500/40 border-emerald-700',
+  'from-violet-500 to-fuchsia-600 shadow-fuchsia-500/40 border-fuchsia-800',
+  'from-sky-400 to-blue-600 shadow-blue-500/40 border-blue-800',
 ];
 
 type Choice = { letter: string; text: string };
@@ -116,10 +176,17 @@ function getFallbackChoices(questionType: string | undefined): Choice[] {
   return FALLBACK_CHOICES[questionType] ?? FALLBACK_CHOICES._default;
 }
 
+interface TurnSignals {
+  representation?: 'manipulative' | 'visual' | 'symbolic' | 'story';
+  activeTemplateId?: string;
+  pickedDistractorIndex?: number;
+  responseTimeMs?: number;
+}
+
 interface GameSceneProps {
   messages: Message[];
   isLoading: boolean;
-  onSendMessage: (content: string) => void;
+  onSendMessage: (content: string, image?: string, signals?: TurnSignals) => void;
   onEndSession: () => void;
 }
 
@@ -158,8 +225,23 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     gradeLevelsUp: number;
   } | null>(null);
   const [progressLoading, setProgressLoading] = useState(false);
+  // Learner model: habits-of-mind ("thinking powers") + buddy growth projection.
+  const [habits, setHabits] = useState<Record<string, { score: number; trend: 'up' | 'flat' | 'down' }> | null>(null);
+  const [buddy, setBuddy] = useState<{ level: number; callback: string | null; taughtCount: number } | null>(null);
   // NarrativeExit: shown when student taps "End adventure" instead of jumping straight out
   const [showNarrativeExit, setShowNarrativeExit] = useState(false);
+  // Live feedback loop: a transient correct/wrong pulse that drives the reactive
+  // SceneCanvas (block slam, character jump, screen flash) + the reward sound +
+  // a streak/combo so every answer FEELS like it moved the game forward.
+  const [sceneResult, setSceneResult] = useState<'correct' | 'wrong' | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [rewardBurst, setRewardBurst] = useState<{ key: number; combo: number } | null>(null);
+  const lastTurnIdRef = useRef<string | null>(null);
+  // Floating "+XP" chips that fly off on a correct answer.
+  const [xpFloats, setXpFloats] = useState<Array<{ key: number; amount: number }>>([]);
+  // Buddy level-up moment (the meta-progression reward between adventures).
+  const [companionLevelUp, setCompanionLevelUp] = useState<number | null>(null);
+  const prevBuddyLevelRef = useRef<number | null>(null);
 
   // Voice hook -- replaces inline TTS state/callbacks
   const { play: playVoice, stop: stopVoice, isPlaying: voiceIsPlaying, isLoading: voiceIsLoading } = useVidyaVoice();
@@ -169,6 +251,27 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   const questionType = lastAssistant?.metadata?.questionType as string | undefined;
   const { narrative, choices: parsedChoices } = parseChoices(lastAssistant?.content ?? '');
   const choices = parsedChoices.length > 0 ? parsedChoices : (lastAssistant ? getFallbackChoices(questionType) : []);
+
+  // ── Game-based learning: turn the word problem into a playable manipulative.
+  // When the quest prompt matches a known shape (e.g. equal-groups), we render
+  // the interaction instead of lettered cards. Otherwise `spec` is null and the
+  // choice cards remain the fallback — nothing breaks.
+  const interactiveSpec = useMemo(
+    () =>
+      activeQuest?.prompt
+        ? synthesizeInteraction(activeQuest.prompt, { subject, id: activeQuest.id })
+        : null,
+    [activeQuest?.prompt, activeQuest?.id, subject]
+  );
+  // Only present the manipulative on "your turn"-type phases (not celebration /
+  // explain-back), and not again once the child has built it this quest.
+  const ATTEMPT_QUESTION_TYPES = ['attempt_prompt', 'socratic', 'foundational', 'hint_with_question', 'encouragement'];
+  const solvedSpecRef = useRef<Set<string>>(new Set());
+  const showInteraction =
+    !!interactiveSpec &&
+    !isLoading &&
+    !solvedSpecRef.current.has(interactiveSpec.id) &&
+    (questionType === undefined || ATTEMPT_QUESTION_TYPES.includes(questionType));
 
   // Detect hint loop: 3+ consecutive assistant messages that are hint/foundational with no parsed choices
   const assistantMessages = messages.filter((m) => m.role === 'assistant');
@@ -181,14 +284,22 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
 
   // Show up to 2 sentences in the speech bubble.
   // If the LLM just parrots the quest prompt, suppress it to avoid repeating the prompt bar.
-  const rawBubble = narrative || lastAssistant?.content || '';
+  const rawBubble = dedupeSentences(narrative || lastAssistant?.content || '');
   const questPrompt = activeQuest?.prompt ?? '';
   const isSameAsPrompt = questPrompt.length > 0 &&
     rawBubble.replace(/\s+/g, ' ').trim().toLowerCase().includes(
       questPrompt.replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 60)
     );
+  // Detect a paraphrase re-read: the bubble heavily overlaps the prompt without
+  // being an exact copy. In that case show only the buddy's actual question
+  // (last sentence) so the kid isn't reading the same problem twice.
+  const isParaphraseOfPrompt =
+    !isSameAsPrompt && questPrompt.length > 0 && rawBubble.length > 80 &&
+    promptOverlap(rawBubble, questPrompt) > 0.5;
   const displayText = isSameAsPrompt
     ? truncateForBubble(rawBubble.replace(questPrompt, '').trim() || 'Pick the right answer!')
+    : isParaphraseOfPrompt
+    ? truncateForBubble(lastSentence(rawBubble))
     : truncateForBubble(rawBubble);
 
   // Derive tone from game state for emotionally intelligent voice
@@ -245,6 +356,16 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     questionType === 'hint_with_question' || questionType === 'foundational' || questionType === 'encouragement' ? 'puzzled' :
     questionType === 'attempt_prompt' || questionType === 'socratic' ? 'talking' : 'idle';
 
+  // Companion mood — prefers the live answer pulse, then the turn type.
+  const companionMood: CompanionMood =
+    sceneResult === 'correct' ? 'happy' :
+    sceneResult === 'wrong' ? 'oops' :
+    isLoading ? 'think' :
+    questionType === 'celebration' || questionType === 'celebrate_then_explain_back' ? 'happy' :
+    questionType === 'hint_with_question' || questionType === 'foundational' ? 'think' :
+    questionType === 'attempt_prompt' || questionType === 'socratic' ? 'talk' : 'idle';
+  const companionLevel = buddy?.level ?? 1;
+
   // Scene phase tracking
   useEffect(() => {
     if (questionType === 'celebrate_then_explain_back') setScenePhase('explain-back');
@@ -274,6 +395,96 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   useEffect(() => {
     if (isQuestComplete) playSound('complete');
   }, [isQuestComplete]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Live feedback loop ──────────────────────────────────────────────────
+  // On every NEW assistant turn, classify the result and drive the reactive
+  // scene + reward sound + streak. This reconnects the SceneCanvas juice
+  // (block slam / jump / flash) and the correct/wrong sounds, which were
+  // previously built but never wired to the answer loop.
+  const hasUserAttempted = messages.some((m) => m.role === 'user');
+  useEffect(() => {
+    if (isLoading || !lastAssistant) return;
+    if (lastTurnIdRef.current === lastAssistant.id) return;
+    const isFirstTurn = lastTurnIdRef.current === null;
+    lastTurnIdRef.current = lastAssistant.id ?? null;
+
+    const qt = lastAssistant.metadata?.questionType as string | undefined;
+    const isCorrect = qt === 'celebration' || qt === 'celebrate_then_explain_back';
+    const isWrong =
+      hasUserAttempted &&
+      (qt === 'hint_with_question' || qt === 'foundational' || qt === 'encouragement');
+
+    // Don't flash on the very first render (e.g. resuming a quest); only react
+    // to turns the kid actually produced this session.
+    if (isFirstTurn && !isLoading) {
+      if (isCorrect) setStreak((s) => s + 1);
+      return;
+    }
+
+    if (isCorrect) {
+      setSceneResult('correct');
+      playSound('correct');
+      setStreak((s) => {
+        const next = s + 1;
+        setRewardBurst({ key: Date.now(), combo: next });
+        return next;
+      });
+    } else if (isWrong) {
+      setSceneResult('wrong');
+      playSound('wrong');
+      setStreak(0);
+    } else {
+      setSceneResult(null);
+    }
+
+    const t = setTimeout(() => {
+      setSceneResult(null);
+      setRewardBurst(null);
+    }, 1100);
+    return () => clearTimeout(t);
+  }, [lastAssistant?.id, isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Floating +XP chips on each correct answer (bigger reward for combos).
+  useEffect(() => {
+    if (sceneResult !== 'correct') return;
+    const amount = 10 + Math.max(0, streak - 1) * 5; // 10, 15, 20… as the streak builds
+    const key = Date.now();
+    setXpFloats((f) => [...f, { key, amount }]);
+    const t = setTimeout(() => setXpFloats((f) => f.filter((x) => x.key !== key)), 1000);
+    return () => clearTimeout(t);
+  }, [sceneResult]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Live learner-model HUD data (buddy growth + thinking powers). Fetched on
+  // mount and on each new adventure so the persistent HUD is never empty, and
+  // so a buddy level-up earned last session is celebrated when the kid returns.
+  const refreshLearner = useCallback(async () => {
+    if (!userId || userId === 'anonymous') return;
+    try {
+      const [traitsRes, buddyRes] = await Promise.all([
+        fetch(`${getApiBase()}/api/learner/traits?userId=${encodeURIComponent(userId)}`, { headers: getJsonHeaders() }).catch(() => null),
+        fetch(`${getApiBase()}/api/learner/buddy?userId=${encodeURIComponent(userId)}`, { headers: getJsonHeaders() }).catch(() => null),
+      ]);
+      if (traitsRes?.ok) {
+        const t = await traitsRes.json().catch(() => null);
+        if (t?.success && t.traits?.habits) setHabits(t.traits.habits);
+      }
+      if (buddyRes?.ok) {
+        const b = await buddyRes.json().catch(() => null);
+        if (b?.success && b.buddy) {
+          const level = b.buddy.level ?? 1;
+          setBuddy({ level, callback: b.buddy.callback ?? null, taughtCount: Object.keys(b.buddy.conceptKnowledge ?? {}).length });
+          const prev = prevBuddyLevelRef.current;
+          if (prev !== null && level > prev) {
+            setCompanionLevelUp(level);
+            playSound('levelUp');
+          }
+          prevBuddyLevelRef.current = level;
+        }
+      }
+    } catch { /* non-critical */ }
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { refreshLearner(); }, [refreshLearner, activeQuest?.id]);
 
   // Detect adaptive grade level-up
   useEffect(() => {
@@ -322,9 +533,58 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     (text: string, _letter?: string) => {
       playSound('tap');
       setChoiceAnimKey((k) => k + 1);
-      onSendMessage(text);
+      // Kid mode is visual-first (SceneCanvas). Tag the turn's representation so
+      // the learner-model channel inference can credit what precedes breakthroughs.
+      onSendMessage(text, undefined, { representation: 'visual' });
     },
     [onSendMessage, playSound]
+  );
+
+  // When the child finishes a manipulative, translate what they BUILT into a
+  // natural answer and feed it back into the Socratic loop — tagged as a
+  // 'manipulative' representation so the learner model credits the channel.
+  const handleInteractionComplete = useCallback(
+    (result: InteractionResult) => {
+      if (interactiveSpec) solvedSpecRef.current.add(interactiveSpec.id);
+      playSound('correct');
+      let msg = 'Done!';
+      if (result.kind === 'equal_groups') {
+        const d = result.detail as { groups: number; perGroup: number; total: number } | undefined;
+        msg = d
+          ? `I made ${d.groups} groups of ${d.perGroup}, so ${d.total} in all.`
+          : 'I built it!';
+      } else if (result.kind === 'sort_categorize') {
+        msg = result.correct ? 'I sorted them all into the right groups!' : 'I sorted them.';
+      } else if (result.kind === 'partition_split') {
+        const d = result.detail as { numerator: number; denominator: number } | undefined;
+        msg = d ? `I shaded ${d.numerator} out of ${d.denominator} parts — that's ${d.numerator}/${d.denominator}.` : 'I shaded the fraction.';
+      } else if (result.kind === 'place_on_scale') {
+        const d = result.detail as { placed: Record<string, number> } | undefined;
+        const vals = d ? Object.values(d.placed) : [];
+        msg = vals.length === 1 ? `I placed it at ${vals[0]} on the number line.` : 'I placed them on the number line.';
+      } else if (result.kind === 'complete_pattern') {
+        const d = result.detail as { fills: string[] } | undefined;
+        const last = d?.fills?.[d.fills.length - 1];
+        msg = last ? `The next one is ${last}.` : 'I completed the pattern.';
+      } else if (result.kind === 'order_sequence') {
+        msg = 'I put them all in the right order!';
+      } else if (result.kind === 'match_connect') {
+        msg = 'I matched them all up!';
+      }
+      onSendMessage(msg, undefined, {
+        representation: 'manipulative',
+        responseTimeMs: result.durationMs,
+      });
+    },
+    [interactiveSpec, onSendMessage, playSound]
+  );
+
+  const handleInteractionSignal = useCallback(
+    (signal: 'pick_up' | 'drop_correct' | 'drop_wrong' | 'all_placed') => {
+      if (signal === 'pick_up') playSound('tap');
+      else if (signal === 'drop_wrong') playSound('wrong');
+    },
+    [playSound]
   );
 
   const quickActions = [
@@ -343,12 +603,34 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
     if (userId && userId !== 'anonymous' && !progressSummary) {
       setProgressLoading(true);
       try {
-        const res = await fetch(`${getApiBase()}/api/progress/summary?userId=${encodeURIComponent(userId)}`, {
-          headers: getJsonHeaders(),
-        });
-        if (res.ok) {
-          const data = await res.json() as { success: boolean; summary: typeof progressSummary };
+        const [summaryRes, traitsRes, buddyRes] = await Promise.all([
+          fetch(`${getApiBase()}/api/progress/summary?userId=${encodeURIComponent(userId)}`, {
+            headers: getJsonHeaders(),
+          }),
+          fetch(`${getApiBase()}/api/learner/traits?userId=${encodeURIComponent(userId)}`, {
+            headers: getJsonHeaders(),
+          }).catch(() => null),
+          fetch(`${getApiBase()}/api/learner/buddy?userId=${encodeURIComponent(userId)}`, {
+            headers: getJsonHeaders(),
+          }).catch(() => null),
+        ]);
+        if (summaryRes.ok) {
+          const data = await summaryRes.json() as { success: boolean; summary: typeof progressSummary };
           if (data.success && data.summary) setProgressSummary(data.summary);
+        }
+        if (traitsRes?.ok) {
+          const t = await traitsRes.json().catch(() => null);
+          if (t?.success && t.traits?.habits) setHabits(t.traits.habits);
+        }
+        if (buddyRes?.ok) {
+          const b = await buddyRes.json().catch(() => null);
+          if (b?.success && b.buddy) {
+            setBuddy({
+              level: b.buddy.level ?? 1,
+              callback: b.buddy.callback ?? null,
+              taughtCount: Object.keys(b.buddy.conceptKnowledge ?? {}).length,
+            });
+          }
         }
       } catch (_) { /* non-critical */ } finally {
         setProgressLoading(false);
@@ -424,7 +706,11 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
   return (
     <div
       data-testid="game-scene"
-      className="relative flex h-full flex-col overflow-hidden"
+      className={cn(
+        'relative flex h-full flex-col overflow-hidden',
+        sceneResult === 'correct' && 'animate-[scorePop_0.4s_ease-out]',
+        sceneResult === 'wrong' && 'animate-[wrongShake_0.4s_ease-out]'
+      )}
       style={{ maxHeight: '100dvh' }}
     >
       {/* Quest Accepted overlay — shows for 1.5s on quest start, skipped in calm mode */}
@@ -438,23 +724,114 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         </div>
       )}
 
-      {/* ── 1. Scene Canvas (40% of viewport) ─────────────────────────────── */}
+      {/* ── 0. Companion HUD — persistent progression (buddy + XP + thinking powers) ── */}
       <div className="relative shrink-0 px-3 pt-3">
-        {/* AI-generated background image (opt-in via VITE_ENABLE_AI_SCENES=true) */}
-        {aiSceneUrl && (
-          <img
-            src={aiSceneUrl}
-            alt=""
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-3 top-3 rounded-2xl object-cover opacity-30"
-          />
-        )}
-        <SceneCanvas
-          chapter={activeQuest.chapter}
-          progress={progress}
-          lastResult={null}
-        />
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-white/90 px-3 py-2 shadow-sm dark:border-slate-700/60 dark:bg-slate-800/90">
+          <Companion level={companionLevel} mood={companionMood} size={46} imageSrc={BUDDY_AVATAR_SRC} />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between">
+              <span className="truncate text-xs font-bold text-slate-700 dark:text-slate-200">
+                Buddy · Level {companionLevel}
+              </span>
+              {streak >= 2 && (
+                <span
+                  className={cn(
+                    'ml-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-extrabold',
+                    streak >= 3
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white animate-[scorePop_0.5s_ease-out]'
+                      : 'text-orange-500'
+                  )}
+                >
+                  🔥 {streak >= 3 ? `ON FIRE · ${streak}` : streak}
+                </span>
+              )}
+            </div>
+            {/* Adventure XP bar */}
+            <div className="relative mt-1 h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500 transition-[width] duration-500"
+                style={{ width: `${Math.round(progress * 100)}%` }}
+              />
+              {/* Floating +XP chips */}
+              {xpFloats.map((x) => (
+                <span
+                  key={x.key}
+                  className="pointer-events-none absolute -top-4 right-1 text-xs font-extrabold text-amber-500 animate-[xpFloat_1s_ease-out_forwards]"
+                >
+                  +{x.amount} XP
+                </span>
+              ))}
+            </div>
+            {/* Thinking Powers — live, no scores */}
+            <div className="mt-1.5 flex items-center gap-1">
+              {KID_HABIT_ORDER.map((k) => {
+                const meta = KID_HABIT_META[k];
+                const h = habits?.[k];
+                const lit = !!h && h.score >= 0.5;
+                return (
+                  <span
+                    key={k}
+                    title={meta.label + (h?.trend === 'up' ? ' (rising!)' : '')}
+                    className={cn(
+                      'text-sm transition-all',
+                      lit ? 'opacity-100' : 'opacity-25 grayscale'
+                    )}
+                  >
+                    {meta.emoji}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* ── 1. Scene Canvas — the decorative themed scene. Hidden while a
+              manipulative is active so the GAME is the focus, not chrome. The
+              HUD's buddy avatar still carries RM's presence + reactions. ───── */}
+      {!showInteraction && (
+        <div className="relative shrink-0 px-3 pt-2">
+          {/* AI-generated background image (opt-in via VITE_ENABLE_AI_SCENES=true) */}
+          {aiSceneUrl && (
+            <img
+              src={aiSceneUrl}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-3 top-3 rounded-2xl object-cover opacity-30"
+            />
+          )}
+          <SceneCanvas
+            chapter={activeQuest.chapter}
+            progress={progress}
+            lastResult={sceneResult}
+          />
+
+          {/* RM hero — the protagonist standing in the scene, reacting to answers */}
+          <SceneHero src={BUDDY_AVATAR_SRC} mood={companionMood} />
+
+          {/* Reward burst — pops over the scene on a correct answer, with a combo
+              streak so consecutive wins build momentum (Fortnite-style "you're on fire"). */}
+          {rewardBurst && (
+            <div
+              key={rewardBurst.key}
+              className="pointer-events-none absolute inset-x-0 top-4 z-30 flex flex-col items-center gap-1 animate-[comboPop_0.5s_ease-out]"
+            >
+              {rewardBurst.combo >= 2 ? (
+                <>
+                  <div className="text-3xl drop-shadow-lg">🔥</div>
+                  <div className="rounded-full bg-orange-500/95 px-4 py-1 text-sm font-extrabold text-white shadow-lg">
+                    {rewardBurst.combo} in a row!
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-full bg-emerald-500/95 px-4 py-1 text-sm font-extrabold text-white shadow-lg">
+                  Nice! +1 ⭐
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── 2a. Reading Context (shown when quest has supplementary material) ── */}
       {activeQuest.context && (
@@ -473,20 +850,28 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         </div>
       )}
 
-      {/* ── 2b. Persistent Quest Prompt ────────────────────────────────── */}
-      <div className="shrink-0 px-3 pt-2">
-        <div
-          data-testid="quest-prompt"
-          className="rounded-xl bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-300 dark:border-amber-700/50 px-4 py-3"
-        >
-          <p className="text-base font-semibold leading-relaxed text-amber-900 dark:text-amber-200">
-            <span className="mr-1.5">&#128218;</span>
-            {activeQuest.prompt}
-          </p>
+      {/* ── 2b. Mission card — the canonical problem (single source of truth).
+              Hidden when a manipulative is active: the game renders its own
+              mission, so showing both would duplicate the prompt. ── */}
+      {!showInteraction && (
+        <div className="shrink-0 px-3 pt-2">
+          <div
+            data-testid="quest-prompt"
+            className="rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-2.5 dark:border-amber-700/50 dark:bg-amber-900/30"
+          >
+            <div className="mb-0.5 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wide text-amber-500 dark:text-amber-400">
+              <span>🎯</span> Mission
+            </div>
+            <p className="text-[15px] font-semibold leading-snug text-amber-900 dark:text-amber-200">
+              {activeQuest.prompt}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* ── 2b. Speech Bubble (Vidya's latest response) ───────────────── */}
+      {/* ── 2b. Speech Bubble — hidden during a manipulative (the game shows
+              its own mission, so the bubble would only duplicate it). ─────── */}
+      {!showInteraction && (
       <div className="relative shrink-0 px-3 pt-2">
         <div
           data-testid="vidya-bubble"
@@ -510,6 +895,12 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
             {questionType && (
               <div className="mb-0.5 font-fredoka text-sm tracking-wide text-amber-600 dark:text-amber-400">
                 {KID_HEADERS[questionType] ?? 'Vidya says…'}
+              </div>
+            )}
+            {/* Buddy growth cue — teaching the buddy is how it learns from the kid */}
+            {questionType === 'celebrate_then_explain_back' && (
+              <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-800/50 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide">
+                <span>🌱</span> Your buddy is learning from you!
               </div>
             )}
             {isLoading ? (
@@ -537,6 +928,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
           </div>
         </div>
       </div>
+      )}
 
       {/* ── Loop escape hatch ─────────────────────────────────────────── */}
       {isStuckInLoop && (
@@ -553,9 +945,34 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         </div>
       )}
 
-      {/* ── 3. Choice Cards (always shown, including explain-back) ─────────── */}
+      {/* ── 3. Interaction zone: a playable manipulative when the problem maps
+              to one, otherwise the choice cards (graceful fallback). ───────── */}
       <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-2 pt-3">
-        {choices.length > 0 && !isLoading ? (
+        {showInteraction && interactiveSpec ? (
+          <>
+            <InteractionRenderer
+              key={interactiveSpec.id}
+              spec={interactiveSpec}
+              onComplete={handleInteractionComplete}
+              onSignal={handleInteractionSignal}
+            />
+            {/* Escape hatches stay available during the manipulative */}
+            <div className="mt-3 flex justify-center gap-2">
+              {quickActions.map((a, i) => (
+                <button
+                  key={i}
+                  data-testid="quick-action"
+                  aria-label={a.label}
+                  onClick={() => handleChoice(a.label)}
+                  disabled={isLoading}
+                  className="rounded-xl bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600 transition-all hover:bg-slate-200 active:scale-95 dark:bg-slate-700 dark:text-slate-300"
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          </>
+        ) : choices.length > 0 && !isLoading ? (
           <div
             key={choiceAnimKey}
             className={cn(
@@ -572,19 +989,29 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                     onClick={() => handleChoice(c.text, c.letter)}
                     disabled={isLoading}
                     className={cn(
-                      'group relative overflow-hidden w-full flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-1 rounded-2xl px-4 py-3 sm:py-4 text-left sm:text-center font-bold text-white shadow-md transition-all active:scale-95 disabled:opacity-40',
-                      CHOICE_COLORS[i % 3],
-                      'animate-[bubbleAppear_0.2s_ease-out]'
+                      'group relative overflow-hidden w-full flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-1.5 rounded-2xl border-b-4 bg-gradient-to-br px-4 py-3.5 sm:py-5 text-left sm:text-center font-extrabold text-white shadow-lg transition-all duration-150',
+                      'hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110 active:translate-y-0.5 active:border-b-2 active:brightness-95 disabled:opacity-40',
+                      'ring-1 ring-white/20',
+                      CHOICE_COLORS[i % CHOICE_COLORS.length],
+                      'animate-[bubbleAppear_0.25s_ease-out]'
                     )}
-                    style={{ animationDelay: `${i * 60}ms`, minHeight: 56 }}
+                    style={{ animationDelay: `${i * 70}ms`, minHeight: 64 }}
                   >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-fredoka">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-black/25 text-base font-fredoka shadow-inner ring-1 ring-white/30">
                       {c.letter}
                     </span>
-                    <span className="text-sm leading-tight">{c.text}</span>
-                    {/* Shimmer on hover */}
+                    {/* Color swatch — when the answer names a color, show the actual color */}
+                    {colorOf(c.text) && (
+                      <span
+                        aria-hidden="true"
+                        className="h-6 w-6 shrink-0 rounded-full border-2 border-white/70 shadow-inner"
+                        style={{ backgroundColor: colorOf(c.text) as string }}
+                      />
+                    )}
+                    <span className="text-[15px] leading-tight drop-shadow-sm">{c.text}</span>
+                    {/* Shimmer sweep on hover */}
                     <span className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
-                      <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                     </span>
                   </button>
                 </div>
@@ -610,7 +1037,7 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
         ) : null}
 
         {/* Quick actions — always visible below choices */}
-        {choices.length > 0 && !isLoading && (
+        {!showInteraction && choices.length > 0 && !isLoading && (
           <div className="mt-2 flex justify-center gap-2">
             {quickActions.map((a, i) => (
               <button
@@ -632,7 +1059,13 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
       <div className="shrink-0 border-t border-slate-200/60 bg-white/90 px-4 py-2 dark:border-slate-700/60 dark:bg-slate-900/90">
         <div className="flex items-center justify-between">
           {/* Animated progress ring */}
-          <div data-testid="quest-progress" className="flex items-center gap-2">
+          <div
+            data-testid="quest-progress"
+            className={cn(
+              'flex items-center gap-2',
+              sceneResult === 'correct' && 'animate-[comboPop_0.5s_ease-out]'
+            )}
+          >
             {(() => {
               const totalSteps = questTotalSteps;
               const stepCount = correctAnswers;
@@ -739,6 +1172,48 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
                       : 'right at your grade — keep going!'}
                   </span>
                 </div>
+
+                {/* Thinking Powers — kid-facing habits of mind (no scores) */}
+                {habits && Object.keys(habits).length > 0 && (
+                  <div className="rounded-xl bg-violet-50 dark:bg-violet-900/30 px-4 py-3">
+                    <p className="font-bold text-violet-700 dark:text-violet-300 mb-1.5">Your Thinking Powers</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {KID_HABIT_ORDER.filter((k) => habits[k]).map((k) => {
+                        const meta = KID_HABIT_META[k];
+                        const lit = habits[k].score >= 0.5;
+                        return (
+                          <span
+                            key={k}
+                            title={meta.label}
+                            className={cn(
+                              'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold',
+                              lit
+                                ? 'bg-violet-200 text-violet-800 dark:bg-violet-700/60 dark:text-violet-100'
+                                : 'bg-slate-100 text-slate-400 dark:bg-slate-700/50'
+                            )}
+                          >
+                            <span>{meta.emoji}</span>
+                            <span>{meta.label}</span>
+                            {habits[k].trend === 'up' && <span className="text-emerald-500">↑</span>}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Buddy growth — the teachable-agent projection */}
+                {buddy && (
+                  <div className="rounded-xl bg-amber-50 dark:bg-amber-900/30 px-4 py-3">
+                    <span className="text-slate-600 dark:text-slate-300">Your buddy is </span>
+                    <span className="font-bold text-amber-700 dark:text-amber-300">Level {buddy.level}</span>
+                    {buddy.taughtCount > 0 && (
+                      <span className="text-slate-600 dark:text-slate-300">
+                        {' '}— you've taught it {buddy.taughtCount} thing{buddy.taughtCount !== 1 ? 's' : ''}!
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             ) : (
               <p className="text-slate-500 text-sm">
@@ -777,6 +1252,35 @@ export function GameScene({ messages, isLoading, onSendMessage, onEndSession }: 
               className="bg-amber-500 text-white rounded-2xl px-6 py-2 font-bold text-sm hover:bg-amber-600 transition-colors"
             >
               Let's go
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Buddy level-up — meta-progression reward for what the kid taught it */}
+      {companionLevelUp !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={() => setCompanionLevelUp(null)}
+        >
+          <div
+            className="mx-4 max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl dark:bg-slate-900 animate-[comboPop_0.4s_ease-out]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto mb-3 w-fit">
+              <Companion level={companionLevelUp} mood="happy" size={120} showLevel={false} imageSrc={BUDDY_AVATAR_SRC} variant="full" />
+            </div>
+            <h2 className="font-fredoka text-2xl text-amber-500 dark:text-amber-400">
+              Your buddy reached Level {companionLevelUp}!
+            </h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              It grew from everything you taught it. Keep teaching to unlock more.
+            </p>
+            <button
+              onClick={() => setCompanionLevelUp(null)}
+              className="mt-5 rounded-2xl bg-amber-500 px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-amber-600"
+            >
+              Awesome!
             </button>
           </div>
         </div>

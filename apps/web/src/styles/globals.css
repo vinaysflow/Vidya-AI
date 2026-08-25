@@ -302,6 +302,24 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes xpFloat {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-22px); opacity: 0; }
+}
+
+@keyframes heroPowerRing {
+  0% { transform: scale(0.5); opacity: 0.85; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Quick celebratory pop for the whole play area on a correct answer */
+@keyframes scorePop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
 .animate-choice-press {
   animation: choicePress 0.2s ease-out;
 }

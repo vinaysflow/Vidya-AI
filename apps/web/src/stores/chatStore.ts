@@ -36,6 +36,14 @@ export type Subject =
   | 'CODING' | 'ENGLISH_LITERATURE' | 'ECONOMICS'
   | 'AI_LEARNING' | 'LOGIC';
 
+/** Optional per-turn signals the kid UI can attach for the learner model. */
+export interface LearnerTurnSignals {
+  representation?: 'manipulative' | 'visual' | 'symbolic' | 'story';
+  activeTemplateId?: string;
+  pickedDistractorIndex?: number;
+  responseTimeMs?: number;
+}
+
 export interface Message {
   id?: string;
   role: 'user' | 'assistant';
@@ -232,7 +240,7 @@ interface ChatState {
   startOnboarding: () => void;
   setOnboardingStep: (step: number) => void;
   startSession: (problem: string, problemImage?: string) => Promise<void>;
-  sendMessage: (content: string, messageImage?: string) => Promise<void>;
+  sendMessage: (content: string, messageImage?: string, signals?: LearnerTurnSignals) => Promise<void>;
   endSession: () => Promise<void>;
   generateQuiz: (count?: number) => Promise<void>;
   loadSession: (sessionId: string) => Promise<void>;
@@ -464,8 +472,13 @@ export const useChatStore = create<ChatState>()(
         }
       },
 
-      sendMessage: async (content: string, messageImage?: string) => {
+      sendMessage: async (content: string, messageImage?: string, signals?: LearnerTurnSignals) => {
         const { sessionId, language, messages, apiKey, noFinalAnswerMode } = get();
+        // Time since the last assistant turn — a learner-model latency signal.
+        const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
+        const measuredResponseTimeMs = lastAssistant?.timestamp
+          ? Math.max(0, Date.now() - new Date(lastAssistant.timestamp).getTime())
+          : undefined;
         const userMessage: Message = { role: 'user', content, language, timestamp: new Date(), ...(messageImage && { imageUrl: messageImage }) };
         set({ messages: [...messages, userMessage], isLoading: true, error: null, currentReport: null, currentQuiz: null });
 
@@ -477,6 +490,12 @@ export const useChatStore = create<ChatState>()(
 
           const body: Record<string, unknown> = { sessionId, message: content, language, noFinalAnswer: noFinalAnswerMode };
           if (messageImage) body.messageImage = messageImage;
+          // Learner-model turn signals (kid mode). Best-effort; server ignores blanks.
+          if (signals?.representation) body.representation = signals.representation;
+          if (signals?.activeTemplateId) body.activeTemplateId = signals.activeTemplateId;
+          if (signals?.pickedDistractorIndex != null) body.pickedDistractorIndex = signals.pickedDistractorIndex;
+          const responseTimeMs = signals?.responseTimeMs ?? measuredResponseTimeMs;
+          if (responseTimeMs != null) body.responseTimeMs = responseTimeMs;
 
           const response = await fetch(`${API_BASE}/api/tutor/message`, {
             method: 'POST',

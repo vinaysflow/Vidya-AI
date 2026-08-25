@@ -39,6 +39,7 @@ export interface TutorInput {
   clientUserId?: string;                // Opaque client user ID
   rsmTrack?: boolean | string;           // Enrichment track name or boolean
   context?: string;                      // Supplementary material (reading passage, graph description, code snippet, etc.)
+  directorDirective?: string;            // Tutor Director: current session-phase directive (mode + representation guidance)
 }
 
 export interface TutorResponse {

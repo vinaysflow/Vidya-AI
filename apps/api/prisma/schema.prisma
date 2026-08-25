@@ -512,6 +512,152 @@ model AnalyticsEvent {
 }
 
 // ============================================
+// LEARNER MODEL (Grade 4-5 math, first-class)
+// The system's model of the student. Five layers:
+//   1. Knowledge state      -> Progress (exists)
+//   2. Misconception ledger -> Misconception + MisconceptionState
+//   3. Learning channel      -> LearnerTraits.channelWeights
+//   4. Struggle/affect       -> LearnerTraits.struggleTolerance / frustrationProneness
+//   5. Habits of mind        -> LearnerTraits.habits
+// LearnerEvent is the append-only telemetry spine that feeds all of the above.
+// ============================================
+
+/// Append-only, queryable per-turn telemetry. Captures the structured signals
+/// the engine computes each turn (and previously discarded into Message.metadata
+/// and the fire-and-forget AnalyticsEvent). This is the spine the learner model
+/// is rolled up from. No FK relation (mirrors AnalyticsEvent) so writes never
+/// block the request path.
+model LearnerEvent {
+  id                  String           @id @default(cuid())
+  userId              String
+  sessionId           String?
+  conceptKey          String?
+  templateId          String?
+  ts                  DateTime         @default(now())
+
+  kind                LearnerEventKind
+
+  // Typed signal columns (nullable — not every kind populates every column)
+  correct             Boolean?
+  distanceFromSolution Float?
+  errorType           String?          // 'conceptual' | 'computational' | 'approach' | 'none'
+  errorDescription    String?          @db.Text
+  misconceptionId     String?          // resolved Misconception.id when inferred
+  hintLevel           Int?
+  latencyMs           Int?
+  representation      String?          // 'manipulative' | 'visual' | 'symbolic' | 'story'
+
+  payload             Json?            // small overflow for kind-specific extras
+
+  @@index([userId, conceptKey])
+  @@index([userId, ts])
+  @@index([sessionId])
+  @@index([kind])
+}
+
+/// Content catalog of named misconceptions (promoted from Concept.misconceptionsData
+/// and QuestionTemplate.misconceptions). Detection cues live in `signature`,
+/// remediation guidance in `remediation`.
+model Misconception {
+  id            String   @id @default(cuid())
+  key           String   @unique          // stable slug, e.g. "add_denominators"
+  conceptKey    String
+  subject       Subject  @default(MATHEMATICS)
+  gradeLevel    Int      @default(4)
+
+  description   String   @db.Text         // kid-neutral description of the error
+  parentLabel   String?                   // parent-friendly phrasing, e.g. "added the bottoms of fractions"
+
+  signature     Json?                     // { distractorIndices?: number[], errorType?, keywords?: string[] }
+  remediation   Json?                     // { representation, hintLadder?: string[], reframe? }
+
+  source        String?                   // "seed-v1"
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  states        MisconceptionState[]
+
+  @@index([conceptKey])
+  @@index([subject, gradeLevel])
+}
+
+enum MisconceptionStatus {
+  ACTIVE      // observed, not yet being remediated
+  RESOLVING   // student is producing correct work against this target
+  RESOLVED    // N consecutive correct — cleared
+}
+
+/// Per-student ledger of which misconceptions a child holds and their lifecycle.
+model MisconceptionState {
+  id                String              @id @default(cuid())
+  userId            String
+  misconceptionId   String
+  misconception     Misconception       @relation(fields: [misconceptionId], references: [id], onDelete: Cascade)
+
+  status            MisconceptionStatus @default(ACTIVE)
+  observations      Int                 @default(1)
+  consecutiveCorrect Int                @default(0)  // toward RESOLVING -> RESOLVED
+
+  firstObservedAt   DateTime            @default(now())
+  lastObservedAt    DateTime            @default(now())
+  resolvedAt        DateTime?
+
+  @@unique([userId, misconceptionId])
+  @@index([userId, status])
+}
+
+/// Slow-moving model of the learner: how they learn (channel), how they struggle,
+/// and their habits of mind. One row per user. Updated by the session-end rollup.
+model LearnerTraits {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+
+  // Learning-channel model — relative weight of each representation in this kid's breakthroughs.
+  channelWeights       Json     @default("{}")   // { manipulative, visual, symbolic, story } each ~0..1
+
+  // Struggle / affect model
+  struggleTolerance    Float    @default(0.5)    // 0..1; higher = give them longer before a hint
+  frustrationProneness Float    @default(0.5)    // 0..1; higher = de-escalate faster
+  optimalSessionMinutes Int?
+
+  // Habits of mind — the anti-score feedback currency.
+  // { persistence: {score,trend}, patternSeeking: {...}, precision, selfCorrection, explanation }
+  habits               Json     @default("{}")
+
+  lastRollupAt         DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+/// Teachable-agent projection of the learner model. The buddy "knows" what the
+/// child has taught it (mirrors mastery for taught concepts) and remembers
+/// explain-back moments for callbacks.
+model BuddyState {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+
+  conceptKnowledge Json     @default("{}")   // { [conceptKey]: { mastery, lastTaughtAt } }
+  taughtMoments    Json     @default("[]")   // [{ conceptKey, summary, at }]
+
+  level            Int      @default(1)
+  cosmetic         Json     @default("{}")
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum LearnerEventKind {
+  ATTEMPT
+  HINT_ESCALATED
+  CHOICE_SELECTED
+  EXPLAIN_BACK
+  BREAKTHROUGH
+  STALL
+  ABANDON
+}
+
+// ============================================
 // GAMIFICATION
 // ============================================
 
