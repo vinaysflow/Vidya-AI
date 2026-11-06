@@ -38,8 +38,10 @@ if (!result.success) {
   process.exit(1);
 }
 
-// At least one LLM provider must be configured
-if (!process.env.OPENAI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
-  console.error('❌ At least one of OPENAI_API_KEY or ANTHROPIC_API_KEY must be set');
+// At least one LLM provider must be configured — unless the deterministic mock
+// provider is enabled (USE_MOCK_LLM=1), which lets apps/api and CI run keyless.
+const mockLlm = ['1', 'true', 'yes'].includes((process.env.USE_MOCK_LLM || '').toLowerCase());
+if (!mockLlm && !process.env.OPENAI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+  console.error('❌ At least one of OPENAI_API_KEY or ANTHROPIC_API_KEY must be set (or set USE_MOCK_LLM=1)');
   process.exit(1);
 }
