@@ -1,7 +1,8 @@
+import { createHash } from 'node:crypto';
 import Anthropic from '@anthropic-ai/sdk';
 import OpenAI from 'openai';
 
-export type LlmProvider = 'anthropic' | 'openai' | 'ollama' | 'vllm';
+export type LlmProvider = 'anthropic' | 'openai' | 'ollama' | 'vllm' | 'mock';
 export type LlmModelType = 'analysis' | 'response';
 
 export interface LlmMessage {
@@ -64,10 +65,66 @@ const HEALTH_TIMEOUT_MS = Number.parseInt(process.env.LLM_HEALTH_TIMEOUT_MS || '
 function normalizeProvider(value?: string): LlmProvider | undefined {
   if (!value) return undefined;
   const normalized = value.toLowerCase();
-  if (normalized === 'anthropic' || normalized === 'openai' || normalized === 'ollama' || normalized === 'vllm') {
+  if (
+    normalized === 'anthropic' ||
+    normalized === 'openai' ||
+    normalized === 'ollama' ||
+    normalized === 'vllm' ||
+    normalized === 'mock'
+  ) {
     return normalized as LlmProvider;
   }
   return undefined;
+}
+
+/**
+ * Deterministic, offline mock provider so apps/api and CI can run a full turn
+ * without any real provider key. Enabled with USE_MOCK_LLM=1 (or LLM_PROVIDER=mock).
+ * It honors the Socratic contract: exactly one question per `response` turn and
+ * no essay prose. `analysis` turns return a JSON superset that parses cleanly
+ * for every module (essay / counselor / stem).
+ */
+export function isMockLlmEnabled(): boolean {
+  const v = (process.env.USE_MOCK_LLM || '').toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
+const MOCK_QUESTIONS: readonly string[] = [
+  "What's a moment from the last year that you keep coming back to?",
+  'When you did that, what were you actually trying to change?',
+  'Who noticed the difference you made, and what did they say?',
+  'What did that experience teach you about yourself?',
+  'If you stripped away what sounds impressive, what part still matters to you?',
+  'What would you have done differently if no one was watching?',
+  'Where did you feel most like yourself this year?',
+  "What's the smallest detail from that story that you'd never forget?",
+];
+
+const MOCK_ANALYSIS = {
+  // essay
+  readiness: 50,
+  strengths: [] as string[],
+  gaps: [] as string[],
+  suggestedFocus: 'understanding your story',
+  hasDraft: false,
+  // counselor
+  intent: 'share',
+  urgency: 'low',
+  relevantContextAreas: [] as string[],
+  sentimentTone: 'neutral',
+  actionability: 50,
+  // stem
+  distanceFromSolution: 50,
+  conceptsIdentified: [] as string[],
+  conceptGaps: [] as string[],
+  errorType: 'approach',
+  errorDescription: null as string | null,
+  studentStrengths: [] as string[],
+  isAttemptShown: false,
+};
+
+function mockHashToInt(input: string): number {
+  return createHash('sha256').update(input, 'utf8').digest().readUInt32BE(0);
 }
 
 export class LlmClient {
@@ -82,7 +139,11 @@ export class LlmClient {
   private dayTokens = 0;
 
   constructor(options: LlmClientOptions = {}) {
-    const provider = options.provider || normalizeProvider(process.env.LLM_PROVIDER) || 'ollama';
+    const provider =
+      options.provider ||
+      (isMockLlmEnabled() ? 'mock' : undefined) ||
+      normalizeProvider(process.env.LLM_PROVIDER) ||
+      'ollama';
     const fallbackProvider = options.fallbackProvider || normalizeProvider(process.env.LLM_FALLBACK_PROVIDER);
 
     const anthropicApiKey = options.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
@@ -145,6 +206,7 @@ export class LlmClient {
       case 'openai': return OPENAI_MODELS[modelType];
       case 'ollama': return OLLAMA_DEFAULT_MODEL;
       case 'vllm': return VLLM_DEFAULT_MODEL;
+      case 'mock': return 'mock-deterministic';
     }
   }
 
@@ -160,7 +222,23 @@ export class LlmClient {
         return this.callOllama(params, modelOverride);
       case 'vllm':
         return this.callVllm(params, modelOverride);
+      case 'mock':
+        return this.callMock(params);
     }
+  }
+
+  /**
+   * Deterministic offline generation. No network, no keys. Same inputs -> same
+   * output, so it is safe for CI and golden-transcript evals.
+   */
+  private callMock(params: LlmGenerateParams): string {
+    if (params.modelType === 'analysis') {
+      return JSON.stringify(MOCK_ANALYSIS);
+    }
+    const lastUser = [...params.messages].reverse().find((m) => m.role === 'user');
+    const seed = `${params.systemPrompt.slice(0, 64)}::${lastUser?.content ?? ''}`;
+    const index = mockHashToInt(seed) % MOCK_QUESTIONS.length;
+    return MOCK_QUESTIONS[index]!;
   }
 
   private async ensureProviderHealthy(provider: LlmProvider): Promise<void> {
